@@ -1,0 +1,358 @@
+/**
+ * 类文档：
+ * 
+ * Component
+ * |_owner                           - 指向元素的指针，在上一个层级(Node)进行绑定
+ * |_showName                        - 组件的名字
+ * |_key                             - 组件的key，用来让元素寻址
+ * |_componentMap                    - 组件的属性-键值对映射表(string->subComponent*)
+ * |_constructor(owner,showName,key) - 构造函数，传入node的指针
+ * |_addValue(key,showName,subComp)  - 添加键值对
+ * |_getValue(key)                   - 根据key获得键值对的值，后台调用subComponent的getValue来实现
+ * |_setValue(key,newValue)          - 根据key设置键值对的值，后台调用subComponent的setValue来实现
+ * |_initHtml()                      - 将组件的所有属性罗列到属性面板中
+ * |_toJsonObj()                     - 将组件的属性转为JsonObject，去掉一些不要的属性
+ * 
+ * 继承关系；
+ * 
+ * Component
+ *     |_C_N_Exterior - 节点外观组件 - exterior_node
+ *     |_C_N_Physics  - 节点物理组件 - physics_node
+ *     |_C_N_Link     - 节点链接组件 - link_node
+ *     |_C_N_Text     - 节点文本组件 - text_node
+ * 
+ * 从JSON生成类：
+ * 
+ * · json示例：
+ * | "exterior":{
+ * |     "size":{"x":1,"y":1},
+ * |     "shape":"circle",
+ * |     "dividerColor":null,
+ * |     "bgColor":"#000000",
+ * |     "fgColor":"#ffffff",
+ * |     "dividerStroke":null,
+ * |     "strokeColor":"#ffffff",
+ * |     "strokeStyle":"line",
+ * |     "strokeWidth":1
+ * | }
+ * · 步骤
+ * · 用ComponentMap查询到对应的Component的class
+ * · 直接调用构造函数进行生成
+ * | 封装在LoadComponentFromJson(key, valueObj)函数中
+ * | key就是从ComponentMap查询到的key
+ * | valueObj直接指定值
+ * 
+ * by vezzzing 2023.8.3
+ * z z z studio
+ */
+
+class Component {
+    /**
+     * 节点组件-父类 
+     * @param {string} showName 组件显示在属性面板中的命名
+     * @param {string} key 组件的key，用来让节点寻址
+     */
+    constructor(showName/*override*/, key/*override*/) {
+        this.owner = null;
+        this.showName = showName;
+        this.key = key;
+        this.valueMap = {
+            //name: name
+        };
+        this.dom = null;
+    }
+
+    /**
+     * 向元素添加属性
+     * · 储存形式：
+     * |    this.valueMap={
+     * |        [key]:{
+     * |            subComp:{new SubComponent()},
+     * |            showName:[showName]    
+     * |        }
+     * |    }
+     * · 例子：
+     * |    this.valueMap={
+     * |        fontColor:{
+     * |            subComp:{new SubComponent()},
+     * |            showName:"字体颜色"    
+     * |        }
+     * |    }
+     * · 注意这里的key用来寻址和记忆，showName在文档中显示
+     * @param {string} key 添加的属性名
+     * @param {string} showName 属性显示在屏幕上的中文名
+     * @param {SubComponent} subComp 添加的属性绑定的subcomponent
+     */
+    addValue(key, showName, subComp) {
+        if (!this.valueMap[key]) {
+            this.valueMap[key] = {
+                subComp: subComp,
+                showName: showName
+            };
+            subComp.owner = this;
+        } else {
+            console.error(`尝试添加subcomponent键值对失败`)
+            console.error(`属性${key}已存在`);
+        }
+    }
+
+    /**
+     * 获取属性
+     * @param {string} key 要获取的值的属性名
+     * @returns any
+     */
+    getValue(key) {
+        if (this.valueMap[key]) {
+            return this.valueMap[key].subComp.getValue();
+        } else {
+            console.error(`尝试读取subcomponent键值对失败`)
+            console.error(`没有找到属性${key}`);
+        }
+    }
+
+    /**
+     * 设置指定属性的值
+     * @param {string} key 属性名
+     * @param {any} newValue 要设置的属性值
+     */
+    setValue(key, newValue) {
+        if (this.valueMap[key]) {
+            this.valueMap[key].subComp.setValue(newValue);
+        } else {
+            console.error(`尝试设置subcomponent键值对失败`)
+            console.error(`属性${key}不存在`);
+        }
+    }
+
+    /**
+     * 转为HTML
+     */
+    initHtml() {
+        this.dom = document.createElement("div");
+        this.dom.classList = "compPan";
+
+        let domTitle = document.createElement("div");
+        domTitle.classList = "compPanTitle";
+
+        let domTitleInnerText = document.createElement("p");
+        domTitleInnerText.classList = "compPanTitleText"
+        domTitleInnerText.innerText = this.showName;
+
+        let domTitleRetractBtn = document.createElement("p");
+        domTitleRetractBtn.classList = "compPanRetractBtn";
+        domTitleRetractBtn.innerText = "↓";
+
+        domTitle.appendChild(domTitleInnerText);
+        domTitle.appendChild(domTitleRetractBtn);
+
+        this.dom.appendChild(domTitle);
+
+        for (let key in this.valueMap) {
+            let value = this.valueMap[key];
+
+            let domPropertyContainer = document.createElement("div");
+            domPropertyContainer.classList = "compPanPropertyContainer";
+
+            let domPropertyKey = document.createElement("p");
+            domPropertyKey.classList = "compPanPropertyKey";
+            domPropertyKey.innerText = value.showName;
+
+            let domPropertyValue = value.subComp.initHtml();
+
+            domPropertyContainer.appendChild(domPropertyKey);
+            domPropertyContainer.appendChild(domPropertyValue);
+
+            this.dom.appendChild(domPropertyContainer);
+        }
+        return this.dom;
+    }
+
+    /**
+     * 转为JsonObject
+     */
+    toJsonObj() {
+        let jsonObj = {};
+        for (let key in this.valueMap) {
+            jsonObj[key] = this.valueMap[key].subComp.getValue();
+        }
+        return jsonObj;
+    }
+}
+
+import {
+    SC_NumberInput,
+    SC_ColorInput,
+    SC_Divider,
+    SC_TextInput,
+    SC_Select,
+    SC_Vector2,
+    SC_UrlInput,
+    SC_Check
+} from "./subComponent";
+
+/**
+ * 节点的外观属性
+ */
+export class C_N_Exterior extends Component {
+    constructor(showName, key, value = {
+        size: { x: 10, y: 1 },
+        shape: "circle",
+        dividerColor: "null",
+        bgColor: "#000f00",
+        dividerStroke: null,
+        strokeColor: "#00f1ff",
+        strokeStyle: "line",
+        strokeWidth: 1
+    }) {
+        super(showName, key);
+        this.addValue("size", "大小", new SC_Vector2(value.size));
+        this.addValue("shape", "形状", new SC_Select(value.shape, {
+            "circle": "圈圈",
+            "rect": "方块"
+        }))
+        this.addValue("dividerColor", null, new SC_Divider());
+        this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor));
+        this.addValue("dividerStroke", null, new SC_Divider());
+        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, {
+            "line": "_______",
+            "dot": "......",
+        }));
+        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, 0, 100));
+    }
+}
+
+/**
+ * 关系的外观属性
+ */
+export class C_E_Exterior extends Component {
+    constructor(showName, key, value = {
+        strokeColor: "#ffffff",
+        strokeStyle: "line",
+        strokeWidth: 0.5
+    }) {
+        super(showName, key);
+        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, {
+            "line": "_______",
+            "dot": "......",
+        }));
+        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, 0, 100));
+    }
+}
+
+/**
+ * 节点的物理属性
+ */
+export class C_N_Physics extends Component {
+    constructor(showName, key, value = {
+        dividerCollision: null,
+        collisionRadius: 10,
+        dividerManyBodyForce: null,
+        manyBodyForceStrength: 0,
+        manyBodyForceRangeMin: 10,
+        manyBodyForceRangeMax: 12,
+        dividerPosition: null,
+        position: { x: 0, y: 0 }
+    }) {
+        super(showName, key);
+        this.addValue("dividerCollision", "▼碰撞", new SC_Divider());
+        this.addValue("collisionRadius", "碰撞半径", new SC_NumberInput(value.collisionRadius, 0, 10000));
+        this.addValue("dividerManyBodyForce", "▼引/斥力", new SC_Divider());
+        this.addValue("manyBodyForceStrength", "大小", new SC_NumberInput(value.manyBodyForceStrength, -Infinity, Infinity));
+        this.addValue("manyBodyForceRangeMin", "最小范围", new SC_NumberInput(value.manyBodyForceRangeMin, 0, Infinity));
+        this.addValue("manyBodyForceRangeMax", "最大范围", new SC_NumberInput(value.manyBodyForceRangeMax, 0, Infinity));
+        this.addValue("dividerPosition", "", new SC_Divider());
+        this.addValue("position", "位置", new SC_Vector2(value.position));
+    }
+}
+
+/**
+ * 关系的物理属性
+ */
+export class C_E_Physics extends Component {
+    constructor(showName, key, value = {
+        linkStrength: 1,
+        linkDistance: 100
+    }) {
+        super(showName, key);
+        this.addValue("linkStrength", "弹簧张力", new SC_NumberInput(value.linkStrength, 0, 10000));
+        this.addValue("linkDistance", "弹簧长度", new SC_NumberInput(value.linkDistance, 0, 10000));
+    }
+}
+
+/**
+ * 节点的外部链接属性
+ */
+export class C_N_Link extends Component {
+    constructor(showName, key, value = {
+        url: "http://vezzzing.cn/vezzzingsLibrary/dist/main.html",
+        openOuter: true
+    }) {
+        super(showName, key);
+        this.addValue("url", "外部链接", new SC_UrlInput(value.url));
+        this.addValue("openOuter", "新页打开", new SC_Check(value.openOuter));
+    }
+}
+
+/**
+ * 节点的文本属性
+ */
+export class C_N_Text extends Component {
+    constructor(showName, key, value = {
+        showText: "VEZZ"
+    }) {
+        super(showName, key);
+        this.addValue("showText", "文本", new SC_TextInput(value.showText));
+    }
+}
+
+/**
+ * 寻址映射
+ */
+const ComponentMap = {
+    "exterior_node": {
+        key: "exterior_node",
+        showName: "外观",
+        class: C_N_Exterior,
+    },
+    "physics_node": {
+        key: "physics_node",
+        showName: "物理",
+        class: C_N_Physics,
+    },
+    "link_node": {
+        key: "link_node",
+        showName: "链接",
+        class: C_N_Link,
+        // link
+    },
+    "text_node": {
+        key: "text_node",
+        showName: "文本",
+        class: C_N_Text,
+        // showText
+    },
+    "exterior_edge": {
+        key: "exterior_edge",
+        showName: "外观",
+        class: C_E_Exterior,
+    },
+    "physics_edge": {
+        key: "physics_edge",
+        showName: "物理",
+        class: C_E_Physics,
+    },
+}
+
+/**
+ * @param {string} key component的寻址key
+ * @param {object} valueObj 储存component值的对象 
+ */
+export function LoadComponentFromJson(key, valueObj) {
+    if (ComponentMap[key]) {
+        return new ComponentMap[key].class(ComponentMap[key].showName, key, valueObj);
+    } else {
+        console.error(`类${key}未定义`)
+    }
+}

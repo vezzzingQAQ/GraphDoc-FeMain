@@ -1,0 +1,87 @@
+/**
+ * component在页面上呈现的样式
+ * by vezzzing 2023.8.3
+ */
+
+@bg_color_title: rgb(82, 82, 82);
+@bg_color_input: rgb(35, 35, 35);
+@bg_color_pan: rgb(56, 56, 56);
+@bg_color_border: rgb(153, 153, 153);
+
+@fg_color_1: rgb(250, 250, 250);
+@fg_color_input: rgb(194, 194, 194);
+
+@normal_border_radius: 5px;
+@small_border_radius: 3px;
+
+@property_height: 23px;
+@property_key_width: 100px;
+
+.compPan {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    color: @fg_color_1;
+    background-color: @bg_color_pan;
+    margin: 20px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    border-radius: @small_border_radius;
+
+    .compPanTitle {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        background-color: @bg_color_title;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 10px;
+        line-height: 40px;
+        font-size: 15px;
+        letter-spacing: 3px;
+    }
+
+    .compPanPropertyContainer {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        height: @property_height;
+        line-height: @property_height;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+
+        .compPanPropertyKey {
+            width: @property_key_width;
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        input,
+        select {
+            outline: none;
+            border: 1px solid @bg_color_border;
+            background-color: @bg_color_input;
+            padding-left: 5px;
+            padding-right: 5px;
+            color: @fg_color_input;
+            width: calc(100% - @property_key_width);
+            height: @property_height;
+            border-radius: @small_border_radius;
+        }
+
+        input[type=checkbox] {
+            width: @property_height;
+        }
+
+        .divider {
+            display: block;
+            background-color: @bg_color_title;
+            width: calc(100% - @property_key_width);
+            height: 2px;
+            margin-top: calc(@property_height / 2);
+        }
+    }
+}
