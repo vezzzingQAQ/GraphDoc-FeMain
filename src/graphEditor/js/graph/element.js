@@ -183,7 +183,12 @@ class Element {
     initHtml() {
         let domCompContianer = document.createElement("div");
         domCompContianer.classList = "compContainer";
+        let keyList = [];
         for (let key in this.componentMap) {
+            keyList.push(key);
+        }
+        keyList = keyList.reverse();
+        for (let key of keyList) {
             domCompContianer.appendChild(this.componentMap[key].initHtml());
         }
         return domCompContianer;
