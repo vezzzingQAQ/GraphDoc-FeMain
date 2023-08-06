@@ -325,34 +325,28 @@ export class C_N_Text extends Component {
 const ComponentMap = {
     "exterior_node": {
         key: "exterior_node",
-        showName: "外观",
         class: C_N_Exterior,
     },
     "physics_node": {
         key: "physics_node",
-        showName: "物理",
         class: C_N_Physics,
     },
     "link_node": {
         key: "link_node",
-        showName: "外链",
         class: C_N_Link,
         // link
     },
     "text_node": {
         key: "text_node",
-        showName: "文本",
         class: C_N_Text,
         // showText
     },
     "exterior_edge": {
         key: "exterior_edge",
-        showName: "外观",
         class: C_E_Exterior,
     },
     "physics_edge": {
         key: "physics_edge",
-        showName: "物理",
         class: C_E_Physics,
     },
 }
