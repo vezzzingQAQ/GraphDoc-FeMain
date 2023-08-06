@@ -7,7 +7,7 @@
  *          |_SubComponent
  * 
  * 从Graph访问Node/Edge：
- * 根据uuid遍历node/edgeList来寻找
+ * · 直接获取data属性
  * 从Node/Edge访问Graph元素：
  * · 用node/edge的uuid来进行querySelect
  * · 这个uuid在Graph.addNode/Edge时自动绑定，作为元素的id

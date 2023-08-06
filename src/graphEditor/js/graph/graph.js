@@ -140,8 +140,7 @@ export class Graph {
             .style("stroke-width", d => d.getComponent("exterior_edge").getValue("strokeWidth"))
             .style("cursor", "pointer")
             .on("click", function (d, i) {
-                let edgeDom = d3.select(this);
-                let edgeObj = _.findEdgeObj(edgeDom);
+                let edgeObj = d3.select(this).data()[0];
                 _.selectElement(edgeObj);
             });
 
@@ -154,8 +153,7 @@ export class Graph {
             .attr("id", d => d.uuid)
             // 点击选中
             .on("click", function () {
-                let nodeDom = d3.select(this);
-                let nodeObj = _.findNodeObj(nodeDom);
+                let nodeObj = d3.select(this).data()[0];
                 _.selectElement(nodeObj);
             })
             // 双击进入节点
@@ -188,8 +186,7 @@ export class Graph {
                 .attr("y2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.y));
 
             nodes.attr("transform", function (d) {
-                let nodeDom = d3.select(this);
-                let nodeObj = _.findNodeObj(nodeDom);
+                let nodeObj = d3.select(this).data()[0];
                 nodeObj.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
                 return `translate(${d.x},${d.y})`
             });
@@ -233,37 +230,6 @@ export class Graph {
         }
     }
 
-    /**
-     * 根据D3的node节点返回对应的node类实例
-     * @param {obj} node d3的node节点 
-     * @returns gc的node节点
-     */
-    findNodeObj(node) {
-        console.log(node.data)
-        for (let nodeObj of this.nodeList) {
-            let nodeUuid = nodeObj.uuid;
-            if (node.attr("id") == nodeUuid) {
-                return nodeObj;
-            }
-        }
-        console.error(`未找到对应的节点:${node}`);
-    }
-
-    /**
-     * 根据D3的edge节点返回对应的edge类实例
-     * @param {obj} edge d3的edge节点
-     * @returns gc的edge节点
-     */
-    findEdgeObj(edge) {
-        for (let edgeObj of this.edgeList) {
-            let edgeUuid = edgeObj.uuid;
-            if (edge.attr("id") == edgeUuid) {
-                return edgeObj;
-            }
-        }
-        console.log(edge)
-        console.error(`未找到对应的关系:${edge}`);
-    }
 
     /**
      * 修改单个节点
