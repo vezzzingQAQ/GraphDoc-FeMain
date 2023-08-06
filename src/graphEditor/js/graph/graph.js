@@ -168,12 +168,13 @@ export class Graph {
                     }
                 }
             })
-            .call(drag(this.renderProperties.simulation))
             .attr(`transform`, d => {
                 let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
                 let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
                 return `translate(${x},${y})`;
-            });
+            })
+            .call(drag())
+
 
         // 根据外观组件绘制节点的形状
         const nodeDraw = nodes.append("circle")
@@ -194,8 +195,7 @@ export class Graph {
                 .attr("y2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.y));
 
             nodes.attr("transform", function (d) {
-                let nodeObj = d3.select(this).data()[0];
-                nodeObj.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
+                d.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
                 return `translate(${d.x},${d.y})`
             });
         });
@@ -212,10 +212,10 @@ export class Graph {
             .on("dblclick.zoom", null);
 
         // 拖动
-        function drag(simulation) {
+        function drag() {
 
             function dragstarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
+                if (!event.active) _.renderProperties.simulation.alphaTarget(0.08).restart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
@@ -226,7 +226,7 @@ export class Graph {
             }
 
             function dragended(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
+                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0008);
                 d.fx = null;
                 d.fy = null;
             }

@@ -209,6 +209,7 @@ export class Node extends Element {
      */
     constructor() {
         super();
+        this.tempFixed = false;
     }
 }
 
