@@ -115,8 +115,8 @@ export class SC_NumberInput extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "number";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
         this.dom.min = this.minValue;
@@ -144,8 +144,8 @@ export class SC_ColorInput extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "color";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
@@ -171,8 +171,8 @@ export class SC_TextInput extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "text";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
@@ -198,8 +198,8 @@ export class SC_UrlInput extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "url";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
@@ -249,8 +249,8 @@ export class SC_Vector2 extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "text";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
         this.dom.value = `(${this.value.x},${this.value.y})`;
         this.dom.addEventListener("input", () => {
@@ -279,23 +279,19 @@ export class SC_Check extends SubComponent {
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "checkbox";
-        if(this.readOnly){
-            this.dom.readOnly="true";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
         }
-        if (this.value) {
-            this.dom.checked = "true";
-        } else {
-            this.dom.checked = "false"
-        }
-        this.dom.addEventListener("change", () => {
-            this.value = this.dom.value;
+        this.dom.checked = this.value;
+        this.dom.addEventListener("click", () => {
+            this.value = this.dom.checked;
             this.updateGraph();
         })
         return this.dom;
     }
     updateHtml() {
         if (this.dom) {
-            this.dom.value = this.value;
+            this.dom.checked = this.value;
         }
     }
 }
