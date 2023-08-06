@@ -157,8 +157,16 @@ export class Graph {
                 _.selectElement(nodeObj);
             })
             // 双击进入节点
-            .on("dbclick", function () {
-
+            .on("dblclick", function () {
+                let nodeObj = d3.select(this).data()[0];
+                if (nodeObj.hasComponent("link_node")) {
+                    let openOuter = nodeObj.autoGetValue("link_node", "openOuter", false);
+                    if (openOuter) {
+                        window.open(nodeObj.autoGetValue("link_node", "url", "."));
+                    } else {
+                        window.location = nodeObj.autoGetValue("link_node", "url", ".");
+                    }
+                }
             })
             .call(drag(this.renderProperties.simulation))
             .attr(`transform`, d => {
