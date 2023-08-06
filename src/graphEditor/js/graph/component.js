@@ -5,6 +5,7 @@
  * |_owner                           - 指向元素的指针，在上一个层级(Node)进行绑定
  * |_showName                        - 组件的名字
  * |_key                             - 组件的key，用来让元素寻址
+ * |_delAble                         - 组件是否可以被删除掉
  * |_componentMap                    - 组件的属性-键值对映射表(string->subComponent*)
  * |_constructor(owner,showName,key) - 构造函数，传入node的指针
  * |_addValue(key,showName,subComp)  - 添加键值对
@@ -52,10 +53,11 @@ class Component {
      * @param {string} showName 组件显示在属性面板中的命名
      * @param {string} key 组件的key，用来让节点寻址
      */
-    constructor(showName/*override*/, key/*override*/) {
+    constructor(showName/*override*/, key/*override*/, delAble = false) {
         this.owner = null;
         this.showName = showName;
         this.key = key;
+        this.delAble = delAble;
         this.valueMap = {
             //name: name
         };
@@ -138,12 +140,14 @@ class Component {
         domTitleInnerText.classList = "compPanTitleText"
         domTitleInnerText.innerText = this.showName;
 
-        let domTitleRetractBtn = document.createElement("p");
-        domTitleRetractBtn.classList = "compPanRetractBtn";
-        domTitleRetractBtn.innerText = "↓";
-
         domTitle.appendChild(domTitleInnerText);
-        domTitle.appendChild(domTitleRetractBtn);
+
+        if (this.delAble) {
+            let domTitleDeleteBtn = document.createElement("p");
+            domTitleDeleteBtn.classList = "compPanRetractBtn";
+            domTitleDeleteBtn.innerText = "x";
+            domTitle.appendChild(domTitleDeleteBtn);
+        }
 
         this.dom.appendChild(domTitle);
 
@@ -205,20 +209,20 @@ export class C_N_Exterior extends Component {
         strokeWidth: 1
     }) {
         super(showName, key);
-        this.addValue("size", "大小", new SC_Vector2(value.size));
-        this.addValue("shape", "形状", new SC_Select(value.shape, {
+        this.addValue("size", "大小", new SC_Vector2(value.size, false));
+        this.addValue("shape", "形状", new SC_Select(value.shape, false, {
             "circle": "圈圈",
             "rect": "方块"
         }))
         this.addValue("dividerColor", null, new SC_Divider());
-        this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor));
+        this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor, false));
         this.addValue("dividerStroke", null, new SC_Divider());
-        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, {
+        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, {
             "line": "_______",
             "dot": "......",
         }));
-        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, 0, 100));
+        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
     }
 }
 
@@ -232,12 +236,12 @@ export class C_E_Exterior extends Component {
         strokeWidth: 0.5
     }) {
         super(showName, key);
-        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, {
+        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, {
             "line": "_______",
             "dot": "......",
         }));
-        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, 0, 100));
+        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
     }
 }
 
@@ -257,13 +261,13 @@ export class C_N_Physics extends Component {
     }) {
         super(showName, key);
         this.addValue("dividerCollision", "▼碰撞", new SC_Divider());
-        this.addValue("collisionRadius", "碰撞半径", new SC_NumberInput(value.collisionRadius, 0, 10000));
+        this.addValue("collisionRadius", "碰撞半径", new SC_NumberInput(value.collisionRadius, false, 0, 10000));
         this.addValue("dividerManyBodyForce", "▼引/斥力", new SC_Divider());
-        this.addValue("manyBodyForceStrength", "大小", new SC_NumberInput(value.manyBodyForceStrength, -Infinity, Infinity));
-        this.addValue("manyBodyForceRangeMin", "最小范围", new SC_NumberInput(value.manyBodyForceRangeMin, 0, Infinity));
-        this.addValue("manyBodyForceRangeMax", "最大范围", new SC_NumberInput(value.manyBodyForceRangeMax, 0, Infinity));
+        this.addValue("manyBodyForceStrength", "大小", new SC_NumberInput(value.manyBodyForceStrength, false, -Infinity, Infinity));
+        this.addValue("manyBodyForceRangeMin", "最小范围", new SC_NumberInput(value.manyBodyForceRangeMin, false, 0, Infinity));
+        this.addValue("manyBodyForceRangeMax", "最大范围", new SC_NumberInput(value.manyBodyForceRangeMax, false, 0, Infinity));
         this.addValue("dividerPosition", "", new SC_Divider());
-        this.addValue("position", "位置", new SC_Vector2(value.position));
+        this.addValue("position", "位置", new SC_Vector2(value.position, true));
     }
 }
 
@@ -276,8 +280,8 @@ export class C_E_Physics extends Component {
         linkDistance: 100
     }) {
         super(showName, key);
-        this.addValue("linkStrength", "弹簧张力", new SC_NumberInput(value.linkStrength, 0, 10000));
-        this.addValue("linkDistance", "弹簧长度", new SC_NumberInput(value.linkDistance, 0, 10000));
+        this.addValue("linkStrength", "弹簧张力", new SC_NumberInput(value.linkStrength, false, 0, 10000));
+        this.addValue("linkDistance", "弹簧长度", new SC_NumberInput(value.linkDistance, false, 0, 10000));
     }
 }
 
@@ -290,8 +294,8 @@ export class C_N_Link extends Component {
         openOuter: true
     }) {
         super(showName, key);
-        this.addValue("url", "外部链接", new SC_UrlInput(value.url));
-        this.addValue("openOuter", "新页打开", new SC_Check(value.openOuter));
+        this.addValue("url", "外部链接", new SC_UrlInput(value.url, false));
+        this.addValue("openOuter", "新页打开", new SC_Check(value.openOuter, false));
     }
 }
 
@@ -303,7 +307,7 @@ export class C_N_Text extends Component {
         showText: "VEZZ"
     }) {
         super(showName, key);
-        this.addValue("showText", "文本", new SC_TextInput(value.showText));
+        this.addValue("showText", "文本", new SC_TextInput(value.showText, false));
     }
 }
 

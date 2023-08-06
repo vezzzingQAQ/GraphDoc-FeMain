@@ -151,11 +151,6 @@ export class Graph {
             .enter()
             .append("g")
             .attr("class", "forceNode")
-            .attr(`transform`, d => {
-                let x = d.getComponent("physics_node").getValue("position").x;
-                let y = d.getComponent("physics_node").getValue("position").y;
-                return `translate(${x},${y})`;
-            })
             .attr("id", d => d.uuid)
             // 点击选中
             .on("click", function () {
@@ -167,29 +162,35 @@ export class Graph {
             .on("dbclick", function () {
 
             })
-            .call(drag(this.renderProperties.simulation));
+            .call(drag(this.renderProperties.simulation))
+            .attr(`transform`, d => {
+                let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
+                let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
+                return `translate(${x},${y})`;
+            });
 
+        // 根据外观组件绘制节点的形状
         const nodeDraw = nodes.append("circle")
             .attr("class", "nodeCircle")
             // 绑定自定义的属性
-            .attr("r", d => d.getComponent("exterior_node").getValue("size").x)
-            .style("fill", d => d.getComponent("exterior_node").getValue("bgColor"))
-            .style("stroke", d => d.getComponent("exterior_node").getValue("strokeColor"))
-            .style("stroke-width", d => d.getComponent("exterior_node").getValue("strokeWidth"))
+            .attr("r", d => d.autoGetValue("exterior_node", "size", 10, (value) => { return value.x }))
+            .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
+            .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
+            .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", 1))
             .style("cursor", "pointer");
 
         // 计算物理模拟
         this.renderProperties.simulation.on("tick", () => {
             edges
-                .attr("x1", d => d.source.getComponent("physics_node").getValue("position").x)
-                .attr("y1", d => d.source.getComponent("physics_node").getValue("position").y)
-                .attr("x2", d => d.target.getComponent("physics_node").getValue("position").x)
-                .attr("y2", d => d.target.getComponent("physics_node").getValue("position").y);
+                .attr("x1", d => d.source.autoGetValue("physics_node", "position", 0, (value) => value.x))
+                .attr("y1", d => d.source.autoGetValue("physics_node", "position", 0, (value) => value.y))
+                .attr("x2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.x))
+                .attr("y2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.y));
 
             nodes.attr("transform", function (d) {
                 let nodeDom = d3.select(this);
                 let nodeObj = _.findNodeObj(nodeDom);
-                nodeObj.getComponent("physics_node").setValue("position", { x: d.x, y: d.y });
+                nodeObj.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
                 return `translate(${d.x},${d.y})`
             });
         });
@@ -238,6 +239,7 @@ export class Graph {
      * @returns gc的node节点
      */
     findNodeObj(node) {
+        console.log(node.data)
         for (let nodeObj of this.nodeList) {
             let nodeUuid = nodeObj.uuid;
             if (node.attr("id") == nodeUuid) {

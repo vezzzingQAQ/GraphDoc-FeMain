@@ -35,21 +35,23 @@
  * 类文档：
  * 
  * Element
- * |_owner                           - 指向图谱的指针，在上一个层级(Graph)进行绑定
- * |_uuid                            - 元素的key，用来让图谱寻址，在图谱的addNode函数中自动生成
- * |_componentMap                    - 元素的组件映射表(string->component*)
- * |_constructor(owner,showName,key) - 构造函数，传入一个graph的指针
- * |_addComponent(component)         - 添加组件
- * |_getComponent(key)               - 获取组件
- * |_initHtml()                      - 将元素的所有属性罗列到属性面板中
- * |_toJsonObj()                     - 将元素的属性转为JsonObject，提供给渲染器绘制
+ * |_owner                                                    - 指向图谱的指针，在上一个层级(Graph)进行绑定
+ * |_uuid                                                     - 元素的key，用来让图谱寻址，在图谱的addNode函数中自动生成
+ * |_componentMap                                             - 元素的组件映射表(string->component*)
+ * |_constructor(owner,showName,key)                          - 构造函数，传入一个graph的指针
+ * |_addComponent(component)                                  - 添加组件
+ * |_getComponent(key)                                        - 获取组件
+ * |_initHtml()                                               - 将元素的所有属性罗列到属性面板中
+ * |_toJsonObj()                                              - 将元素的属性转为JsonObject，提供给渲染器绘制
+ * |_autoGetValue(componentKey,valueKey,defaultValue,afterFn) - 根据组件键和属性键获取值
+ * |_autoSetValue(componentKey,valueKey,value)                - 根据组件键和属性键获设置值
  * |____Node
  * |____Edge
- *      |_source                     - 从哪个节点
- *      |_target                     - 指向哪个节点
- *      |_setSource                  - 绑定source
- *      |_setTarget                  - 绑定target
- *      |_toJsonObj()                - 重写toJsonObj方法
+ *      |_source                                              - 从哪个节点
+ *      |_target                                              - 指向哪个节点
+ *      |_setSource                                           - 绑定source
+ *      |_setTarget                                           - 绑定target
+ *      |_toJsonObj()                                         - 重写toJsonObj方法
  * 
  * 创建node：
  * · 用工厂函数进行创建
@@ -127,9 +129,45 @@ class Element {
         } else {
             console.error(`尝试获取component失败`);
             console.error(`不存在key为${componentKey}的节点`);
+            return false;
         }
     }
 
+    /**
+     * 判断元素是否拥有某个组件
+     * @param {string} componentKey 组件key
+     * @returns 布尔值，是否有这个组件
+     */
+    hasComponent(componentKey) {
+        if (this.componentMap[componentKey]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 自动获取value
+     * 简化这部分代码
+     * · let x = d.hasComponent("physics_node") ? d.getComponent("physics_node").getValue("position").x : 0
+     * | let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
+     */
+    autoGetValue(componentKey, valueKey, defaultValue, afterFn = (value) => { return value }) {
+        if (this.hasComponent(componentKey)) {
+            return afterFn(this.getComponent(componentKey).getValue(valueKey));
+        } else {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * 自动设置key
+     */
+    autoSetValue(componentKey, valueKey, value) {
+        if (this.hasComponent(componentKey)) {
+            this.getComponent(componentKey).setValue(valueKey, value)
+        }
+    }
 
     // getters&setters
     getUuid() {

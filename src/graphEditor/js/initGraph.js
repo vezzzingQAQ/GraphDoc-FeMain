@@ -17,7 +17,7 @@ export function initGraph(graphObj) {
     let centerNode = CreateBasicNode();
     graph.addNode(centerNode);
     let pNode = null;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 113; i++) {
         let addedNodeLink = CreateLinkNode();
         graph.addNode(addedNodeLink);
         let addedEdge = CreateBasicEdge(centerNode, addedNodeLink);
@@ -32,6 +32,5 @@ export function initGraph(graphObj) {
     //     let graph=LoadGraphFromJson(JSON.parse(`
     //     `));
     graph.render();
-    console.log(JSON.stringify(graph.toJsonObj()))
     return graph;
 }

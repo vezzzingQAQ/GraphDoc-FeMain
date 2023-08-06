@@ -34,10 +34,12 @@ class SubComponent {
     /**
      * 构造函数
      * @param {any} defaultValue 默认值
+     * @param {boolean} readOnly 是否是只读的
      */
-    constructor(defaultValue = null) {
+    constructor(defaultValue = null, readOnly = false) {
         this.owner = null;
         this.defaultValue = defaultValue;
+        this.readOnly = readOnly;
         this.value = defaultValue;
         this.dom = null;
     }
@@ -105,14 +107,17 @@ export class SC_Divider extends SubComponent {
  * 数字输入框
  */
 export class SC_NumberInput extends SubComponent {
-    constructor(defaultValue, minValue = 0, maxValue = 100) {
-        super(defaultValue);
+    constructor(defaultValue, readOnly = false, minValue = 0, maxValue = 100) {
+        super(defaultValue, readOnly);
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "number";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         this.dom.value = this.value;
         this.dom.min = this.minValue;
         this.dom.max = this.maxValue;
@@ -133,12 +138,15 @@ export class SC_NumberInput extends SubComponent {
  * 颜色选择框
  */
 export class SC_ColorInput extends SubComponent {
-    constructor(defaultValue = "#f6b73c") {
-        super(defaultValue);
+    constructor(defaultValue = "#f6b73c", readOnly = false) {
+        super(defaultValue, readOnly);
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "color";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
@@ -157,12 +165,15 @@ export class SC_ColorInput extends SubComponent {
  * 文字输入框
  */
 export class SC_TextInput extends SubComponent {
-    constructor(defaultValue = "text") {
-        super(defaultValue);
+    constructor(defaultValue = "text", readOnly = false) {
+        super(defaultValue, readOnly);
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "text";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
@@ -181,12 +192,15 @@ export class SC_TextInput extends SubComponent {
  * URL输入框
  */
 export class SC_UrlInput extends SubComponent {
-    constructor(defaultValue = "text") {
-        super(defaultValue);
+    constructor(defaultValue = "text", readOnly = false) {
+        super(defaultValue, readOnly);
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "url";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
@@ -202,11 +216,11 @@ export class SC_UrlInput extends SubComponent {
 }
 
 /**
- * 单选框
+ * 下拉列表
  */
 export class SC_Select extends SubComponent {
-    constructor(defaultValue, selectList = {}) {
-        super(defaultValue);
+    constructor(defaultValue, readOnly = false, selectList = {}) {
+        super(defaultValue, readOnly);
         this.selectList = selectList;
     }
     initHtml() {
@@ -229,12 +243,15 @@ export class SC_Select extends SubComponent {
  * 表示二维坐标系位置
  */
 export class SC_Vector2 extends SubComponent {
-    constructor(defaultValue = { x: 1, y: 2 }) {
-        super(defaultValue);
+    constructor(defaultValue = { x: 1, y: 2 }, readOnly = false) {
+        super(defaultValue, readOnly);
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "text";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         this.dom.value = `(${this.value.x},${this.value.y})`;
         this.dom.addEventListener("input", () => {
             let [_, x, y] = this.dom.value.split(/[(,)]/);
@@ -256,12 +273,15 @@ export class SC_Vector2 extends SubComponent {
  * 单选框
  */
 export class SC_Check extends SubComponent {
-    constructor(defaultValue = false) {
-        super(defaultValue);
+    constructor(defaultValue = false, readOnly = false) {
+        super(defaultValue, readOnly);
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "checkbox";
+        if(this.readOnly){
+            this.dom.readOnly="true";
+        }
         if (this.value) {
             this.dom.checked = "true";
         } else {
