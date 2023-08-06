@@ -335,7 +335,7 @@ const ComponentMap = {
     },
     "link_node": {
         key: "link_node",
-        showName: "链接",
+        showName: "外链",
         class: C_N_Link,
         // link
     },

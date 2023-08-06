@@ -298,7 +298,7 @@ export function CreateBasicEdge(source, target) {
 export function CreateLinkNode() {
     let node = CreateBasicNode();
     node.addComponent(new C_N_Text("文本", "text_node"));
-    node.addComponent(new C_N_Link("链接", "link_node"));
+    node.addComponent(new C_N_Link("外链", "link_node"));
     return node;
 }
 
