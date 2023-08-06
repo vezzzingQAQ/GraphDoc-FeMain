@@ -308,7 +308,7 @@ export class C_N_Text extends Component {
         textColor: "#ffffff",
         textSize: 4,
         textSpacing: 0,
-        textWeight: 1
+        textWeight: 5
     }) {
         super(showName, key);
         this.addValue("showText", "文本", new SC_TextInput(value.showText, false));
