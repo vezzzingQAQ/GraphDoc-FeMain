@@ -186,6 +186,17 @@ export class Graph {
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", 1))
             .style("cursor", "pointer");
 
+        // 绘制node文本
+        const nodeText = nodes.append("text")
+            .text(d => d.autoGetValue("text_node", "showText", ""))
+            .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
+            .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
+            .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
+            .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+            .style("text-anchor", "middle")
+            .style("dominant-baseline","middle")
+            .style("cursor", "pointer");
+
         // 计算物理模拟
         this.renderProperties.simulation.on("tick", () => {
             edges
@@ -248,7 +259,13 @@ export class Graph {
             .attr("r", nodeObj.getComponent("exterior_node").getValue("size").x)
             .style("fill", nodeObj.getComponent("exterior_node").getValue("bgColor"))
             .style("stroke", nodeObj.getComponent("exterior_node").getValue("strokeColor"))
-            .style("stroke-width", nodeObj.getComponent("exterior_node").getValue("strokeWidth"))
+            .style("stroke-width", nodeObj.getComponent("exterior_node").getValue("strokeWidth"));
+        const findedNodeText = findedNode.select("text")
+            .text(d => d.autoGetValue("text_node", "showText", ""))
+            .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
+            .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
+            .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
+            .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
     }
 
     /**

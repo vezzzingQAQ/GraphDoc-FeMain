@@ -304,10 +304,18 @@ export class C_N_Link extends Component {
  */
 export class C_N_Text extends Component {
     constructor(showName, key, value = {
-        showText: "VEZZ"
+        showText: "VEZZ",
+        textColor: "#ffffff",
+        textSize: 4,
+        textSpacing: 0,
+        textWeight: 1
     }) {
         super(showName, key);
         this.addValue("showText", "文本", new SC_TextInput(value.showText, false));
+        this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
+        this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
+        this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
+        this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
     }
 }
 
