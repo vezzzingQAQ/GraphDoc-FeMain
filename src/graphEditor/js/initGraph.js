@@ -17,7 +17,7 @@ export function initGraph(graphObj) {
     let centerNode = CreateBasicNode();
     graph.addNode(centerNode);
     let pNode = null;
-    for (let i = 0; i < 113; i++) {
+    for (let i = 0; i < 413; i++) {
         let addedNodeLink = CreateLinkNode();
         graph.addNode(addedNodeLink);
         let addedEdge = CreateBasicEdge(centerNode, addedNodeLink);

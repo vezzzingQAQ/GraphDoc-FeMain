@@ -276,7 +276,7 @@ export class C_N_Physics extends Component {
  */
 export class C_E_Physics extends Component {
     constructor(showName, key, value = {
-        linkStrength: 1,
+        linkStrength: 0.8,
         linkDistance: 400
     }) {
         super(showName, key);
