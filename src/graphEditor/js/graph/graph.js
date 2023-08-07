@@ -289,7 +289,7 @@ export class Graph {
             .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
             .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
             .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
-        this.renderProperties.simulation.alphaTarget(0.08).restart();
+        this.renderProperties.simulation.restart();
     }
 
     /**
