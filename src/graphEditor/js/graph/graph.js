@@ -112,9 +112,9 @@ export class Graph {
         //     .distanceMax(d => d.getComponent("physics_node").getValue("manyBodyForceRangeMin"));
 
         _.renderProperties.forces.chargeForce = d3.forceManyBody()
-            .strength(-80)
-            .distanceMax(200)
-            .distanceMin(10);
+            .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
+            .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
+            .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
 
         _.renderProperties.forces.collideForce = d3.forceCollide()
             .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
@@ -282,6 +282,14 @@ export class Graph {
             .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
             .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
             .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+        // 更新物理
+        this.renderProperties.forces.collideForce
+            .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
+        this.renderProperties.forces.chargeForce = d3.forceManyBody()
+            .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
+            .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
+            .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
+        this.renderProperties.simulation.alphaTarget(0.08).restart();
     }
 
     /**

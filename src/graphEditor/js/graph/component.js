@@ -253,9 +253,9 @@ export class C_N_Physics extends Component {
         dividerCollision: null,
         collisionRadius: 10,
         dividerManyBodyForce: null,
-        manyBodyForceStrength: 0,
+        manyBodyForceStrength: 80,
         manyBodyForceRangeMin: 10,
-        manyBodyForceRangeMax: 12,
+        manyBodyForceRangeMax: 112,
         dividerPosition: null,
         position: { x: 0, y: 0 }
     }) {
