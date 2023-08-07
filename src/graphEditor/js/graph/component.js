@@ -144,9 +144,11 @@ class Component {
 
         if (this.delAble) {
             let domTitleDeleteBtn = document.createElement("p");
-            domTitleDeleteBtn.classList = "compPanRetractBtn";
-            domTitleDeleteBtn.innerText = "x";
+            domTitleDeleteBtn.classList = "compPanDeleteBtn fa fa-close";
             domTitle.appendChild(domTitleDeleteBtn);
+            domTitleDeleteBtn.addEventListener("click", () => {
+                this.owner.removeComponent(this);
+            })
         }
 
         this.dom.appendChild(domTitle);
@@ -208,7 +210,7 @@ export class C_N_Exterior extends Component {
         strokeStyle: "line",
         strokeWidth: 1
     }) {
-        super(showName, key);
+        super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
         this.addValue("shape", "形状", new SC_Select(value.shape, false, {
             "circle": "圈圈",
@@ -235,7 +237,7 @@ export class C_E_Exterior extends Component {
         strokeStyle: "line",
         strokeWidth: 0.3
     }) {
-        super(showName, key);
+        super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
         this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, {
             "line": "_______",
@@ -259,7 +261,7 @@ export class C_N_Physics extends Component {
         dividerPosition: null,
         position: { x: 0, y: 0 }
     }) {
-        super(showName, key);
+        super(showName, key, false);
         this.addValue("dividerCollision", "▼碰撞", new SC_Divider());
         this.addValue("collisionRadius", "碰撞半径", new SC_NumberInput(value.collisionRadius, false, 0, 10000));
         this.addValue("dividerManyBodyForce", "▼引/斥力", new SC_Divider());
@@ -279,7 +281,7 @@ export class C_E_Physics extends Component {
         linkStrength: 0.8,
         linkDistance: 400
     }) {
-        super(showName, key);
+        super(showName, key, false);
         this.addValue("linkStrength", "弹簧张力", new SC_NumberInput(value.linkStrength, false, 0, 10000));
         this.addValue("linkDistance", "弹簧长度", new SC_NumberInput(value.linkDistance, false, 0, 10000));
     }
@@ -293,7 +295,7 @@ export class C_N_Link extends Component {
         url: "http://vezzzing.cn/vezzzingsLibrary/dist/main.html",
         openOuter: true
     }) {
-        super(showName, key);
+        super(showName, key, true);
         this.addValue("url", "外部链接", new SC_UrlInput(value.url, false));
         this.addValue("openOuter", "新页打开", new SC_Check(value.openOuter, false));
     }
@@ -310,7 +312,7 @@ export class C_N_Text extends Component {
         textSpacing: 0,
         textWeight: 5
     }) {
-        super(showName, key);
+        super(showName, key, true);
         this.addValue("showText", "文本", new SC_TextInput(value.showText, false));
         this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
         this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));

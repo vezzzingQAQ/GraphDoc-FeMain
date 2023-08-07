@@ -16,6 +16,7 @@
 
 @property_height: 23px;
 @property_key_width: 100px;
+@title_height: 40px;
 
 .compPan {
     display: flex;
@@ -30,16 +31,37 @@
 
     .compPanTitle {
         width: 100%;
-        height: 40px;
+        height: @title_height;
         display: flex;
         flex-direction: row;
         background-color: @bg_color_title;
         padding-left: 10px;
         padding-right: 10px;
         margin-bottom: 10px;
-        line-height: 40px;
+        line-height: @title_height;
         font-size: 15px;
         letter-spacing: 3px;
+        position: relative;
+
+        .compPanTitleText {
+            font-size: 14px;
+            width: calc(100% - @title_height);
+        }
+
+        .compPanDeleteBtn {
+            display: block;
+            width: @title_height;
+            height: @title_height;
+            font-size: 18px;
+            line-height: @title_height;
+            text-align: right;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+
+            &:hover {
+                color: rgb(255, 204, 0);
+            }
+        }
     }
 
     .compPanPropertyContainer {

@@ -46,13 +46,14 @@
  * |_autoGetValue(componentKey,valueKey,defaultValue,afterFn) - 根据组件键和属性键获取值
  * |_autoSetValue(componentKey,valueKey,value)                - 根据组件键和属性键获设置值
  * |____Node
+ * |    |_removeComponent(component)                          - 删除指定的component，由component类调用     
  * |____Edge
  *      |_source                                              - 从哪个节点
  *      |_target                                              - 指向哪个节点
  *      |_setSource                                           - 绑定source
  *      |_setTarget                                           - 绑定target
  *      |_toJsonObj()                                         - 重写toJsonObj方法
- * 
+ *      |_removeComponent(component)                          - 删除指定的component，由component类调用     
  * 创建node：
  * · 用工厂函数进行创建
  * 
@@ -215,6 +216,16 @@ export class Node extends Element {
     constructor() {
         super();
         this.tempFixed = false;
+    }
+
+    /**
+     * 由组件来调用，用户不能调用
+     * · 组件删除自身
+     */
+    removeComponent(component) {
+        component.dom.remove();
+        delete this.componentMap[component.key]
+        this.owner.modifyNode(this);
     }
 }
 
