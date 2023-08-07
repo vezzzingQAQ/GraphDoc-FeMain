@@ -41,6 +41,12 @@ export class Graph {
         this.renderProperties = {
             svg: null,
             viewArea: null,
+            forces: {
+                linkForce: null,
+                centerForce: null,
+                chargeForce: null,
+                collideForce: null
+            },
             simulation: null
         }
     }
@@ -90,11 +96,12 @@ export class Graph {
         let renderDom = document.querySelector(".displayArea");
 
         // 创建所需要的力
-        const linkForce = d3.forceLink()
+        _.renderProperties.forces.linkForce = d3.forceLink()
             .links(this.edgeList)
-            .distance(500);
+            .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
+            .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
 
-        const centerForce = d3.forceCenter()
+        _.renderProperties.forces.centerForce = d3.forceCenter()
             .x(renderDom.offsetWidth / 2)
             .y(renderDom.offsetHeight / 2)
             .strength(0.3);
@@ -104,20 +111,20 @@ export class Graph {
         //     .distanceMax(d => d.getComponent("physics_node").getValue("manyBodyForceRangeMax"))
         //     .distanceMax(d => d.getComponent("physics_node").getValue("manyBodyForceRangeMin"));
 
-        const chargeForce = d3.forceManyBody()
+        _.renderProperties.forces.chargeForce = d3.forceManyBody()
             .strength(-80)
             .distanceMax(200)
             .distanceMin(10);
 
-        const collideForce = d3.forceCollide()
+        _.renderProperties.forces.collideForce = d3.forceCollide()
             .radius(d => d.getComponent("physics_node").getValue("collisionRadius"));
 
         // 创建物理模拟
         this.renderProperties.simulation = d3.forceSimulation(this.nodeList)
-            .force("link", linkForce)
-            .force("center", centerForce)
-            .force("charge", chargeForce)
-            .force("collide", collideForce)
+            .force("link", _.renderProperties.forces.linkForce)
+            .force("center", _.renderProperties.forces.centerForce)
+            .force("charge", _.renderProperties.forces.chargeForce)
+            .force("collide", _.renderProperties.forces.collideForce)
             .alphaDecay(0.08);
 
         // 创建画布
@@ -285,6 +292,11 @@ export class Graph {
         findedEdge
             .style("stroke", d => d.getComponent("exterior_edge").getValue("strokeColor"))
             .style("stroke-width", d => d.getComponent("exterior_edge").getValue("strokeWidth"))
+        // 更新物理
+        this.renderProperties.forces.linkForce
+            .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
+            .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
+        this.renderProperties.simulation.alphaTarget(0.08).restart();
     }
 
     selectElement(elementObj) {

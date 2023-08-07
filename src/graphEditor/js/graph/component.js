@@ -277,7 +277,7 @@ export class C_N_Physics extends Component {
 export class C_E_Physics extends Component {
     constructor(showName, key, value = {
         linkStrength: 1,
-        linkDistance: 100
+        linkDistance: 400
     }) {
         super(showName, key);
         this.addValue("linkStrength", "弹簧张力", new SC_NumberInput(value.linkStrength, false, 0, 10000));
