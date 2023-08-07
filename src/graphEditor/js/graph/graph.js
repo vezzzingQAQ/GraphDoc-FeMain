@@ -134,13 +134,17 @@ export class Graph {
             .data(this.edgeList)
             .enter()
             .append("line")
-            .attr("class", "forceLine")
+            .attr("class", "forceLine forceElemet")
             .attr("id", d => d.uuid)
             .style("stroke", d => d.getComponent("exterior_edge").getValue("strokeColor"))
             .style("stroke-width", d => d.getComponent("exterior_edge").getValue("strokeWidth"))
             .style("cursor", "pointer")
+            .style("outline", "none")
             .on("click", function (d, i) {
                 let edgeObj = d3.select(this).data()[0];
+                let allElement = d3.selectAll(".forceElemet").style("outline", "none");
+                let edge = d3.select(this);
+                edge.style("outline", "1px dashed white");
                 _.selectElement(edgeObj);
             });
 
@@ -149,11 +153,16 @@ export class Graph {
             .data(this.nodeList)
             .enter()
             .append("g")
-            .attr("class", "forceNode")
+            .attr("class", "forceNode forceElemet")
             .attr("id", d => d.uuid)
+            .style("outline-offset", "3px")
+            .style("outline", "none")
             // 点击选中
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
+                let allElement = d3.selectAll(".forceElemet").style("outline", "none");
+                let node = d3.select(this);
+                node.style("outline", "1px dashed white");
                 _.selectElement(nodeObj);
             })
             // 双击进入节点
@@ -194,7 +203,7 @@ export class Graph {
             .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
             .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
             .style("text-anchor", "middle")
-            .style("dominant-baseline","middle")
+            .style("dominant-baseline", "middle")
             .style("cursor", "pointer");
 
         // 计算物理模拟
