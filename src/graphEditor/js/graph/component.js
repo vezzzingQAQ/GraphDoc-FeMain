@@ -231,9 +231,9 @@ export class C_N_Exterior extends Component {
  */
 export class C_E_Exterior extends Component {
     constructor(showName, key, value = {
-        strokeColor: "#ffffff",
+        strokeColor: "#666666",
         strokeStyle: "line",
-        strokeWidth: 0.5
+        strokeWidth: 0.3
     }) {
         super(showName, key);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
