@@ -117,7 +117,7 @@ export class Graph {
             .distanceMin(10);
 
         _.renderProperties.forces.collideForce = d3.forceCollide()
-            .radius(d => d.getComponent("physics_node").getValue("collisionRadius"));
+            .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
 
         // 创建物理模拟
         this.renderProperties.simulation = d3.forceSimulation(this.nodeList)
@@ -272,10 +272,10 @@ export class Graph {
     modifyNode(nodeObj) {
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`)
         const findedNodeCircle = findedNode.select("circle")
-            .attr("r", nodeObj.getComponent("exterior_node").getValue("size").x)
-            .style("fill", nodeObj.getComponent("exterior_node").getValue("bgColor"))
-            .style("stroke", nodeObj.getComponent("exterior_node").getValue("strokeColor"))
-            .style("stroke-width", nodeObj.getComponent("exterior_node").getValue("strokeWidth"));
+            .attr("r", nodeObj.autoGetValue("exterior_node", "size", 0, value => value.x))
+            .style("fill", nodeObj.autoGetValue("exterior_node", "bgColor", "#000000"))
+            .style("stroke", nodeObj.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
+            .style("stroke-width", nodeObj.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`));
         const findedNodeText = findedNode.select("text")
             .text(d => d.autoGetValue("text_node", "showText", ""))
             .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
@@ -290,8 +290,8 @@ export class Graph {
     modifyEdge(edgeObj) {
         const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
         findedEdge
-            .style("stroke", d => d.getComponent("exterior_edge").getValue("strokeColor"))
-            .style("stroke-width", d => d.getComponent("exterior_edge").getValue("strokeWidth"))
+            .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
+            .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
         // 更新物理
         this.renderProperties.forces.linkForce
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
