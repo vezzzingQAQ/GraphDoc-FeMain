@@ -23,6 +23,7 @@
 import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
 import { LoadEdgeFromJson, LoadNodeFromJson } from "./element";
+import { playMusic } from "../../../public/js/musicPlayer";
 
 export class Graph {
     /**
@@ -182,6 +183,13 @@ export class Graph {
                     } else {
                         window.location = nodeObj.autoGetValue("link_node", "url", ".");
                     }
+                }
+            })
+            // 悬停事件
+            .on("mouseenter", function () {
+                let nodeObj = d3.select(this).data()[0];
+                if (nodeObj.hasComponent("audio_node")) {
+                    playMusic(nodeObj.autoGetValue("audio_node", "soundVolume", 1));
                 }
             })
             .attr(`transform`, d => {

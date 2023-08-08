@@ -107,10 +107,11 @@ export class SC_Divider extends SubComponent {
  * 数字输入框
  */
 export class SC_NumberInput extends SubComponent {
-    constructor(defaultValue, readOnly = false, minValue = 0, maxValue = 100) {
+    constructor(defaultValue, readOnly = false, minValue = 0, maxValue = 100, step = 1) {
         super(defaultValue, readOnly);
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.step = step
     }
     initHtml() {
         this.dom = document.createElement("input");
@@ -121,6 +122,7 @@ export class SC_NumberInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.min = this.minValue;
         this.dom.max = this.maxValue;
+        this.dom.step = this.step;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
             this.updateGraph();

@@ -325,6 +325,18 @@ export class C_N_Text extends Component {
 }
 
 /**
+ * 节点的音效属性
+ */
+export class C_N_Audio extends Component {
+    constructor(showName, key, value = {
+        soundVolume: 1
+    }) {
+        super(showName, key, true);
+        this.addValue("soundVolume", "音量", new SC_NumberInput(value.soundVolume, false, 0, 1, 0.1));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -351,6 +363,12 @@ export const ComponentMap = {
         type: "node",
         showName: "文本",
         class: C_N_Text,
+    },
+    "audio_node": {
+        key: "audio_node",
+        type: "node",
+        showName: "悬停音效",
+        class: C_N_Audio,
     },
     "exterior_edge": {
         key: "exterior_edge",
