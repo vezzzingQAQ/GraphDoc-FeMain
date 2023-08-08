@@ -1,3 +1,5 @@
+@import url(./vairbles.less);
+
 * {
     margin: 0;
     padding: 0;
@@ -26,6 +28,40 @@ body {
             width: 20vw;
             height: 100vh;
             background-color: rgb(35, 35, 35);
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .topPan {
+                .window {
+                    overflow: hidden;
+                    border-bottom-left-radius: @normal_border_radius;
+                    border-bottom-right-radius: @normal_border_radius;
+
+                    .title {
+                        background-color: @bg_color_title;
+                        height: @add_pan_title_height;
+                        line-height: @add_pan_title_height;
+                        font-size: 14px;
+                        padding-left: 10px;
+                        color: @fg_color_1;
+                        letter-spacing: 2px;
+                    }
+
+                    .content {
+                        .container {
+                            color: @fg_color_1;
+                            background-color: @bg_color_pan;
+                            display: flex;
+                            flex-direction: row;
+                            padding: 5px;
+                        }
+                    }
+                }
+            }
+
         }
 
         .btnArea {
@@ -49,5 +85,26 @@ body {
                 cursor: pointer;
             }
         }
+    }
+}
+
+// 组件添加窗口
+.panArea .topPan .window .componentAddContainer .componentAddBtn {
+    display: block;
+    width: max-content;
+    height: @component_add_btn_height;
+    line-height: calc(@component_add_btn_height - 8px);
+    padding: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: @bg_color_input;
+    font-size: 13px;
+    text-align: center;
+    margin: 5px;
+    border-radius: @normal_border_radius;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+    &:hover{
+        background-color: @bg_color_title;
     }
 }

@@ -38,6 +38,7 @@
  * |_owner                                                    - 指向图谱的指针，在上一个层级(Graph)进行绑定
  * |_uuid                                                     - 元素的key，用来让图谱寻址，在图谱的addNode函数中自动生成
  * |_componentMap                                             - 元素的组件映射表(string->component*)
+ * |_type                                                     - node或edge
  * |_constructor(owner,showName,key)                          - 构造函数，传入一个graph的指针
  * |_addComponent(component)                                  - 添加组件
  * |_getComponent(key)                                        - 获取组件
@@ -45,6 +46,7 @@
  * |_toJsonObj()                                              - 将元素的属性转为JsonObject，提供给渲染器绘制
  * |_autoGetValue(componentKey,valueKey,defaultValue,afterFn) - 根据组件键和属性键获取值
  * |_autoSetValue(componentKey,valueKey,value)                - 根据组件键和属性键获设置值
+ * |_initComponentAddDom()                                    - 生成组件添加面板的DOM元素
  * |____Node
  * |    |_removeComponent(component)                          - 删除指定的component，由component类调用     
  * |____Edge
@@ -103,6 +105,7 @@ class Element {
         this.owner = null;
         this.uuid = "";
         this.componentMap = {};
+        this.type = null;
     }
 
     /**
@@ -192,7 +195,11 @@ class Element {
         for (let key of keyList) {
             domCompContianer.appendChild(this.componentMap[key].initHtml());
         }
-        return domCompContianer;
+        // 生成组件添加DOM
+        this.initComponentAddDom();
+        // 添加到文档
+        document.querySelector(".panArea .listPan").innerHTML = "";
+        document.querySelector(".panArea .listPan").appendChild(domCompContianer);
     }
 
     /**
@@ -207,6 +214,43 @@ class Element {
         }
         return jsonObj;
     }
+
+    /**
+     * 生成组件列表DOM元素
+     */
+    initComponentAddDom() {
+        let componentList = [];
+        for (let key in ComponentMap) {
+            if ((!this.hasComponent(key)) && (ComponentMap[key].type == this.type)) {
+                componentList.push(ComponentMap[key]);
+            }
+        }
+        console.log(componentList);
+        let domContainer = document.createElement("div");
+        domContainer.classList = "componentAddContainer container";
+        for (let componentObj of componentList) {
+            let domComponentAddBtn = document.createElement("div");
+            domComponentAddBtn.classList = "componentAddBtn";
+            console.log(componentObj)
+            domComponentAddBtn.innerText = componentObj.showName;
+            // 点击添加组件
+            domComponentAddBtn.addEventListener("click", () => {
+                this.addComponent(new componentObj.class(componentObj.showName, componentObj.key));
+                domComponentAddBtn.remove();
+                this.initHtml();
+                // 更新图表
+                if (this.type == "node") {
+                    this.owner.modifyNode(this);
+                } else {
+                    this.owner.modifyEdge(this);
+                }
+            });
+            domContainer.appendChild(domComponentAddBtn);
+        }
+        // 添加到文档
+        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+        document.querySelector(".panArea .topPan .addComponent .content").appendChild(domContainer);
+    }
 }
 
 export class Node extends Element {
@@ -215,6 +259,7 @@ export class Node extends Element {
      */
     constructor() {
         super();
+        this.type = "node";
         this.tempFixed = false;
     }
 
@@ -224,7 +269,8 @@ export class Node extends Element {
      */
     removeComponent(component) {
         component.dom.remove();
-        delete this.componentMap[component.key]
+        delete this.componentMap[component.key];
+        this.initHtml();
         this.owner.modifyNode(this);
     }
 }
@@ -235,6 +281,7 @@ export class Edge extends Element {
      */
     constructor() {
         super();
+        this.type = "edge";
         this.source = null;
         this.target = null;
     }
@@ -274,10 +321,21 @@ export class Edge extends Element {
         }
         return jsonObj;
     }
+
+    /**
+     * 由组件来调用，用户不能调用
+     * · 组件删除自身
+     */
+    removeComponent(component) {
+        component.dom.remove();
+        delete this.componentMap[component.key];
+        this.initHtml();
+        this.owner.modifyEdge(this);
+    }
+
 }
 
-import { Graph } from "./graph";
-import { C_E_Exterior, C_E_Physics, C_N_Exterior, C_N_Link, C_N_Physics, C_N_Text, LoadComponentFromJson } from "./component";
+import { C_E_Exterior, C_E_Physics, C_N_Exterior, C_N_Link, C_N_Physics, C_N_Text, ComponentMap, LoadComponentFromJson } from "./component";
 
 /**
  * 创建基本节点

@@ -43,6 +43,9 @@
  * | key就是从ComponentMap查询到的key
  * | valueObj直接指定值
  * 
+ * 生成组件列表DOM元素：
+ * · 直接调用InitComponentDom()
+ * 
  * by vezzzing 2023.8.3
  * z z z studio
  */
@@ -206,7 +209,7 @@ export class C_N_Exterior extends Component {
         dividerColor: "null",
         bgColor: "#000f00",
         dividerStroke: null,
-        strokeColor: "#00f1ff",
+        strokeColor: "#ffd500",
         strokeStyle: "line",
         strokeWidth: 1
     }) {
@@ -324,31 +327,41 @@ export class C_N_Text extends Component {
 /**
  * 寻址映射
  */
-const ComponentMap = {
+export const ComponentMap = {
     "exterior_node": {
         key: "exterior_node",
+        type: "node",
+        showName: "外观",
         class: C_N_Exterior,
     },
     "physics_node": {
         key: "physics_node",
+        type: "node",
+        showName: "物理",
         class: C_N_Physics,
     },
     "link_node": {
         key: "link_node",
+        type: "node",
+        showName: "外链",
         class: C_N_Link,
-        // link
     },
     "text_node": {
         key: "text_node",
+        type: "node",
+        showName: "文本",
         class: C_N_Text,
-        // showText
     },
     "exterior_edge": {
         key: "exterior_edge",
+        type: "edge",
+        showName: "外观",
         class: C_E_Exterior,
     },
     "physics_edge": {
         key: "physics_edge",
+        type: "edge",
+        showName: "物理",
         class: C_E_Physics,
     },
 }

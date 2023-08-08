@@ -307,12 +307,12 @@ export class Graph {
         this.renderProperties.simulation.alphaTarget(0.08).restart();
     }
 
+    /**
+     * 选择元素
+     */
     selectElement(elementObj) {
-        //this.selectedNode.push(node)
         this.selectedElement = elementObj;
-        console.log(elementObj)
-        document.querySelector(".panArea").innerHTML = "";
-        document.querySelector(".panArea").appendChild(elementObj.initHtml());
+        elementObj.initHtml();
     }
 
     toJsonObj() {
