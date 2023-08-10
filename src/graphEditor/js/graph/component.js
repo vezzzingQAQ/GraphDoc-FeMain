@@ -211,24 +211,28 @@ export class C_N_Exterior extends Component {
         bgColor: "#000f00",
         dividerStroke: null,
         strokeColor: "#ffd500",
-        strokeStyle: "line",
+        strokeStyle: "0",
         strokeWidth: 1
     }) {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
         this.addValue("sizeAuto", "自适应", new SC_Check(true, false));
-        this.addValue("shape", "形状", new SC_Select(value.shape, false, {
-            "circle": "圈圈",
-            "rect": "方块"
-        }))
+        this.addValue("shape", "形状", new SC_Select(value.shape, false, [
+            { value: "circle", text: "圈圈" },
+            { value: "rect", text: "方块" },
+        ]))
         this.addValue("dividerColor", null, new SC_Divider());
         this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor, false));
         this.addValue("dividerStroke", null, new SC_Divider());
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, {
-            "line": "_______",
-            "dot": "......",
-        }));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, [
+            { value: "0", text: "_______" },
+            { value: "3,1", text: "-- -- -- " },
+            { value: "2,1", text: "- - - -" },
+            { value: "0.8", text: "........" },
+            { value: "1,2", text: ". . . ." },
+            { value: "3,2,1,2", text: "._._._." },
+        ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
     }
 }
@@ -239,7 +243,7 @@ export class C_N_Exterior extends Component {
 export class C_E_Exterior extends Component {
     constructor(showName, key, value = {
         strokeColor: "#666666",
-        strokeStyle: "line",
+        strokeStyle: "dot",
         strokeWidth: 0.3
     }) {
         super(showName, key, false);

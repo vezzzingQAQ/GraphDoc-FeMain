@@ -298,7 +298,10 @@ export class Graph {
             })
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
-            .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`));
+            .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
+            .style("stroke-dasharray", d => { 
+                console.log(d.autoGetValue("exterior_node", "strokeStyle", "0"))
+                return d.autoGetValue("exterior_node", "strokeStyle", "0")});
         // 更新物理
         this.renderProperties.forces.collideForce
             .radius(d => {

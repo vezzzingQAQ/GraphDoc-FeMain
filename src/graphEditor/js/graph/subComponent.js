@@ -227,17 +227,38 @@ export class SC_Select extends SubComponent {
     }
     initHtml() {
         this.dom = document.createElement("select");
-        for (let key in this.selectList) {
-            let value = this.selectList[key];
+        for (let pair of this.selectList) {
+            let value = pair.value;
+            let text = pair.text;
             let domSelectOption = document.createElement("option");
-            domSelectOption.value = key;
-            domSelectOption.innerText = value;
+            domSelectOption.value = value;
+            domSelectOption.innerText = text;
             this.dom.appendChild(domSelectOption);
-            this.dom.addEventListener("click", () => {
-                this.setValue(this.dom.value);
-            });
         }
+        // 指定默认元素
+        for (let i = 0; i < this.dom.options.length; i++) {
+            if (this.defaultValue == this.dom.options[i].value) {
+                this.dom.options[i].selected = true;
+            } else {
+                this.dom.options[i].selected = false;
+            }
+        }
+        this.dom.addEventListener("change", () => {
+            this.setValue(this.dom.options[this.dom.selectedIndex].value);
+            this.updateGraph();
+        });
         return this.dom;
+    }
+    updateHtml() {
+        if (this.dom) {
+            for (let i = 0; i < this.dom.options.length; i++) {
+                if (this.value == this.dom.options[i].value) {
+                    this.dom.options[i].selected = true;
+                } else {
+                    this.dom.options[i].selected = false;
+                }
+            }
+        }
     }
 }
 
