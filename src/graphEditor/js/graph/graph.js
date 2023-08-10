@@ -274,7 +274,7 @@ export class Graph {
             d.fy = event.y;
         }
         function dragended(event, d) {
-            if (!event.active) _.renderProperties.simulation.alphaTarget(0.001);
+            if (!event.active) _.renderProperties.simulation.alphaTarget(0.0001);
             d.fx = null;
             d.fy = null;
         }

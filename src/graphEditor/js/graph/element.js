@@ -351,6 +351,7 @@ import {
     C_N_Exterior,
     C_N_Link,
     C_N_Physics,
+    C_N_ScaleHover,
     C_N_Text,
     ComponentMap,
     LoadComponentFromJson
@@ -364,7 +365,7 @@ export function CreateBasicNode() {
     let node = new Node();
     node.addComponent(new C_N_Exterior("外观", "exterior_node"));
     node.addComponent(new C_N_Physics("物理", "physics_node"));
-    // node.addComponent(new C_N_Audio("音效","audio_node"))
+    node.addComponent(new C_N_ScaleHover("悬停缩放", "scaleHover_node"));
     return node;
 }
 
