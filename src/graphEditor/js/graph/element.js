@@ -229,7 +229,7 @@ class Element {
                 let addedComponent = new componentObj.class(componentObj.showName, componentObj.key);
                 domComponentAddBtn.remove();
                 this.addComponent(addedComponent);
-                document.querySelector(".panArea .listPan").appendChild(addedComponent.initHtml());
+                document.querySelector(".panArea .listPan").insertAdjacentElement("afterbegin", addedComponent.initHtml());
                 // 更新图表
                 if (this.type == "node") {
                     this.owner.modifyNode(this);
