@@ -190,7 +190,7 @@ export class Graph {
                 // 缩放
                 let node = d3.select(this).select(".nodeGraph");
                 if (nodeObj.hasComponent("scaleHover_node")) {
-                    let radius = nodeObj.autoGetValue("exterior_node", "size", 10, (value) => { return value.x });
+                    let radius = node.attr("r");
                     let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
                     node
                         .transition()
@@ -203,7 +203,7 @@ export class Graph {
                 let nodeObj = d3.select(this).data()[0];
                 let node = d3.select(this).select(".nodeGraph");
                 if (nodeObj.hasComponent("scaleHover_node")) {
-                    let radius = nodeObj.autoGetValue("exterior_node", "size", 10, (value) => { return value.x });
+                    let radius = node.attr("r") / nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
                     node
                         .transition()
                         .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
@@ -317,7 +317,6 @@ export class Graph {
                 let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
                 if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
                     radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r");
-                    console.log(radius);
                 }
                 return radius;
             });
