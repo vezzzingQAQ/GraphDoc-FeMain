@@ -263,9 +263,7 @@ export class C_N_Physics extends Component {
         dividerManyBodyForce: null,
         manyBodyForceStrength: 80,
         manyBodyForceRangeMin: 10,
-        manyBodyForceRangeMax: 112,
-        dividerPosition: null,
-        position: { x: 0, y: 0 }
+        manyBodyForceRangeMax: 112
     }) {
         super(showName, key, false);
         this.addValue("dividerCollision", "▼碰撞", new SC_Divider());
@@ -275,8 +273,6 @@ export class C_N_Physics extends Component {
         this.addValue("manyBodyForceStrength", "大小", new SC_NumberInput(value.manyBodyForceStrength, false, -Infinity, Infinity));
         this.addValue("manyBodyForceRangeMin", "最小范围", new SC_NumberInput(value.manyBodyForceRangeMin, false, 0, Infinity));
         this.addValue("manyBodyForceRangeMax", "最大范围", new SC_NumberInput(value.manyBodyForceRangeMax, false, 0, Infinity));
-        this.addValue("dividerPosition", "", new SC_Divider());
-        this.addValue("position", "位置", new SC_Vector2(value.position, true));
     }
 }
 

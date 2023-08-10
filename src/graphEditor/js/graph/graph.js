@@ -211,11 +211,11 @@ export class Graph {
                         .attr("r", radius);
                 }
             })
-            .attr(`transform`, d => {
-                let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
-                let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
-                return `translate(${x},${y})`;
-            })
+            // .attr(`transform`, d => {
+            //     let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
+            //     let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
+            //     return `translate(${x},${y})`;
+            // })
             .call(d3.drag()
                 .on("start", dragstarted)
                 .on("drag", dragged)
@@ -244,15 +244,12 @@ export class Graph {
         // 计算物理模拟
         this.renderProperties.simulation.on("tick", () => {
             edges
-                .attr("x1", d => d.source.autoGetValue("physics_node", "position", 0, (value) => value.x))
-                .attr("y1", d => d.source.autoGetValue("physics_node", "position", 0, (value) => value.y))
-                .attr("x2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.x))
-                .attr("y2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.y));
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
 
-            nodes.attr("transform", d => {
-                d.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
-                return `translate(${d.x},${d.y})`
-            });
+            nodes.attr("transform", d => `translate(${d.x},${d.y})`);
         });
 
         // 缩放平移
