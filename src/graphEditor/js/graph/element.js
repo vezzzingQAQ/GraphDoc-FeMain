@@ -226,9 +226,10 @@ class Element {
             domComponentAddBtn.innerText = componentObj.showName;
             // 点击添加组件
             domComponentAddBtn.addEventListener("click", () => {
-                this.addComponent(new componentObj.class(componentObj.showName, componentObj.key));
+                let addedComponent = new componentObj.class(componentObj.showName, componentObj.key);
                 domComponentAddBtn.remove();
-                this.initHtml();
+                this.addComponent(addedComponent);
+                document.querySelector(".panArea .listPan").appendChild(addedComponent.initHtml());
                 // 更新图表
                 if (this.type == "node") {
                     this.owner.modifyNode(this);
@@ -278,7 +279,7 @@ export class Node extends Element {
     removeComponent(component) {
         component.dom.remove();
         delete this.componentMap[component.key];
-        this.initHtml();
+        this.initComponentAddDom();
         this.owner.modifyNode(this);
     }
 }
@@ -337,7 +338,7 @@ export class Edge extends Element {
     removeComponent(component) {
         component.dom.remove();
         delete this.componentMap[component.key];
-        this.initHtml();
+        this.initComponentAddDom();
         this.owner.modifyEdge(this);
     }
 
