@@ -229,34 +229,20 @@ export class Graph {
         // 根据外观组件绘制节点的形状
         const nodeDraw = nodes.append("circle")
             .attr("class", "nodeCircle nodeGraph")
-            // 绑定自定义的属性
-            .attr("r", d => {
-                let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
-                // 根据文字大小来决定
-                if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                    if (d.hasComponent("text_node")) {
-                        radius = calLength(d.autoGetValue("text_node", "showText", "")) * d.autoGetValue("text_node", `textSize`, 2) * 0.5 + d.autoGetValue("text_node", `textSpacing`, 1) * 1.9;
-                    } else {
-                        radius = 10;
-                    }
-                }
-                return radius;
-            })
-            .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
-            .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
-            .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", 1))
             .style("cursor", "pointer")
 
         // 绘制node文本
         const nodeText = nodes.append("text")
-            .text(d => d.autoGetValue("text_node", "showText", ""))
-            .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
-            .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
-            .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
-            .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
             .style("text-anchor", "middle")
             .style("dominant-baseline", "middle")
             .style("cursor", "pointer");
+
+        for (let node of this.nodeList) {
+            _.modifyNode(node);
+        }
+        for (let edge of this.edgeList) {
+            _.modifyEdge(edge);
+        }
 
         // 计算物理模拟
         this.renderProperties.simulation.on("tick", () => {
