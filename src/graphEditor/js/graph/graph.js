@@ -190,25 +190,23 @@ export class Graph {
                 // 缩放
                 let node = d3.select(this).select(".nodeGraph");
                 if (nodeObj.hasComponent("scaleHover_node")) {
-                    let radius = node.attr("r");
                     let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
                     node
                         .transition()
                         .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
                         .ease(d3.easeElasticOut)
-                        .attr("r", radius * radiusScale);
+                        .style("transform", `scale(${radiusScale})`);
                 }
             })
             .on("mouseleave", function () {
                 let nodeObj = d3.select(this).data()[0];
                 let node = d3.select(this).select(".nodeGraph");
                 if (nodeObj.hasComponent("scaleHover_node")) {
-                    let radius = node.attr("r") / nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
                     node
                         .transition()
                         .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
                         .ease(d3.easeElasticOut)
-                        .attr("r", radius);
+                        .style("transform", `scale(1)`);
                 }
             })
             .call(d3.drag()
