@@ -211,11 +211,6 @@ export class Graph {
                         .attr("r", radius);
                 }
             })
-            // .attr(`transform`, d => {
-            //     let x = d.autoGetValue("physics_node", "position", 0, (value) => { return value.x });
-            //     let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
-            //     return `translate(${x},${y})`;
-            // })
             .call(d3.drag()
                 .on("start", dragstarted)
                 .on("drag", dragged)
@@ -299,8 +294,6 @@ export class Graph {
                 if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                     if (d.hasComponent("text_node")) {
                         radius = Math.max(Math.abs(findedNodeText.node().getBBox().x), Math.abs(findedNodeText.node().getBBox().y)) + 8;
-                    } else {
-                        radius = 10;
                     }
                 }
                 return radius;
