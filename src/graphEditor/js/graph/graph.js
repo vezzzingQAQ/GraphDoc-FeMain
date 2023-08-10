@@ -337,11 +337,12 @@ export class Graph {
         findedEdge
             .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
+            .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"));
         // 更新物理
         this.renderProperties.forces.linkForce
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
-        this.renderProperties.simulation.alphaTarget(0.08).restart();
+        this.renderProperties.simulation.alphaTarget(0.001).restart();
     }
 
     /**

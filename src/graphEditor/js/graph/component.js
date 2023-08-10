@@ -248,10 +248,14 @@ export class C_E_Exterior extends Component {
     }) {
         super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, {
-            "line": "_______",
-            "dot": "......",
-        }));
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, [
+            { value: "0", text: "_______" },
+            { value: "3,1", text: "-- -- -- " },
+            { value: "2,1", text: "- - - -" },
+            { value: "0.8", text: "........" },
+            { value: "1,2", text: ". . . ." },
+            { value: "3,2,1,2", text: "._._._." },
+        ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
     }
 }
