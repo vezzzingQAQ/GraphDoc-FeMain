@@ -275,7 +275,7 @@ export class Graph {
         function drag() {
 
             function dragstarted(event, d) {
-                if (!event.active) _.renderProperties.simulation.alphaTarget(0.08).restart();
+                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0228).restart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
@@ -286,7 +286,7 @@ export class Graph {
             }
 
             function dragended(event, d) {
-                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0008);
+                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0228);
                 d.fx = null;
                 d.fy = null;
             }
