@@ -24,6 +24,7 @@ import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
 import { LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
+import { calLength } from "../../../public/js/stringLength";
 
 export class Graph {
     /**
@@ -229,7 +230,18 @@ export class Graph {
         const nodeDraw = nodes.append("circle")
             .attr("class", "nodeCircle nodeGraph")
             // 绑定自定义的属性
-            .attr("r", d => d.autoGetValue("exterior_node", "size", 10, (value) => { return value.x }))
+            .attr("r", d => {
+                let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                // 根据文字大小来决定
+                if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                    if (d.hasComponent("text_node")) {
+                        radius = calLength(d.autoGetValue("text_node", "showText", "")) * d.autoGetValue("text_node", `textSize`, 2) * 0.5 + d.autoGetValue("text_node", `textSpacing`, 1) * 1.9;
+                    } else {
+                        radius = 10;
+                    }
+                }
+                return radius;
+            })
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", 1))
@@ -304,17 +316,29 @@ export class Graph {
      */
     modifyNode(nodeObj) {
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`)
-        const findedNodeCircle = findedNode.select("circle")
-            .attr("r", nodeObj.autoGetValue("exterior_node", "size", 0, value => value.x))
-            .style("fill", nodeObj.autoGetValue("exterior_node", "bgColor", "#000000"))
-            .style("stroke", nodeObj.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
-            .style("stroke-width", nodeObj.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`));
         const findedNodeText = findedNode.select("text")
             .text(d => d.autoGetValue("text_node", "showText", ""))
             .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
             .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
             .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
             .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+        const findedNodeCircle = findedNode.select("circle")
+            .attr("r", d => {
+                let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                // 根据文字大小来决定
+                if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                    if (d.hasComponent("text_node")) {
+                        console.log(d.autoGetValue("text_node", `textSpacing`, 1));
+                        radius = Math.max(Math.abs(findedNodeText.node().getBBox().x), Math.abs(findedNodeText.node().getBBox().y)) + 8;
+                    } else {
+                        radius = 10;
+                    }
+                }
+                return radius;
+            })
+            .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
+            .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
+            .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`));
         // 更新物理
         this.renderProperties.forces.collideForce
             .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));

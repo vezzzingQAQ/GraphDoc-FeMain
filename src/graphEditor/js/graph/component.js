@@ -205,6 +205,7 @@ import {
 export class C_N_Exterior extends Component {
     constructor(showName, key, value = {
         size: { x: 10, y: 1 },
+        sizeAuto: true,
         shape: "circle",
         dividerColor: "null",
         bgColor: "#000f00",
@@ -215,6 +216,7 @@ export class C_N_Exterior extends Component {
     }) {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
+        this.addValue("sizeAuto", "自适应", new SC_Check(true, false));
         this.addValue("shape", "形状", new SC_Select(value.shape, false, {
             "circle": "圈圈",
             "rect": "方块"
