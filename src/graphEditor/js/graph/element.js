@@ -48,6 +48,7 @@
  * |_autoSetValue(componentKey,valueKey,value)                - 根据组件键和属性键获设置值
  * |_initComponentAddDom()                                    - 生成组件添加面板的DOM元素
  * |____Node
+ * |    |_toJsonObj()                                         - 重写toJsonObj方法
  * |    |_removeComponent(component)                          - 删除指定的component，由component类调用     
  * |____Edge
  *      |_source                                              - 从哪个节点
@@ -205,15 +206,7 @@ class Element {
     /**
      * 转为JSON
      */
-    toJsonObj() {
-        let jsonObj = {};
-        jsonObj.uuid = this.uuid;
-        jsonObj.components = {};
-        for (let key in this.componentMap) {
-            jsonObj.components[key] = this.componentMap[key].toJsonObj();
-        }
-        return jsonObj;
-    }
+    toJsonObj() /*override*/ { }
 
     /**
      * 生成组件列表DOM元素
@@ -261,6 +254,23 @@ export class Node extends Element {
         super();
         this.type = "node";
         this.tempFixed = false;
+    }
+
+    /**
+     * 转为JSON
+     */
+    toJsonObj() {
+        let jsonObj = {};
+        jsonObj.uuid = this.uuid;
+        jsonObj.components = {};
+        jsonObj.vx = this.vx;
+        jsonObj.vy = this.vy;
+        jsonObj.x = this.x;
+        jsonObj.y = this.y;
+        for (let key in this.componentMap) {
+            jsonObj.components[key] = this.componentMap[key].toJsonObj();
+        }
+        return jsonObj;
     }
 
     /**
@@ -335,6 +345,7 @@ export class Edge extends Element {
 
 }
 
+import { json } from "d3";
 import {
     C_E_Exterior,
     C_E_Physics,
@@ -399,6 +410,10 @@ export function CreateTextNode() {
 export function LoadNodeFromJson(jsonObj) {
     let createdNode = new Node();
     createdNode.setUuid(jsonObj.uuid);
+    createdNode.vx = jsonObj.vx;
+    createdNode.vy = jsonObj.vy;
+    createdNode.x = jsonObj.x;
+    createdNode.y = jsonObj.y;
     for (let componentKey in jsonObj.components) {
         let createdComponent = LoadComponentFromJson(componentKey, jsonObj.components[componentKey]);
         createdNode.addComponent(createdComponent);

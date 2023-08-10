@@ -24,7 +24,6 @@ import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
 import { LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
-import { calLength } from "../../../public/js/stringLength";
 
 export class Graph {
     /**
@@ -108,11 +107,6 @@ export class Graph {
             .y(renderDom.offsetHeight / 2)
             .strength(0.3);
 
-        // const chargeForce = d3.forceManyBody()
-        //     .strength(d => d.getComponent("physics_node").getValue("manyBodyForceStrength"))
-        //     .distanceMax(d => d.getComponent("physics_node").getValue("manyBodyForceRangeMax"))
-        //     .distanceMax(d => d.getComponent("physics_node").getValue("manyBodyForceRangeMin"));
-
         _.renderProperties.forces.chargeForce = d3.forceManyBody()
             .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
             .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
@@ -127,7 +121,7 @@ export class Graph {
             .force("center", _.renderProperties.forces.centerForce)
             .force("charge", _.renderProperties.forces.chargeForce)
             .force("collide", _.renderProperties.forces.collideForce)
-            .alphaDecay(0.08);
+            .alphaDecay(0.8);
 
         // 创建画布
         this.renderProperties.svg = d3.select(".displayArea svg")
@@ -223,7 +217,10 @@ export class Graph {
                 let y = d.autoGetValue("physics_node", "position", 0, (value) => { return value.y });
                 return `translate(${x},${y})`;
             })
-            .call(drag())
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended))
 
 
         // 根据外观组件绘制节点的形状
@@ -237,6 +234,7 @@ export class Graph {
             .style("dominant-baseline", "middle")
             .style("cursor", "pointer");
 
+        // 开始的时候先全部更新一遍，装入数据
         for (let node of this.nodeList) {
             _.modifyNode(node);
         }
@@ -252,7 +250,7 @@ export class Graph {
                 .attr("x2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.x))
                 .attr("y2", d => d.target.autoGetValue("physics_node", "position", 0, (value) => value.y));
 
-            nodes.attr("transform", function (d) {
+            nodes.attr("transform", d => {
                 d.autoSetValue("physics_node", "position", { x: d.x, y: d.y });
                 return `translate(${d.x},${d.y})`
             });
@@ -270,29 +268,19 @@ export class Graph {
             .on("dblclick.zoom", null);
 
         // 拖动
-        function drag() {
-
-            function dragstarted(event, d) {
-                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0228).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(event, d) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-
-            function dragended(event, d) {
-                if (!event.active) _.renderProperties.simulation.alphaTarget(0.0228);
-                d.fx = null;
-                d.fy = null;
-            }
-
-            return d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended);
+        function dragstarted(event, d) {
+            if (!event.active) _.renderProperties.simulation.alphaTarget(0.2).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+        function dragended(event, d) {
+            if (!event.active) _.renderProperties.simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
         }
     }
 
