@@ -98,7 +98,7 @@ export class Graph {
 
         // 创建所需要的力
         _.renderProperties.forces.linkForce = d3.forceLink()
-            .links(this.edgeList)
+            .links(_.edgeList)
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
 
@@ -116,7 +116,7 @@ export class Graph {
             .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
 
         // 创建物理模拟
-        this.renderProperties.simulation = d3.forceSimulation(this.nodeList)
+        _.renderProperties.simulation = d3.forceSimulation(_.nodeList)
             .force("link", _.renderProperties.forces.linkForce)
             .force("center", _.renderProperties.forces.centerForce)
             .force("charge", _.renderProperties.forces.chargeForce)
@@ -124,17 +124,17 @@ export class Graph {
             .alphaDecay(0.8);
 
         // 创建画布
-        this.renderProperties.svg = d3.select(".displayArea svg")
+        _.renderProperties.svg = d3.select(".displayArea svg")
             .attr("width", renderDom.offsetWidth)
             .attr("height", renderDom.offsetHeight)
 
         // 创建绘画区域
-        this.renderProperties.viewArea = this.renderProperties.svg.append("g")
+        _.renderProperties.viewArea = _.renderProperties.svg.append("g")
             .attr("class", "viewArea");
 
         // 绘制关系
-        const edges = this.renderProperties.viewArea.selectAll(".forceLine")
-            .data(this.edgeList)
+        const edges = _.renderProperties.viewArea.selectAll(".forceLine")
+            .data(_.edgeList)
             .enter()
             .append("line")
             .attr("class", "forceLine forceElemet")
@@ -152,8 +152,8 @@ export class Graph {
             });
 
         // 绘制node
-        const nodes = this.renderProperties.viewArea.selectAll(".forceNode")
-            .data(this.nodeList)
+        const nodes = _.renderProperties.viewArea.selectAll(".forceNode")
+            .data(_.nodeList)
             .enter()
             .append("g")
             .attr("class", "forceNode forceElemet")
@@ -227,15 +227,15 @@ export class Graph {
             .style("cursor", "pointer");
 
         // 开始的时候先全部更新一遍，装入数据
-        for (let node of this.nodeList) {
+        for (let node of _.nodeList) {
             _.modifyNode(node);
         }
-        for (let edge of this.edgeList) {
+        for (let edge of _.edgeList) {
             _.modifyEdge(edge);
         }
 
         // 计算物理模拟
-        this.renderProperties.simulation.on("tick", () => {
+        _.renderProperties.simulation.on("tick", () => {
             edges
                 .attr("x1", d => d.source.x)
                 .attr("y1", d => d.source.y)
@@ -246,12 +246,12 @@ export class Graph {
         });
 
         // 缩放平移
-        this.renderProperties.svg.call(d3.zoom()
+        _.renderProperties.svg.call(d3.zoom()
             .extent([[0, 0], [window.innerWidth, window.innerHeight]])
             .scaleExtent([0.1, 20])
 
             .on("zoom", ({ transform }) => {
-                this.renderProperties.viewArea.attr("transform", transform);
+                _.renderProperties.viewArea.attr("transform", transform);
             }))
             // 取消双击放大事件
             .on("dblclick.zoom", null);
