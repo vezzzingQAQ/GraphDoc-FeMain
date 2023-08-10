@@ -268,7 +268,7 @@ export class C_N_Physics extends Component {
         super(showName, key, false);
         this.addValue("dividerCollision", "▼碰撞", new SC_Divider());
         this.addValue("collisionRadius", "碰撞半径", new SC_NumberInput(value.collisionRadius, false, 0, 10000));
-        this.addValue("collisionRadiusAuto", "自动更新碰撞", new SC_Check(true, false));
+        this.addValue("collisionRadiusAuto", "自动更新碰撞", new SC_Check(value.collisionRadiusAuto, false));
         this.addValue("dividerManyBodyForce", "▼引/斥力", new SC_Divider());
         this.addValue("manyBodyForceStrength", "大小", new SC_NumberInput(value.manyBodyForceStrength, false, -Infinity, Infinity));
         this.addValue("manyBodyForceRangeMin", "最小范围", new SC_NumberInput(value.manyBodyForceRangeMin, false, 0, Infinity));
