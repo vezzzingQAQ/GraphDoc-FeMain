@@ -348,6 +348,7 @@ import { json } from "d3";
 import {
     C_E_Exterior,
     C_E_Physics,
+    C_E_ScaleHover,
     C_N_Audio,
     C_N_Exterior,
     C_N_Link,
@@ -379,6 +380,7 @@ export function CreateBasicEdge(source, target) {
     edge.setTarget(target);
     edge.addComponent(new C_E_Exterior("外观", "exterior_edge"));
     edge.addComponent(new C_E_Physics("物理", "physics_edge"));
+    edge.addComponent(new C_E_ScaleHover("悬停缩放", "scaleHover_edge"));
     return edge;
 }
 

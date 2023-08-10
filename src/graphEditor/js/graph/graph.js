@@ -139,8 +139,6 @@ export class Graph {
             .append("line")
             .attr("class", "forceLine forceElemet")
             .attr("id", d => d.uuid)
-            .style("stroke", d => d.getComponent("exterior_edge").getValue("strokeColor"))
-            .style("stroke-width", d => d.getComponent("exterior_edge").getValue("strokeWidth"))
             .style("cursor", "pointer")
             .style("outline", "none")
             .on("click", function (d, i) {
@@ -149,6 +147,31 @@ export class Graph {
                 let edge = d3.select(this);
                 edge.style("outline", "1px dashed white");
                 _.selectElement(edgeObj);
+            })
+            .on("mouseenter", function () {
+                // 缩放
+                let edge = d3.select(this);
+                let edgeObj = d3.select(this).data()[0];
+                if (edgeObj.hasComponent("scaleHover_edge")) {
+                    let scale = edgeObj.autoGetValue("scaleHover_edge", "scale", 1.2);
+                    edge
+                        .transition()
+                        .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
+                        .ease(d3.easeElasticOut)
+                        .style("stroke-width", `${edgeObj.autoGetValue("exterior_edge", "strokeWidth") * scale}px`);
+                }
+            })
+            .on("mouseleave", function () {
+                // 缩放
+                let edge = d3.select(this);
+                let edgeObj = d3.select(this).data()[0];
+                if (edgeObj.hasComponent("scaleHover_edge")) {
+                    edge
+                        .transition()
+                        .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
+                        .ease(d3.easeElasticOut)
+                        .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
+                }
             });
 
         // 绘制node

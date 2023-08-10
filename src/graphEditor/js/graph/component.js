@@ -244,7 +244,7 @@ export class C_E_Exterior extends Component {
     constructor(showName, key, value = {
         strokeColor: "#666666",
         strokeStyle: "dot",
-        strokeWidth: 0.3
+        strokeWidth: 0.6
     }) {
         super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
@@ -359,6 +359,20 @@ export class C_N_ScaleHover extends Component {
 }
 
 /**
+ * 关系悬停缩放组件
+ */
+export class C_E_ScaleHover extends Component {
+    constructor(showName, key, value = {
+        scale: 11,
+        scaleTime: 0.5
+    }) {
+        super(showName, key, true);
+        this.addValue("scale", "缩放大小", new SC_NumberInput(value.scale, false, 0, 1000, 0.1));
+        this.addValue("scaleTime", "缩放时间", new SC_NumberInput(value.scaleTime, false, 0, 1000, 0.1));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -409,6 +423,12 @@ export const ComponentMap = {
         type: "node",
         showName: "悬停缩放",
         class: C_N_ScaleHover,
+    },
+    "scaleHover_edge": {
+        key: "scaleHover_edge",
+        type: "edge",
+        showName: "悬停缩放",
+        class: C_E_ScaleHover,
     }
 }
 
