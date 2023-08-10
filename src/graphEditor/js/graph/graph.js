@@ -2,19 +2,19 @@
  * 类文档：
  * 
  * Graph
- * |_nodeList         - 图谱的节点列表
- * |                  · 储存的是Node类指针
- * |_wdgeList         - 图谱的关系列表
- * |                  · 储存edge类指针
- * |_selectedNodeList - 被选中的节点的列表
- * |_renderProperties - 渲染的参数集
- * |                  · 储存渲染的svg、viewAarea等参数，方便在不同的方法之间调用
- * |_addNode(node)    - 向图谱中添加节点
- * |_render()         - 渲染图谱
- * |_modifyNode(node) - 修改特定node的参数，传入node类，自动寻找其DOM元素
- * |_select(node)     - 选择一个指定的节点
- * |_toJsonObj()      - 将图谱转换为JsonObject
- * |_clearRender()    - 清除所有的svg元素和力模拟数据 TODO
+ * |_nodeList               - 图谱的节点列表
+ * |                        · 储存的是Node类指针
+ * |_wdgeList               - 图谱的关系列表
+ * |                        · 储存edge类指针
+ * |_selectedNodeList       - 被选中的节点的列表
+ * |_renderProperties       - 渲染的参数集
+ * |                        · 储存渲染的svg、viewAarea等参数，方便在不同的方法之间调用
+ * |_addNode(node)          - 向图谱中添加节点
+ * |_render()               - 渲染图谱
+ * |_modifyNode(node)       - 修改特定node的参数，传入node类，自动寻找其DOM元素
+ * |_selectElement(element) - 选择一个指定的元素
+ * |_toJsonObj()            - 将图谱转换为JsonObject
+ * |_clearRender()          - 清除所有的svg元素和力模拟数据 TODO
  * 
  * 从JSON生成图谱：
  * · 调用函数LoadGraphFromJson(jsonObj)来返回一个图谱类
@@ -313,7 +313,14 @@ export class Graph {
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`));
         // 更新物理
         this.renderProperties.forces.collideForce
-            .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
+            .radius(d => {
+                let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
+                if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
+                    radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r");
+                    console.log(radius);
+                }
+                return radius;
+            });
         this.renderProperties.forces.chargeForce = d3.forceManyBody()
             .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
             .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
