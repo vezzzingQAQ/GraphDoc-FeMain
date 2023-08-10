@@ -234,6 +234,19 @@ export class Graph {
             _.modifyEdge(edge);
         }
 
+        // 点击空白处取消选择
+        document.querySelector(".displayArea svg").addEventListener("click", function (e) {
+            if (e.target == this) {
+                _.selectedElement = null;
+                _.renderProperties.viewArea.selectAll(".forceLine")
+                    .style("outline", "none");
+                _.renderProperties.viewArea.selectAll(".forceNode")
+                    .style("outline", "none");
+                document.querySelector(".panArea .listPan").innerHTML = "";
+                document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+            }
+        });
+
         // 计算物理模拟
         _.renderProperties.simulation.on("tick", () => {
             edges
