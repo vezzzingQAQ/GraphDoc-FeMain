@@ -218,13 +218,11 @@ class Element {
                 componentList.push(ComponentMap[key]);
             }
         }
-        console.log(componentList);
         let domContainer = document.createElement("div");
         domContainer.classList = "componentAddContainer container";
         for (let componentObj of componentList) {
             let domComponentAddBtn = document.createElement("div");
             domComponentAddBtn.classList = "componentAddBtn";
-            console.log(componentObj)
             domComponentAddBtn.innerText = componentObj.showName;
             // 点击添加组件
             domComponentAddBtn.addEventListener("click", () => {

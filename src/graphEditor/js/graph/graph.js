@@ -192,7 +192,6 @@ export class Graph {
                 if (nodeObj.hasComponent("scaleHover_node")) {
                     let radius = nodeObj.autoGetValue("exterior_node", "size", 10, (value) => { return value.x });
                     let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
-                    console.log(node);
                     node
                         .transition()
                         .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
@@ -302,7 +301,6 @@ export class Graph {
                 // 根据文字大小来决定
                 if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                     if (d.hasComponent("text_node")) {
-                        console.log(d.autoGetValue("text_node", `textSpacing`, 1));
                         radius = Math.max(Math.abs(findedNodeText.node().getBBox().x), Math.abs(findedNodeText.node().getBBox().y)) + 8;
                     } else {
                         radius = 10;
