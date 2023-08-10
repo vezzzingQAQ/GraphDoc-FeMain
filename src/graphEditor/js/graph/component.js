@@ -212,7 +212,7 @@ export class C_N_Exterior extends Component {
         dividerStroke: null,
         strokeColor: "#ffd500",
         strokeStyle: "0",
-        strokeWidth: 1
+        strokeWidth: 0.5
     }) {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
@@ -233,7 +233,7 @@ export class C_N_Exterior extends Component {
             { value: "1,2", text: ". . . ." },
             { value: "3,2,1,2", text: "._._._." },
         ]));
-        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
+        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100, 0.1));
     }
 }
 
