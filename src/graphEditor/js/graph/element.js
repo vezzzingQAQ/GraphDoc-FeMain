@@ -335,7 +335,17 @@ export class Edge extends Element {
 
 }
 
-import { C_E_Exterior, C_E_Physics, C_N_Audio, C_N_Exterior, C_N_Link, C_N_Physics, C_N_Text, ComponentMap, LoadComponentFromJson } from "./component";
+import {
+    C_E_Exterior,
+    C_E_Physics,
+    C_N_Audio,
+    C_N_Exterior,
+    C_N_Link,
+    C_N_Physics,
+    C_N_Text,
+    ComponentMap,
+    LoadComponentFromJson
+} from "./component";
 
 /**
  * 创建基本节点

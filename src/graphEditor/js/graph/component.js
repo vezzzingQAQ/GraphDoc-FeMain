@@ -337,6 +337,20 @@ export class C_N_Audio extends Component {
 }
 
 /**
+ * 节点悬停缩放组件
+ */
+export class C_N_ScaleHover extends Component {
+    constructor(showName, key, value = {
+        scale: 1.2,
+        scaleTime: 0.5
+    }) {
+        super(showName, key, true);
+        this.addValue("scale", "缩放大小", new SC_NumberInput(value.scale, false, 0, 1000, 0.1));
+        this.addValue("scaleTime", "缩放时间", new SC_NumberInput(value.scaleTime, false, 0, 1000, 0.1));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -364,12 +378,6 @@ export const ComponentMap = {
         showName: "文本",
         class: C_N_Text,
     },
-    "audio_node": {
-        key: "audio_node",
-        type: "node",
-        showName: "悬停音效",
-        class: C_N_Audio,
-    },
     "exterior_edge": {
         key: "exterior_edge",
         type: "edge",
@@ -382,6 +390,18 @@ export const ComponentMap = {
         showName: "物理",
         class: C_E_Physics,
     },
+    "audio_node": {
+        key: "audio_node",
+        type: "node",
+        showName: "悬停音效",
+        class: C_N_Audio,
+    },
+    "scaleHover_node": {
+        key: "scaleHover_node",
+        type: "node",
+        showName: "悬停缩放",
+        class: C_N_ScaleHover,
+    }
 }
 
 /**

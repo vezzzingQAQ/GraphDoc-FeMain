@@ -188,8 +188,33 @@ export class Graph {
             // 悬停事件
             .on("mouseenter", function () {
                 let nodeObj = d3.select(this).data()[0];
+                // 播放音效
                 if (nodeObj.hasComponent("audio_node")) {
                     playMusic(nodeObj.autoGetValue("audio_node", "soundVolume", 1));
+                }
+                // 缩放
+                let node = d3.select(this).select(".nodeGraph");
+                if (nodeObj.hasComponent("scaleHover_node")) {
+                    let radius = nodeObj.autoGetValue("exterior_node", "size", 10, (value) => { return value.x });
+                    let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
+                    console.log(node);
+                    node
+                        .transition()
+                        .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
+                        .ease(d3.easeElasticOut)
+                        .attr("r", radius * radiusScale);
+                }
+            })
+            .on("mouseleave", function () {
+                let nodeObj = d3.select(this).data()[0];
+                let node = d3.select(this).select(".nodeGraph");
+                if (nodeObj.hasComponent("scaleHover_node")) {
+                    let radius = nodeObj.autoGetValue("exterior_node", "size", 10, (value) => { return value.x });
+                    node
+                        .transition()
+                        .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
+                        .ease(d3.easeElasticOut)
+                        .attr("r", radius);
                 }
             })
             .attr(`transform`, d => {
@@ -202,13 +227,13 @@ export class Graph {
 
         // 根据外观组件绘制节点的形状
         const nodeDraw = nodes.append("circle")
-            .attr("class", "nodeCircle")
+            .attr("class", "nodeCircle nodeGraph")
             // 绑定自定义的属性
             .attr("r", d => d.autoGetValue("exterior_node", "size", 10, (value) => { return value.x }))
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", 1))
-            .style("cursor", "pointer");
+            .style("cursor", "pointer")
 
         // 绘制node文本
         const nodeText = nodes.append("text")
