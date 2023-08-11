@@ -121,7 +121,7 @@ export class Graph {
             .force("center", _.renderProperties.forces.centerForce)
             .force("charge", _.renderProperties.forces.chargeForce)
             .force("collide", _.renderProperties.forces.collideForce)
-            .alphaDecay(0.8);
+            .alphaDecay(1.0);
 
         // 创建画布
         _.renderProperties.svg = d3.select(".displayArea svg")
@@ -309,7 +309,7 @@ export class Graph {
 
         // 拖动
         function dragstarted(event, d) {
-            if (!event.active) _.renderProperties.simulation.alphaTarget(0.2).restart();
+            if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
