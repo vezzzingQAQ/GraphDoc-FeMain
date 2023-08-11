@@ -137,7 +137,7 @@ export class Graph {
             .data(_.edgeList)
             .enter()
             .append("line")
-            .attr("class", "forceLine forceElemet")
+            .attr("class", "forceEdge forceElemet")
             .attr("id", d => d.uuid)
             .style("cursor", "pointer")
             .style("outline", "none")
@@ -258,7 +258,7 @@ export class Graph {
         }
 
         // 点击空白处取消选择
-        document.querySelector(".displayArea svg").addEventListener("click", function (e) {
+        d3.select(".displayArea svg").on("click", function (e) {
             if (e.target == this) {
                 _.selectedElement = null;
                 _.renderProperties.viewArea.selectAll(".forceLine")
@@ -268,6 +268,32 @@ export class Graph {
                 document.querySelector(".panArea .listPan").innerHTML = "";
                 document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
             }
+        });
+
+        // 选中节点后delete删除
+        d3.select("body").on("keydown", function (e) {
+            if (e.target == this)
+                if (e.keyCode == 46) {
+                    if (_.selectedElement) {
+                        if (_.selectedElement.type = "node") {
+                            _.nodeList.splice(_.nodeList.indexOf(_.selectedElement), 1);
+                            let nodeUuid = _.selectedElement.uuid;
+                            // 移除节点
+                            let removedNode = d3.select(`#${nodeUuid}`).remove();
+                            // 移除相关关系
+                            let removeEdgeList = _.findNodeEdges(_.selectedElement);
+                            console.log(removeEdgeList)
+                            for (let i = 0; i < removeEdgeList.length; i++) {
+                                let currentRemoveEdge = removeEdgeList[i];
+                                _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
+                                let edgeUuid = currentRemoveEdge.uuid;
+                                d3.select(`#${edgeUuid}`).remove();
+                            }
+                            // 重启物理模拟
+                            _.renderProperties.simulation.restart();
+                        }
+                    }
+                }
         });
 
         // 计算物理模拟
@@ -376,6 +402,22 @@ export class Graph {
         elementObj.initHtml();
     }
 
+    /**
+     * 查找和node关联的edge
+     */
+    findNodeEdges(nodeObj) {
+        let removeEdgeList = [];
+        for (let i = 0; i < this.edgeList.length; i++) {
+            let currentEdge = this.edgeList[i];
+            if (currentEdge.source == nodeObj || currentEdge.target == nodeObj)
+                removeEdgeList.push(currentEdge);
+        }
+        return removeEdgeList;
+    }
+
+    /**
+     * 转为JSON
+     */
     toJsonObj() {
         let jsonObj = {
             nodeList: [],
