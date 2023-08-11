@@ -238,23 +238,12 @@ export class Graph {
                 .on("end", dragended))
 
 
-        // 根据外观组件绘制节点的形状
-        const nodeDraw = nodes.append("circle")
-            .attr("class", "nodeCircle nodeGraph")
-            .style("cursor", "pointer")
-
-        // 绘制node文本
-        const nodeText = nodes.append("text")
-            .style("text-anchor", "middle")
-            .style("dominant-baseline", "middle")
-            .style("cursor", "pointer");
-
         // 开始的时候先全部更新一遍，装入数据
         for (let node of _.nodeList) {
-            _.modifyNode(node);
+            _.modifyNode(node, true);
         }
         for (let edge of _.edgeList) {
-            _.modifyEdge(edge);
+            _.modifyEdge(edge, true);
         }
 
         // 点击空白处取消选择
@@ -339,49 +328,111 @@ export class Graph {
     /**
      * 修改单个节点
      */
-    modifyNode(nodeObj) {
-        const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`)
-        const findedNodeText = findedNode.select("text")
-            .text(d => d.autoGetValue("text_node", "showText", ""))
-            .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
-            .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
-            .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
-            .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
-        const findedNodeCircle = findedNode.select("circle")
-            .attr("r", d => {
-                let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
-                // 根据文字大小来决定
-                if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                    if (d.hasComponent("text_node")) {
-                        radius = Math.max(Math.abs(findedNodeText.node().getBBox().x), Math.abs(findedNodeText.node().getBBox().y)) + 8;
+    modifyNode(nodeObj, load = false) {
+        const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`);
+        // 先删除原来绘制的形状
+        findedNode.selectAll(".nodeGraph").remove();
+
+        // 在这里指定组件的绘制顺序
+        let addedNodeText = null;
+        let addedNodeGraph = null;
+        let addedNodeCircle = null;
+        let addedNodeRect = null;
+        if (nodeObj.autoGetValue("exterior_node", "shape") == "circle") {
+            addedNodeGraph = findedNode.append("circle");
+            addedNodeCircle = addedNodeGraph;
+        } else if (nodeObj.autoGetValue("exterior_node", "shape") == "rect") {
+            addedNodeGraph = findedNode.append("rect");
+            addedNodeRect = addedNodeGraph;
+        }
+        if (nodeObj.hasComponent("text_node")) {
+            addedNodeText = findedNode.append("text");
+        }
+
+        // 在这里绑定组件的属性
+        if (addedNodeText)
+            addedNodeText.style("z-index", 999)
+                .attr("class", "nodeText nodeGraph")
+                .style("text-anchor", "middle")
+                .style("dominant-baseline", "middle")
+                .style("cursor", "pointer")
+                .text(d => d.autoGetValue("text_node", "showText", ""))
+                .attr("fill", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
+                .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
+                .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
+                .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+
+        if (addedNodeCircle)
+            addedNodeCircle
+                .attr("class", "nodeCircle nodeGraph")
+                .style("cursor", "pointer")
+                .attr("r", d => {
+                    let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                    // 根据文字大小来决定
+                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                        if (d.hasComponent("text_node")) {
+                            radius = Math.max(Math.abs(addedNodeText.node().getBBox().x), Math.abs(addedNodeText.node().getBBox().y)) + 8;
+                        }
                     }
-                }
-                return radius;
-            })
+                    return radius;
+                })
+        if (addedNodeRect) {
+            addedNodeRect
+                .attr("class", "nodeRect nodeGraph")
+                .style("cursor", "pointer")
+                .attr("width", d => {
+                    let width = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                    // 根据文字大小来决定
+                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                        if (d.hasComponent("text_node")) {
+                            width = Math.abs(addedNodeText.node().getBBox().x) * 2 + 8;
+                        }
+                    }
+                    return width;
+                })
+                .attr("height", d => {
+                    let height = d.autoGetValue("exterior_node", "size", 0, value => value.y);
+                    // 根据文字大小来决定
+                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                        if (d.hasComponent("text_node")) {
+                            height = Math.abs(addedNodeText.node().getBBox().y) * 2 + 8;
+                        }
+                    }
+                    return height;
+                })
+                .attr("x", d => -d3.select(`#${d.uuid} .nodeRect`).attr("width") / 2)
+                .attr("y", d => -d3.select(`#${d.uuid} .nodeRect`).attr("height") / 2)
+        }
+        addedNodeGraph
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"));
         // 更新物理
-        this.renderProperties.forces.collideForce
-            .radius(d => {
-                let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
-                if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
-                    radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r");
-                }
-                return radius;
-            });
-        this.renderProperties.forces.chargeForce = d3.forceManyBody()
-            .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
-            .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
-            .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
-        this.renderProperties.simulation.restart();
+        if (!load) {
+            this.renderProperties.forces.collideForce
+                .radius(d => {
+                    let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
+                    if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
+                        if (addedNodeCircle)
+                            radius = d3.select(`#${d.uuid}`).select(".nodeGraph").attr("r");
+                        if (addedNodeRect)
+                            radius = Math.max(d3.select(`#${d.uuid} .nodeGraph`).attr("width"), d3.select(`#${d.uuid} .nodeGraph`).attr("height"));
+                    }
+                    return radius;
+                });
+            this.renderProperties.forces.chargeForce = d3.forceManyBody()
+                .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
+                .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
+                .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
+            this.renderProperties.simulation.restart();
+        }
     }
 
     /**
      * 修改单个关系
      */
-    modifyEdge(edgeObj) {
+    modifyEdge(edgeObj, load = false) {
         const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
         findedEdge
             .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
