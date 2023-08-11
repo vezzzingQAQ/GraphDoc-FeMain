@@ -442,7 +442,7 @@ export class Graph {
         this.renderProperties.forces.linkForce
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
-        this.renderProperties.simulation.alphaTarget(0.001).restart();
+        this.renderProperties.simulation.alphaTarget(0.01).restart();
     }
 
     /**
