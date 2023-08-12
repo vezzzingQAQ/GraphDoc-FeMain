@@ -350,7 +350,7 @@ export class Graph {
         }
         if (nodeObj.hasComponent("text_node")) {
             addedSubComponentContainer = findedNode.append("foreignObject");
-            addedNodeText = addedSubComponentContainer.append("xhtml:p");
+            addedNodeText = addedSubComponentContainer.append("xhtml:div");
         }
 
         // 在这里绑定组件的属性
@@ -358,10 +358,17 @@ export class Graph {
             addedNodeText.style("z-index", 999)
                 .attr("class", "nodeText")
                 .style("display", "inline-block")
+                .style("width", "max-content")
+                .style("height", "max-content")
                 .style("text-anchor", "middle")
                 .style("dominant-baseline", "middle")
                 .style("cursor", "pointer")
-                .text(d => d.autoGetValue("text_node", "showText", ""))
+                .html(d => {
+                    let rawText = d.autoGetValue("text_node", "showText", "");
+                    console.log(rawText.toString());
+                    let retText = rawText.replace(/\n/g, "<br/>");
+                    return retText;
+                })
                 .style("color", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
                 .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
@@ -390,7 +397,6 @@ export class Graph {
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
-                            console.log(addedSubComponentContainer.node().getBBox())
                             radius = Math.max(Math.abs(addedSubComponentContainer.node().getBBox().width) / 2, Math.abs(addedSubComponentContainer.node().getBBox().height) / 2) + 8;
                         }
                     }
