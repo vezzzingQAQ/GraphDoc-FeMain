@@ -2,20 +2,23 @@
  * 类文档：
  * 
  * Graph
- * |_nodeList               - 图谱的节点列表
- * |                        · 储存的是Node类指针
- * |_wdgeList               - 图谱的关系列表
- * |                        · 储存edge类指针
- * |_selectedNodeList       - 被选中的节点的列表
- * |_renderProperties       - 渲染的参数集
- * |                        · 储存渲染的svg、viewAarea等参数，方便在不同的方法之间调用
- * |_addNode(node)          - 向图谱中添加节点
- * |_render()               - 渲染图谱
- * |_modifyNode(node)       - 修改特定node的参数，传入node类，自动寻找其DOM元素
- * |_selectElement(element) - 选择一个指定的元素
- * |_toJsonObj()            - 将图谱转换为JsonObject
- * |_toJson()               - 转为JSON字符串
- * |_clearRender()          - 清除所有的svg元素和力模拟数据 TODO
+ * |_nodeList                 - 图谱的节点列表
+ * |                          · 储存的是Node类指针
+ * |_wdgeList                 - 图谱的关系列表
+ * |                          · 储存edge类指针
+ * |_selectedNodeList         - 被选中的节点的列表
+ * |_renderProperties         - 渲染的参数集
+ * |                          · 储存渲染的svg、viewAarea等参数，方便在不同的方法之间调用
+ * |_addNode(node)            - 向图谱中添加节点
+ * |_render()                 - 渲染图谱
+ * |_modifyNodeExterior(node) - 修改特定node的参数，传入node类，自动寻找其DOM元素
+ * |_modifyNodePhysics()   
+ * |_modifyNodeExterior(node) - 修改特定edge的参数，传入edge类，自动寻找其DOM元素
+ * |_modifyNodePhysics()   
+ * |_selectElement(element)   - 选择一个指定的元素
+ * |_toJsonObj()              - 将图谱转换为JsonObject
+ * |_toJson()                 - 转为JSON字符串
+ * |_clearRender()            - 清除所有的svg元素和力模拟数据 TODO
  * 
  * 从JSON生成图谱：
  * · 调用函数LoadGraphFromJson(jsonObj)来返回一个图谱类
@@ -38,7 +41,6 @@ export class Graph {
         this.edgeList = storeObj.edgeList;
         //test
         this.selectedElementList = [];
-        this.selectedElement = null;
         // 渲染
         this.renderProperties = {
             svg: null,
@@ -51,6 +53,8 @@ export class Graph {
             },
             simulation: null
         }
+        // 选择模式
+        this.selectMode = "edge";
     }
 
     /**
@@ -141,7 +145,6 @@ export class Graph {
             .attr("class", "forceEdge forceElemet")
             .attr("id", d => d.uuid)
             .style("cursor", "pointer")
-            .style("outline", "none")
             .on("click", function (d, i) {
                 let edgeObj = d3.select(this).data()[0];
                 let allElement = d3.selectAll(".forceElemet").style("outline", "none");
@@ -180,16 +183,15 @@ export class Graph {
             .data(_.nodeList)
             .enter()
             .append("g")
-            .attr("class", "forceNode forceElemet")
+            .attr("class", "forceNode forceElemet unselected")
             .attr("id", d => d.uuid)
-            .style("outline-offset", "3px")
-            .style("outline", "none")
             // 点击选中
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
-                let allElement = d3.selectAll(".forceElemet").style("outline", "none");
+                let allElement = d3.selectAll(".forceNode").attr("class", "forceNode forceElemet unselected");
                 let node = d3.select(this);
-                node.style("outline", "1px dashed white");
+                node.attr("class", "forceNode forceElement selected");
+                _.deselectAll();
                 _.selectElement(nodeObj);
             })
             // 双击进入节点
@@ -247,7 +249,7 @@ export class Graph {
             _.modifyEdgeExterior(edge);
         }
         for (let node of _.nodeList) {
-            _.modifyNodePhysics(node);
+            _.modifyNodePhysics();
         }
         for (let edge of _.edgeList) {
             _.modifyEdgePhysics();
@@ -256,34 +258,142 @@ export class Graph {
         // 点击空白处取消选择
         d3.select(".displayArea svg").on("click", function (e) {
             if (e.target == this) {
-                _.selectedElement = null;
-                _.renderProperties.viewArea.selectAll(".forceLine")
-                    .style("outline", "none");
-                _.renderProperties.viewArea.selectAll(".forceNode")
-                    .style("outline", "none");
+                _.deselectAll();
+                _.renderProperties.viewArea.selectAll(".forceLine").attr("class", "forceLine forceElement unselected")
+                _.renderProperties.viewArea.selectAll(".forceNode").attr("class", "forceNode forceElement unselected")
                 document.querySelector(".panArea .listPan").innerHTML = "";
                 document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
             }
         });
 
+        // 框选
+        let clickTime = "";
+        let startLoc = [];
+        let endLoc = [];
+        let selectionFlag = false;
+        function drawSelectionRect() {
+            let rect = d3.select(".displayArea svg").append("rect")
+                .attr("width", 0)
+                .attr("height", 0)
+                .attr("fill", "rgba(33,20,50,0.3)")
+                .attr("stroke", "#ccc")
+                .attr("stroke-width", "2px")
+                .attr("transform", "translate(0,0)")
+                .attr("id", "squareSelect");
+
+            d3.select(".displayArea svg").on("mousedown", function (e) {
+                _.deselectAll();
+                clickTime = (new Date()).getTime();
+                selectionFlag = true;
+                rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
+                startLoc = [e.layerX, e.layerY];
+            });
+
+            d3.select(".displayArea svg").on("mousemove", function (e) {
+                //判断事件target
+                if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
+
+                    let width = e.layerX - startLoc[0];
+                    let height = e.layerY - startLoc[1];
+                    if (width < 0) {
+                        rect.attr("transform", "translate(" + e.layerX + "," + startLoc[1] + ")");
+                    }
+                    if (height < 0) {
+                        rect.attr("transform", "translate(" + startLoc[0] + "," + e.layerY + ")");
+                    }
+                    if (height < 0 && width < 0) {
+                        rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
+                    }
+                    rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
+                }
+
+            })
+
+            d3.select(".displayArea svg").on("mouseup", function (e) {
+                if (selectionFlag == true) {
+                    selectionFlag = false;
+                    endLoc = [e.layerX, e.layerY];
+                    let leftTop = [];
+                    let rightBottom = []
+                    if (endLoc[0] >= startLoc[0]) {
+                        leftTop[0] = startLoc[0];
+                        rightBottom[0] = endLoc[0];
+                    } else {
+                        leftTop[0] = endLoc[0];
+                        rightBottom[0] = startLoc[0];
+                    }
+
+                    if (endLoc[1] >= startLoc[1]) {
+                        leftTop[1] = startLoc[1];
+                        rightBottom[1] = endLoc[1];
+                    } else {
+                        leftTop[1] = endLoc[1];
+                        rightBottom[1] = startLoc[1];
+                    }
+
+                    // 通过和node的坐标比较，确定哪些点在圈选范围
+                    if (_.selectMode == "node") {
+                        let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
+                            let node = d3.select(this).node();
+                            let nodePosition = {
+                                x: node.getBoundingClientRect().x,
+                                y: node.getBoundingClientRect().y
+                            }
+                            if (nodePosition.x < rightBottom[0] && nodePosition.x > leftTop[0] && nodePosition.y > leftTop[1] && nodePosition.y < rightBottom[1]) {
+                                _.selectElement(d3.select(this).data()[0]);
+                            }
+                        });
+                    } else if (_.selectMode == "edge") {
+                        let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
+                            let node1 = d3.select(`#${d.source.uuid}`).node();
+                            let node2 = d3.select(`#${d.target.uuid}`).node();
+                            let nodePosition = {
+                                x1: node1.getBoundingClientRect().x,
+                                y1: node1.getBoundingClientRect().y,
+                                x2: node2.getBoundingClientRect().x,
+                                y2: node2.getBoundingClientRect().y
+                            }
+                            if (
+                                (nodePosition.x1 < rightBottom[0] && nodePosition.x1 > leftTop[0] && nodePosition.y1 > leftTop[1] && nodePosition.y1 < rightBottom[1]) &&
+                                (nodePosition.x2 < rightBottom[0] && nodePosition.x2 > leftTop[0] && nodePosition.y2 > leftTop[1] && nodePosition.y2 < rightBottom[1])
+                            ) {
+                                _.selectElement(d3.select(this).data()[0]);
+                            }
+                        });
+                    }
+                    console.log(_.selectedElementList);
+                    rect.attr("width", 0).attr("height", 0);
+                }
+                let times = (new Date()).getTime() - clickTime;
+                if (times < 100) {
+                    //_.deselectAll();
+                }
+
+            })
+        }
+        drawSelectionRect();
+
         // 选中节点后delete删除
         d3.select("body").on("keydown", function (e) {
+            console.log(_.selectedElementList);
             if (e.target == this)
                 if (e.keyCode == 46) {
-                    if (_.selectedElement) {
-                        if (_.selectedElement.type = "node") {
-                            _.nodeList.splice(_.nodeList.indexOf(_.selectedElement), 1);
-                            let nodeUuid = _.selectedElement.uuid;
-                            // 移除节点
-                            let removedNode = d3.select(`#${nodeUuid}`).remove();
-                            // 移除相关关系
-                            let removeEdgeList = _.findNodeEdges(_.selectedElement);
-                            console.log(removeEdgeList)
-                            for (let i = 0; i < removeEdgeList.length; i++) {
-                                let currentRemoveEdge = removeEdgeList[i];
-                                _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
-                                let edgeUuid = currentRemoveEdge.uuid;
-                                d3.select(`#${edgeUuid}`).remove();
+                    if (_.selectedElementList.length != 0) {
+                        for (let selectedElement of _.selectedElementList) {
+                            if (selectedElement.type = "node") {
+                                _.nodeList.splice(_.nodeList.indexOf(_.selectedElement), 1);
+                                let nodeUuid = selectedElement.uuid;
+                                // 移除节点
+                                let removedNode = d3.select(`#${nodeUuid}`).remove();
+                                // 移除相关关系
+                                let removeEdgeList = _.findNodeEdges(selectedElement);
+                                console.log(removeEdgeList)
+                                for (let i = 0; i < removeEdgeList.length; i++) {
+                                    let currentRemoveEdge = removeEdgeList[i];
+                                    _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
+                                    let edgeUuid = currentRemoveEdge.uuid;
+                                    d3.select(`#${edgeUuid}`).remove();
+                                }
                             }
                             // 重启物理模拟
                             _.renderProperties.simulation.restart();
@@ -488,8 +598,41 @@ export class Graph {
      * 选择元素
      */
     selectElement(elementObj) {
-        this.selectedElement = elementObj;
-        elementObj.initHtml();
+        let element = d3.select(`#${elementObj.uuid}`);
+        if (elementObj.type == "node") {
+            element.attr("class", "forceNode forceElement selected");
+        } else if (elementObj.type == "edge") {
+            element.attr("class", "forceEdge forceElement selected");
+        }
+        this.selectedElementList.push(elementObj);
+        //elementObj.initHtml();
+    }
+
+    /**
+     * 取消选择
+     */
+    deselectElement(elementObj) {
+        let element = d3.select(`#${elementObj.uuid}`);
+        if (elementObj.type == "node") {
+            element.attr("class", "forceNode forceElement unselected");
+        } else if (elementObj.type == "edge") {
+            element.attr("class", "forceEdge forceElement unselected");
+        }
+        if (this.selectedElementList.includes(elementObj)) {
+            this.selectedElementList.splice(this.selectedElementList.indexOf(elementObj), 1);
+        }
+    }
+
+    /**
+     * 全部取消选择
+     */
+    deselectAll() {
+        for (let nodeObj of this.nodeList) {
+            this.deselectElement(nodeObj);
+        }
+        for (let edgeObj of this.edgeList) {
+            this.deselectElement(edgeObj);
+        }
     }
 
     /**
