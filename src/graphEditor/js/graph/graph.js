@@ -361,7 +361,6 @@ export class Graph {
                             }
                         });
                     }
-                    console.log(_.selectedElementList);
                     rect.attr("width", 0).attr("height", 0);
                 }
                 let times = (new Date()).getTime() - clickTime;
@@ -375,7 +374,6 @@ export class Graph {
 
         // 选中节点后delete删除
         d3.select("body").on("keydown", function (e) {
-            console.log(_.selectedElementList);
             if (e.target == this)
                 if (e.keyCode == 46) {
                     if (_.selectedElementList.length != 0) {
@@ -387,19 +385,25 @@ export class Graph {
                                 let removedNode = d3.select(`#${nodeUuid}`).remove();
                                 // 移除相关关系
                                 let removeEdgeList = _.findNodeEdges(selectedElement);
-                                console.log(removeEdgeList)
                                 for (let i = 0; i < removeEdgeList.length; i++) {
                                     let currentRemoveEdge = removeEdgeList[i];
                                     _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                     let edgeUuid = currentRemoveEdge.uuid;
                                     d3.select(`#${edgeUuid}`).remove();
                                 }
+                            } else if (selectedElement.type == "edge") {
+                                _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
+                                let edgeUuid = selectedElement.uuid;
+                                // 移除关系
+                                let removeEdge = d3.select(`#${edgeUuid}`).remove();
                             }
                             // 重启物理模拟
                             _.renderProperties.simulation.restart();
                         }
                     }
                 }
+                console.log(_.edgeList);
+                console.log(_.nodeList);
         });
 
         // 计算物理模拟
