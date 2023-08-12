@@ -320,6 +320,32 @@ export class SC_Check extends SubComponent {
 }
 
 /**
+ * Textarea框
+ */
+export class SC_Textarea extends SubComponent {
+    constructor(defaultValue = false, readOnly = false) {
+        super(defaultValue, readOnly);
+    }
+    initHtml() {
+        this.dom = document.createElement("textarea");
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
+        }
+        this.dom.value = this.value;
+        this.dom.addEventListener("input", () => {
+            this.value = this.dom.value;
+            this.updateGraph();
+        })
+        return this.dom;
+    }
+    updateHtml() {
+        if (this.dom) {
+            this.dom.value = this.value;
+        }
+    }
+}
+
+/**
  * Tag系统
  */
 export class SC_Tag extends SubComponent {

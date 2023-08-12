@@ -93,6 +93,18 @@
                 height: 2px;
                 margin-top: calc(@property_height / 2);
             }
+
+            textarea{
+                outline: none;
+                border: 1px solid @bg_color_border;
+                background-color: @bg_color_input;
+                padding-left: 5px;
+                padding-right: 5px;
+                color: @fg_color_input;
+                width: calc(100% - @property_key_width);
+                height: @property_height;
+                border-radius: @small_border_radius;
+            }
         }
     }
 }

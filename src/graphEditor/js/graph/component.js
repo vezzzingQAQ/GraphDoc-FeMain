@@ -196,7 +196,8 @@ import {
     SC_Select,
     SC_Vector2,
     SC_UrlInput,
-    SC_Check
+    SC_Check,
+    SC_Textarea
 } from "./subComponent";
 
 /**
@@ -324,7 +325,7 @@ export class C_N_Text extends Component {
         textWeight: 5
     }) {
         super(showName, key, true);
-        this.addValue("showText", "文本", new SC_TextInput(value.showText, false));
+        this.addValue("showText", "文本", new SC_Textarea(value.showText, false));
         this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
         this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
