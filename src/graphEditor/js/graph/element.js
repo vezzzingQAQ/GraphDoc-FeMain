@@ -232,7 +232,8 @@ class Element {
                 document.querySelector(".panArea .listPan").insertAdjacentElement("afterbegin", addedComponent.initHtml());
                 // 更新图表
                 if (this.type == "node") {
-                    this.owner.modifyNode(this);
+                    this.owner.modifyNodeExterior(this);
+                    this.owner.modifyNodePhysics();
                 } else {
                     this.owner.modifyEdge(this);
                 }

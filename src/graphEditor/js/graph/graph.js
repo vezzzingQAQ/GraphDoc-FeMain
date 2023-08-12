@@ -241,10 +241,16 @@ export class Graph {
 
         // 开始的时候先全部更新一遍，装入数据
         for (let node of _.nodeList) {
-            _.modifyNode(node, true);
+            _.modifyNodeExterior(node);
         }
         for (let edge of _.edgeList) {
-            _.modifyEdge(edge, true);
+            _.modifyEdgeExterior(edge);
+        }
+        for (let node of _.nodeList) {
+            _.modifyNodePhysics(node);
+        }
+        for (let edge of _.edgeList) {
+            _.modifyEdgePhysics();
         }
 
         // 点击空白处取消选择
@@ -329,7 +335,7 @@ export class Graph {
     /**
      * 修改单个节点
      */
-    modifyNode(nodeObj, load = false) {
+    modifyNodeExterior(nodeObj) {
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`);
         // 先删除原来绘制的形状
         findedNode.selectAll(".nodeGraph").remove();
@@ -434,38 +440,45 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"));
+    }
 
-        // 更新物理
-        if (!load) {
-            this.renderProperties.forces.collideForce
-                .radius(d => {
-                    let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
-                    if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
-                        if (addedNodeCircle)
-                            radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r") * 1.2;
-                        else if (addedNodeRect)
-                            radius = Math.max(d3.select(`#${d.uuid} .nodeGraph`).attr("width") * 1.2, d3.select(`#${d.uuid} .nodeGraph`).attr("height"));
-                    }
-                    return radius;
-                });
-            this.renderProperties.forces.chargeForce = d3.forceManyBody()
-                .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
-                .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
-                .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
-            this.renderProperties.simulation.restart();
-        }
+    /**
+     * 修改节点的物理表现
+     */
+    modifyNodePhysics() {
+        this.renderProperties.forces.collideForce
+            .radius(d => {
+                let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
+                if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
+                    if (d.autoGetValue("exterior_node", "shape") == "circle")
+                        radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r") * 1.2;
+                    else if (d.autoGetValue("exterior_node", "shape") == "rect")
+                        radius = Math.max(d3.select(`#${d.uuid} .nodeGraph`).attr("width") * 1.2, d3.select(`#${d.uuid} .nodeGraph`).attr("height"));
+                }
+                return radius;
+            });
+        this.renderProperties.forces.chargeForce = d3.forceManyBody()
+            .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
+            .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
+            .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
+        this.renderProperties.simulation.restart();
     }
 
     /**
      * 修改单个关系
      */
-    modifyEdge(edgeObj, load = false) {
+    modifyEdgeExterior(edgeObj) {
         const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
         findedEdge
             .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"));
-        // 更新物理
+    }
+
+    /**
+     * 修改关系的物理表现
+     */
+    modifyEdgePhysics() {
         this.renderProperties.forces.linkForce
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));

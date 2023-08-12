@@ -61,10 +61,12 @@ class SubComponent {
     updateGraph() {
         if (this.owner.owner instanceof Node) {
             // 节点
-            this.owner.owner.owner.modifyNode(this.owner.owner);
+            this.owner.owner.owner.modifyNodeExterior(this.owner.owner);
+            this.owner.owner.owner.modifyNodePhysics();
         } else if (this.owner.owner instanceof Edge) {
-            // 组件
-            this.owner.owner.owner.modifyEdge(this.owner.owner);
+            // 关系
+            this.owner.owner.owner.modifyEdgeExterior(this.owner.owner);
+            this.owner.owner.owner.modifyEdgePhysics();
         } else {
             console.error(`不是Node也不是Edge的组件`);
         }
