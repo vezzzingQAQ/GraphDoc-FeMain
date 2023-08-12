@@ -452,7 +452,7 @@ export class Graph {
                     if (d.autoGetValue("exterior_node", "shape") == "circle")
                         radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r") * 1.2;
                     else if (d.autoGetValue("exterior_node", "shape") == "rect")
-                        radius = Math.max(d3.select(`#${d.uuid} .nodeGraph`).attr("width") * 1.2, d3.select(`#${d.uuid} .nodeGraph`).attr("height"));
+                        radius = Math.sqrt((d3.select(`#${d.uuid} .nodeGraphContainer`).node().getBBox().width / 2) ** 2 + (d3.select(`#${d.uuid} .nodeGraphContainer`).node().getBBox().height / 2) ** 2) * 1.2;
                 }
                 return radius;
             });
