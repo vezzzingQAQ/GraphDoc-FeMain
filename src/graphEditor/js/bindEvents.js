@@ -6,6 +6,6 @@ import { Graph } from "./graph/graph";
  */
 export function bindEvents(graph) {
     document.querySelector("#btnToJson").addEventListener("click", () => {
-        console.log(JSON.stringify(graph.toJsonObj()));
+        console.log(graph.toJson());
     });
 }

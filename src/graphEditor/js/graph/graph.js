@@ -14,6 +14,7 @@
  * |_modifyNode(node)       - 修改特定node的参数，传入node类，自动寻找其DOM元素
  * |_selectElement(element) - 选择一个指定的元素
  * |_toJsonObj()            - 将图谱转换为JsonObject
+ * |_toJson()               - 转为JSON字符串
  * |_clearRender()          - 清除所有的svg元素和力模拟数据 TODO
  * 
  * 从JSON生成图谱：
@@ -487,7 +488,7 @@ export class Graph {
     }
 
     /**
-     * 转为JSON
+     * 转为JSON object
      */
     toJsonObj() {
         let jsonObj = {
@@ -501,6 +502,14 @@ export class Graph {
             jsonObj.edgeList.push(edge.toJsonObj());
         }
         return jsonObj;
+    }
+
+    /**
+     * 转为JSON
+     */
+    toJson() {
+        let jsonString = JSON.stringify(this.toJsonObj());
+        return jsonString.replace(/\\/g, "\\\\");
     }
 }
 
