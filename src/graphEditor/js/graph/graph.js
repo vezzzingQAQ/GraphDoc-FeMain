@@ -517,7 +517,8 @@ export class Graph {
             jsonObj.nodeList.push(node.toJsonObj());
         }
         for (let edge of this.edgeList) {
-            jsonObj.edgeList.push(edge.toJsonObj());
+            if (edge.target && edge.source && edge)
+                jsonObj.edgeList.push(edge.toJsonObj());
         }
         return jsonObj;
     }

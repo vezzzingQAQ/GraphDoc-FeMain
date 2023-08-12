@@ -345,7 +345,6 @@ export class Edge extends Element {
 
 }
 
-import { json } from "d3";
 import {
     C_E_Exterior,
     C_E_Physics,
