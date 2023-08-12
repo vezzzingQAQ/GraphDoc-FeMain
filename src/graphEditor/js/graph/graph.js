@@ -371,7 +371,6 @@ export class Graph {
                 .style("cursor", "pointer")
                 .html(d => {
                     let rawText = d.autoGetValue("text_node", "showText", "");
-                    console.log(rawText.toString());
                     let retText = rawText.replace(/\n/g, "<br/>");
                     return retText;
                 })
@@ -403,7 +402,7 @@ export class Graph {
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
-                            radius = Math.max(Math.abs(addedSubComponentContainer.node().getBBox().width) / 2, Math.abs(addedSubComponentContainer.node().getBBox().height) / 2) + 8;
+                            radius = Math.sqrt((addedSubComponentContainer.node().getBBox().width / 2) ** 2 + (addedSubComponentContainer.node().getBBox().height / 2) ** 2) + 8;
                         }
                     }
                     return radius;
