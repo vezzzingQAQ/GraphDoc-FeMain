@@ -408,6 +408,7 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"));
+
         // 更新物理
         if (!load) {
             this.renderProperties.forces.collideForce
@@ -415,8 +416,8 @@ export class Graph {
                     let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
                     if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
                         if (addedNodeCircle)
-                            radius = d3.select(`#${d.uuid}`).select(".nodeGraph").attr("r");
-                        if (addedNodeRect)
+                            radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r") * 4;
+                        else if (addedNodeRect)
                             radius = Math.max(d3.select(`#${d.uuid} .nodeGraph`).attr("width"), d3.select(`#${d.uuid} .nodeGraph`).attr("height"));
                     }
                     return radius;
