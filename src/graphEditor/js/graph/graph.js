@@ -283,92 +283,96 @@ export class Graph {
                 .attr("id", "squareSelect");
 
             d3.select(".displayArea svg").on("mousedown", function (e) {
+                if (e.button == 2) {
+                    clickTime = (new Date()).getTime();
+                    selectionFlag = true;
+                    rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
+                    startLoc = [e.layerX, e.layerY];
+                }
                 _.deselectAll();
-                clickTime = (new Date()).getTime();
-                selectionFlag = true;
-                rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
-                startLoc = [e.layerX, e.layerY];
             });
 
             d3.select(".displayArea svg").on("mousemove", function (e) {
                 //判断事件target
-                if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
+                //if (e.button == 2) {
+                    if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
 
-                    let width = e.layerX - startLoc[0];
-                    let height = e.layerY - startLoc[1];
-                    if (width < 0) {
-                        rect.attr("transform", "translate(" + e.layerX + "," + startLoc[1] + ")");
+                        let width = e.layerX - startLoc[0];
+                        let height = e.layerY - startLoc[1];
+                        if (width < 0) {
+                            rect.attr("transform", "translate(" + e.layerX + "," + startLoc[1] + ")");
+                        }
+                        if (height < 0) {
+                            rect.attr("transform", "translate(" + startLoc[0] + "," + e.layerY + ")");
+                        }
+                        if (height < 0 && width < 0) {
+                            rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
+                        }
+                        rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                     }
-                    if (height < 0) {
-                        rect.attr("transform", "translate(" + startLoc[0] + "," + e.layerY + ")");
-                    }
-                    if (height < 0 && width < 0) {
-                        rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
-                    }
-                    rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
-                }
-
+                //}
             })
 
             d3.select(".displayArea svg").on("mouseup", function (e) {
-                if (selectionFlag == true) {
-                    selectionFlag = false;
-                    endLoc = [e.layerX, e.layerY];
-                    let leftTop = [];
-                    let rightBottom = []
-                    if (endLoc[0] >= startLoc[0]) {
-                        leftTop[0] = startLoc[0];
-                        rightBottom[0] = endLoc[0];
-                    } else {
-                        leftTop[0] = endLoc[0];
-                        rightBottom[0] = startLoc[0];
-                    }
+                if (e.button == 2) {
+                    if (selectionFlag == true) {
+                        selectionFlag = false;
+                        endLoc = [e.layerX, e.layerY];
+                        let leftTop = [];
+                        let rightBottom = []
+                        if (endLoc[0] >= startLoc[0]) {
+                            leftTop[0] = startLoc[0];
+                            rightBottom[0] = endLoc[0];
+                        } else {
+                            leftTop[0] = endLoc[0];
+                            rightBottom[0] = startLoc[0];
+                        }
 
-                    if (endLoc[1] >= startLoc[1]) {
-                        leftTop[1] = startLoc[1];
-                        rightBottom[1] = endLoc[1];
-                    } else {
-                        leftTop[1] = endLoc[1];
-                        rightBottom[1] = startLoc[1];
-                    }
+                        if (endLoc[1] >= startLoc[1]) {
+                            leftTop[1] = startLoc[1];
+                            rightBottom[1] = endLoc[1];
+                        } else {
+                            leftTop[1] = endLoc[1];
+                            rightBottom[1] = startLoc[1];
+                        }
 
-                    // 通过和node的坐标比较，确定哪些点在圈选范围
-                    if (_.selectMode == "node") {
-                        let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
-                            let node = d3.select(this).node();
-                            let nodePosition = {
-                                x: node.getBoundingClientRect().x,
-                                y: node.getBoundingClientRect().y
-                            }
-                            if (nodePosition.x < rightBottom[0] && nodePosition.x > leftTop[0] && nodePosition.y > leftTop[1] && nodePosition.y < rightBottom[1]) {
-                                _.selectElement(d3.select(this).data()[0]);
-                            }
-                        });
-                    } else if (_.selectMode == "edge") {
-                        let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
-                            let node1 = d3.select(`#${d.source.uuid}`).node();
-                            let node2 = d3.select(`#${d.target.uuid}`).node();
-                            let nodePosition = {
-                                x1: node1.getBoundingClientRect().x,
-                                y1: node1.getBoundingClientRect().y,
-                                x2: node2.getBoundingClientRect().x,
-                                y2: node2.getBoundingClientRect().y
-                            }
-                            if (
-                                (nodePosition.x1 < rightBottom[0] && nodePosition.x1 > leftTop[0] && nodePosition.y1 > leftTop[1] && nodePosition.y1 < rightBottom[1]) &&
-                                (nodePosition.x2 < rightBottom[0] && nodePosition.x2 > leftTop[0] && nodePosition.y2 > leftTop[1] && nodePosition.y2 < rightBottom[1])
-                            ) {
-                                _.selectElement(d3.select(this).data()[0]);
-                            }
-                        });
+                        // 通过和node的坐标比较，确定哪些点在圈选范围
+                        if (_.selectMode == "node") {
+                            let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
+                                let node = d3.select(this).node();
+                                let nodePosition = {
+                                    x: node.getBoundingClientRect().x,
+                                    y: node.getBoundingClientRect().y
+                                }
+                                if (nodePosition.x < rightBottom[0] && nodePosition.x > leftTop[0] && nodePosition.y > leftTop[1] && nodePosition.y < rightBottom[1]) {
+                                    _.selectElement(d3.select(this).data()[0]);
+                                }
+                            });
+                        } else if (_.selectMode == "edge") {
+                            let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
+                                let node1 = d3.select(`#${d.source.uuid}`).node();
+                                let node2 = d3.select(`#${d.target.uuid}`).node();
+                                let nodePosition = {
+                                    x1: node1.getBoundingClientRect().x,
+                                    y1: node1.getBoundingClientRect().y,
+                                    x2: node2.getBoundingClientRect().x,
+                                    y2: node2.getBoundingClientRect().y
+                                }
+                                if (
+                                    (nodePosition.x1 < rightBottom[0] && nodePosition.x1 > leftTop[0] && nodePosition.y1 > leftTop[1] && nodePosition.y1 < rightBottom[1]) &&
+                                    (nodePosition.x2 < rightBottom[0] && nodePosition.x2 > leftTop[0] && nodePosition.y2 > leftTop[1] && nodePosition.y2 < rightBottom[1])
+                                ) {
+                                    _.selectElement(d3.select(this).data()[0]);
+                                }
+                            });
+                        }
+                        rect.attr("width", 0).attr("height", 0);
                     }
-                    rect.attr("width", 0).attr("height", 0);
+                    let times = (new Date()).getTime() - clickTime;
+                    if (times < 100) {
+                        //_.deselectAll();
+                    }
                 }
-                let times = (new Date()).getTime() - clickTime;
-                if (times < 100) {
-                    //_.deselectAll();
-                }
-
             })
         }
         drawSelectionRect();
@@ -639,7 +643,7 @@ export class Graph {
         for (let edgeObj of this.edgeList) {
             this.deselectElement(edgeObj);
         }
-        this.selectedElementList=[];
+        this.selectedElementList = [];
     }
 
     /**
