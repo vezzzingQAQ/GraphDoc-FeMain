@@ -564,11 +564,14 @@ export class Graph {
         findedNode.selectAll(".nodeGraphContainer").remove();
 
         // 在这里指定组件的绘制顺序
-        let addedNodeText = null;
+        let domAddedNodeText = null;
         let addedNodeGraph = null;
         let addedNodeCircle = null;
         let addedNodeRect = null;
-        let addedSubComponentContainer = null;
+
+        let addedSubComponentForeign = null;
+        let domAddedSubComponentContainer = null;
+
         if (nodeObj.autoGetValue("exterior_node", "shape") == "circle") {
             addedNodeGraph = findedNode.append("circle");
             addedNodeCircle = addedNodeGraph;
@@ -576,16 +579,18 @@ export class Graph {
             addedNodeGraph = findedNode.append("rect");
             addedNodeRect = addedNodeGraph;
         }
+
+        addedSubComponentForeign = findedNode.append("foreignObject").attr("class", "nodeGraphContainer");
+        domAddedSubComponentContainer = addedSubComponentForeign.append("xhtml:body").attr("class", "nodeGraphDomContainer");
+
         if (nodeObj.hasComponent("text_node")) {
-            addedSubComponentContainer = findedNode.append("foreignObject");
-            addedNodeText = addedSubComponentContainer.append("xhtml:div");
+            domAddedNodeText = domAddedSubComponentContainer.append("xhtml:div");
         }
 
         // 在这里绑定组件的属性
-        if (addedNodeText)
-            addedNodeText.style("z-index", 999)
+        if (domAddedNodeText)
+            domAddedNodeText.style("z-index", 999)
                 .attr("class", "nodeText")
-                .style("display", "inline-block")
                 .style("width", "max-content")
                 .style("height", "max-content")
                 .style("text-anchor", "middle")
@@ -601,19 +606,23 @@ export class Graph {
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
                 .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
 
-        if (addedSubComponentContainer)
-            addedSubComponentContainer
-                .attr("class", "nodeGraphContainer")
-                .attr("width", function () {
-                    let textDom = d3.select(this).select(".nodeText");
-                    return textDom.node().offsetWidth;
-                })
-                .attr("height", function () {
-                    let textDom = d3.select(this).select(".nodeText");
-                    return textDom.node().offsetHeight;
-                })
-                .attr("x", function () { return -d3.select(this).attr("width") / 2 })
-                .attr("y", function () { return -d3.select(this).attr("height") / 2 })
+        domAddedSubComponentContainer
+            .style("display", "flex")
+            .style("width", "max-content")
+            .style("height", "max-content")
+            .style("z-index", 1);
+
+        addedSubComponentForeign
+            .attr("width", function () {
+                let containerDom = d3.select(this).select(".nodeGraphDomContainer");
+                return containerDom.node().offsetWidth;
+            })
+            .attr("height", function () {
+                let containerDom = d3.select(this).select(".nodeGraphDomContainer");
+                return containerDom.node().offsetHeight;
+            })
+            .attr("x", function () { return -d3.select(this).attr("width") / 2 })
+            .attr("y", function () { return -d3.select(this).attr("height") / 2 })
 
         if (addedNodeCircle)
             addedNodeCircle
@@ -624,7 +633,7 @@ export class Graph {
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
-                            radius = Math.sqrt((addedSubComponentContainer.node().getBBox().width / 2) ** 2 + (addedSubComponentContainer.node().getBBox().height / 2) ** 2) + 8;
+                            radius = Math.sqrt((addedSubComponentForeign.node().getBBox().width / 2) ** 2 + (addedSubComponentForeign.node().getBBox().height / 2) ** 2) + 8;
                         }
                     }
                     return radius;
@@ -638,7 +647,7 @@ export class Graph {
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
-                            width = Math.abs(addedSubComponentContainer.node().getBBox().width) + 8;
+                            width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
                         }
                     }
                     return width;
@@ -648,7 +657,7 @@ export class Graph {
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
-                            height = Math.abs(addedSubComponentContainer.node().getBBox().height) + 8;
+                            height = Math.abs(addedSubComponentForeign.node().getBBox().height) + 8;
                         }
                     }
                     return height;
