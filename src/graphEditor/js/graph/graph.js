@@ -298,7 +298,6 @@ export class Graph {
 
         }
 
-
         function initElements() {
             // 开始的时候先全部更新一遍，装入数据
             for (let node of _.nodeList) {
@@ -321,8 +320,8 @@ export class Graph {
 
                     // 添加节点
                     let addedNode = CreateTextNode();
-                    addedNode.x = e.x;
-                    addedNode.y = e.y;
+                    addedNode.x = e.offsetX;
+                    addedNode.y = e.offsetY;
                     _.addNode(addedNode);
 
                     // 添加关系

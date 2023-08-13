@@ -285,7 +285,8 @@ export class Node extends Element {
         component.dom.remove();
         delete this.componentMap[component.key];
         this.initComponentAddDom();
-        this.owner.modifyNode(this);
+        this.owner.modifyNodeExterior(this);
+        this.owner.modifyNodePhysics();
     }
 }
 
