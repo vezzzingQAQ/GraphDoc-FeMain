@@ -103,159 +103,177 @@ export class Graph {
 
         let renderDom = document.querySelector(".displayArea");
 
-        // 创建所需要的力
-        _.renderProperties.forces.linkForce = d3.forceLink()
-            .links(_.edgeList)
-            .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
-            .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
+        function initPhysics() {
+            // 创建所需要的力
+            _.renderProperties.forces.linkForce = d3.forceLink()
+                .links(_.edgeList)
+                .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
+                .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
 
-        _.renderProperties.forces.centerForce = d3.forceCenter()
-            .x(renderDom.offsetWidth / 2)
-            .y(renderDom.offsetHeight / 2)
-            .strength(0.3);
+            _.renderProperties.forces.centerForce = d3.forceCenter()
+                .x(renderDom.offsetWidth / 2)
+                .y(renderDom.offsetHeight / 2)
+                .strength(0.3);
 
-        _.renderProperties.forces.chargeForce = d3.forceManyBody()
-            .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
-            .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
-            .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
+            _.renderProperties.forces.chargeForce = d3.forceManyBody()
+                .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
+                .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
+                .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
 
-        _.renderProperties.forces.collideForce = d3.forceCollide()
-            .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
+            _.renderProperties.forces.collideForce = d3.forceCollide()
+                .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
 
-        // 创建物理模拟
-        _.renderProperties.simulation = d3.forceSimulation(_.nodeList)
-            .force("link", _.renderProperties.forces.linkForce)
-            .force("center", _.renderProperties.forces.centerForce)
-            .force("charge", _.renderProperties.forces.chargeForce)
-            .force("collide", _.renderProperties.forces.collideForce)
-            .alphaDecay(1.0);
+            // 创建物理模拟
+            _.renderProperties.simulation = d3.forceSimulation(_.nodeList)
+                .force("link", _.renderProperties.forces.linkForce)
+                .force("center", _.renderProperties.forces.centerForce)
+                .force("charge", _.renderProperties.forces.chargeForce)
+                .force("collide", _.renderProperties.forces.collideForce)
+                .alphaDecay(1.0);
+        }
+        initPhysics();
 
-        // 创建画布
-        _.renderProperties.svg = d3.select(".displayArea svg")
-            .attr("width", renderDom.offsetWidth)
-            .attr("height", renderDom.offsetHeight)
+        function initSvg() {
+            // 创建画布
+            _.renderProperties.svg = d3.select(".displayArea svg")
+                .attr("width", renderDom.offsetWidth)
+                .attr("height", renderDom.offsetHeight)
 
-        // 创建绘画区域
-        _.renderProperties.viewArea = _.renderProperties.svg.append("g")
-            .attr("class", "viewArea");
+            // 创建绘画区域
+            _.renderProperties.viewArea = _.renderProperties.svg.append("g")
+                .attr("class", "viewArea");
+        }
+        initSvg();
 
         // 绘制关系
         const edges = _.renderProperties.viewArea.selectAll(".forceLine")
             .data(_.edgeList, d => d.uuid)
             .enter()
             .append("line")
-            .attr("class", "forceEdge forceElemet")
-            .attr("id", d => d.uuid)
-            .style("cursor", "pointer")
-            .on("click", function (d, i) {
-                let edgeObj = d3.select(this).data()[0];
-                let allElement = d3.selectAll(".forceElemet").style("outline", "none");
-                let edge = d3.select(this);
-                edge.style("outline", "1px dashed white");
-                _.selectElement(edgeObj);
-            })
-            .on("mouseenter", function () {
-                // 缩放
-                let edge = d3.select(this);
-                let edgeObj = d3.select(this).data()[0];
-                if (edgeObj.hasComponent("scaleHover_edge")) {
-                    let scale = edgeObj.autoGetValue("scaleHover_edge", "scale", 1.2);
-                    edge
-                        .transition()
-                        .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
-                        .ease(d3.easeElasticOut)
-                        .style("stroke-width", `${edgeObj.autoGetValue("exterior_edge", "strokeWidth") * scale}px`);
-                }
-            })
-            .on("mouseleave", function () {
-                // 缩放
-                let edge = d3.select(this);
-                let edgeObj = d3.select(this).data()[0];
-                if (edgeObj.hasComponent("scaleHover_edge")) {
-                    edge
-                        .transition()
-                        .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
-                        .ease(d3.easeElasticOut)
-                        .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
-                }
-            });
+            .call(initEdges)
+
+        function initEdges(edges) {
+            edges.attr("class", "forceEdge forceElemet")
+                .attr("id", d => d.uuid)
+                .style("cursor", "pointer")
+                .on("click", function (d, i) {
+                    let edgeObj = d3.select(this).data()[0];
+                    let allElement = d3.selectAll(".forceElemet").style("outline", "none");
+                    let edge = d3.select(this);
+                    edge.style("outline", "1px dashed white");
+                    _.selectElement(edgeObj);
+                })
+                .on("mouseenter", function () {
+                    // 缩放
+                    let edge = d3.select(this);
+                    let edgeObj = d3.select(this).data()[0];
+                    if (edgeObj.hasComponent("scaleHover_edge")) {
+                        let scale = edgeObj.autoGetValue("scaleHover_edge", "scale", 1.2);
+                        edge
+                            .transition()
+                            .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
+                            .ease(d3.easeElasticOut)
+                            .style("stroke-width", `${edgeObj.autoGetValue("exterior_edge", "strokeWidth") * scale}px`);
+                    }
+                })
+                .on("mouseleave", function () {
+                    // 缩放
+                    let edge = d3.select(this);
+                    let edgeObj = d3.select(this).data()[0];
+                    if (edgeObj.hasComponent("scaleHover_edge")) {
+                        edge
+                            .transition()
+                            .duration(edgeObj.autoGetValue("scaleHover_edge", "scaleTime", 800, value => value * 1000))
+                            .ease(d3.easeElasticOut)
+                            .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
+                    }
+                });
+        }
 
         // 绘制node
         const nodes = _.renderProperties.viewArea.selectAll(".forceNode")
             .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
-            .attr("class", "forceNode forceElemet unselected")
-            .attr("id", d => d.uuid)
-            // 点击选中
-            .on("click", function () {
-                let nodeObj = d3.select(this).data()[0];
-                let allElement = d3.selectAll(".forceNode").attr("class", "forceNode forceElemet unselected");
-                let node = d3.select(this);
-                node.attr("class", "forceNode forceElement selected");
-                _.deselectAll();
-                _.selectElement(nodeObj);
-            })
-            // 双击进入节点
-            .on("dblclick", function () {
-                let nodeObj = d3.select(this).data()[0];
-                if (nodeObj.hasComponent("link_node")) {
-                    let openOuter = nodeObj.autoGetValue("link_node", "openOuter", false);
-                    if (openOuter) {
-                        window.open(nodeObj.autoGetValue("link_node", "url", "."));
-                    } else {
-                        window.location = nodeObj.autoGetValue("link_node", "url", ".");
+            .call(initNodes);
+
+        function initNodes(nodes) {
+            nodes.attr("class", "forceNode forceElemet unselected")
+                .attr("id", d => d.uuid)
+                // 点击选中
+                .on("click", function () {
+                    let nodeObj = d3.select(this).data()[0];
+                    let allElement = d3.selectAll(".forceNode").attr("class", "forceNode forceElemet unselected");
+                    let node = d3.select(this);
+                    node.attr("class", "forceNode forceElement selected");
+                    _.deselectAll();
+                    _.selectElement(nodeObj);
+                })
+                // 双击进入节点
+                .on("dblclick", function () {
+                    let nodeObj = d3.select(this).data()[0];
+                    if (nodeObj.hasComponent("link_node")) {
+                        let openOuter = nodeObj.autoGetValue("link_node", "openOuter", false);
+                        if (openOuter) {
+                            window.open(nodeObj.autoGetValue("link_node", "url", "."));
+                        } else {
+                            window.location = nodeObj.autoGetValue("link_node", "url", ".");
+                        }
                     }
-                }
-            })
-            // 悬停事件
-            .on("mouseenter", function () {
-                let nodeObj = d3.select(this).data()[0];
-                // 播放音效
-                if (nodeObj.hasComponent("audio_node")) {
-                    playMusic(nodeObj.autoGetValue("audio_node", "soundVolume", 1));
-                }
-                // 缩放
-                let node = d3.select(this).select(".nodeGraph");
-                if (nodeObj.hasComponent("scaleHover_node")) {
-                    let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
-                    node
-                        .transition()
-                        .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
-                        .ease(d3.easeElasticOut)
-                        .style("transform", `scale(${radiusScale})`);
-                }
-            })
-            .on("mouseleave", function () {
-                let nodeObj = d3.select(this).data()[0];
-                let node = d3.select(this).select(".nodeGraph");
-                if (nodeObj.hasComponent("scaleHover_node")) {
-                    node
-                        .transition()
-                        .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
-                        .ease(d3.easeElasticOut)
-                        .style("transform", `scale(1)`);
-                }
-            })
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended))
+                })
+                // 悬停事件
+                .on("mouseenter", function () {
+                    let nodeObj = d3.select(this).data()[0];
+                    // 播放音效
+                    if (nodeObj.hasComponent("audio_node")) {
+                        playMusic(nodeObj.autoGetValue("audio_node", "soundVolume", 1));
+                    }
+                    // 缩放
+                    let node = d3.select(this).select(".nodeGraph");
+                    if (nodeObj.hasComponent("scaleHover_node")) {
+                        let radiusScale = nodeObj.autoGetValue("scaleHover_node", "scale", 1.2);
+                        node
+                            .transition()
+                            .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
+                            .ease(d3.easeElasticOut)
+                            .style("transform", `scale(${radiusScale})`);
+                    }
+                })
+                .on("mouseleave", function () {
+                    let nodeObj = d3.select(this).data()[0];
+                    let node = d3.select(this).select(".nodeGraph");
+                    if (nodeObj.hasComponent("scaleHover_node")) {
+                        node
+                            .transition()
+                            .duration(d => d.autoGetValue("scaleHover_node", "scaleTime", 800, value => value * 1000))
+                            .ease(d3.easeElasticOut)
+                            .style("transform", `scale(1)`);
+                    }
+                })
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
+
+        }
 
 
-        // 开始的时候先全部更新一遍，装入数据
-        for (let node of _.nodeList) {
-            _.modifyNodeExterior(node);
+        function initElements() {
+            // 开始的时候先全部更新一遍，装入数据
+            for (let node of _.nodeList) {
+                _.modifyNodeExterior(node);
+            }
+            for (let edge of _.edgeList) {
+                _.modifyEdgeExterior(edge);
+            }
+            for (let node of _.nodeList) {
+                _.modifyNodePhysics();
+            }
+            for (let edge of _.edgeList) {
+                _.modifyEdgePhysics();
+            }
         }
-        for (let edge of _.edgeList) {
-            _.modifyEdgeExterior(edge);
-        }
-        for (let node of _.nodeList) {
-            _.modifyNodePhysics();
-        }
-        for (let edge of _.edgeList) {
-            _.modifyEdgePhysics();
-        }
+        initElements();
 
         // 点击空白处取消选择
         d3.select(".displayArea svg").on("click", function (e) {
@@ -277,155 +295,161 @@ export class Graph {
         let startLoc = [];
         let endLoc = [];
         let selectionFlag = false;
-        let rect = d3.select(".displayArea svg").append("rect")
-            .attr("width", 0)
-            .attr("height", 0)
-            .attr("fill", "rgba(33,20,50,0.3)")
-            .attr("stroke", "#ccc")
-            .attr("stroke-width", "2px")
-            .attr("transform", "translate(0,0)")
-            .attr("id", "squareSelect");
+        function selectionRect() {
+            let rect = d3.select(".displayArea svg").append("rect")
+                .attr("width", 0)
+                .attr("height", 0)
+                .attr("fill", "rgba(33,20,50,0.3)")
+                .attr("stroke", "#ccc")
+                .attr("stroke-width", "2px")
+                .attr("transform", "translate(0,0)")
+                .attr("id", "squareSelect");
 
-        d3.select(".displayArea svg").on("mousedown", function (e) {
-            if (e.button == 2) {
-                clickTime = (new Date()).getTime();
-                selectionFlag = true;
-                rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
-                startLoc = [e.layerX, e.layerY];
-            }
-            _.deselectAll();
-        });
-
-        d3.select(".displayArea svg").on("mousemove", function (e) {
-            //判断事件target
-            //if (e.button == 2) {
-            if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
-
-                let width = e.layerX - startLoc[0];
-                let height = e.layerY - startLoc[1];
-                if (width < 0) {
-                    rect.attr("transform", "translate(" + e.layerX + "," + startLoc[1] + ")");
-                }
-                if (height < 0) {
-                    rect.attr("transform", "translate(" + startLoc[0] + "," + e.layerY + ")");
-                }
-                if (height < 0 && width < 0) {
+            d3.select(".displayArea svg").on("mousedown", function (e) {
+                if (e.button == 2) {
+                    clickTime = (new Date()).getTime();
+                    selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
+                    startLoc = [e.layerX, e.layerY];
                 }
-                rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
-            }
-            //}
-        })
+                _.deselectAll();
+            });
 
-        d3.select(".displayArea svg").on("mouseup", function (e) {
-            if (e.button == 2) {
-                if (selectionFlag == true) {
-                    selectionFlag = false;
-                    endLoc = [e.layerX, e.layerY];
-                    let leftTop = [];
-                    let rightBottom = []
-                    if (endLoc[0] >= startLoc[0]) {
-                        leftTop[0] = startLoc[0];
-                        rightBottom[0] = endLoc[0];
-                    } else {
-                        leftTop[0] = endLoc[0];
-                        rightBottom[0] = startLoc[0];
-                    }
+            d3.select(".displayArea svg").on("mousemove", function (e) {
+                //判断事件target
+                //if (e.button == 2) {
+                if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
 
-                    if (endLoc[1] >= startLoc[1]) {
-                        leftTop[1] = startLoc[1];
-                        rightBottom[1] = endLoc[1];
-                    } else {
-                        leftTop[1] = endLoc[1];
-                        rightBottom[1] = startLoc[1];
+                    let width = e.layerX - startLoc[0];
+                    let height = e.layerY - startLoc[1];
+                    if (width < 0) {
+                        rect.attr("transform", "translate(" + e.layerX + "," + startLoc[1] + ")");
                     }
-
-                    // 通过和node的坐标比较，确定哪些点在圈选范围
-                    if (_.selectMode == "node") {
-                        let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
-                            let node = d3.select(this).node();
-                            let nodePosition = {
-                                x: node.getBoundingClientRect().x,
-                                y: node.getBoundingClientRect().y
-                            }
-                            if (nodePosition.x < rightBottom[0] && nodePosition.x > leftTop[0] && nodePosition.y > leftTop[1] && nodePosition.y < rightBottom[1]) {
-                                _.selectElement(d3.select(this).data()[0]);
-                            }
-                        });
-                    } else if (_.selectMode == "edge") {
-                        let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
-                            let node1 = d3.select(`#${d.source.uuid}`).node();
-                            let node2 = d3.select(`#${d.target.uuid}`).node();
-                            let nodePosition = {
-                                x1: node1.getBoundingClientRect().x,
-                                y1: node1.getBoundingClientRect().y,
-                                x2: node2.getBoundingClientRect().x,
-                                y2: node2.getBoundingClientRect().y
-                            }
-                            if (
-                                (nodePosition.x1 < rightBottom[0] && nodePosition.x1 > leftTop[0] && nodePosition.y1 > leftTop[1] && nodePosition.y1 < rightBottom[1]) &&
-                                (nodePosition.x2 < rightBottom[0] && nodePosition.x2 > leftTop[0] && nodePosition.y2 > leftTop[1] && nodePosition.y2 < rightBottom[1])
-                            ) {
-                                _.selectElement(d3.select(this).data()[0]);
-                            }
-                        });
+                    if (height < 0) {
+                        rect.attr("transform", "translate(" + startLoc[0] + "," + e.layerY + ")");
                     }
-                    if (_.selectedElementList.length > 1) {
-                        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
-                        document.querySelector(".panArea .listPan").innerHTML = "";
+                    if (height < 0 && width < 0) {
+                        rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
                     }
-                    rect.attr("width", 0).attr("height", 0);
+                    rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                 }
-                let times = (new Date()).getTime() - clickTime;
-                if (times < 100) {
-                    _.deselectAll();
-                }
-            }
-        })
+                //}
+            })
 
-        // 选中节点后delete删除
-        d3.select("body").on("keydown", function (e) {
-            if (e.target == this) {
-                if (e.keyCode == 46) {
-                    if (_.selectedElementList.length != 0) {
-                        for (let selectedElement of _.selectedElementList) {
-                            if (selectedElement.type == "node") {
-                                // 移除相关关系
-                                let removeEdgeList = _.findNodeEdges(selectedElement);
-                                for (let i = 0; i < removeEdgeList.length; i++) {
-                                    let currentRemoveEdge = removeEdgeList[i];
-                                    let edgeUuid = currentRemoveEdge.uuid;
-                                    // d3.select(`#${edgeUuid}`).remove();
-                                    _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
-                                }
-                                edges.data(_.edgeList, d => d.uuid).exit().remove();
-                                // 移除节点
-                                let nodeUuid = selectedElement.uuid;
-                                // d3.select(`#${nodeUuid}`).remove();
-                                _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
-                                nodes.data(_.nodeList, d => d.uuid).exit().remove();
-                            } else if (selectedElement.type == "edge") {
-                                _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
-                                let edgeUuid = selectedElement.uuid;
-                                // 移除关系
-                                let removeEdge = d3.select(`#${edgeUuid}`).remove();
-                            }
-                            // 重启物理模拟
-                            _.renderProperties.simulation.restart();
+            d3.select(".displayArea svg").on("mouseup", function (e) {
+                if (e.button == 2) {
+                    if (selectionFlag == true) {
+                        selectionFlag = false;
+                        endLoc = [e.layerX, e.layerY];
+                        let leftTop = [];
+                        let rightBottom = []
+                        if (endLoc[0] >= startLoc[0]) {
+                            leftTop[0] = startLoc[0];
+                            rightBottom[0] = endLoc[0];
+                        } else {
+                            leftTop[0] = endLoc[0];
+                            rightBottom[0] = startLoc[0];
                         }
+
+                        if (endLoc[1] >= startLoc[1]) {
+                            leftTop[1] = startLoc[1];
+                            rightBottom[1] = endLoc[1];
+                        } else {
+                            leftTop[1] = endLoc[1];
+                            rightBottom[1] = startLoc[1];
+                        }
+
+                        // 通过和node的坐标比较，确定哪些点在圈选范围
+                        if (_.selectMode == "node") {
+                            let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
+                                let node = d3.select(this).node();
+                                let nodePosition = {
+                                    x: node.getBoundingClientRect().x,
+                                    y: node.getBoundingClientRect().y
+                                }
+                                if (nodePosition.x < rightBottom[0] && nodePosition.x > leftTop[0] && nodePosition.y > leftTop[1] && nodePosition.y < rightBottom[1]) {
+                                    _.selectElement(d3.select(this).data()[0]);
+                                }
+                            });
+                        } else if (_.selectMode == "edge") {
+                            let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
+                                let node1 = d3.select(`#${d.source.uuid}`).node();
+                                let node2 = d3.select(`#${d.target.uuid}`).node();
+                                let nodePosition = {
+                                    x1: node1.getBoundingClientRect().x,
+                                    y1: node1.getBoundingClientRect().y,
+                                    x2: node2.getBoundingClientRect().x,
+                                    y2: node2.getBoundingClientRect().y
+                                }
+                                if (
+                                    (nodePosition.x1 < rightBottom[0] && nodePosition.x1 > leftTop[0] && nodePosition.y1 > leftTop[1] && nodePosition.y1 < rightBottom[1]) &&
+                                    (nodePosition.x2 < rightBottom[0] && nodePosition.x2 > leftTop[0] && nodePosition.y2 > leftTop[1] && nodePosition.y2 < rightBottom[1])
+                                ) {
+                                    _.selectElement(d3.select(this).data()[0]);
+                                }
+                            });
+                        }
+                        if (_.selectedElementList.length > 1) {
+                            document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                            document.querySelector(".panArea .listPan").innerHTML = "";
+                        }
+                        rect.attr("width", 0).attr("height", 0);
                     }
-                } else if (e.keyCode == 16) {
-                    _.isShiftDown = true;
+                    let times = (new Date()).getTime() - clickTime;
+                    if (times < 100) {
+                        _.deselectAll();
+                    }
                 }
-            }
-        });
-        d3.select("body").on("keyup", function (e) {
-            if (e.target == this) {
-                if (e.keyCode == 16) {
-                    _.isShiftDown = false;
+            })
+        }
+        selectionRect();
+
+        function bindKeyEvent() {
+            // 选中节点后delete删除
+            d3.select("body").on("keydown", function (e) {
+                if (e.target == this) {
+                    if (e.keyCode == 46) {
+                        if (_.selectedElementList.length != 0) {
+                            for (let selectedElement of _.selectedElementList) {
+                                if (selectedElement.type == "node") {
+                                    // 移除相关关系
+                                    let removeEdgeList = _.findNodeEdges(selectedElement);
+                                    for (let i = 0; i < removeEdgeList.length; i++) {
+                                        let currentRemoveEdge = removeEdgeList[i];
+                                        let edgeUuid = currentRemoveEdge.uuid;
+                                        // d3.select(`#${edgeUuid}`).remove();
+                                        _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
+                                    }
+                                    edges.data(_.edgeList, d => d.uuid).exit().remove();
+                                    // 移除节点
+                                    let nodeUuid = selectedElement.uuid;
+                                    // d3.select(`#${nodeUuid}`).remove();
+                                    _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
+                                    nodes.data(_.nodeList, d => d.uuid).exit().remove();
+                                } else if (selectedElement.type == "edge") {
+                                    _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
+                                    let edgeUuid = selectedElement.uuid;
+                                    // 移除关系
+                                    let removeEdge = d3.select(`#${edgeUuid}`).remove();
+                                }
+                                // 重启物理模拟
+                                _.renderProperties.simulation.restart();
+                            }
+                        }
+                    } else if (e.keyCode == 16) {
+                        _.isShiftDown = true;
+                    }
                 }
-            }
-        });
+            });
+            d3.select("body").on("keyup", function (e) {
+                if (e.target == this) {
+                    if (e.keyCode == 16) {
+                        _.isShiftDown = false;
+                    }
+                }
+            });
+        }
+        bindKeyEvent();
 
         // 计算物理模拟
         _.renderProperties.simulation.on("tick", () => {
