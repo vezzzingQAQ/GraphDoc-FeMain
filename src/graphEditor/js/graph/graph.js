@@ -296,6 +296,7 @@ export class Graph {
 
                     // 添加关系
                     let addedEdge = CreateBasicEdge(fromNode, addedNode);
+                    addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - addedNode.x) ** 2 + (fromNode.y - addedNode.y) ** 2));
                     _.addEdge(addedEdge);
 
                     // 绘制
