@@ -145,12 +145,21 @@ export class Graph {
 
             // 创建绘画区域
             _.renderProperties.viewArea = _.renderProperties.svg.append("g")
-                .attr("class", "viewArea");
+                .attr("class", "viewArea")
+
+            // 创建图层-节点层和关系层
+            d3.select(".viewArea").append("g")
+                .attr("class", "edgeLayer layer")
+                .attr("id", "edgeLayer")
+
+            d3.select(".viewArea").append("g")
+                .attr("class", "nodeLayer layer")
+                .attr("id", "nodeLayer")
         }
         initSvg();
 
         // 绘制关系
-        let edges = _.renderProperties.viewArea.selectAll(".forceLine")
+        let edges = d3.select("#edgeLayer").selectAll(".forceLine")
             .data(_.edgeList, d => d.uuid)
             .enter()
             .append("line")
@@ -195,7 +204,7 @@ export class Graph {
         }
 
         // 绘制node
-        let nodes = _.renderProperties.viewArea.selectAll(".forceNode")
+        let nodes = d3.select("#nodeLayer").selectAll(".forceNode")
             .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
