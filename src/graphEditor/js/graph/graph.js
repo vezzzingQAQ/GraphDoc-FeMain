@@ -215,6 +215,38 @@ export class Graph {
                 // 点击选中
                 .on("click", function () {
                     let nodeObj = d3.select(this).data()[0];
+                    // 按下shift的同时点击另一个节点，创建关系
+                    if (_.isShiftDown && _.selectedElementList.length >= 1) {
+                        let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
+                        // 遍历所有链接判断是不是已经链接过了
+                        let isLinked = false;
+                        for (let edge of _.edgeList) {
+                            if (edge.source == fromNode && edge.target == nodeObj) {
+                                isLinked = true;
+                                break;
+                            }
+                        }
+                        console.log(isLinked)
+                        // 没连过就连上
+                        if (!isLinked) {
+                            let addedEdge = CreateBasicEdge(fromNode, nodeObj);
+                            addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - nodeObj.x) ** 2 + (fromNode.y - nodeObj.y) ** 2));
+                            _.addEdge(addedEdge);
+
+                            // 绘制
+                            edges = edges
+                                .data(_.edgeList, d => d.uuid)
+                                .enter()
+                                .append("line")
+                                .call(initEdges)
+                                .merge(edges);
+
+                            // 初始化组件
+                            _.modifyEdgeExterior(addedEdge);
+                            _.modifyEdgePhysics();
+                        }
+                    }
+                    // 清除选择集
                     _.deselectAll();
                     _.selectElement(nodeObj);
                 })
