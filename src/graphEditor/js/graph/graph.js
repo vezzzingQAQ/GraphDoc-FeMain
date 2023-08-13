@@ -55,11 +55,14 @@ export class Graph {
             simulation: null
         }
         // 选择模式
-        this.selectMode = "node";
+        this.selectMode = "all";
         this.isShiftDown = false;
+        this.isControlDown = false;
         // 图谱中的节点
         this.nodes;
         this.edges;
+        // 复制的节点
+        this.copiedElementList = [];
     }
 
     /**
@@ -425,7 +428,7 @@ export class Graph {
                         }
 
                         // 通过和node的坐标比较，确定哪些点在圈选范围
-                        if (_.selectMode == "node") {
+                        if ("all" || _.selectMode == "node") {
                             let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
                                 let node = d3.select(this).node();
                                 let nodePosition = {
@@ -436,7 +439,8 @@ export class Graph {
                                     _.selectElement(d3.select(this).data()[0]);
                                 }
                             });
-                        } else if (_.selectMode == "edge") {
+                        }
+                        if ("all" || _.selectMode == "edge") {
                             let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
                                 let node1 = d3.select(`#${d.source.uuid}`).node();
                                 let node2 = d3.select(`#${d.target.uuid}`).node();
@@ -473,6 +477,7 @@ export class Graph {
             // 选中节点后delete删除
             d3.select("body").on("keydown", function (e) {
                 if (e.target == this) {
+                    // delete删除选中的元素
                     if (e.keyCode == 46) {
                         if (_.selectedElementList.length != 0) {
                             for (let selectedElement of _.selectedElementList) {
@@ -481,15 +486,18 @@ export class Graph {
                                     let removeEdgeList = _.findNodeEdges(selectedElement);
                                     for (let i = 0; i < removeEdgeList.length; i++) {
                                         let currentRemoveEdge = removeEdgeList[i];
-                                        _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
+                                        if (_.edgeList.indexOf(currentRemoveEdge) != -1)
+                                            _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                     }
                                     edges.data(_.edgeList, d => d.uuid).exit().remove();
                                     // 移除节点
-                                    _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
+                                    if (_.nodeList.indexOf(selectedElement) != -1)
+                                        _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
                                     nodes.data(_.nodeList, d => d.uuid).exit().remove();
                                 } else if (selectedElement.type == "edge") {
                                     // 移除关系
-                                    _.edgeList.splice(_.edgeList.indexOf(selectedElement), 1);
+                                    if (_.edgeList.indexOf(selectedElement) != -1)
+                                        _.edgeList.splice(_.edgeList.indexOf(selectedElement), 1);
                                     edges.data(_.edgeList, d => d.uuid).exit().remove();
                                 }
                                 // 重启物理模拟
@@ -497,8 +505,20 @@ export class Graph {
                                 _.modifyEdgePhysics();
                             }
                         }
-                    } else if (e.keyCode == 16) {
+                    }
+                    if (e.keyCode == 16)
                         _.isShiftDown = true;
+                    if (e.keyCode == 17)
+                        _.isControlDown = true;
+                    // ctrl+v复制选中的节点
+                    if (e.keyCode == 86 && _.isControlDown) {
+                        for (let i = 0; i < _.selectedElementList.length; i++) {
+                            let currentElement = _.selectedElementList[i];
+                            // 用asign进行深拷贝(引用保留)
+                            let newElement = Object.assign({}, currentElement);
+                            _.copiedElementList.push(newElement);
+                        }
+                        console.log(_.copiedElementList);
                     }
                 }
             });
@@ -506,6 +526,8 @@ export class Graph {
                 if (e.target == this) {
                     if (e.keyCode == 16) {
                         _.isShiftDown = false;
+                    } else if (e.keyCode == 17) {
+                        _.isControlDown = false;
                     }
                 }
             });
