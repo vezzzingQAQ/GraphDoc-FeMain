@@ -56,6 +56,7 @@ export class Graph {
         }
         // 选择模式
         this.selectMode = "node";
+        this.isShiftDown = false;
     }
 
     /**
@@ -140,7 +141,7 @@ export class Graph {
 
         // 绘制关系
         const edges = _.renderProperties.viewArea.selectAll(".forceLine")
-            .data(_.edgeList)
+            .data(_.edgeList, d => d.uuid)
             .enter()
             .append("line")
             .attr("class", "forceEdge forceElemet")
@@ -181,7 +182,7 @@ export class Graph {
 
         // 绘制node
         const nodes = _.renderProperties.viewArea.selectAll(".forceNode")
-            .data(_.nodeList)
+            .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
             .attr("class", "forceNode forceElemet unselected")
@@ -259,9 +260,13 @@ export class Graph {
         // 点击空白处取消选择
         d3.select(".displayArea svg").on("click", function (e) {
             if (e.target == this) {
+                // 如果同时按着shift键，添加节点
+                if (_.selectedElementList.length >= 1 && _.isShiftDown) {
+                    let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
+
+                }
+                // 取消选择
                 _.deselectAll();
-                _.renderProperties.viewArea.selectAll(".forceLine").attr("class", "forceLine forceElement unselected")
-                _.renderProperties.viewArea.selectAll(".forceNode").attr("class", "forceNode forceElement unselected")
                 document.querySelector(".panArea .listPan").innerHTML = "";
                 document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
             }
@@ -380,7 +385,7 @@ export class Graph {
 
         // 选中节点后delete删除
         d3.select("body").on("keydown", function (e) {
-            if (e.target == this)
+            if (e.target == this) {
                 if (e.keyCode == 46) {
                     if (_.selectedElementList.length != 0) {
                         for (let selectedElement of _.selectedElementList) {
@@ -390,14 +395,15 @@ export class Graph {
                                 for (let i = 0; i < removeEdgeList.length; i++) {
                                     let currentRemoveEdge = removeEdgeList[i];
                                     let edgeUuid = currentRemoveEdge.uuid;
-                                    d3.select(`#${edgeUuid}`).remove();
+                                    // d3.select(`#${edgeUuid}`).remove();
                                     _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                 }
+                                edges.data(_.edgeList, d => d.uuid).exit().remove();
                                 // 移除节点
                                 let nodeUuid = selectedElement.uuid;
-                                console.log(nodeUuid);
-                                d3.select(`#${nodeUuid}`).remove();
+                                // d3.select(`#${nodeUuid}`).remove();
                                 _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
+                                nodes.data(_.nodeList, d => d.uuid).exit().remove();
                             } else if (selectedElement.type == "edge") {
                                 _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
                                 let edgeUuid = selectedElement.uuid;
@@ -408,9 +414,17 @@ export class Graph {
                             _.renderProperties.simulation.restart();
                         }
                     }
+                } else if (e.keyCode == 16) {
+                    _.isShiftDown = true;
                 }
-            console.log(_.edgeList);
-            console.log(_.nodeList);
+            }
+        });
+        d3.select("body").on("keyup", function (e) {
+            if (e.target == this) {
+                if (e.keyCode == 16) {
+                    _.isShiftDown = false;
+                }
+            }
         });
 
         // 计算物理模拟
