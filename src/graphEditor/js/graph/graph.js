@@ -171,9 +171,8 @@ export class Graph {
                 .style("cursor", "pointer")
                 .on("click", function (d, i) {
                     let edgeObj = d3.select(this).data()[0];
-                    let allElement = d3.selectAll(".forceElemet").style("outline", "none");
                     let edge = d3.select(this);
-                    edge.style("outline", "1px dashed white");
+                    _.deselectAll();
                     _.selectElement(edgeObj);
                 })
                 .on("mouseenter", function () {
@@ -472,6 +471,7 @@ export class Graph {
                         _.isShiftDown = true;
                     }
                     console.log(_.nodeList);
+                    console.log(_.edgeList);
                 }
             });
             d3.select("body").on("keyup", function (e) {
@@ -637,8 +637,6 @@ export class Graph {
      */
     modifyNodePhysics() {
         this.renderProperties.simulation.nodes(this.nodeList)
-        console.log(1)
-        console.log(this.nodeList)
         this.renderProperties.forces.collideForce
             .radius(d => {
                 let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
