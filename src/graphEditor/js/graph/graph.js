@@ -26,7 +26,7 @@
 
 import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
-import { LoadEdgeFromJson, LoadNodeFromJson } from "./element";
+import { CreateBasicEdge, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
 import { ComponentMap } from "./component";
 
@@ -57,6 +57,9 @@ export class Graph {
         // 选择模式
         this.selectMode = "node";
         this.isShiftDown = false;
+        // 图谱中的节点
+        this.nodes;
+        this.edges;
     }
 
     /**
@@ -107,6 +110,7 @@ export class Graph {
             // 创建所需要的力
             _.renderProperties.forces.linkForce = d3.forceLink()
                 .links(_.edgeList)
+                .id(d => d.uuid)
                 .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
                 .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
 
@@ -146,14 +150,14 @@ export class Graph {
         initSvg();
 
         // 绘制关系
-        const edges = _.renderProperties.viewArea.selectAll(".forceLine")
+        let edges = _.renderProperties.viewArea.selectAll(".forceLine")
             .data(_.edgeList, d => d.uuid)
             .enter()
             .append("line")
             .call(initEdges)
 
         function initEdges(edges) {
-            edges.attr("class", "forceEdge forceElemet")
+            edges
                 .attr("id", d => d.uuid)
                 .style("cursor", "pointer")
                 .on("click", function (d, i) {
@@ -191,21 +195,18 @@ export class Graph {
         }
 
         // 绘制node
-        const nodes = _.renderProperties.viewArea.selectAll(".forceNode")
+        let nodes = _.renderProperties.viewArea.selectAll(".forceNode")
             .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
             .call(initNodes);
 
         function initNodes(nodes) {
-            nodes.attr("class", "forceNode forceElemet unselected")
+            nodes
                 .attr("id", d => d.uuid)
                 // 点击选中
                 .on("click", function () {
                     let nodeObj = d3.select(this).data()[0];
-                    let allElement = d3.selectAll(".forceNode").attr("class", "forceNode forceElemet unselected");
-                    let node = d3.select(this);
-                    node.attr("class", "forceNode forceElement selected");
                     _.deselectAll();
                     _.selectElement(nodeObj);
                 })
@@ -266,12 +267,8 @@ export class Graph {
             for (let edge of _.edgeList) {
                 _.modifyEdgeExterior(edge);
             }
-            for (let node of _.nodeList) {
-                _.modifyNodePhysics();
-            }
-            for (let edge of _.edgeList) {
-                _.modifyEdgePhysics();
-            }
+            _.modifyNodePhysics();
+            _.modifyEdgePhysics();
         }
         initElements();
 
@@ -282,6 +279,35 @@ export class Graph {
                 if (_.selectedElementList.length >= 1 && _.isShiftDown) {
                     let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
 
+                    // 添加节点
+                    let addedNode = CreateTextNode();
+                    addedNode.x = e.x;
+                    addedNode.y = e.y;
+                    _.addNode(addedNode);
+
+                    // 添加关系
+                    let addedEdge = CreateBasicEdge(fromNode, addedNode);
+                    _.addEdge(addedEdge);
+
+                    // 绘制
+                    edges = edges
+                        .data(_.edgeList, d => d.uuid)
+                        .enter()
+                        .append("line")
+                        .call(initEdges)
+                        .merge(edges);
+                    nodes = nodes
+                        .data(_.nodeList, d => d.uuid)
+                        .enter()
+                        .append("g")
+                        .call(initNodes)
+                        .merge(nodes);
+
+                    // 初始化组件
+                    _.modifyEdgeExterior(addedEdge);
+                    _.modifyEdgePhysics();
+                    _.modifyNodeExterior(addedNode);
+                    _.modifyNodePhysics();
                 }
                 // 取消选择
                 _.deselectAll();
@@ -311,8 +337,8 @@ export class Graph {
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
                     startLoc = [e.layerX, e.layerY];
+                    _.deselectAll();
                 }
-                _.deselectAll();
             });
 
             d3.select(".displayArea svg").on("mousemove", function (e) {
@@ -416,29 +442,26 @@ export class Graph {
                                     let removeEdgeList = _.findNodeEdges(selectedElement);
                                     for (let i = 0; i < removeEdgeList.length; i++) {
                                         let currentRemoveEdge = removeEdgeList[i];
-                                        let edgeUuid = currentRemoveEdge.uuid;
-                                        // d3.select(`#${edgeUuid}`).remove();
                                         _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                     }
                                     edges.data(_.edgeList, d => d.uuid).exit().remove();
                                     // 移除节点
-                                    let nodeUuid = selectedElement.uuid;
-                                    // d3.select(`#${nodeUuid}`).remove();
                                     _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
                                     nodes.data(_.nodeList, d => d.uuid).exit().remove();
                                 } else if (selectedElement.type == "edge") {
-                                    _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
-                                    let edgeUuid = selectedElement.uuid;
                                     // 移除关系
-                                    let removeEdge = d3.select(`#${edgeUuid}`).remove();
+                                    _.edgeList.splice(_.edgeList.indexOf(selectedElement), 1);
+                                    edges.data(_.edgeList, d => d.uuid).exit().remove();
                                 }
                                 // 重启物理模拟
-                                _.renderProperties.simulation.restart();
+                                _.modifyNodePhysics();
+                                _.modifyEdgePhysics();
                             }
                         }
                     } else if (e.keyCode == 16) {
                         _.isShiftDown = true;
                     }
+                    console.log(_.nodeList);
                 }
             });
             d3.select("body").on("keyup", function (e) {
@@ -458,7 +481,6 @@ export class Graph {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-
             nodes.attr("transform", d => `translate(${d.x},${d.y})`);
         });
 
@@ -604,6 +626,9 @@ export class Graph {
      * 修改节点的物理表现
      */
     modifyNodePhysics() {
+        this.renderProperties.simulation.nodes(this.nodeList)
+        console.log(1)
+        console.log(this.nodeList)
         this.renderProperties.forces.collideForce
             .radius(d => {
                 let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
@@ -638,6 +663,8 @@ export class Graph {
      */
     modifyEdgePhysics() {
         this.renderProperties.forces.linkForce
+            .links(this.edgeList)
+            .id(d => d.uuid)
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
         this.renderProperties.simulation.alphaTarget(0.01).restart();

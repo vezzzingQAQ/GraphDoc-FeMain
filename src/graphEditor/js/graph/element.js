@@ -254,6 +254,10 @@ export class Node extends Element {
         super();
         this.type = "node";
         this.tempFixed = false;
+        this.x;
+        this.y;
+        this.vx;
+        this.vy;
     }
 
     /**
