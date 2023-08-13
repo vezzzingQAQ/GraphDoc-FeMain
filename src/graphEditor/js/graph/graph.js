@@ -510,8 +510,9 @@ export class Graph {
                         _.isShiftDown = true;
                     if (e.keyCode == 17)
                         _.isControlDown = true;
-                    // ctrl+v复制选中的节点
-                    if (e.keyCode == 86 && _.isControlDown) {
+                    // ctrl+c复制选中的节点
+                    if (e.keyCode == 67 && _.isControlDown) {
+                        _.copiedElementList=[];
                         for (let i = 0; i < _.selectedElementList.length; i++) {
                             let currentElement = _.selectedElementList[i];
                             // 用asign进行深拷贝(引用保留)
