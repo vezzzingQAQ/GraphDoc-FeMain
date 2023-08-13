@@ -340,7 +340,8 @@ export class Edge extends Element {
         component.dom.remove();
         delete this.componentMap[component.key];
         this.initComponentAddDom();
-        this.owner.modifyEdge(this);
+        this.owner.modifyEdgeExterior(this);
+        this.owner.modifyEdgePhysics(this);
     }
 
 }

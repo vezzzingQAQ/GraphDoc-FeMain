@@ -28,6 +28,7 @@ import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
 import { LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
+import { ComponentMap } from "./component";
 
 export class Graph {
     /**
@@ -54,7 +55,7 @@ export class Graph {
             simulation: null
         }
         // 选择模式
-        this.selectMode = "edge";
+        this.selectMode = "node";
     }
 
     /**
@@ -378,19 +379,20 @@ export class Graph {
                 if (e.keyCode == 46) {
                     if (_.selectedElementList.length != 0) {
                         for (let selectedElement of _.selectedElementList) {
-                            if (selectedElement.type = "node") {
-                                _.nodeList.splice(_.nodeList.indexOf(_.selectedElement), 1);
-                                let nodeUuid = selectedElement.uuid;
-                                // 移除节点
-                                let removedNode = d3.select(`#${nodeUuid}`).remove();
+                            if (selectedElement.type == "node") {
                                 // 移除相关关系
                                 let removeEdgeList = _.findNodeEdges(selectedElement);
                                 for (let i = 0; i < removeEdgeList.length; i++) {
                                     let currentRemoveEdge = removeEdgeList[i];
-                                    _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                     let edgeUuid = currentRemoveEdge.uuid;
                                     d3.select(`#${edgeUuid}`).remove();
+                                    _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
                                 }
+                                // 移除节点
+                                let nodeUuid = selectedElement.uuid;
+                                console.log(nodeUuid);
+                                d3.select(`#${nodeUuid}`).remove();
+                                _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
                             } else if (selectedElement.type == "edge") {
                                 _.edgeList.splice(_.edgeList.indexOf(_.selectedElement), 1);
                                 let edgeUuid = selectedElement.uuid;
@@ -402,8 +404,8 @@ export class Graph {
                         }
                     }
                 }
-                console.log(_.edgeList);
-                console.log(_.nodeList);
+            console.log(_.edgeList);
+            console.log(_.nodeList);
         });
 
         // 计算物理模拟
@@ -609,7 +611,7 @@ export class Graph {
             element.attr("class", "forceEdge forceElement selected");
         }
         this.selectedElementList.push(elementObj);
-        //elementObj.initHtml();
+        elementObj.initHtml();
     }
 
     /**
@@ -637,6 +639,7 @@ export class Graph {
         for (let edgeObj of this.edgeList) {
             this.deselectElement(edgeObj);
         }
+        this.selectedElementList=[];
     }
 
     /**
