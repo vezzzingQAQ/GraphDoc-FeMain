@@ -226,7 +226,6 @@ export class Graph {
                                 break;
                             }
                         }
-                        console.log(isLinked)
                         // 没连过就连上
                         if (!isLinked) {
                             let addedEdge = CreateBasicEdge(fromNode, nodeObj);
@@ -501,8 +500,6 @@ export class Graph {
                     } else if (e.keyCode == 16) {
                         _.isShiftDown = true;
                     }
-                    console.log(_.nodeList);
-                    console.log(_.edgeList);
                 }
             });
             d3.select("body").on("keyup", function (e) {
