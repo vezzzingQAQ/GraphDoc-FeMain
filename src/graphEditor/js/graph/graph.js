@@ -258,6 +258,13 @@ export class Graph {
                     _.deselectAll();
                     _.selectElement(nodeObj);
                 })
+                // 双击转到编辑
+                .on("dblclick",function(){
+                    let nodeObj = d3.select(this).data()[0];
+                    if(nodeObj.hasComponent("text_node")){
+                        document.querySelector("#text_node_textarea").focus();
+                    }
+                })
                 // 悬停事件
                 .on("mouseenter", function () {
                     let nodeObj = d3.select(this).data()[0];
