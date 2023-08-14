@@ -316,7 +316,7 @@ export class C_N_Link extends Component {
  */
 export class C_N_Text extends Component {
     constructor(showName, key, value = {
-        showText: "VEZZ",
+        showText: "",
         textColor: "#ffffff",
         textSize: 4,
         textSpacing: 0,
