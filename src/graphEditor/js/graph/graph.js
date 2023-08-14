@@ -705,7 +705,6 @@ export class Graph {
                 .html("🔗")
                 .style("display", "block")
                 .style("margin", 0)
-                .style("margin-top", "5px")
                 .style("padding", "1px")
                 .style("color", "rgb(200,200,200)")
                 .style("font-size", "10px")
@@ -723,7 +722,6 @@ export class Graph {
             .style("width", "max-content")
             .style("height", "max-content")
             .style("flex-direction", "column")
-            .style("z-index", 1);
 
         addedSubComponentForeign
             .attr("width", function () {
@@ -745,9 +743,7 @@ export class Graph {
                     let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
                     // 根据文字大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                        if (d.hasComponent("text_node")) {
-                            radius = Math.sqrt((addedSubComponentForeign.node().getBBox().width / 2) ** 2 + (addedSubComponentForeign.node().getBBox().height / 2) ** 2) + 8;
-                        }
+                        radius = Math.sqrt((addedSubComponentForeign.node().getBBox().width / 2) ** 2 + (addedSubComponentForeign.node().getBBox().height / 2) ** 2) + 8;
                     }
                     return radius;
                 })
@@ -759,9 +755,7 @@ export class Graph {
                     let width = d.autoGetValue("exterior_node", "size", 0, value => value.x);
                     // 根据内容大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                        if (d.hasComponent("text_node")) {
-                            width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
-                        }
+                        width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
                     }
                     return width;
                 })
