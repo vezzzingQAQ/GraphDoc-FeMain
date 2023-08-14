@@ -174,14 +174,6 @@ class Element {
         }
     }
 
-    // getters&setters
-    getUuid() {
-        return this.uuid;
-    }
-    setUuid(str) {
-        this.uuid = str;
-    }
-
     /**
      * 转为HTML属性面板
      */

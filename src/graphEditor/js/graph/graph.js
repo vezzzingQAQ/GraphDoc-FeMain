@@ -91,7 +91,7 @@ export class Graph {
         if (!this.edgeList.includes(edge)) {
             if (!edge.uuid) {
                 let id = `zzedge${uuidv4().split("-").join("")}`;
-                edge.setUuid(id);
+                edge.uuid = id;
             }
             edge.owner = this;
             this.edgeList.push(edge);
