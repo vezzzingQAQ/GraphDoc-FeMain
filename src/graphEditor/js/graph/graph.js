@@ -64,6 +64,8 @@ export class Graph {
         // 复制的节点
         this.copiedNodeJsonList = [];
         this.copiedEdgeJsonList = [];
+        // 背景颜色
+        this.bgColor = "#ffffff";
     }
 
     /**
@@ -161,6 +163,9 @@ export class Graph {
                 .attr("id", "nodeLayer")
         }
         initSvg();
+
+        // 设置节点颜色
+        _.setBgColor(_.bgColor);
 
         // 绘制关系
         let edges = d3.select("#edgeLayer").selectAll(".forceLine")
@@ -878,10 +883,19 @@ export class Graph {
     }
 
     /**
+     * 设置背景颜色
+     */
+    setBgColor(color) {
+        this.bgColor = color;
+        this.renderProperties.svg.style("background-color", color);
+    }
+
+    /**
      * 转为JSON object
      */
     toJsonObj() {
         let jsonObj = {
+            bgColor: this.bgColor,
             nodeList: [],
             edgeList: []
         };
@@ -917,5 +931,6 @@ export function LoadGraphFromJson(jsonObj) {
         let edge = LoadEdgeFromJson(edgeJson, graph.nodeList);
         graph.addEdge(edge);
     }
+    graph.bgColor = jsonObj.bgColor;
     return graph;
 }

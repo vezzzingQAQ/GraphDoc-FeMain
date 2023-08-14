@@ -11,6 +11,9 @@ export function bindEvents(graph) {
     document.querySelector("#btnExport").addEventListener("click", () => {
         graph.exportImg();
     });
+    document.querySelector("#bgColorInput").addEventListener("input", () => {
+        graph.setBgColor(document.querySelector("#bgColorInput").value);
+    })
     window.oncontextmenu = function (e) {
         //取消默认的浏览器自带右键 很重要！！
         e.preventDefault();
