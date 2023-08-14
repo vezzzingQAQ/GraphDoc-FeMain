@@ -305,11 +305,9 @@ export class C_E_Physics extends Component {
 export class C_N_Link extends Component {
     constructor(showName, key, value = {
         url: "http://vezzzing.cn/vezzzingsLibrary/dist/main.html",
-        openOuter: true
     }) {
         super(showName, key, true);
         this.addValue("url", "外部链接", new SC_UrlInput(value.url, false));
-        this.addValue("openOuter", "新页打开", new SC_Check(value.openOuter, false));
     }
 }
 
