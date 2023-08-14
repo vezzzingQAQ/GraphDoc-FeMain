@@ -28,7 +28,7 @@ import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
 import { CreateBasicEdge, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
-import { ComponentMap } from "./component";
+import { saveSvgAsPng } from "save-svg-png-ext";
 
 export class Graph {
     /**
@@ -687,7 +687,7 @@ export class Graph {
                 .style("cursor", "pointer")
                 .html(d => {
                     let rawText = d.autoGetValue("text_node", "showText", "");
-                    let retText = rawText.replace(/\n/g, "<br/>");
+                    let retText = rawText.replace(/\n/g, "<div></div>");
                     return retText;
                 })
                 .style("color", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
@@ -860,6 +860,15 @@ export class Graph {
                 removeEdgeList.push(currentEdge);
         }
         return removeEdgeList;
+    }
+
+    /**
+     * 下载为图片
+     */
+    exportImg(scale = 5) {
+        saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", { 
+            scale: scale
+         });
     }
 
     /**
