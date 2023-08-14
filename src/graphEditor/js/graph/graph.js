@@ -653,11 +653,14 @@ export class Graph {
         findedNode.selectAll(".nodeGraphContainer").remove();
 
         // 在这里指定组件的绘制顺序
-        let domAddedNodeText = null;
         let addedNodeGraph = null;
         let addedNodeCircle = null;
         let addedNodeRect = null;
 
+        let domAddedNodeText = null;
+        let domAddedNodeLink = null;
+
+        // 容器
         let addedSubComponentForeign = null;
         let domAddedSubComponentContainer = null;
 
@@ -672,13 +675,14 @@ export class Graph {
         addedSubComponentForeign = findedNode.append("foreignObject").attr("class", "nodeGraphContainer");
         domAddedSubComponentContainer = addedSubComponentForeign.append("xhtml:body").attr("class", "nodeGraphDomContainer");
 
-        if (nodeObj.hasComponent("text_node")) {
+        if (nodeObj.hasComponent("text_node"))
             domAddedNodeText = domAddedSubComponentContainer.append("xhtml:div");
-        }
+        if (nodeObj.hasComponent("link_node"))
+            domAddedNodeLink = domAddedSubComponentContainer.append("xhtml:a");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
-            domAddedNodeText.style("z-index", 999)
+            domAddedNodeText
                 .attr("class", "nodeText")
                 .style("width", "max-content")
                 .style("height", "max-content")
@@ -695,10 +699,30 @@ export class Graph {
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
                 .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
 
+        if (domAddedNodeLink)
+            domAddedNodeLink
+                .attr("class", "nodeLink")
+                .html("🔗")
+                .style("display", "block")
+                .style("margin", 0)
+                .style("margin-top", "5px")
+                .style("padding", "1px")
+                .style("color", "rgb(200,200,200)")
+                .style("font-size", "10px")
+                .style("height", "max-content")
+                .style("width", "max-content")
+                .style("border-radius", "2px")
+                .style("background-color", "rgb(50,50,50)")
+                .style("cursor", "pointer")
+                .style("text-decoration", "none")
+                .attr("href", d => d.autoGetValue("link_node", "url"))
+                .attr("target", "_blank")
+
         domAddedSubComponentContainer
             .style("display", "flex")
             .style("width", "max-content")
             .style("height", "max-content")
+            .style("flex-direction", "column")
             .style("z-index", 1);
 
         addedSubComponentForeign
@@ -733,7 +757,7 @@ export class Graph {
                 .style("cursor", "pointer")
                 .attr("width", d => {
                     let width = d.autoGetValue("exterior_node", "size", 0, value => value.x);
-                    // 根据文字大小来决定
+                    // 根据内容大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
                             width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
@@ -743,7 +767,7 @@ export class Graph {
                 })
                 .attr("height", d => {
                     let height = d.autoGetValue("exterior_node", "size", 0, value => value.y);
-                    // 根据文字大小来决定
+                    // 根据内容大小来决定
                     if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                         if (d.hasComponent("text_node")) {
                             height = Math.abs(addedSubComponentForeign.node().getBBox().height) + 8;
@@ -866,9 +890,9 @@ export class Graph {
      * 下载为图片
      */
     exportImg(scale = 5) {
-        saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", { 
+        saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", {
             scale: scale
-         });
+        });
     }
 
     /**
