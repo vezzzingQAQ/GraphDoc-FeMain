@@ -417,7 +417,7 @@ export function CreateTextNode() {
  */
 export function LoadNodeFromJson(jsonObj) {
     let createdNode = new Node();
-    createdNode.setUuid(jsonObj.uuid);
+    createdNode.uuid = jsonObj.uuid;
     createdNode.vx = jsonObj.vx;
     createdNode.vy = jsonObj.vy;
     createdNode.x = jsonObj.x;
@@ -436,7 +436,7 @@ export function LoadNodeFromJson(jsonObj) {
  */
 export function LoadEdgeFromJson(jsonObj, nodeList) {
     let createdEdge = new Edge();
-    createdEdge.setUuid(jsonObj.uuid);
+    createdEdge.uuid = jsonObj.uuid;
     for (let componentKey in jsonObj.components) {
         let createdComponent = LoadComponentFromJson(componentKey, jsonObj.components[componentKey]);
         createdEdge.addComponent(createdComponent);

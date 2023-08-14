@@ -62,7 +62,8 @@ export class Graph {
         this.nodes;
         this.edges;
         // 复制的节点
-        this.copiedElementList = [];
+        this.copiedNodeJsonList = [];
+        this.copiedEdgeJsonList = [];
     }
 
     /**
@@ -73,7 +74,7 @@ export class Graph {
         if (!this.nodeList.includes(node)) {
             if (!node.uuid) {
                 let id = `zznode${uuidv4().split("-").join("")}`;
-                node.setUuid(id);
+                node.uuid = id;
             }
             node.owner = this;
             this.nodeList.push(node);
@@ -313,7 +314,7 @@ export class Graph {
         }
         initElements();
 
-        // 点击空白处取消选择
+        // 点击空白处
         d3.select(".displayArea svg").on("click", function (e) {
             if (e.target == this) {
                 // 如果同时按着shift键，添加节点
@@ -486,19 +487,25 @@ export class Graph {
                                     let removeEdgeList = _.findNodeEdges(selectedElement);
                                     for (let i = 0; i < removeEdgeList.length; i++) {
                                         let currentRemoveEdge = removeEdgeList[i];
-                                        if (_.edgeList.indexOf(currentRemoveEdge) != -1)
+                                        if (_.edgeList.indexOf(currentRemoveEdge) != -1) {
                                             _.edgeList.splice(_.edgeList.indexOf(currentRemoveEdge), 1);
+                                            d3.select(`#${currentRemoveEdge.uuid}`).remove();
+                                            edges = edges.filter(edge => { return edge.uuid != currentRemoveEdge.uuid });
+                                        }
                                     }
-                                    edges.data(_.edgeList, d => d.uuid).exit().remove();
                                     // 移除节点
-                                    if (_.nodeList.indexOf(selectedElement) != -1)
+                                    if (_.nodeList.indexOf(selectedElement) != -1) {
                                         _.nodeList.splice(_.nodeList.indexOf(selectedElement), 1);
-                                    nodes.data(_.nodeList, d => d.uuid).exit().remove();
+                                        d3.select(`#${selectedElement.uuid}`).remove();
+                                        nodes = nodes.filter(node => { return node.uuid != selectedElement.uuid });
+                                    }
                                 } else if (selectedElement.type == "edge") {
                                     // 移除关系
-                                    if (_.edgeList.indexOf(selectedElement) != -1)
+                                    if (_.edgeList.indexOf(selectedElement) != -1) {
                                         _.edgeList.splice(_.edgeList.indexOf(selectedElement), 1);
-                                    edges.data(_.edgeList, d => d.uuid).exit().remove();
+                                        d3.select(`#${selectedElement.uuid}`).remove();
+                                        edges = edges.filter(edge => { return edge.uuid != selectedElement.uuid });
+                                    }
                                 }
                                 // 重启物理模拟
                                 _.modifyNodePhysics();
@@ -512,14 +519,76 @@ export class Graph {
                         _.isControlDown = true;
                     // ctrl+c复制选中的节点
                     if (e.keyCode == 67 && _.isControlDown) {
-                        _.copiedElementList=[];
+                        _.copiedNodeJsonList = [];
+                        _.copiedEdgeJsonList = [];
                         for (let i = 0; i < _.selectedElementList.length; i++) {
                             let currentElement = _.selectedElementList[i];
-                            // 用asign进行深拷贝(引用保留)
-                            let newElement = Object.assign({}, currentElement);
-                            _.copiedElementList.push(newElement);
+                            if (currentElement.type == "node") {
+                                _.copiedNodeJsonList.push(JSON.stringify(currentElement.toJsonObj()));
+                            } else if (currentElement.type == "edge") {
+                                _.copiedEdgeJsonList.push(JSON.stringify(currentElement.toJsonObj()));
+                            }
                         }
-                        console.log(_.copiedElementList);
+                    }
+                    // ctrl+v粘贴元素
+                    if (e.keyCode == 86 && _.isControlDown) {
+                        // 记录新旧键值对
+                        let oldNewUuid = new Map();
+
+                        // 粘贴node
+                        _.copiedNodeJsonList.forEach(jsonString => {
+                            let nodeStore = JSON.parse(jsonString);
+                            let oldUuid = nodeStore.uuid;
+                            nodeStore.uuid = null;
+                            nodeStore.x = Math.random() * 100;
+                            nodeStore.y = Math.random() * 100;
+                            let loadedNode = LoadNodeFromJson(nodeStore);
+                            _.addNode(loadedNode);
+
+                            oldNewUuid.set(oldUuid, loadedNode.uuid);
+
+                            nodes = nodes
+                                .data(_.nodeList, d => d.uuid)
+                                .enter()
+                                .append("g")
+                                .call(initNodes)
+                                .merge(nodes);
+
+                            _.modifyNodeExterior(loadedNode);
+                        });
+
+                        // 粘贴edge
+                        _.copiedEdgeJsonList.forEach(jsonString => {
+                            let edgeStore = JSON.parse(jsonString);
+                            if (oldNewUuid.has(edgeStore.source) && oldNewUuid.has(edgeStore.target)) {
+                                console.log(edgeStore.source, oldNewUuid.get(edgeStore.source))
+                                edgeStore.source = oldNewUuid.get(edgeStore.source);
+                                edgeStore.target = oldNewUuid.get(edgeStore.target);
+                                edgeStore.uuid = null;
+                                let loadedEdge = LoadEdgeFromJson(edgeStore, _.nodeList);
+                                _.addEdge(loadedEdge);
+
+                                edges = edges
+                                    .data(_.edgeList, d => d.uuid)
+                                    .enter()
+                                    .append("line")
+                                    .call(initEdges)
+                                    .merge(edges);
+
+                                _.modifyEdgeExterior(loadedEdge);
+                            }
+                        });
+
+                        _.modifyNodePhysics();
+                        _.modifyEdgePhysics();
+                    }
+                    // Debug输出
+                    if (e.keyCode == 68 && _.isShiftDown) {
+                        console.log("------------------------------------")
+                        console.log("nodelist", _.nodeList);
+                        console.log("nodes", nodes);
+                        console.log("edgelist", _.edgeList);
+                        console.log("edges", edges)
                     }
                 }
             });
