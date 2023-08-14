@@ -253,18 +253,6 @@ export class Graph {
                     _.deselectAll();
                     _.selectElement(nodeObj);
                 })
-                // 双击进入节点
-                .on("dblclick", function () {
-                    let nodeObj = d3.select(this).data()[0];
-                    if (nodeObj.hasComponent("link_node")) {
-                        let openOuter = nodeObj.autoGetValue("link_node", "openOuter", false);
-                        if (openOuter) {
-                            window.open(nodeObj.autoGetValue("link_node", "url", "."));
-                        } else {
-                            window.location = nodeObj.autoGetValue("link_node", "url", ".");
-                        }
-                    }
-                })
                 // 悬停事件
                 .on("mouseenter", function () {
                     let nodeObj = d3.select(this).data()[0];
