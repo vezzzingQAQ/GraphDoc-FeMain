@@ -363,9 +363,9 @@ import {
  */
 export function CreateBasicNode() {
     let node = new Node();
-    node.addComponent(new C_N_Exterior("外观", "exterior_node"));
-    node.addComponent(new C_N_Physics("物理", "physics_node"));
-    node.addComponent(new C_N_ScaleHover("悬停缩放", "scaleHover_node"));
+    node.addComponent(new C_N_Exterior(ComponentMap.exterior_node.showName, "exterior_node"));
+    node.addComponent(new C_N_Physics(ComponentMap.physics_node.showName, "physics_node"));
+    node.addComponent(new C_N_ScaleHover(ComponentMap.scaleHover_node.showName, "scaleHover_node"));
     return node;
 }
 
@@ -376,9 +376,9 @@ export function CreateBasicEdge(source, target) {
     let edge = new Edge();
     edge.setSource(source);
     edge.setTarget(target);
-    edge.addComponent(new C_E_Exterior("外观", "exterior_edge"));
-    edge.addComponent(new C_E_Physics("物理", "physics_edge"));
-    edge.addComponent(new C_E_ScaleHover("悬停缩放", "scaleHover_edge"));
+    edge.addComponent(new C_E_Exterior(ComponentMap.exterior_edge.showName, "exterior_edge"));
+    edge.addComponent(new C_E_Physics(ComponentMap.physics_edge.showName, "physics_edge"));
+    edge.addComponent(new C_E_ScaleHover(ComponentMap.scaleHover_edge.showName, "scaleHover_edge"));
     return edge;
 }
 
@@ -388,8 +388,8 @@ export function CreateBasicEdge(source, target) {
  */
 export function CreateLinkNode() {
     let node = CreateBasicNode();
-    node.addComponent(new C_N_Text("文本", "text_node"));
-    node.addComponent(new C_N_Link("外链", "link_node"));
+    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, "text_node"));
+    node.addComponent(new C_N_Link(ComponentMap.link_node.showName, "link_node"));
     return node;
 }
 
@@ -399,7 +399,7 @@ export function CreateLinkNode() {
  */
 export function CreateTextNode() {
     let node = CreateBasicNode();
-    node.addComponent(new C_N_Text("文本", "text_node"));
+    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, "text_node"));
     return node;
 }
 
