@@ -21,14 +21,14 @@ body {
             width: 80vw;
             height: 100vh;
             display: block;
-            background-color: rgb(6, 6, 6);
+            transition: 0.3s ease-in-out;
         }
 
         .panArea {
             width: 20vw;
             height: 100vh;
-            background-color: rgb(35, 35, 35);
             overflow-y: scroll;
+            transition: 0.3s ease-in-out;
 
             &::-webkit-scrollbar {
                 display: none;
@@ -41,27 +41,41 @@ body {
                     border-bottom-right-radius: @normal_border_radius;
 
                     .title {
-                        background-color: @bg_color_title;
                         height: @add_pan_title_height;
                         line-height: @add_pan_title_height;
                         font-size: 14px;
                         padding-left: 10px;
-                        color: @fg_color_1;
                         letter-spacing: 2px;
+                        transition: 0.3s ease-in-out;
                     }
 
                     .content {
+                        transition: 0.3s ease-in-out;
                         .container {
-                            color: @fg_color_1;
-                            background-color: @bg_color_pan;
                             display: flex;
                             flex-direction: row;
                             padding: 5px;
+                            transition: 0.3s ease-in-out;
                         }
+                    }
+
+                    .componentAddContainer .componentAddBtn {
+                        display: block;
+                        width: max-content;
+                        height: @component_add_btn_height;
+                        line-height: calc(@component_add_btn_height - 8px);
+                        padding: 4px;
+                        padding-left: 6px;
+                        padding-right: 6px;
+                        font-size: 13px;
+                        text-align: center;
+                        margin: 5px;
+                        border-radius: @normal_border_radius;
+                        cursor: pointer;
+                        transition: 0.1s ease-in-out;
                     }
                 }
             }
-
         }
 
         .btnArea {
@@ -73,6 +87,7 @@ body {
             flex-direction: row;
             width: 200px;
             height: 50px;
+            transition: 0.3s ease-in-out;
 
             .btn {
                 display: block;
@@ -80,41 +95,98 @@ body {
                 width: 50px;
                 margin-right: 10px;
                 height: 50px;
-                background-color: rgb(35, 35, 35);
-                color: rgb(250, 250, 250);
                 line-height: 50px;
                 font-size: 20px;
                 text-align: center;
                 border-radius: @small_border_radius;
                 cursor: pointer;
+                transition: 0.3s ease-in-out;
             }
 
             input {
-                border: none!important;
-                outline: none!important;
+                border: none !important;
+                outline: none !important;
             }
         }
     }
 }
 
-// 组件添加窗口
-.panArea .topPan .window .componentAddContainer .componentAddBtn {
-    display: block;
-    width: max-content;
-    height: @component_add_btn_height;
-    line-height: calc(@component_add_btn_height - 8px);
-    padding: 4px;
-    padding-left: 6px;
-    padding-right: 6px;
-    background-color: @bg_color_input;
-    font-size: 13px;
-    text-align: center;
-    margin: 5px;
-    border-radius: @normal_border_radius;
-    cursor: pointer;
-    transition: 0.1s ease-in-out;
+.darkMode {
+    .displayArea {
+        background-color: rgb(6, 6, 6);
+    }
 
-    &:hover {
-        background-color: @bg_color_title;
+    .panArea {
+        background-color: rgb(35, 35, 35);
+
+        .topPan {
+            .window {
+                .title {
+                    background-color: @bg_color_d_title;
+                    color: @fg_color_d_1;
+                }
+
+                .content {
+                    .container {
+                        color: @fg_color_d_1;
+                        background-color: @bg_color_d_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_d_input;
+                    &:hover {
+                        background-color: @bg_color_d_title;
+                    }
+                }
+            }
+        }
+    }
+
+    .btnArea {
+        .btn {
+            background-color: rgb(35, 35, 35);
+            color: rgb(250, 250, 250);
+        }
+    }
+}
+
+.lightMode {
+    .displayArea {
+        background-color: rgb(247, 247, 247);
+    }
+
+    .panArea {
+        background-color: rgb(246, 246, 246);
+
+        .topPan {
+            .window {
+                .title {
+                    background-color: @bg_color_l_title;
+                    color: @fg_color_l_1;
+                }
+
+                .content {
+                    .container {
+                        color: @fg_color_l_1;
+                        background-color: @bg_color_l_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_l_input;
+                    &:hover {
+                        background-color: @bg_color_l_title;
+                    }
+                }
+            }
+        }
+    }
+
+    .btnArea {
+        .btn {
+            background-color: rgb(231, 231, 231);
+            color: rgb(57, 57, 57);
+        }
     }
 }
