@@ -73,15 +73,17 @@ export class Graph {
      * @param {Node} node 要添加的节点
      */
     addNode(node) {
-        if (!this.nodeList.includes(node)) {
-            if (!node.uuid) {
-                let id = `zznode${uuidv4().split("-").join("")}`;
-                node.uuid = id;
+        if (node) {
+            if (!this.nodeList.includes(node)) {
+                if (!node.uuid) {
+                    let id = `zznode${uuidv4().split("-").join("")}`;
+                    node.uuid = id;
+                }
+                node.owner = this;
+                this.nodeList.push(node);
+            } else {
+                console.error(`节点已存在:${node}`);
             }
-            node.owner = this;
-            this.nodeList.push(node);
-        } else {
-            console.error(`节点已存在:${node}`);
         }
     }
 
@@ -90,15 +92,17 @@ export class Graph {
      * @param {edge} edge 要添加的关系
      */
     addEdge(edge) {
-        if (!this.edgeList.includes(edge)) {
-            if (!edge.uuid) {
-                let id = `zzedge${uuidv4().split("-").join("")}`;
-                edge.uuid = id;
+        if (edge) {
+            if (!this.edgeList.includes(edge)) {
+                if (!edge.uuid) {
+                    let id = `zzedge${uuidv4().split("-").join("")}`;
+                    edge.uuid = id;
+                }
+                edge.owner = this;
+                this.edgeList.push(edge);
+            } else {
+                console.error(`关系已存在:${node}`);
             }
-            edge.owner = this;
-            this.edgeList.push(edge);
-        } else {
-            console.error(`关系已存在:${node}`);
         }
     }
 
@@ -115,8 +119,6 @@ export class Graph {
         function initPhysics() {
             // 创建所需要的力
             _.renderProperties.forces.linkForce = d3.forceLink()
-                .links(_.edgeList)
-                .id(d => d.uuid)
                 .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
                 .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
 
@@ -134,7 +136,7 @@ export class Graph {
                 .radius(d => d.autoGetValue("physics_node", "collisionRadius", 20));
 
             // 创建物理模拟
-            _.renderProperties.simulation = d3.forceSimulation(_.nodeList)
+            _.renderProperties.simulation = d3.forceSimulation()
                 .force("link", _.renderProperties.forces.linkForce)
                 .force("center", _.renderProperties.forces.centerForce)
                 .force("charge", _.renderProperties.forces.chargeForce)
@@ -356,11 +358,16 @@ export class Graph {
                     _.modifyEdgePhysics();
                     _.modifyNodeExterior(addedNode);
                     _.modifyNodePhysics();
+
+                    _.deselectAll();
+                    // 选中新添加的节点
+                    _.selectElement(addedNode);
+                } else {
+                    // 取消选择
+                    _.deselectAll();
+                    document.querySelector(".panArea .listPan").innerHTML = "";
+                    document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
                 }
-                // 取消选择
-                _.deselectAll();
-                document.querySelector(".panArea .listPan").innerHTML = "";
-                document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
             }
         });
 

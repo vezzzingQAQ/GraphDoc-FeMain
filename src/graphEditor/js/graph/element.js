@@ -300,8 +300,10 @@ export class Edge extends Element {
     setSource(nodeSource) {
         if (!nodeSource) {
             console.error("nodeSource不合法");
+            return false;
         } else {
             this.source = nodeSource;
+            return true;
         }
     }
 
@@ -312,8 +314,10 @@ export class Edge extends Element {
     setTarget(nodeTarget) {
         if (!nodeTarget) {
             console.error("nodeTo不合法");
+            return false;
         } else {
             this.target = nodeTarget;
+            return true;
         }
     }
 
@@ -441,7 +445,9 @@ export function LoadEdgeFromJson(jsonObj, nodeList) {
             targetNode = node;
         }
     }
-    createdEdge.setSource(sourceNode);
-    createdEdge.setTarget(targetNode)
-    return createdEdge;
+    if (createdEdge.setSource(sourceNode) && createdEdge.setTarget(targetNode)) {
+        return createdEdge;
+    } else {
+        return null;
+    }
 }
