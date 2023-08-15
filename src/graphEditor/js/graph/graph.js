@@ -173,6 +173,7 @@ export class Graph {
             .enter()
             .append("line")
             .call(initEdges)
+        this.edges = edges;
 
         function initEdges(edges) {
             edges
@@ -217,6 +218,7 @@ export class Graph {
             .enter()
             .append("g")
             .call(initNodes);
+        this.nodes = nodes;
 
         function initNodes(nodes) {
             nodes
@@ -259,9 +261,9 @@ export class Graph {
                     _.selectElement(nodeObj);
                 })
                 // 双击转到编辑
-                .on("dblclick",function(){
+                .on("dblclick", function () {
                     let nodeObj = d3.select(this).data()[0];
-                    if(nodeObj.hasComponent("text_node")){
+                    if (nodeObj.hasComponent("text_node")) {
                         document.querySelector("#text_node_textarea").focus();
                     }
                 })
@@ -898,6 +900,47 @@ export class Graph {
     }
 
     /**
+     * 清空图谱
+     */
+    clear() {
+        for (let node of this.nodeList) {
+            this.nodeList = [];
+            this.edgeList = [];
+            this.edges.filter(edge => {
+                d3.select(`#${edge.uuid}`).remove();
+                this.edges = this.edges.filter(currentEdge => { return currentEdge.uuid != edge.uuid });
+            });
+            this.nodes.filter(node => {
+                d3.select(`#${node.uuid}`).remove();
+                this.nodes = this.nodes.filter(currentNode => { return currentNode.uuid != node.uuid });
+            });
+            d3.selectAll(".layer").remove();
+            d3.select(".viewArea").remove();
+            //d3.selectAll("svg").selectAll("*").remove();
+            // 重启物理模拟
+            this.renderProperties.simulation.on("tick", () => { })
+        }
+    }
+
+    /**
+     * 加载数据
+     */
+    load(jsonObj) {
+        let nodeJsonList = jsonObj.nodeList;
+        let edgeJsonList = jsonObj.edgeList;
+        for (let nodeJson of nodeJsonList) {
+            let node = LoadNodeFromJson(nodeJson);
+            this.addNode(node);
+        }
+        for (let edgeJson of edgeJsonList) {
+            let edge = LoadEdgeFromJson(edgeJson, this.nodeList);
+            this.addEdge(edge);
+        }
+        this.bgColor = jsonObj.bgColor;
+        this.render();
+    }
+
+    /**
      * 转为JSON object
      */
     toJsonObj() {
@@ -921,7 +964,7 @@ export class Graph {
      */
     toJson() {
         let jsonString = JSON.stringify(this.toJsonObj());
-        return jsonString.replace(/\\/g, "\\\\");
+        return jsonString;// .replace(/\\/g, "\\\\")
     }
 }
 
