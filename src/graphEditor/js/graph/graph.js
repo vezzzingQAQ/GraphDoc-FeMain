@@ -325,8 +325,11 @@ export class Graph {
 
                     // 添加节点
                     let addedNode = CreateTextNode();
-                    addedNode.x = e.offsetX;
-                    addedNode.y = e.offsetY;
+                    // 计算鼠标在svg中的相对位置
+                    var transform = d3.zoomTransform(_.renderProperties.viewArea.node());
+                    let pt = transform.invert([e.x, e.y]);
+                    addedNode.x = pt[0];
+                    addedNode.y = pt[1];
                     _.addNode(addedNode);
 
                     // 添加关系
