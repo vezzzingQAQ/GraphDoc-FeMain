@@ -147,7 +147,8 @@ class Component {
 
         if (this.delAble) {
             let domTitleDeleteBtn = document.createElement("p");
-            domTitleDeleteBtn.classList = "compPanDeleteBtn fa fa-close";
+            domTitleDeleteBtn.classList = "compPanDeleteBtn";
+            domTitleDeleteBtn.innerText = "×";
             domTitle.appendChild(domTitleDeleteBtn);
             domTitleDeleteBtn.addEventListener("click", () => {
                 this.owner.removeComponent(this);
