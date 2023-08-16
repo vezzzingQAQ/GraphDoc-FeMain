@@ -66,6 +66,9 @@ export class Graph {
         this.copiedEdgeJsonList = [];
         // 背景颜色
         this.bgColor = "#ffffff";
+        // 鼠标位置
+        this.mouseX;
+        this.mouseY;
     }
 
     /**
@@ -328,7 +331,7 @@ export class Graph {
                     // 添加节点
                     let addedNode = CreateTextNode();
                     // 计算鼠标在svg中的相对位置
-                    var transform = d3.zoomTransform(_.renderProperties.viewArea.node());
+                    let transform = d3.zoomTransform(_.renderProperties.viewArea.node());
                     let pt = transform.invert([e.x, e.y]);
                     addedNode.x = pt[0];
                     addedNode.y = pt[1];
@@ -368,6 +371,8 @@ export class Graph {
                     document.querySelector(".panArea .listPan").innerHTML = "";
                     document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
                 }
+                _.mouseX = e.offsetX;
+                _.mouseY = e.offsetY;
             }
         });
 
@@ -552,8 +557,11 @@ export class Graph {
                             let nodeStore = JSON.parse(jsonString);
                             let oldUuid = nodeStore.uuid;
                             nodeStore.uuid = null;
-                            nodeStore.x = Math.random() * 100;
-                            nodeStore.y = Math.random() * 100;
+                            // 计算鼠标在svg中的相对位置
+                            let transform = d3.zoomTransform(_.renderProperties.viewArea.node());
+                            let pt = transform.invert([_.mouseX, _.mouseY]);
+                            nodeStore.x = Math.random() * 10 + pt[0];
+                            nodeStore.y = Math.random() * 10 + pt[1];
                             let loadedNode = LoadNodeFromJson(nodeStore);
                             _.addNode(loadedNode);
 
@@ -573,7 +581,6 @@ export class Graph {
                         _.copiedEdgeJsonList.forEach(jsonString => {
                             let edgeStore = JSON.parse(jsonString);
                             if (oldNewUuid.has(edgeStore.source) && oldNewUuid.has(edgeStore.target)) {
-                                console.log(edgeStore.source, oldNewUuid.get(edgeStore.source))
                                 edgeStore.source = oldNewUuid.get(edgeStore.source);
                                 edgeStore.target = oldNewUuid.get(edgeStore.target);
                                 edgeStore.uuid = null;
