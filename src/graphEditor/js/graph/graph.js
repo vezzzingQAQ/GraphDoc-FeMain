@@ -659,6 +659,14 @@ export class Graph {
             d.fx = null;
             d.fy = null;
         }
+
+        // 加载网络资源延迟
+        window.setTimeout(() => {
+            for (let node of _.nodeList) {
+                _.modifyNodeExterior(node);
+            }
+        }, 1500);
+
     }
 
 
