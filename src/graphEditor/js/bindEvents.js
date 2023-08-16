@@ -21,8 +21,8 @@ export function bindEvents(graph) {
         console.log(graph.toJson());
     });
     document.querySelector("#btnSave").addEventListener("click", () => {
-        let file = new File([graph.toJson()], +new Date() + ".json", { type: "text/plain;charset=utf-8" });
-        saveAs(file);
+        let blob = new Blob([graph.toJson()]);
+        saveAs(blob, +new Date() + ".vgd");
     });
     document.querySelector("#btnExport").addEventListener("click", () => {
         graph.exportImg();
@@ -44,7 +44,6 @@ export function bindEvents(graph) {
                 reader.addEventListener("load", (readRes) => {
                     graph.clear();
                     data = JSON.parse(readRes.target.result);
-                    console.log(data)
                     graph.load(data);
                 });
                 reader.addEventListener("error", () => {
