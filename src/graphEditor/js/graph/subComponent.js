@@ -238,13 +238,7 @@ export class SC_Select extends SubComponent {
             this.dom.appendChild(domSelectOption);
         }
         // 指定默认元素
-        for (let i = 0; i < this.dom.options.length; i++) {
-            if (this.defaultValue == this.dom.options[i].value) {
-                this.dom.options[i].selected = true;
-            } else {
-                this.dom.options[i].selected = false;
-            }
-        }
+        this.dom.value = this.value;
         this.dom.addEventListener("change", () => {
             this.setValue(this.dom.options[this.dom.selectedIndex].value);
             this.updateGraph();
@@ -330,7 +324,7 @@ export class SC_Textarea extends SubComponent {
     }
     initHtml() {
         this.dom = document.createElement("textarea");
-        this.dom.id="text_node_textarea";
+        this.dom.id = "text_node_textarea";
         if (this.readOnly) {
             this.dom.readOnly = "true";
         }
