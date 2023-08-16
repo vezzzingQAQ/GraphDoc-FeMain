@@ -144,7 +144,7 @@ export class Graph {
                 .force("center", _.renderProperties.forces.centerForce)
                 .force("charge", _.renderProperties.forces.chargeForce)
                 .force("collide", _.renderProperties.forces.collideForce)
-                .alphaDecay(1.0);
+                .alphaDecay(1.1);
         }
         initPhysics();
 
