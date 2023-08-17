@@ -564,6 +564,14 @@ export class Graph {
                             nodeStore.y = Math.random() * 10 + pt[1];
                             let loadedNode = LoadNodeFromJson(nodeStore);
                             _.addNode(loadedNode);
+                            if (loadedNode.autoGetValue("physics_node", "fixPosition")) {
+                                loadedNode.cx = pt[0];
+                                loadedNode.cy = pt[1];
+                                _.nodeList.forEach(nodeObj => {
+                                    nodeObj.fx = null;
+                                    nodeObj.fy = null;
+                                })
+                            }
 
                             oldNewUuid.set(oldUuid, loadedNode.uuid);
 
