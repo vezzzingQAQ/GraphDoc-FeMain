@@ -630,7 +630,16 @@ export class Graph {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            nodes.attr("transform", d => `translate(${d.x},${d.y})`);
+            nodes.attr("transform", d => {
+                if (d.autoGetValue("physics_node", "fixPosition")) {
+                    d.fx = d.cx;
+                    d.fy = d.cy;
+                } else {
+                    d.cx = d.x;
+                    d.cy = d.y;
+                }
+                return `translate(${d.x},${d.y})`;
+            });
         });
 
         // 缩放平移
@@ -647,12 +656,17 @@ export class Graph {
         // 拖动
         function dragstarted(event, d) {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
-            d.fx = d.x;
-            d.fy = d.y;
+            console.log(d);
+            if (!d.autoGetValue("physics_node", "fixPosition")) {
+                d.fx = d.x;
+                d.fy = d.y;
+            }
         }
         function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
+            if (!d.autoGetValue("physics_node", "fixPosition")) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
         }
         function dragended(event, d) {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.0001);
@@ -675,6 +689,13 @@ export class Graph {
      */
     modifyNodeExterior(nodeObj) {
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`);
+
+        // 是否是固定节点
+        if (!nodeObj.autoGetValue("physics_node", "fixPosition")) {
+            nodeObj.fx = null;
+            nodeObj.fy = null;
+        }
+
         // 先删除原来绘制的形状
         findedNode.selectAll(".nodeGraph").remove();
         findedNode.selectAll(".nodeGraphContainer").remove();
@@ -933,7 +954,7 @@ export class Graph {
             document.body.removeChild(link);
         };
     }
-    exportPng(scale=5){
+    exportPng(scale = 5) {
         saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", {
             scale: scale
         });

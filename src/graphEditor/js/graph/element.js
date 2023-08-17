@@ -48,6 +48,9 @@
  * |_autoSetValue(componentKey,valueKey,value)                - 根据组件键和属性键获设置值
  * |_initComponentAddDom()                                    - 生成组件添加面板的DOM元素
  * |____Node
+ * |    |_x,y
+ * |    |_vx,vy
+ * |    |_cx,cy
  * |    |_toJsonObj()                                         - 重写toJsonObj方法
  * |    |_removeComponent(component)                          - 删除指定的component，由component类调用     
  * |____Edge
@@ -250,6 +253,8 @@ export class Node extends Element {
         this.y;
         this.vx;
         this.vy;
+        this.cx;
+        this.cy;
     }
 
     /**
@@ -263,6 +268,8 @@ export class Node extends Element {
         jsonObj.vy = this.vy;
         jsonObj.x = this.x;
         jsonObj.y = this.y;
+        jsonObj.cx = this.cx;
+        jsonObj.cy = this.cy;
         for (let key in this.componentMap) {
             jsonObj.components[key] = this.componentMap[key].toJsonObj();
         }
@@ -418,9 +425,17 @@ export function LoadNodeFromJson(jsonObj) {
     createdNode.vy = jsonObj.vy;
     createdNode.x = jsonObj.x;
     createdNode.y = jsonObj.y;
+    // 适配旧版本
+    createdNode.cx = jsonObj.cx ? jsonObj.cx : jsonObj.x;
+    createdNode.cy = jsonObj.cy ? jsonObj.cy : jsonObj.y;
     for (let componentKey in jsonObj.components) {
         let createdComponent = LoadComponentFromJson(componentKey, jsonObj.components[componentKey]);
         createdNode.addComponent(createdComponent);
+    }
+    // 是否是固定节点
+    if (createdNode.autoGetValue("physics_node", "fixPosition")) {
+        createdNode.x = createdNode.cx;
+        createdNode.y = createdNode.cy;
     }
     return createdNode;
 }

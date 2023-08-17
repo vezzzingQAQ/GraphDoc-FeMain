@@ -28,7 +28,7 @@ export function bindEvents(graph) {
         graph.exportSvg();
     });
     document.querySelector("#btnExport2").addEventListener("click", () => {
-        graph.exportPng();
+        graph.exportImg();
     });
     document.querySelector("#openFile").addEventListener("click", () => {
         let elementInput = document.createElement("input");
