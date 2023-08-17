@@ -915,10 +915,7 @@ export class Graph {
     /**
      * 下载为图片
      */
-    exportImg(scale = 5) {
-        // saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", {
-        //     scale: scale
-        // });
+    exportSvg() {
         const svg = document.querySelector('svg');
         const source = new XMLSerializer().serializeToString(svg); //将整个SVG document 对象序列化为一个 XML 字符串。
         onDownload(source, 'text/xml', 'test.svg'); // 下载 
@@ -935,6 +932,11 @@ export class Graph {
             URL.revokeObjectURL(url); // 清除Url
             document.body.removeChild(link);
         };
+    }
+    exportPng(scale=5){
+        saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", {
+            scale: scale
+        });
     }
 
     /**

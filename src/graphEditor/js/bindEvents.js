@@ -25,7 +25,10 @@ export function bindEvents(graph) {
         saveAs(blob, +new Date() + ".vgd");
     });
     document.querySelector("#btnExport").addEventListener("click", () => {
-        graph.exportImg();
+        graph.exportSvg();
+    });
+    document.querySelector("#btnExport2").addEventListener("click", () => {
+        graph.exportPng();
     });
     document.querySelector("#openFile").addEventListener("click", () => {
         let elementInput = document.createElement("input");
