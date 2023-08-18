@@ -376,7 +376,7 @@ export class Graph {
         let selectionFlag = false;
         function selectionRect() {
             let rect = d3.select(".displayArea svg").append("rect")
-                .attr("class","selectionRect")
+                .attr("class", "selectionRect")
                 .attr("width", 0)
                 .attr("height", 0)
                 .attr("transform", "translate(0,0)")
@@ -983,6 +983,11 @@ export class Graph {
             // 重启物理模拟
             this.renderProperties.simulation.on("tick", () => { })
         }
+        this.isControlDown = false;
+        this.isShiftDown = false;
+        this.selectedElementList = [];
+        this.copiedEdgeJsonList = [];
+        this.copiedNodeJsonList = [];
     }
 
     /**
