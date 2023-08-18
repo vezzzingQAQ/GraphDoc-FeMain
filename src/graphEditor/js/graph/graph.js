@@ -48,7 +48,6 @@ export class Graph {
             viewArea: null,
             forces: {
                 linkForce: null,
-                centerForce: null,
                 chargeForce: null,
                 collideForce: null
             },
@@ -124,11 +123,6 @@ export class Graph {
             _.renderProperties.forces.linkForce = d3.forceLink()
                 .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
                 .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
-
-            _.renderProperties.forces.centerForce = d3.forceCenter()
-                .x(renderDom.offsetWidth / 2)
-                .y(renderDom.offsetHeight / 2)
-                .strength(0.3);
 
             _.renderProperties.forces.chargeForce = d3.forceManyBody()
                 .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
@@ -564,16 +558,10 @@ export class Graph {
                             let pt = transform.invert([_.mouseX, _.mouseY]);
                             nodeStore.x = nodeStore.x - finalNodeStore.x + pt[0];
                             nodeStore.y = nodeStore.y - finalNodeStore.y + pt[1];
+                            nodeStore.cx = nodeStore.x + Math.random() / 100;
+                            nodeStore.cy = nodeStore.y + Math.random() / 100;
                             let loadedNode = LoadNodeFromJson(nodeStore);
                             _.addNode(loadedNode);
-                            if (loadedNode.autoGetValue("physics_node", "fixPosition")) {
-                                loadedNode.cx = pt[0];
-                                loadedNode.cy = pt[1];
-                                _.nodeList.forEach(nodeObj => {
-                                    nodeObj.fx = null;
-                                    nodeObj.fy = null;
-                                })
-                            }
 
                             oldNewUuid.set(oldUuid, loadedNode.uuid);
 
@@ -611,6 +599,7 @@ export class Graph {
                         _.modifyNodePhysics();
                         _.modifyEdgePhysics();
                     }
+
                     // Debug输出
                     if (e.keyCode == 68 && _.isShiftDown) {
                         console.log("------------------------------------")
@@ -654,7 +643,7 @@ export class Graph {
 
         // 缩放平移
         _.renderProperties.svg.call(d3.zoom()
-            .extent([[0, 0], [window.innerWidth, window.innerHeight]])
+            .extent([[0, 0], [this.renderProperties.svg.attr("width"), this.renderProperties.svg.attr("height")]])
             .scaleExtent([0.1, 20])
 
             .on("zoom", ({ transform }) => {
@@ -699,12 +688,6 @@ export class Graph {
      */
     modifyNodeExterior(nodeObj) {
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`);
-
-        // 是否是固定节点
-        if (!nodeObj.autoGetValue("physics_node", "fixPosition")) {
-            nodeObj.fx = null;
-            nodeObj.fy = null;
-        }
 
         // 先删除原来绘制的形状
         findedNode.selectAll(".nodeGraph").remove();
@@ -874,6 +857,7 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"));
+        this.renderProperties.simulation.restart();
     }
 
     /**
@@ -885,7 +869,7 @@ export class Graph {
             .id(d => d.uuid)
             .strength(d => d.autoGetValue("physics_edge", "linkStrength", 1))
             .distance(d => d.autoGetValue("physics_edge", "linkDistance", 400));
-        this.renderProperties.simulation.alphaTarget(0.01).restart();
+        this.renderProperties.simulation.alphaTarget(0.0).restart();
     }
 
     /**
