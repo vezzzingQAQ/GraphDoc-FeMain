@@ -678,7 +678,7 @@ export class Graph {
             for (let node of _.nodeList) {
                 _.modifyNodeExterior(node);
             }
-        }, 1500);
+        }, 3500);
 
     }
 
