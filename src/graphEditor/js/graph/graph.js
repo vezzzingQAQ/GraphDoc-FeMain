@@ -553,15 +553,17 @@ export class Graph {
                         let oldNewUuid = new Map();
 
                         // 粘贴node
-                        _.copiedNodeJsonList.forEach(jsonString => {
+                        for (let i = 0; i < _.copiedNodeJsonList.length; i++) {
+                            let jsonString = _.copiedNodeJsonList[i];
                             let nodeStore = JSON.parse(jsonString);
+                            let finalNodeStore = JSON.parse(_.copiedNodeJsonList[_.copiedNodeJsonList.length - 1]);
                             let oldUuid = nodeStore.uuid;
                             nodeStore.uuid = null;
                             // 计算鼠标在svg中的相对位置
                             let transform = d3.zoomTransform(_.renderProperties.viewArea.node());
                             let pt = transform.invert([_.mouseX, _.mouseY]);
-                            nodeStore.x = Math.random() * 10 + pt[0];
-                            nodeStore.y = Math.random() * 10 + pt[1];
+                            nodeStore.x = nodeStore.x - finalNodeStore.x + pt[0];
+                            nodeStore.y = nodeStore.y - finalNodeStore.y + pt[1];
                             let loadedNode = LoadNodeFromJson(nodeStore);
                             _.addNode(loadedNode);
                             if (loadedNode.autoGetValue("physics_node", "fixPosition")) {
@@ -583,7 +585,7 @@ export class Graph {
                                 .merge(nodes);
 
                             _.modifyNodeExterior(loadedNode);
-                        });
+                        }
 
                         // 粘贴edge
                         _.copiedEdgeJsonList.forEach(jsonString => {
