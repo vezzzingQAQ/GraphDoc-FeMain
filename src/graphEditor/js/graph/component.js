@@ -327,7 +327,7 @@ export class C_N_Text extends Component {
         textWeight: 5
     }) {
         super(showName, key, true);
-        this.addValue("showText", "文本", new SC_Textarea(value.showText, false));
+        this.addValue("showText", "HTML", new SC_Textarea(value.showText, false));
         this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
         this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
@@ -400,7 +400,7 @@ export const ComponentMap = {
     "text_node": {
         key: "text_node",
         type: "node",
-        showName: "📃文本",
+        showName: "📃HTML",
         class: C_N_Text,
     },
     "exterior_edge": {
