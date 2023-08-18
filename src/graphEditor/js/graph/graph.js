@@ -317,7 +317,7 @@ export class Graph {
 
         // 点击空白处
         d3.select(".displayArea svg").on("click", function (e) {
-            if (e.target == this) {
+            if (e.target == this && e.button == 0) {
                 // 如果同时按着shift键，添加节点
                 if (_.selectedElementList.length >= 1 && _.isShiftDown) {
                     let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
@@ -361,7 +361,6 @@ export class Graph {
                     _.selectElement(addedNode);
                 } else {
                     // 取消选择
-                    _.deselectAll();
                     document.querySelector(".panArea .listPan").innerHTML = "";
                     document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
                 }
@@ -386,7 +385,7 @@ export class Graph {
                 .attr("id", "squareSelect");
 
             d3.select(".displayArea svg").on("mousedown", function (e) {
-                if (e.button == 2) {
+                if (e.button == 0) {
                     clickTime = (new Date()).getTime();
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
@@ -397,7 +396,6 @@ export class Graph {
 
             d3.select(".displayArea svg").on("mousemove", function (e) {
                 //判断事件target
-                //if (e.button == 2) {
                 if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
 
                     let width = e.layerX - startLoc[0];
@@ -413,11 +411,10 @@ export class Graph {
                     }
                     rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                 }
-                //}
             })
 
             d3.select(".displayArea svg").on("mouseup", function (e) {
-                if (e.button == 2) {
+                if (e.button == 0) {
                     if (selectionFlag == true) {
                         selectionFlag = false;
                         endLoc = [e.layerX, e.layerY];
@@ -644,7 +641,12 @@ export class Graph {
         // 缩放平移
         _.renderProperties.svg.call(d3.zoom()
             .extent([[0, 0], [this.renderProperties.svg.attr("width"), this.renderProperties.svg.attr("height")]])
-            .scaleExtent([0.1, 20])
+            .scaleExtent([0.01, 30])
+
+            // 右键操作
+            .filter(e => {
+                return e.button == 2 || e.type === "touchstart" || e instanceof WheelEvent
+            })
 
             .on("zoom", ({ transform }) => {
                 _.renderProperties.viewArea.attr("transform", transform);
