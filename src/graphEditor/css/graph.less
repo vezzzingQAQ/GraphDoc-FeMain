@@ -1,4 +1,6 @@
 .displayArea {
+    user-select: none;
+
     .forceNode {
         outline-offset: 3px;
     }
@@ -15,7 +17,14 @@
         transition: 0.3s ease-in-out;
 
         &:hover {
-            background-color: rgb(9, 97, 112)!important;
+            background-color: rgb(9, 97, 112) !important;
         }
     }
+}
+
+// 选择框
+.selectionRect {
+    fill: rgba(50, 20, 20, 0.3);
+    stroke: #ccc;
+    stroke-width: 2px;
 }

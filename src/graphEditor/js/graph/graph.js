@@ -376,11 +376,9 @@ export class Graph {
         let selectionFlag = false;
         function selectionRect() {
             let rect = d3.select(".displayArea svg").append("rect")
+                .attr("class","selectionRect")
                 .attr("width", 0)
                 .attr("height", 0)
-                .attr("fill", "rgba(33,20,50,0.3)")
-                .attr("stroke", "#ccc")
-                .attr("stroke-width", "2px")
                 .attr("transform", "translate(0,0)")
                 .attr("id", "squareSelect");
 
