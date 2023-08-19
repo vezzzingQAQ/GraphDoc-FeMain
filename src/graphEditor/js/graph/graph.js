@@ -700,6 +700,7 @@ export class Graph {
 
         let domAddedNodeText = null;
         let domAddedNodeLink = null;
+        let domAddedNodeImg = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -720,6 +721,8 @@ export class Graph {
             domAddedNodeText = domAddedSubComponentContainer.append("xhtml:div");
         if (nodeObj.hasComponent("link_node"))
             domAddedNodeLink = domAddedSubComponentContainer.append("xhtml:a");
+        if (nodeObj.hasComponent("img_node"))
+            domAddedNodeImg = domAddedSubComponentContainer.append("xhtml:img");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -758,6 +761,16 @@ export class Graph {
                 .attr("href", d => d.autoGetValue("link_node", "url"))
                 .attr("target", "_blank")
 
+        if (domAddedNodeImg)
+            domAddedNodeImg
+                .attr("class", "nodeImg")
+                .attr("src", d => d.autoGetValue("img_node", "path", "#"))
+                .style("display", "block")
+                .style("width", d => d.autoGetValue("img_node", "width", "200px"))
+                .on("load", function () {
+                    calSize();
+                })
+
         domAddedSubComponentContainer
             .style("display", "flex")
             .style("width", "max-content")
@@ -769,55 +782,57 @@ export class Graph {
             .style("margin", 0)
             .style("padding", 0)
 
-        addedSubComponentForeign
-            .attr("width", function () {
-                let containerDom = d3.select(this).select(".nodeGraphDomContainer");
-                return containerDom.node().offsetWidth;
-            })
-            .attr("height", function () {
-                let containerDom = d3.select(this).select(".nodeGraphDomContainer");
-                return containerDom.node().offsetHeight;
-            })
-            .attr("x", function () { return -d3.select(this).attr("width") / 2 })
-            .attr("y", function () { return -d3.select(this).attr("height") / 2 })
+        function calSize() {
+            addedSubComponentForeign
+                .attr("width", function () {
+                    let containerDom = d3.select(this).select(".nodeGraphDomContainer");
+                    return containerDom.node().offsetWidth;
+                })
+                .attr("height", function () {
+                    let containerDom = d3.select(this).select(".nodeGraphDomContainer");
+                    return containerDom.node().offsetHeight;
+                })
+                .attr("x", function () { return -d3.select(this).attr("width") / 2 })
+                .attr("y", function () { return -d3.select(this).attr("height") / 2 })
 
-        if (addedNodeCircle)
-            addedNodeCircle
-                .attr("class", "nodeCircle nodeGraph")
-                .style("cursor", "pointer")
-                .attr("r", d => {
-                    let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
-                    // 根据文字大小来决定
-                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                        radius = Math.sqrt((addedSubComponentForeign.node().getBBox().width / 2) ** 2 + (addedSubComponentForeign.node().getBBox().height / 2) ** 2) + 8;
-                    }
-                    return radius;
-                })
-        if (addedNodeRect) {
-            addedNodeRect
-                .attr("class", "nodeRect nodeGraph")
-                .style("cursor", "pointer")
-                .attr("width", d => {
-                    let width = d.autoGetValue("exterior_node", "size", 0, value => value.x);
-                    // 根据内容大小来决定
-                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                        width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
-                    }
-                    return width;
-                })
-                .attr("height", d => {
-                    let height = d.autoGetValue("exterior_node", "size", 0, value => value.y);
-                    // 根据内容大小来决定
-                    if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
-                        if (d.hasComponent("text_node")) {
+            if (addedNodeCircle)
+                addedNodeCircle
+                    .attr("class", "nodeCircle nodeGraph")
+                    .style("cursor", "pointer")
+                    .attr("r", d => {
+                        let radius = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                        // 根据文字大小来决定
+                        if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                            radius = Math.sqrt((addedSubComponentForeign.node().getBBox().width / 2) ** 2 + (addedSubComponentForeign.node().getBBox().height / 2) ** 2) + 8;
+                        }
+                        return radius;
+                    })
+            if (addedNodeRect) {
+                addedNodeRect
+                    .attr("class", "nodeRect nodeGraph")
+                    .style("cursor", "pointer")
+                    .attr("width", d => {
+                        let width = d.autoGetValue("exterior_node", "size", 0, value => value.x);
+                        // 根据内容大小来决定
+                        if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
+                            width = Math.abs(addedSubComponentForeign.node().getBBox().width) + 8;
+                        }
+                        return width;
+                    })
+                    .attr("height", d => {
+                        let height = d.autoGetValue("exterior_node", "size", 0, value => value.y);
+                        // 根据内容大小来决定
+                        if (d.autoGetValue("exterior_node", "sizeAuto", false)) {
                             height = Math.abs(addedSubComponentForeign.node().getBBox().height) + 8;
                         }
-                    }
-                    return height;
-                })
-                .attr("x", d => -d3.select(`#${d.uuid} .nodeRect`).attr("width") / 2)
-                .attr("y", d => -d3.select(`#${d.uuid} .nodeRect`).attr("height") / 2)
+                        return height;
+                    })
+                    .attr("x", d => -d3.select(`#${d.uuid} .nodeRect`).attr("width") / 2)
+                    .attr("y", d => -d3.select(`#${d.uuid} .nodeRect`).attr("height") / 2)
+            }
         }
+        calSize();
+
         addedNodeGraph
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))

@@ -198,7 +198,8 @@ import {
     SC_Vector2,
     SC_UrlInput,
     SC_Check,
-    SC_Textarea
+    SC_Textarea,
+    SC_FileInput
 } from "./subComponent";
 
 /**
@@ -376,6 +377,20 @@ export class C_E_ScaleHover extends Component {
 }
 
 /**
+ * 图片组件
+ */
+export class C_N_Img extends Component {
+    constructor(showName, key, value = {
+        path: "/",
+        width: 200,
+    }) {
+        super(showName, key, true);
+        this.addValue("path", "选择图片", new SC_FileInput(value.path));
+        this.addValue("width", "宽度", new SC_NumberInput(value.width, false, 0, 2000, 1));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -432,6 +447,12 @@ export const ComponentMap = {
         type: "edge",
         showName: "🖱️悬停缩放",
         class: C_E_ScaleHover,
+    },
+    "img_node": {
+        key: "img_node",
+        type: "node",
+        showName: "🧻图片",
+        class: C_N_Img
     }
 }
 

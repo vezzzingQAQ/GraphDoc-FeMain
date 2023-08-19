@@ -28,6 +28,10 @@
  * z z z studio
  */
 
+import axios from "axios";
+const IMG_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadImg/"
+const IMG_STORE_PATH = "http://127.0.0.1:4999/media/images/"
+
 import { Node, Edge } from "./element";
 
 class SubComponent {
@@ -340,6 +344,42 @@ export class SC_Textarea extends SubComponent {
             this.dom.value = this.value;
         }
     }
+}
+
+/**
+ * 文件上传
+ */
+export class SC_FileInput extends SubComponent {
+    constructor(defaultValue = "/", readOnly = false) {
+        super(defaultValue, readOnly);
+    }
+    initHtml() {
+        this.dom = document.createElement("input");
+        this.dom.type = "file";
+        this.dom.accept = "image/gif,image/jpeg,image/jpg,image/png";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
+        }
+        // 读取本地图片文件上传服务器，返回URL生成IMG标签
+        this.dom.addEventListener("input", () => {
+            let formData = new FormData();
+            formData.append("pic", this.dom.files[0]);
+            axios({
+                url: IMG_UPLOAD_PATH,
+                method: "POST",
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                data: formData
+            }).then(d => {
+                this.setValue(IMG_STORE_PATH + d.data.msg.filename);
+                console.log(this.value)
+                this.updateGraph();
+            });
+        });
+        return this.dom;
+    }
+    updateHtml() { }
 }
 
 /**
