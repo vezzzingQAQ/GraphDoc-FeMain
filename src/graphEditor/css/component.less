@@ -79,6 +79,18 @@
                 width: @property_height;
             }
 
+            input[type=file]{
+                &::-webkit-file-upload-button{
+                    visibility: hidden;
+                }
+                &::before{
+                    content: '点击选择文件';
+                    cursor: pointer;
+                    line-height: @property_height;
+                    font-size: 11px;
+                }
+            }
+
             .divider {
                 display: block;
                 width: calc(100% - @property_key_width);

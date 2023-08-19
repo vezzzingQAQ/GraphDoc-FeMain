@@ -1064,7 +1064,7 @@ export class Graph {
     refreshBottomDom() {
         document.querySelector("#nodeCount").innerHTML = `节点:${this.nodeList.length}`;
         document.querySelector("#edgeCount").innerHTML = `关系:${this.edgeList.length}`;
-        document.querySelector("#selectedId").innerHTML = `选中的元素:${this.selectedElementList[0] ? this.selectedElementList[0].uuid : "#"}`;
+        document.querySelector("#selectedId").innerHTML = `选中的元素:<span style="letter-spacing:0">${this.selectedElementList[0] ? this.selectedElementList[0].uuid.slice(0, 11) + "..." : "#"}</span>`;
     }
 }
 
