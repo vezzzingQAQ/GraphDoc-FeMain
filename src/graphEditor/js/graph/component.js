@@ -50,6 +50,11 @@
  * z z z studio
  */
 
+const IMG_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadImg/"
+const IMG_STORE_PATH = "http://127.0.0.1:4999/media/images/"
+const FILE_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadFile/"
+const FILE_STORE_PATH = "http://127.0.0.1:4999/media/files/"
+
 class Component {
     /**
      * 节点组件-父类 
@@ -385,8 +390,32 @@ export class C_N_Img extends Component {
         width: 200,
     }) {
         super(showName, key, true);
-        this.addValue("path", "选择图片", new SC_FileInput(value.path));
+        this.addValue("path", "选择图片", new SC_FileInput(value.path,
+            false,
+            "image/gif,image/jpeg,image/jpg,image/png",
+            "pic",
+            IMG_UPLOAD_PATH,
+            IMG_STORE_PATH
+        ));
         this.addValue("width", "宽度", new SC_NumberInput(value.width, false, 0, 2000, 1));
+    }
+}
+
+/**
+ * 文件组件
+ */
+export class C_N_File extends Component {
+    constructor(showName, key, value = {
+        path: "/",
+    }) {
+        super(showName, key, true);
+        this.addValue("path", "选择文件", new SC_FileInput(value.path,
+            false,
+            "*",
+            "file",
+            FILE_UPLOAD_PATH,
+            FILE_STORE_PATH
+        ));
     }
 }
 
@@ -451,8 +480,14 @@ export const ComponentMap = {
     "img_node": {
         key: "img_node",
         type: "node",
-        showName: "🧻图片",
-        class: C_N_Img
+        showName: "📏图片",
+        class: C_N_Img,
+    },
+    "file_node": {
+        key: "file_node",
+        type: "node",
+        showName: "📑文件",
+        class: C_N_File,
     }
 }
 

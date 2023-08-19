@@ -704,6 +704,7 @@ export class Graph {
         let domAddedNodeText = null;
         let domAddedNodeLink = null;
         let domAddedNodeImg = null;
+        let domAddedNodeFile = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -726,6 +727,8 @@ export class Graph {
             domAddedNodeLink = domAddedSubComponentContainer.append("xhtml:a");
         if (nodeObj.hasComponent("img_node"))
             domAddedNodeImg = domAddedSubComponentContainer.append("xhtml:img");
+        if (nodeObj.hasComponent("file_node"))
+            domAddedNodeFile = domAddedSubComponentContainer.append("xhtml:a");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -748,10 +751,10 @@ export class Graph {
 
         if (domAddedNodeLink)
             domAddedNodeLink
-                .attr("class", "nodeLink")
+                .attr("class", "nodeLink nodeBlock")
                 .html("🔗")
                 .style("display", "block")
-                .style("margin", 0)
+                .style("margin-left", 0)
                 .style("padding", "1px")
                 .style("color", "rgb(200,200,200)")
                 .style("font-size", "10px")
@@ -761,6 +764,7 @@ export class Graph {
                 .style("background-color", "rgb(50,50,50)")
                 .style("cursor", "pointer")
                 .style("text-decoration", "none")
+                .style("margin-top", "5px")
                 .attr("href", d => d.autoGetValue("link_node", "url"))
                 .attr("target", "_blank")
 
@@ -773,6 +777,25 @@ export class Graph {
                 .on("load", function () {
                     calSize();
                 })
+
+        if (domAddedNodeFile)
+            domAddedNodeFile
+                .attr("class", "nodeFile nodeBlock")
+                .html("📑")
+                .style("display", "block")
+                .style("margin-left", 0)
+                .style("padding", "1px")
+                .style("color", "rgb(200,200,200)")
+                .style("font-size", "10px")
+                .style("height", "max-content")
+                .style("width", "max-content")
+                .style("border-radius", "2px")
+                .style("background-color", "rgb(50,50,50)")
+                .style("cursor", "pointer")
+                .style("text-decoration", "none")
+                .style("margin-top", "5px")
+                .attr("download", d => d.autoGetValue("file_node", "path", "#"))
+                .attr("href", d => d.autoGetValue("file_node", "path", "#"))
 
         domAddedSubComponentContainer
             .style("display", "flex")

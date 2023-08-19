@@ -29,8 +29,6 @@
  */
 
 import axios from "axios";
-const IMG_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadImg/"
-const IMG_STORE_PATH = "http://127.0.0.1:4999/media/images/"
 
 import { Node, Edge } from "./element";
 
@@ -350,30 +348,33 @@ export class SC_Textarea extends SubComponent {
  * 文件上传
  */
 export class SC_FileInput extends SubComponent {
-    constructor(defaultValue = "/", readOnly = false) {
+    constructor(defaultValue = "/", readOnly = false, accept, catg, urlUpload, urlLoad) {
         super(defaultValue, readOnly);
+        this.accept = accept;
+        this.catg = catg;
+        this.urlUpload = urlUpload;
+        this.urlLoad = urlLoad;
     }
     initHtml() {
         this.dom = document.createElement("input");
         this.dom.type = "file";
-        this.dom.accept = "image/gif,image/jpeg,image/jpg,image/png";
+        this.dom.accept = this.accept;
         if (this.readOnly) {
             this.dom.readOnly = "true";
         }
         // 读取本地图片文件上传服务器，返回URL生成IMG标签
         this.dom.addEventListener("input", () => {
             let formData = new FormData();
-            formData.append("pic", this.dom.files[0]);
+            formData.append(this.catg, this.dom.files[0]);
             axios({
-                url: IMG_UPLOAD_PATH,
+                url: this.urlUpload,
                 method: "POST",
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
                 data: formData
             }).then(d => {
-                this.setValue(IMG_STORE_PATH + d.data.msg.filename);
-                console.log(this.value)
+                this.setValue(this.urlLoad + d.data.msg.filename);
                 this.updateGraph();
             });
         });
