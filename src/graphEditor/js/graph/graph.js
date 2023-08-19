@@ -317,6 +317,9 @@ export class Graph {
 
         // 点击空白处
         d3.select(".displayArea svg").on("click", function (e) {
+            // 更新元素
+            _.refreshBottomDom();
+
             if (e.target == this && e.button == 0) {
                 // 如果同时按着shift键，添加节点
                 if (_.selectedElementList.length >= 1 && _.isShiftDown) {
@@ -838,6 +841,9 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"));
+
+        // 更新元素
+        this.refreshBottomDom();
     }
 
     /**
@@ -873,6 +879,8 @@ export class Graph {
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"));
         this.renderProperties.simulation.restart();
+        // 更新元素
+        this.refreshBottomDom();
     }
 
     /**
@@ -1048,6 +1056,15 @@ export class Graph {
     toJson() {
         let jsonString = JSON.stringify(this.toJsonObj());
         return jsonString;// .replace(/\\/g, "\\\\")
+    }
+
+    /**
+     * 计算节点和关系的总数，填充DOM
+     */
+    refreshBottomDom() {
+        document.querySelector("#nodeCount").innerHTML = `节点:${this.nodeList.length}`;
+        document.querySelector("#edgeCount").innerHTML = `关系:${this.edgeList.length}`;
+        document.querySelector("#selectedId").innerHTML = `选中的元素:${this.selectedElementList[0] ? this.selectedElementList[0].uuid : "#"}`;
     }
 }
 

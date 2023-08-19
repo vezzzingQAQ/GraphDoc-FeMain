@@ -25,7 +25,7 @@ body {
         }
 
         .panArea {
-            width: 20vw;
+            width: @pan_area_width;
             height: calc(100vh - @menu_height);
             margin-top: @menu_height;
             overflow-y: scroll;
@@ -158,6 +158,25 @@ body {
                 }
             }
         }
+
+        .bottomArea {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: @bottom_height;
+            width: calc(100vw - @pan_area_width);
+            display: flex;
+            flex-direction: row;
+            user-select: none;
+
+            .sub {
+                line-height: @bottom_height;
+                font-size: 11px;
+                padding-left: 20px;
+                letter-spacing: 2px;
+                font-weight: 100;
+            }
+        }
     }
 }
 
@@ -215,11 +234,16 @@ body {
             }
         }
     }
+
+    .bottomArea {
+        background-color: rgba(61, 61, 61, 0.347);
+        color: rgba(250, 250, 250, 0.548);
+    }
 }
 
 .lightMode {
     .displayArea {
-        background-color: rgb(247, 247, 247);
+        background-color: @bg_color_d_pan;
     }
 
     .panArea {
