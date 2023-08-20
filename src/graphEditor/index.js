@@ -15,6 +15,7 @@ import { initGraph } from "./js/initGraph";
 import "./css/index.less";
 import "./css/component.less";
 import "./css/graph.less";
+import "./css/centerWindow.less";
 import { bindEvents } from "./js/bindEvents";
 
 window.addEventListener("load", () => {

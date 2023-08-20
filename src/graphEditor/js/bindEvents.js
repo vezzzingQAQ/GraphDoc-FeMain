@@ -1,6 +1,8 @@
 import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 
+import mainAboutPng from "./../../asset/img/mainAbout.png";
+
 // 界面色彩配置
 let darkMode = true;
 
@@ -29,6 +31,11 @@ export function bindEvents(graph) {
     });
     document.querySelector("#btnExport2").addEventListener("click", () => {
         graph.exportPng();
+    });
+    document.querySelector("#btnAuthorList").addEventListener("click", () => {
+        document.querySelector("#windowAuthorList").style.opacity = 0.97;
+        document.querySelector("#windowAuthorList").style.pointerEvents = "all";
+        document.querySelector("#windowAuthorList").style.transition = "0.3s ease-in-out";
     });
     document.querySelector("#openFile").addEventListener("click", () => {
         let elementInput = document.createElement("input");
@@ -64,4 +71,10 @@ export function bindEvents(graph) {
         //取消默认的浏览器自带右键
         e.preventDefault();
     }
+    // 关于窗口
+    document.querySelector("#mainAboutImg").src = mainAboutPng;
+    document.querySelector("#windowAuthorList span").addEventListener("click", () => {
+        document.querySelector("#windowAuthorList").style.opacity = 0;
+        document.querySelector("#windowAuthorList").style.pointerEvents = "none";
+    });
 }
