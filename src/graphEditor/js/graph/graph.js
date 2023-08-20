@@ -628,13 +628,14 @@ export class Graph {
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
             nodes.attr("transform", d => {
-                if (d.autoGetValue("physics_node", "fixPosition")) {
-                    d.fx = d.cx;
-                    d.fy = d.cy;
-                } else {
-                    d.cx = d.x;
-                    d.cy = d.y;
-                }
+                if (!d.isMove)
+                    if (d.autoGetValue("physics_node", "fixPosition")) {
+                        d.fx = d.cx;
+                        d.fy = d.cy;
+                    } else {
+                        d.cx = d.x;
+                        d.cy = d.y;
+                    }
                 return `translate(${d.x},${d.y})`;
             });
         });
@@ -659,32 +660,30 @@ export class Graph {
         let moveList = [];
         function dragstarted(event, d) {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
-            if (!d.autoGetValue("physics_node", "fixPosition")) {
-                // 寻找要移动的节点
-                moveList = [];
-                for (let selectedElement of _.selectedElementList) {
-                    if (selectedElement.type == "node") {
-                        selectedElement.deltaX = selectedElement.x - d.x;
-                        selectedElement.deltaY = selectedElement.y - d.y;
-                        moveList.push(selectedElement);
-                    }
+            d.isMove = true;
+            // 寻找要移动的节点
+            moveList = [];
+            for (let selectedElement of _.selectedElementList) {
+                if (selectedElement.type == "node") {
+                    selectedElement.deltaX = selectedElement.x - d.x;
+                    selectedElement.deltaY = selectedElement.y - d.y;
+                    moveList.push(selectedElement);
                 }
-                d.fx = d.x;
-                d.fy = d.y;
-                for (let moveNode of moveList) {
-                    moveNode.fx = d.x + moveNode.deltaX;
-                    moveNode.fy = d.y + moveNode.deltaY;
-                }
+            }
+            d.fx = d.x;
+            d.fy = d.y;
+            for (let moveNode of moveList) {
+                moveNode.fx = d.x + moveNode.deltaX;
+                moveNode.fy = d.y + moveNode.deltaY;
+                moveNode.isMove = true;
             }
         }
         function dragged(event, d) {
-            if (!d.autoGetValue("physics_node", "fixPosition")) {
-                d.fx = event.x;
-                d.fy = event.y;
-                for (let moveNode of moveList) {
-                    moveNode.fx = event.x + moveNode.deltaX;
-                    moveNode.fy = event.y + moveNode.deltaY;
-                }
+            d.fx = event.x;
+            d.fy = event.y;
+            for (let moveNode of moveList) {
+                moveNode.fx = event.x + moveNode.deltaX;
+                moveNode.fy = event.y + moveNode.deltaY;
             }
         }
         function dragended(event, d) {
@@ -694,6 +693,9 @@ export class Graph {
             for (let moveNode of moveList) {
                 moveNode.fx = null;
                 moveNode.fy = null;
+                moveNode.cx = moveNode.x;
+                moveNode.cy = moveNode.y;
+                moveNode.isMove = false;
             }
         }
 

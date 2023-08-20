@@ -427,6 +427,7 @@ export function LoadNodeFromJson(jsonObj) {
     createdNode.y = jsonObj.y;
     createdNode.fx = null;
     createdNode.fy = null;
+    createdNode.isMove = false;
     // 适配旧版本
     createdNode.cx = jsonObj.cx ? jsonObj.cx : jsonObj.x;
     createdNode.cy = jsonObj.cy ? jsonObj.cy : jsonObj.y;
