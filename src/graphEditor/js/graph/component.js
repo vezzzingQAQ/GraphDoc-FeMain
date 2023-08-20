@@ -50,12 +50,14 @@
  * z z z studio
  */
 
-const IMG_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadImg/"
-const IMG_STORE_PATH = "http://127.0.0.1:4999/media/images/"
-const FILE_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadFile/"
-const FILE_STORE_PATH = "http://127.0.0.1:4999/media/files/"
-const VIDEO_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadVideo/"
-const VIDEO_STORE_PATH = "http://127.0.0.1:4999/media/videos/"
+import {
+    IMG_UPLOAD_PATH,
+    IMG_STORE_PATH,
+    FILE_UPLOAD_PATH,
+    FILE_STORE_PATH,
+    VIDEO_UPLOAD_PATH,
+    VIDEO_STORE_PATH
+} from "./urls"
 
 
 class Component {
