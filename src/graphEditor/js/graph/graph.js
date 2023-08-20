@@ -30,6 +30,15 @@ import { CreateBasicEdge, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } f
 import { playMusic } from "../../../public/js/musicPlayer";
 import { saveSvgAsPng } from "save-svg-png-ext";
 
+import {
+    IMG_UPLOAD_PATH,
+    IMG_STORE_PATH,
+    FILE_UPLOAD_PATH,
+    FILE_STORE_PATH,
+    VIDEO_UPLOAD_PATH,
+    VIDEO_STORE_PATH
+} from "./urls"
+
 export class Graph {
     /**
      * 图谱类
@@ -662,6 +671,8 @@ export class Graph {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
             d.isMove = true;
             // 寻找要移动的节点
+            if (_.selectedElementList.length == 1)
+                _.deselectAll();
             moveList = [];
             for (let selectedElement of _.selectedElementList) {
                 if (selectedElement.type == "node") {
@@ -690,6 +701,9 @@ export class Graph {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.0001);
             d.fx = null;
             d.fy = null;
+            d.cx = d.x;
+            d.cy = d.y;
+            d.isMove = false;
             for (let moveNode of moveList) {
                 moveNode.fx = null;
                 moveNode.fy = null;
@@ -797,7 +811,7 @@ export class Graph {
         if (domAddedNodeImg)
             domAddedNodeImg
                 .attr("class", "nodeImg")
-                .attr("src", d => d.autoGetValue("img_node", "path", "#"))
+                .attr("src", d => d.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .style("display", "block")
                 .style("width", d => d.autoGetValue("img_node", "width", "200px"))
                 .on("load", function () {
@@ -820,15 +834,15 @@ export class Graph {
                 .style("cursor", "pointer")
                 .style("text-decoration", "none")
                 .style("margin-top", "5px")
-                .attr("download", d => d.autoGetValue("file_node", "path", "#"))
-                .attr("href", d => d.autoGetValue("file_node", "path", "#"))
+                .attr("download", d => d.autoGetValue("file_node", "path", "#", value => FILE_STORE_PATH + value))
+                .attr("href", d => d.autoGetValue("file_node", "path", "#", value => FILE_STORE_PATH + value))
                 .attr("target", "_blank")
 
         if (domAddedNodeVideo)
             domAddedNodeVideo
                 .attr("class", "nodeVideo")
                 .attr("controls", true)
-                .attr("src", d => d.autoGetValue("video_node", "path", "#"))
+                .attr("src", d => d.autoGetValue("video_node", "path", "#", value => VIDEO_STORE_PATH + value))
                 .style("display", "block")
                 .style("width", d => d.autoGetValue("video_node", "width", "200px"))
                 .on("load", function () {

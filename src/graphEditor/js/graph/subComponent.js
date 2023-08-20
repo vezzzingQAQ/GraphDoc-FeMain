@@ -374,7 +374,7 @@ export class SC_FileInput extends SubComponent {
                 },
                 data: formData
             }).then(d => {
-                this.setValue(this.urlLoad + d.data.msg.filename);
+                this.setValue(d.data.msg.filename);
                 this.updateGraph();
             });
         });

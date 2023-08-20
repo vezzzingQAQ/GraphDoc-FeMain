@@ -440,6 +440,14 @@ export function LoadNodeFromJson(jsonObj) {
         createdNode.x = createdNode.cx;
         createdNode.y = createdNode.cy;
     }
+    //temp
+    // if (createdNode.autoGetValue("img_node", "path"))
+    //     createdNode.autoSetValue("img_node", "path", createdNode.autoGetValue("img_node", "path").replace("/media/images/", ""))
+    // if (createdNode.autoGetValue("video_node", "path"))
+    //     createdNode.autoSetValue("video_node", "path", createdNode.autoGetValue("video_node", "path").replace("/media/files/", ""))
+    // if (createdNode.autoGetValue("file_node", "path"))
+    //     createdNode.autoSetValue("file_node", "path", createdNode.autoGetValue("file_node", "path").replace("/media/videos/", ""))
+    
     return createdNode;
 }
 
