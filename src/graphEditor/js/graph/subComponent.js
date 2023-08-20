@@ -393,6 +393,11 @@ export class SC_Tag extends SubComponent {
     initHtml() {
         let _ = this;
         function initBtnDom(value) {
+            let tagContainer = document.createElement("div");
+            tagContainer.classList = "tagContainer";
+            let tagDeleteBtn = document.createElement("p");
+            tagDeleteBtn.classList = "tagDeleteBtn";
+            tagDeleteBtn.innerHTML = "×";
             let tagDom = document.createElement("input");
             tagDom.classList = "tagDom tagBtn";
             tagDom.type = "text";
@@ -403,11 +408,12 @@ export class SC_Tag extends SubComponent {
             spanTempDom.style.display = "hidden";
             document.querySelector("body").appendChild(spanTempDom)
             if (spanTempDom.offsetWidth > 10) {
-                tagDom.style.width = spanTempDom.offsetWidth + 5 + "px";
+                tagContainer.style.width = spanTempDom.offsetWidth + 35 + "px";
             }
             spanTempDom.remove();
             tagDom.addEventListener("input", () => {
                 let tagDoms = document.querySelectorAll(".tagDom");
+                _.value=[];
                 for (let i = 0; i < tagDoms.length; i++) {
                     let currentTagDom = tagDoms[i];
                     _.value[i] = currentTagDom.value;
@@ -418,11 +424,26 @@ export class SC_Tag extends SubComponent {
                 spanTempDom.style.display = "hidden";
                 document.querySelector("body").appendChild(spanTempDom)
                 if (spanTempDom.offsetWidth > 10) {
-                    tagDom.style.width = spanTempDom.offsetWidth + 5 + "px";
+                    tagContainer.style.width = spanTempDom.offsetWidth + 35 + "px";
+                }
+                spanTempDom.remove();
+            });
+            tagDeleteBtn.addEventListener("click", () => {
+                tagDom.remove();
+                tagDeleteBtn.remove();
+                tagContainer.remove();
+                let tagDoms = document.querySelectorAll(".tagDom");
+                _.value=[];
+                for (let i = 0; i < tagDoms.length; i++) {
+                    let currentTagDom = tagDoms[i];
+                    _.value[i] = currentTagDom.value;
                 }
             });
-            console.log(_.value)
-            return tagDom;
+
+            tagContainer.appendChild(tagDom);
+            tagContainer.appendChild(tagDeleteBtn);
+
+            return tagContainer;
         }
         this.dom = document.createElement("div");
         this.dom.id = "tag_node";
@@ -439,7 +460,7 @@ export class SC_Tag extends SubComponent {
         addBtnDom.addEventListener("click", () => {
             let tagDom = initBtnDom("");
             this.dom.insertBefore(tagDom, addBtnDom);
-            tagDom.focus();
+            tagDom.querySelector("input").focus();
         })
         this.dom.appendChild(addBtnDom);
         return this.dom;
