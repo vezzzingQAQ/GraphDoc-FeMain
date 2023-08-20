@@ -656,24 +656,45 @@ export class Graph {
             .on("dblclick.zoom", null);
 
         // 拖动
+        let moveList = [];
         function dragstarted(event, d) {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
-            console.log(d);
             if (!d.autoGetValue("physics_node", "fixPosition")) {
+                // 寻找要移动的节点
+                moveList = [];
+                for (let selectedElement of _.selectedElementList) {
+                    if (selectedElement.type == "node") {
+                        selectedElement.deltaX = selectedElement.x - d.x;
+                        selectedElement.deltaY = selectedElement.y - d.y;
+                        moveList.push(selectedElement);
+                    }
+                }
                 d.fx = d.x;
                 d.fy = d.y;
+                for (let moveNode of moveList) {
+                    moveNode.fx = d.x + moveNode.deltaX;
+                    moveNode.fy = d.y + moveNode.deltaY;
+                }
             }
         }
         function dragged(event, d) {
             if (!d.autoGetValue("physics_node", "fixPosition")) {
                 d.fx = event.x;
                 d.fy = event.y;
+                for (let moveNode of moveList) {
+                    moveNode.fx = event.x + moveNode.deltaX;
+                    moveNode.fy = event.y + moveNode.deltaY;
+                }
             }
         }
         function dragended(event, d) {
             if (!event.active) _.renderProperties.simulation.alphaTarget(0.0001);
             d.fx = null;
             d.fy = null;
+            for (let moveNode of moveList) {
+                moveNode.fx = null;
+                moveNode.fy = null;
+            }
         }
 
         // 加载网络资源延迟
