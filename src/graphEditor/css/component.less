@@ -79,11 +79,12 @@
                 width: @property_height;
             }
 
-            input[type=file]{
-                &::-webkit-file-upload-button{
+            input[type=file] {
+                &::-webkit-file-upload-button {
                     visibility: hidden;
                 }
-                &::before{
+
+                &::before {
                     content: '点击选择文件';
                     cursor: pointer;
                     line-height: @property_height;
@@ -106,6 +107,33 @@
                 height: 100px;
                 border-radius: @small_border_radius;
                 resize: none;
+            }
+        }
+
+        #tag_node {
+            width: @pan_area_width;
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: calc(-1 * @property_key_width + 20px) !important;
+
+            .tagBtn {
+                display: block;
+                width: 15px;
+                padding-left: 4px;
+                padding-right: 4px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+                height: 25px;
+                line-height: 25px;
+                outline: none;
+                border: none;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .addBtnDom {
+                width: 20px !important;
+                border-radius: @small_border_radius;
             }
         }
     }
@@ -143,6 +171,12 @@
                 border: 1px solid @bg_color_d_border;
                 background-color: @bg_color_d_input;
                 color: @fg_color_d_input;
+            }
+        }
+
+        #tag_node {
+            .addBtnDom {
+                background-color: @bg_color_d_title;
             }
         }
     }

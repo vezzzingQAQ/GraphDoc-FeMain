@@ -387,10 +387,66 @@ export class SC_FileInput extends SubComponent {
  * Tag系统
  */
 export class SC_Tag extends SubComponent {
-    constructor(defaultValue = ["测试"]) {
+    constructor(defaultValue = ["测试"], readOnly = false) {
         super(defaultValue);
     }
     initHtml() {
+        let _ = this;
+        function initBtnDom(value) {
+            let tagDom = document.createElement("input");
+            tagDom.classList = "tagDom tagBtn";
+            tagDom.type = "text";
+            tagDom.value = value;
+            // 宽度自适应
+            let spanTempDom = document.createElement("span");
+            spanTempDom.innerHTML = tagDom.value;
+            spanTempDom.style.display = "hidden";
+            document.querySelector("body").appendChild(spanTempDom)
+            if (spanTempDom.offsetWidth > 10) {
+                tagDom.style.width = spanTempDom.offsetWidth + 5 + "px";
+            }
+            spanTempDom.remove();
+            tagDom.addEventListener("input", () => {
+                let tagDoms = document.querySelectorAll(".tagDom");
+                for (let i = 0; i < tagDoms.length; i++) {
+                    let currentTagDom = tagDoms[i];
+                    _.value[i] = currentTagDom.value;
+                }
+                // 宽度自适应
+                let spanTempDom = document.createElement("span");
+                spanTempDom.innerHTML = tagDom.value;
+                spanTempDom.style.display = "hidden";
+                document.querySelector("body").appendChild(spanTempDom)
+                if (spanTempDom.offsetWidth > 10) {
+                    tagDom.style.width = spanTempDom.offsetWidth + 5 + "px";
+                }
+            });
+            console.log(_.value)
+            return tagDom;
+        }
+        this.dom = document.createElement("div");
+        this.dom.id = "tag_node";
+        if (this.readOnly) {
+            this.dom.readOnly = "true";
+        }
+        for (let i = 0; i < this.value.length; i++) {
+            let tag = this.value[i];
+            this.dom.appendChild(initBtnDom(tag));
+        }
+        let addBtnDom = document.createElement("div");
+        addBtnDom.classList = "addBtnDom tagBtn";
+        addBtnDom.innerHTML = "+";
+        addBtnDom.addEventListener("click", () => {
+            let tagDom = initBtnDom("");
+            this.dom.insertBefore(tagDom, addBtnDom);
+            tagDom.focus();
+        })
+        this.dom.appendChild(addBtnDom);
+        return this.dom;
+    }
+    updateHtml() {
+        // if (this.dom) {
 
+        // }
     }
 }

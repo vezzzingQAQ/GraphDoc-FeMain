@@ -796,6 +796,7 @@ export class Graph {
                 .style("margin-top", "5px")
                 .attr("download", d => d.autoGetValue("file_node", "path", "#"))
                 .attr("href", d => d.autoGetValue("file_node", "path", "#"))
+                .attr("target", "_blank")
 
         domAddedSubComponentContainer
             .style("display", "flex")

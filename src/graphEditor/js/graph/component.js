@@ -204,7 +204,8 @@ import {
     SC_UrlInput,
     SC_Check,
     SC_Textarea,
-    SC_FileInput
+    SC_FileInput,
+    SC_Tag
 } from "./subComponent";
 
 /**
@@ -420,6 +421,18 @@ export class C_N_File extends Component {
 }
 
 /**
+ * tag组件
+ */
+export class C_N_Tag extends Component {
+    constructor(showName, key, value = {
+        tags: []
+    }) {
+        super(showName, key, true);
+        this.addValue("tags", "", new SC_Tag(value.tags, false));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -488,6 +501,12 @@ export const ComponentMap = {
         type: "node",
         showName: "📑文件",
         class: C_N_File,
+    },
+    "tag_node": {
+        key: "tag_node",
+        type: "node",
+        showName: "📃TAG",
+        class: C_N_Tag,
     }
 }
 
