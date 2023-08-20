@@ -54,6 +54,9 @@ const IMG_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadImg/"
 const IMG_STORE_PATH = "http://127.0.0.1:4999/media/images/"
 const FILE_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadFile/"
 const FILE_STORE_PATH = "http://127.0.0.1:4999/media/files/"
+const VIDEO_UPLOAD_PATH = "http://127.0.0.1:4999/fileUpload/uploadVideo/"
+const VIDEO_STORE_PATH = "http://127.0.0.1:4999/media/videos/"
+
 
 class Component {
     /**
@@ -421,6 +424,26 @@ export class C_N_File extends Component {
 }
 
 /**
+ * 视频组件
+ */
+export class C_N_Video extends Component {
+    constructor(showName, key, value = {
+        path: "/",
+        width: 200,
+    }) {
+        super(showName, key, true);
+        this.addValue("path", "选择文件", new SC_FileInput(value.path,
+            false,
+            "video/mp4,video/avi",
+            "video",
+            VIDEO_UPLOAD_PATH,
+            VIDEO_STORE_PATH
+        ));
+        this.addValue("width", "宽度", new SC_NumberInput(value.width, false, 0, 2000, 1));
+    }
+}
+
+/**
  * tag组件
  */
 export class C_N_Tag extends Component {
@@ -501,6 +524,12 @@ export const ComponentMap = {
         type: "node",
         showName: "📑文件",
         class: C_N_File,
+    },
+    "video_node": {
+        key: "video_node",
+        type: "node",
+        showName: "📽️视频",
+        class: C_N_Video,
     },
     "tag_node": {
         key: "tag_node",

@@ -705,6 +705,7 @@ export class Graph {
         let domAddedNodeLink = null;
         let domAddedNodeImg = null;
         let domAddedNodeFile = null;
+        let domAddedNodeVideo = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -729,6 +730,8 @@ export class Graph {
             domAddedNodeImg = domAddedSubComponentContainer.append("xhtml:img");
         if (nodeObj.hasComponent("file_node"))
             domAddedNodeFile = domAddedSubComponentContainer.append("xhtml:a");
+        if (nodeObj.hasComponent("video_node"))
+            domAddedNodeVideo = domAddedSubComponentContainer.append("xhtml:video");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -797,6 +800,17 @@ export class Graph {
                 .attr("download", d => d.autoGetValue("file_node", "path", "#"))
                 .attr("href", d => d.autoGetValue("file_node", "path", "#"))
                 .attr("target", "_blank")
+
+        if (domAddedNodeVideo)
+            domAddedNodeVideo
+                .attr("class", "nodeVideo")
+                .attr("controls", true)
+                .attr("src", d => d.autoGetValue("video_node", "path", "#"))
+                .style("display", "block")
+                .style("width", d => d.autoGetValue("video_node", "width", "200px"))
+                .on("load", function () {
+                    calSize();
+                })
 
         domAddedSubComponentContainer
             .style("display", "flex")
