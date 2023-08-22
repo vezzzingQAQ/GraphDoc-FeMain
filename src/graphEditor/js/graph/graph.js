@@ -667,12 +667,13 @@ export class Graph {
 
         // 拖动
         let moveList = [];
-        function dragstarted(event, d) {
-            if (!event.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
+        function dragstarted(e, d) {
+            if (!e.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
             d.isMove = true;
+            console.log(e)
             // 寻找要移动的节点
-            if (_.selectedElementList.length == 1)
-                _.deselectAll();
+            // if (!_.selectedElementList.includes(d))
+            //     _.deselectAll();
             moveList = [];
             for (let selectedElement of _.selectedElementList) {
                 if (selectedElement.type == "node") {
@@ -689,16 +690,16 @@ export class Graph {
                 moveNode.isMove = true;
             }
         }
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
+        function dragged(e, d) {
+            d.fx = e.x;
+            d.fy = e.y;
             for (let moveNode of moveList) {
-                moveNode.fx = event.x + moveNode.deltaX;
-                moveNode.fy = event.y + moveNode.deltaY;
+                moveNode.fx = e.x + moveNode.deltaX;
+                moveNode.fy = e.y + moveNode.deltaY;
             }
         }
-        function dragended(event, d) {
-            if (!event.active) _.renderProperties.simulation.alphaTarget(0.0001);
+        function dragended(e, d) {
+            if (!e.active) _.renderProperties.simulation.alphaTarget(0.0001);
             d.fx = null;
             d.fy = null;
             d.cx = d.x;

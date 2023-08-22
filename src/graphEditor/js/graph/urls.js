@@ -1,4 +1,4 @@
-export const DOMAIN = "http://192.168.43.142:4999";
+export const DOMAIN = "http://127.0.0.1:4999";
 
 export const IMG_UPLOAD_PATH = `${DOMAIN}/fileUpload/uploadImg/`;
 export const IMG_STORE_PATH = `${DOMAIN}/media/images/`;
