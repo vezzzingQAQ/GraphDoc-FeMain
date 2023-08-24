@@ -77,6 +77,10 @@ export class Graph {
         // 鼠标位置
         this.mouseX;
         this.mouseY;
+        // 是否正在展示右键菜单
+        this.isShowRightMenu = false;
+        // 是否正在平移缩放
+        this.isZooming = false;
     }
 
     /**
@@ -203,7 +207,7 @@ export class Graph {
         initElements();
 
         // 点击空白处
-        d3.select(".displayArea").on("click", function (e) {
+        d3.select(".displayArea").node().addEventListener("click", function (e) {
             // 更新元素
             _.refreshBottomDom();
             if (e.button == 0 && e.target == this) {
@@ -220,6 +224,8 @@ export class Graph {
             }
             _.mouseX = e.offsetX;
             _.mouseY = e.offsetY;
+            if (_.isShowRightMenu)
+                _.hideMenu();
         });
 
         // 框选
@@ -227,7 +233,7 @@ export class Graph {
 
         function bindKeyEvent() {
             // 选中节点后delete删除
-            d3.select("body").on("keydown", function (e) {
+            d3.select("body").node().addEventListener("keydown", function (e) {
                 if (e.target == this) {
                     // delete删除选中的元素
                     if (e.keyCode == 46) {
@@ -263,7 +269,7 @@ export class Graph {
                     }
                 }
             });
-            d3.select("body").on("keyup", function (e) {
+            d3.select("body").node().addEventListener("keyup", function (e) {
                 if (e.target == this) {
                     if (e.keyCode == 16) {
                         _.isShiftDown = false;
@@ -276,12 +282,14 @@ export class Graph {
         bindKeyEvent();
 
         function initRightMenu() {
-            d3.select(".displayArea svg").on("contextmenu", function (e) {
+            d3.select(".displayArea svg").node().addEventListener("contextmenu", function (e) {
                 e.preventDefault();
-                if (e.target == this) {
-                    console.log(1);
+                if (e.target == this && !_.isZooming) {
+                    _.initMenu_Svg(e);
+                } else {
+                    _.hideMenu();
                 }
-            })
+            });
         }
         initRightMenu();
 
@@ -493,6 +501,7 @@ export class Graph {
      */
     initZoomEvents() {
         let _ = this;
+        let zoomTime = 0;
         _.renderProperties.svg.call(d3.zoom()
             .extent([[0, 0], [this.renderProperties.svg.attr("width"), this.renderProperties.svg.attr("height")]])
             .scaleExtent([0.01, 30])
@@ -501,7 +510,21 @@ export class Graph {
             .filter(e => {
                 return e.button == 2 || e.type === "touchstart" || e instanceof WheelEvent
             })
-
+            .on("start", () => {
+                _.isZooming = true;
+                zoomTime = (new Date()).getTime();
+                _.hideMenu();
+            })
+            .on("end", () => {
+                let deltaTime = (new Date()).getTime() - zoomTime;
+                if (deltaTime > 100) {
+                    setTimeout(() => {
+                        _.isZooming = false;
+                    }, 0);
+                } else {
+                    _.isZooming = false;
+                }
+            })
             .on("zoom", ({ transform }) => {
                 _.renderProperties.viewArea.attr("transform", transform);
             }))
@@ -553,17 +576,19 @@ export class Graph {
                 .attr("transform", "translate(0,0)")
                 .attr("id", "squareSelect");
 
-            d3.select(".displayArea svg").on("mousedown", function (e) {
+            d3.select(".displayArea svg").node().addEventListener("mousedown", function (e) {
                 if (e.button == 0) {
                     clickTime = (new Date()).getTime();
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
                     startLoc = [e.layerX, e.layerY];
                     _.deselectAll();
+                    if (_.isShowRightMenu)
+                        _.hideMenu();
                 }
             });
 
-            d3.select(".displayArea svg").on("mousemove", function (e) {
+            d3.select(".displayArea svg").node().addEventListener("mousemove", function (e) {
                 //判断事件target
                 if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
 
@@ -582,7 +607,7 @@ export class Graph {
                 }
             })
 
-            d3.select(".displayArea svg").on("mouseup", function (e) {
+            d3.select(".displayArea svg").node().addEventListener("mouseup", function (e) {
                 if (e.button == 0) {
                     if (selectionFlag == true) {
                         selectionFlag = false;
@@ -647,6 +672,7 @@ export class Graph {
                         _.deselectAll();
                     }
                 }
+                _.hideMenu();
             })
         }
         selectionRect();
@@ -1100,6 +1126,8 @@ export class Graph {
             this.deselectElement(edgeObj);
         }
         this.selectedElementList = [];
+        document.querySelector(".panArea .listPan").innerHTML = "";
+        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
     }
 
     /**
@@ -1145,12 +1173,45 @@ export class Graph {
     /**
      * 在空白处点击的菜单
      */
-    initMenu_Svg() {
+    initMenu_Svg(e) {
         let menu = [
             {
-                name: "添加节点"
+                name: "添加节点",
+                func: null
+            },
+            {
+                name: "选择所有关系",
+                func: null
+            },
+            {
+                name: "选择所有节点",
+                func: null
             }
         ]
+        this.initMenu(e, menu)
+    }
+    initMenu(e, menuObj) {
+        let domMenu = document.querySelector(".rightMenu");
+        domMenu.innerHTML = "";
+        domMenu.style.left = `${e.offsetX}px`;
+        domMenu.style.top = `${e.offsetY}px`;
+        domMenu.classList = "rightMenu rightMenu_show";
+        menuObj.forEach(obj => {
+            let domMenuBlock = document.createElement("div");
+            domMenuBlock.classList = "menuBlock";
+            domMenuBlock.innerHTML = obj.name;
+            domMenu.appendChild(domMenuBlock);
+        });
+        this.isShowRightMenu = true;
+    }
+
+    /**
+     * 隐藏右键菜单
+     */
+    hideMenu() {
+        let domMenu = document.querySelector(".rightMenu");
+        domMenu.classList = "rightMenu rightMenu_hide";
+        this.isShowRightMenu = false;
     }
 
     /**

@@ -182,6 +182,34 @@ body {
                 }
             }
         }
+
+        .rightMenu {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+
+            .menuBlock {
+                display: block;
+                height: @menu_block_height;
+                line-height: @menu_block_height;
+                font-size: 13px;
+                letter-spacing: 2px;
+                cursor: pointer;
+                padding-left: 5px;
+                padding-right: 5px;
+                transition: 0.1s ease-in-out;
+            }
+        }
+
+        .rightMenu_show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .rightMenu_hide {
+            opacity: 0;
+            pointer-events: none;
+        }
     }
 }
 
@@ -245,6 +273,17 @@ body {
 
         a {
             color: rgb(192, 154, 0);
+        }
+    }
+
+    .rightMenu {
+        background-color: rgb(61, 61, 61);
+        color: @fg_color_d_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(40, 40, 40);
+            }
         }
     }
 }
@@ -312,4 +351,14 @@ body {
         }
     }
 
+    .rightMenu {
+        background-color: rgb(246, 246, 246);
+        color: @fg_color_l_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(230, 230, 230);
+            }
+        }
+    }
 }
