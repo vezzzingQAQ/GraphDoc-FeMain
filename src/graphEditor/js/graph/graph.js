@@ -1158,17 +1158,30 @@ export class Graph {
             {
                 name: "添加节点",
                 func: function () {
-                    console.log()
                     _.addNode(e);
                 }
             },
             {
                 name: "选择所有关系",
-                func: null
+                func: function () {
+                    _.deselectAll();
+                    _.edgeList.forEach(edgeObj => {
+                        _.selectElement(edgeObj);
+                        document.querySelector(".panArea .listPan").innerHTML = "";
+                        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                    })
+                }
             },
             {
                 name: "选择所有节点",
-                func: null
+                func: function () {
+                    _.deselectAll();
+                    _.nodeList.forEach(nodeList => {
+                        _.selectElement(nodeList);
+                        document.querySelector(".panArea .listPan").innerHTML = "";
+                        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                    })
+                }
             }
         ]
         this.initMenu(e, menu)
