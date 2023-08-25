@@ -41,10 +41,10 @@ export function bindEvents(graph) {
         setGraphBackgroundColor(graph);
     });
     document.querySelector("#mainAboutImg").src = mainAboutPng;
-    document.querySelector("#windowAuthorList span").addEventListener("click", () => {
-        document.querySelector("#windowAuthorList").style.opacity = 0;
-        document.querySelector("#windowAuthorList").style.pointerEvents = "none";
-    });
+    // document.querySelector("#windowAuthorList span").addEventListener("click", () => {
+    //     document.querySelector("#windowAuthorList").style.opacity = 0;
+    //     document.querySelector("#windowAuthorList").style.pointerEvents = "none";
+    // });
 }
 
 /**

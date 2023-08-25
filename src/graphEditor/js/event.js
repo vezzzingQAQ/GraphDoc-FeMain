@@ -56,9 +56,22 @@ export function exportPng(graph) {
  * 展示作者列表
  */
 export function showAuthorList() {
-    document.querySelector("#windowAuthorList").style.opacity = 0.97;
-    document.querySelector("#windowAuthorList").style.pointerEvents = "all";
-    document.querySelector("#windowAuthorList").style.transition = "0.3s ease-in-out";
+    showCenterWindow(document.querySelector("#windowAuthorList"));
+}
+
+function showCenterWindow(selector) {
+    selector.style.opacity = 1;
+    selector.style.pointerEvents = "all";
+    selector.style.transition = "0.1s ease-in-out";
+    // 绑定关闭事件
+    selector.querySelector(".centerWindowCloseBtn").onclick = function () {
+        hideCenterWindow(selector);
+    }
+}
+
+function hideCenterWindow(selector) {
+    selector.style.opacity = 0;
+    selector.style.pointerEvents = "none";
 }
 
 /**
@@ -95,6 +108,6 @@ export function openGraph(graph) {
 /**
  * 设置导图背景颜色
  */
-export function setGraphBackgroundColor(graph){
+export function setGraphBackgroundColor(graph) {
     graph.setBgColor(document.querySelector("#bgColorInput").value);
 }
