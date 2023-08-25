@@ -363,6 +363,7 @@ import {
     C_N_Link,
     C_N_Physics,
     C_N_ScaleHover,
+    C_N_Tag,
     C_N_Text,
     ComponentMap,
     LoadComponentFromJson
@@ -376,7 +377,7 @@ export function CreateBasicNode() {
     let node = new Node();
     node.addComponent(new C_N_Exterior(ComponentMap.exterior_node.showName, "exterior_node"));
     node.addComponent(new C_N_Physics(ComponentMap.physics_node.showName, "physics_node"));
-    node.addComponent(new C_N_ScaleHover(ComponentMap.scaleHover_node.showName, "scaleHover_node"));
+    node.addComponent(new C_N_Tag(ComponentMap.tag_node.showName, "tag_node"));
     return node;
 }
 
@@ -447,7 +448,7 @@ export function LoadNodeFromJson(jsonObj) {
     //     createdNode.autoSetValue("video_node", "path", createdNode.autoGetValue("video_node", "path").replace("/media/files/", ""))
     // if (createdNode.autoGetValue("file_node", "path"))
     //     createdNode.autoSetValue("file_node", "path", createdNode.autoGetValue("file_node", "path").replace("/media/videos/", ""))
-    
+
     return createdNode;
 }
 
