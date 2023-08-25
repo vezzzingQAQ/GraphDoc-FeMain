@@ -26,7 +26,7 @@
 
 import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
-import { CreateBasicEdge, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
+import { CreateBasicEdge, CreateBasicNode, CreateLinkNode, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
 import { saveSvgAsPng } from "save-svg-png-ext";
 
@@ -758,12 +758,24 @@ export class Graph {
     /**
      * 向图谱中添加节点
      */
-    addNode(e) {
+    addNode(e, type) {
         let _ = this;
 
         // 添加节点
-        let addedNode = CreateTextNode();
-        let addedEdge = null;
+        let addedNode;
+        switch (type) {
+            case "basic":
+                addedNode = CreateBasicNode();
+                break;
+            case "text":
+                addedNode = CreateTextNode();
+                break;
+            case "link":
+                addedNode = CreateLinkNode();
+                break;
+            default:
+                addedNode = CreateBasicNode();
+        }
         // 计算鼠标在svg中的相对位置
         let transform = d3.zoomTransform(_.renderProperties.viewArea.node());
         let pt = transform.invert([e.x, e.y]);
@@ -1156,10 +1168,25 @@ export class Graph {
         let _ = this;
         let menu = [
             {
-                name: "添加节点",
+                name: "添加空白节点",
                 func: function () {
-                    _.addNode(e);
+                    _.addNode(e, "basic");
                 }
+            },
+            {
+                name: "添加文本节点",
+                func: function () {
+                    _.addNode(e, "text");
+                }
+            },
+            {
+                name: "添加链接节点",
+                func: function () {
+                    _.addNode(e, "link");
+                }
+            },
+            {
+                divider: true
             },
             {
                 name: "选择所有关系",
@@ -1194,14 +1221,20 @@ export class Graph {
         domMenu.style.top = `${e.offsetY}px`;
         domMenu.classList = "rightMenu rightMenu_show";
         menuObj.forEach(obj => {
-            let domMenuBlock = document.createElement("div");
-            domMenuBlock.classList = "menuBlock";
-            domMenuBlock.innerHTML = obj.name;
-            domMenuBlock.addEventListener("click", function () {
-                obj.func();
-                _.hideMenu();
-            });
-            domMenu.appendChild(domMenuBlock);
+            if (obj.name && obj.func) {
+                let domMenuBlock = document.createElement("div");
+                domMenuBlock.classList = "menuBlock";
+                domMenuBlock.innerHTML = obj.name;
+                domMenuBlock.addEventListener("click", function () {
+                    obj.func();
+                    _.hideMenu();
+                });
+                domMenu.appendChild(domMenuBlock);
+            } else if (obj.divider) {
+                let domMenuDivider = document.createElement("div");
+                domMenuDivider.classList = "menuDivider";
+                domMenu.appendChild(domMenuDivider);
+            }
         });
         this.isShowRightMenu = true;
     }
