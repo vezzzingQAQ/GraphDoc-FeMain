@@ -758,9 +758,8 @@ export class Graph {
     /**
      * 向图谱中添加节点
      */
-    addNode(e, fromNode) {
+    addNode(e) {
         let _ = this;
-        console.log(1)
 
         // 添加节点
         let addedNode = CreateTextNode();
@@ -779,29 +778,9 @@ export class Graph {
             .merge(_.nodes);
         _.initNodes(_.nodes);
 
-        if (fromNode) {
-            // 添加关系
-            let addedEdge = CreateBasicEdge(fromNode, addedNode);
-            addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - addedNode.x) ** 2 + (fromNode.y - addedNode.y) ** 2));
-            _.pushEdge(addedEdge);
-
-            // 绘制
-            _.edges = _.edges
-                .data(_.edgeList, d => d.uuid)
-                .enter()
-                .append("line")
-                .merge(_.edges);
-            _.initEdges(_.edges);
-        }
-
         // 初始化组件
         _.modifyNodeExterior(addedNode);
         _.modifyNodePhysics();
-
-        if (fromNode) {
-            _.modifyEdgeExterior(addedEdge);
-            _.modifyEdgePhysics();
-        }
 
         _.deselectAll();
         // 选中新添加的节点
@@ -1174,10 +1153,14 @@ export class Graph {
      * 在空白处点击的菜单
      */
     initMenu_Svg(e) {
+        let _ = this;
         let menu = [
             {
                 name: "添加节点",
-                func: null
+                func: function () {
+                    console.log()
+                    _.addNode(e);
+                }
             },
             {
                 name: "选择所有关系",
@@ -1191,6 +1174,7 @@ export class Graph {
         this.initMenu(e, menu)
     }
     initMenu(e, menuObj) {
+        let _ = this;
         let domMenu = document.querySelector(".rightMenu");
         domMenu.innerHTML = "";
         domMenu.style.left = `${e.offsetX}px`;
@@ -1200,6 +1184,10 @@ export class Graph {
             let domMenuBlock = document.createElement("div");
             domMenuBlock.classList = "menuBlock";
             domMenuBlock.innerHTML = obj.name;
+            domMenuBlock.addEventListener("click", function () {
+                obj.func();
+                _.hideMenu();
+            });
             domMenu.appendChild(domMenuBlock);
         });
         this.isShowRightMenu = true;
