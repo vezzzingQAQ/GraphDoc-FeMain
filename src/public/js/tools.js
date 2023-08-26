@@ -15,3 +15,11 @@ export function setCookie(name, data, expireTime) {
     date.setTime(date.getTime() + expireTime);
     document.cookie = `${name}=${data}; expires=${date}`;
 }
+
+// 删除cookie
+export function delCookie(name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval = getCookie(name);
+    if (cval != null) document.cookie = name + "=" + cval + "; expires=" + exp.toGMTString();
+}

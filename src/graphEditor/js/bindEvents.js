@@ -10,7 +10,8 @@ import {
     showLogin,
     showRegister,
     userRegister,
-    userLogin
+    userLogin,
+    userLogout
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -69,6 +70,11 @@ export function bindEvents(graph) {
     // 登录按钮
     document.querySelector("#login").addEventListener("click", () => {
         userLogin();
+    })
+
+    // 退出登录
+    document.querySelector("#btnLogout").addEventListener("click", () => {
+        userLogout();
     })
 
     // 上来先获取下用户信息

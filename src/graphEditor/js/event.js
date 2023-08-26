@@ -8,7 +8,7 @@ import axios from "axios";
 import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
-import { getCookie, setCookie } from "../../public/js/tools";
+import { delCookie, getCookie, setCookie } from "../../public/js/tools";
 import { getUserData } from "./serverCom";
 
 
@@ -176,4 +176,12 @@ export function userLogin() {
         // 获取用户信息进行显示
         getUserData();
     })
+}
+
+/**
+ * 用户退出
+ */
+export function userLogout() {
+    delCookie("jwt");
+    getUserData();
 }
