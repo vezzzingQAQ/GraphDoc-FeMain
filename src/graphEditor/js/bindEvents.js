@@ -16,6 +16,7 @@ import {
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
 import { getUserData } from "./serverCom.js";
+import { getCookie } from "../../public/js/tools.js";
 
 /**
  * 
@@ -61,6 +62,10 @@ export function bindEvents(graph) {
     document.querySelector("#toLogin").addEventListener("click", () => {
         showLogin();
     });
+    document.querySelector(".userBlock").addEventListener("click", () => {
+        if (!getCookie("jwt"))
+            showLogin();
+    });
 
     // 注册按钮
     document.querySelector("#register").addEventListener("click", () => {
@@ -70,7 +75,7 @@ export function bindEvents(graph) {
     // 登录按钮
     document.querySelector("#login").addEventListener("click", () => {
         userLogin();
-    })
+    });
 
     // 退出登录
     document.querySelector("#btnLogout").addEventListener("click", () => {

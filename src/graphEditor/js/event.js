@@ -136,7 +136,7 @@ export function userRegister() {
     let password1 = document.querySelector("#register_password1").value;
     let password2 = document.querySelector("#register_password2").value;
     if (password1 != password2) {
-        alert("两次密码不相等");
+        document.querySelector("#password_conflict").classList = "hint show";
         return;
     }
     let formData = new FormData();
@@ -154,6 +154,8 @@ export function userRegister() {
             // 跳转登录
             hideCenterWindow(document.querySelector("#windowRegister"));
             showLogin();
+        }else if(d.data.state==0){
+            document.querySelector("#user_name_exist").classList = "hint show";
         }
     })
 }
