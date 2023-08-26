@@ -12,11 +12,12 @@ import {
     userRegister,
     userLogin,
     userLogout,
-    showSaveToCloud
+    showSaveToCloud,
+    saveToCloud
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
-import { getUserData } from "./serverCom.js";
+import { getUserData, saveGraphToCloud } from "./serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 
 /**
@@ -28,7 +29,6 @@ export function bindEvents(graph) {
         reverseColorMode();
     });
     document.querySelector("#btnToCloudSavsAs").addEventListener("click", () => {
-        // uploadToServer(graph);
         showSaveToCloud();
     });
     document.querySelector("#btnSave").addEventListener("click", () => {
@@ -82,13 +82,13 @@ export function bindEvents(graph) {
     // 退出登录
     document.querySelector("#btnLogout").addEventListener("click", () => {
         userLogout();
-    })
+    });
+
+    // 保存到云
+    document.querySelector("#saveToCloud").addEventListener("click", () => {
+        saveToCloud(graph);
+    });
 
     // 上来先获取下用户信息
     getUserData();
 }
-
-/**
- * 设置右键菜单
- */
-export function initRightMenu() { }

@@ -11,6 +11,7 @@ export const DOMAIN_MAIN = "http://127.0.0.1:4998"
 
 export const USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
 export const USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
-export const USER_DATA=`${DOMAIN_MAIN}/user/data`;
-export const USER_AVATAR_ROOT=`${DOMAIN_MAIN}/media/avatars/`;
-export const USER_LIST_GRAPH_PATH=`${DOMAIN_MAIN}/graph/listGraph`;
+export const USER_DATA = `${DOMAIN_MAIN}/user/data`;
+export const USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
+export const USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
+export const USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;

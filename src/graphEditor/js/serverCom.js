@@ -1,6 +1,11 @@
 import axios from "axios";
 import { getCookie } from "../../public/js/tools";
-import { USER_AVATAR_ROOT, USER_DATA, USER_LIST_GRAPH_PATH } from "./graph/urls";
+import {
+    USER_AVATAR_ROOT,
+    USER_DATA,
+    USER_LIST_GRAPH_PATH,
+    USER_SAVE_GRAPH_TO_CLOUD
+} from "./graph/urls";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 
 /**
@@ -43,4 +48,23 @@ export async function listUserGraph() {
     });
     let graphList = response.data.msg;
     return graphList;
+}
+
+/**
+ * 储存图谱到云
+ */
+export async function saveGraphToCloud(jsonData, filename) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('json', jsonData);
+    formData.append('name', filename);
+    let response = await axios({
+        url: USER_SAVE_GRAPH_TO_CLOUD,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
 }

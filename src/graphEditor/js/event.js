@@ -9,7 +9,7 @@ import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
 import { delCookie, getCookie, setCookie } from "../../public/js/tools";
-import { getUserData, listUserGraph } from "./serverCom";
+import { getUserData, listUserGraph, saveGraphToCloud } from "./serverCom";
 
 
 // 界面色彩配置
@@ -25,13 +25,6 @@ export function reverseColorMode() {
     } else {
         document.querySelector(".mainWindow").classList = "mainWindow lightMode";
     }
-}
-
-/**
- * 导出为JSON，上传服务器
- */
-export function uploadToServer(graph) {
-    console.log(graph.toJson());
 }
 
 /**
@@ -170,8 +163,15 @@ export function userLogout() {
 /**
  * 另存到云
  */
-export function savsAsCloud() {
-
+export async function saveToCloud(graph) {
+    let name = document.querySelector("#stc_path").value;
+    if (name) {
+        // 保存到云
+        let data = graph.toJson();
+        let response = await saveGraphToCloud(data, name);
+        if (response.state == 11 || response.state == 10)
+            hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+    }
 }
 
 
@@ -188,6 +188,7 @@ export function showRegister() {
     showCenterWindow(document.querySelector("#windowRegister"));
 }
 export async function showSaveToCloud() {
+    document.querySelector("#saveToCloud").innerHTML = "保存";
     document.querySelector("#windowSaveToCloud ul").innerHTML = "";
     let graphList = await listUserGraph();
     for (let i = 0; i < graphList.length; i++) {
@@ -199,9 +200,19 @@ export async function showSaveToCloud() {
         `;
         domGraphTag.addEventListener("click", () => {
             document.querySelector("#stc_path").value = currentGraph.name;
+            document.querySelector("#saveToCloud").innerHTML = "覆盖";
         });
         document.querySelector("#windowSaveToCloud ul").appendChild(domGraphTag);
     }
+    document.querySelector("#stc_path").addEventListener("input", () => {
+        for (let graph of graphList) {
+            if (graph.name == document.querySelector("#stc_path").value) {
+                document.querySelector("#saveToCloud").innerHTML = "覆盖";
+            } else {
+                document.querySelector("#saveToCloud").innerHTML = "保存";
+            }
+        }
+    });
     showCenterWindow(document.querySelector("#windowSaveToCloud"));
 }
 
