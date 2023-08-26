@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getCookie } from "../../public/js/tools";
-import { USER_DATA } from "./graph/urls";
+import { USER_AVATAR_ROOT, USER_DATA } from "./graph/urls";
 
 export function getUserData() {
     let formData = new FormData();
@@ -13,6 +13,9 @@ export function getUserData() {
         },
         data: formData
     }).then(d => {
-        document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
+        if (d.data.state == 1) {
+            document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
+            document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
+        }
     });
 }

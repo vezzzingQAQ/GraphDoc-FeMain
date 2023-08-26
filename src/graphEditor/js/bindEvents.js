@@ -14,6 +14,7 @@ import {
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
+import { getUserData } from "./serverCom.js";
 
 /**
  * 
@@ -69,6 +70,9 @@ export function bindEvents(graph) {
     document.querySelector("#login").addEventListener("click", () => {
         userLogin();
     })
+
+    // 上来先获取下用户信息
+    getUserData();
 }
 
 /**
