@@ -80,9 +80,10 @@ function showCenterWindow(selector) {
     selector.querySelector(".centerWindowCloseBtn").onclick = function () {
         hideCenterWindow(selector);
     }
-    selector.querySelector(".close").addEventListener("click", function () {
-        hideCenterWindow(selector);
-    });
+    if (selector.querySelector(".close"))
+        selector.querySelector(".close").addEventListener("click", function () {
+            hideCenterWindow(selector);
+        });
 }
 
 function hideCenterWindow(selector) {
