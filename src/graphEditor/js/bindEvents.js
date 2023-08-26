@@ -49,6 +49,14 @@ export function bindEvents(graph) {
         setGraphBackgroundColor(graph);
     });
     document.querySelector("#mainAboutImg").src = mainAboutPng;
+
+    // 登录注册窗体互相跳转
+    document.querySelector("#toRegister").addEventListener("click", () => {
+        showRegister();
+    });
+    document.querySelector("#toLogin").addEventListener("click", () => {
+        showLogin();
+    });
 }
 
 /**

@@ -58,21 +58,24 @@ export function exportPng(graph) {
 export function showAuthorList() {
     showCenterWindow(document.querySelector("#windowAuthorList"));
 }
-export function showLogin(){
+export function showLogin() {
     showCenterWindow(document.querySelector("#windowLogin"));
 }
-export function showRegister(){
+export function showRegister() {
     showCenterWindow(document.querySelector("#windowRegister"))
 }
 
 function showCenterWindow(selector) {
     selector.style.opacity = 1;
     selector.style.pointerEvents = "all";
-    selector.style.transition = "0.1s ease-in-out";
+    selector.style.transition = "0.3s ease-in-out";
     // 绑定关闭事件
     selector.querySelector(".centerWindowCloseBtn").onclick = function () {
         hideCenterWindow(selector);
     }
+    selector.querySelector(".close").addEventListener("click", function () {
+        hideCenterWindow(selector);
+    });
 }
 
 function hideCenterWindow(selector) {
