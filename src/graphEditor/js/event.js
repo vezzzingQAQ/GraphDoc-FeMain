@@ -154,7 +154,7 @@ export function userRegister() {
             // 跳转登录
             hideCenterWindow(document.querySelector("#windowRegister"));
             showLogin();
-        }else if(d.data.state==0){
+        } else if (d.data.state == 0) {
             document.querySelector("#user_name_exist").classList = "hint show";
         }
     })
@@ -181,6 +181,7 @@ export function userLogin() {
             setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
             // 获取用户信息进行显示
             getUserData();
+            hideCenterWindow(document.querySelector("#windowLogin"));
         } else if (d.data.state == 2) {
             document.querySelector("#login_password").value = "";
             document.querySelector("#hint_password_incorrect").classList = "hint show";
