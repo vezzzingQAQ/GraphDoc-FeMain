@@ -9,6 +9,7 @@ import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
 import { getCookie, setCookie } from "../../public/js/tools";
+import { getUserData } from "./serverCom";
 
 
 // 界面色彩配置
@@ -171,22 +172,8 @@ export function userLogin() {
         },
         data: formData
     }).then(d => {
-        console.log(d.data)
-        setCookie('jwt', d.data.jwt, 1000 * 60 * 60)
-    })
-}
-
-/**
- * 获取用户名和头像
- */
-export function getUserData() {
-    let formData = new FormData();
-    console.log(getCookie("sessionid"))
-    formData.append("sessionid", getCookie("sessionid"));
-    axios({
-        url: USER_DATA,
-        method: "POST"
-    }).then(d => {
-        console.log(d)
+        setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
+        // 获取用户信息进行显示
+        getUserData();
     })
 }

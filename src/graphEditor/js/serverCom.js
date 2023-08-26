@@ -13,6 +13,6 @@ export function getUserData() {
         },
         data: formData
     }).then(d => {
-        document.querySelector("#showUsername").innerHTML = d.data.username;
+        document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
     });
 }

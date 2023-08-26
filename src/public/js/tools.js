@@ -1,14 +1,10 @@
 // 获取指定名称的cookie
-export function getCookie(name) {
-    let strcookie = document.cookie;//获取cookie字符串
-    let arrcookie = strcookie.split("; ");//分割
-    console.log(arrcookie)
-    //遍历匹配
-    for (let i = 0; i < arrcookie.length; i++) {
-        let arr = arrcookie[i].split("=");
-        if (arr[0] == name) {
-            return arr[1];
-        }
+export function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
     }
     return "";
 }
