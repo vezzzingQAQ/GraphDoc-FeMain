@@ -6,7 +6,9 @@ import {
     exportPng,
     showAuthorList,
     openGraph,
-    setGraphBackgroundColor
+    setGraphBackgroundColor,
+    showLogin,
+    showRegister
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -31,6 +33,12 @@ export function bindEvents(graph) {
     document.querySelector("#btnExport2").addEventListener("click", () => {
         exportPng(graph);
     });
+    document.querySelector("#btnLogin").addEventListener("click", () => {
+        showLogin();
+    })
+    document.querySelector("#btnRegister").addEventListener("click", () => {
+        showRegister();
+    })
     document.querySelector("#btnAuthorList").addEventListener("click", () => {
         showAuthorList();
     });
@@ -41,10 +49,6 @@ export function bindEvents(graph) {
         setGraphBackgroundColor(graph);
     });
     document.querySelector("#mainAboutImg").src = mainAboutPng;
-    // document.querySelector("#windowAuthorList span").addEventListener("click", () => {
-    //     document.querySelector("#windowAuthorList").style.opacity = 0;
-    //     document.querySelector("#windowAuthorList").style.pointerEvents = "none";
-    // });
 }
 
 /**

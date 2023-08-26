@@ -85,12 +85,63 @@
     }
 }
 
+.lore {
+    .content {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+
+        input {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .btnArea {
+            display: flex;
+            flex-direction: row;
+            margin: 5px;
+
+            button {
+                display: block;
+                width: 50%;
+                padding: 5px;
+                letter-spacing: 2px;
+                border: none;
+                outline: none;
+                border-radius: @small_border_radius;
+                cursor: pointer;
+
+                &:first-child {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
+
 .darkMode {
     .centerWindow {
         background-color: @bg_color_d_pan;
         color: @fg_color_d_1;
 
         .title {
+            background-color: @bg_color_d_title;
+        }
+    }
+
+    .centerWindow {
+        input {
+            outline: none;
+            border: none;
+            background-color: @bg_color_d_input;
+            color: @fg_color_d_1;
+        }
+
+        button {
+            background-color: @bg_color_l_pan;
+        }
+
+        .btnSub {
             background-color: @bg_color_d_title;
         }
     }

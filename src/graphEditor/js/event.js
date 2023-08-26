@@ -53,10 +53,16 @@ export function exportPng(graph) {
 }
 
 /**
- * 展示作者列表
+ * 展示中央窗体
  */
 export function showAuthorList() {
     showCenterWindow(document.querySelector("#windowAuthorList"));
+}
+export function showLogin(){
+    showCenterWindow(document.querySelector("#windowLogin"));
+}
+export function showRegister(){
+    showCenterWindow(document.querySelector("#windowRegister"))
 }
 
 function showCenterWindow(selector) {

@@ -62,6 +62,13 @@
                         </li>
                     </ul>
                 </div>
+                <div class="col menuBlock" id="userBlock">
+                    <p><i class="fa fa-user"></i> 用户</p>
+                    <ul>
+                        <li id="btnLogin">登录</li>
+                        <li id="btnRegister">注册</li>
+                    </ul>
+                </div>
                 <div class="col menuBlock">
                     <p><i class="fa fa-paper-plane"></i> 关于</p>
                     <ul>
@@ -92,6 +99,34 @@
                         <a target="_blank" href="http://vezzzing.cn/vezzzingsLibrary/dist/main.html">大图书馆</a>
                         <a target="_blank" href="http://vezzzing.cn/vezzzingsBuilding/dist/main.html">BUILDINGS</a>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="centerWindow lore" id="windowLogin">
+            <div class="title">
+                <p><i class="fa fa-paper-plane"></i>登录</p><span class="centerWindowCloseBtn">×</span>
+            </div>
+            <div class="content">
+                <input type="text" maxlength="10" placeholder="用户名">
+                <input type="password" placeholder="密码">
+                <div class="btnArea">
+                    <button class="btn" id="login">登录</button>
+                    <button class="btn btnSub" id="toRegister">注册</button>
+                </div>
+            </div>
+        </div>
+        <div class="centerWindow lore" id="windowRegister">
+            <div class="title">
+                <p><i class="fa fa-paper-plane"></i>注册</p><span class="centerWindowCloseBtn">×</span>
+            </div>
+            <div class="content">
+                <input type="text" maxlength="10" placeholder="用户名">
+                <input type="password" placeholder="密码">
+                <input type="password" placeholder="确认密码">
+                <input type="email" placeholder="邮箱">
+                <div class="btnArea">
+                    <button class="btn" id="register">注册</button>
+                    <button class="btn btnSub" id="toLogin">登录</button>
                 </div>
             </div>
         </div>
