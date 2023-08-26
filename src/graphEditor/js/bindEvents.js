@@ -8,7 +8,8 @@ import {
     openGraph,
     setGraphBackgroundColor,
     showLogin,
-    showRegister
+    showRegister,
+    userRegister
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -57,6 +58,11 @@ export function bindEvents(graph) {
     document.querySelector("#toLogin").addEventListener("click", () => {
         showLogin();
     });
+
+    // 注册按钮
+    document.querySelector("#register").addEventListener("click", () => {
+        userRegister();
+    })
 }
 
 /**
