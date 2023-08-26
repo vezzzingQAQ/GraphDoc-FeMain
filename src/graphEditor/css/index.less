@@ -1,0 +1,421 @@
+@import url(./vairbles.less);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    .mainWindow {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+
+        .displayArea {
+            width: 80vw;
+            height: 100vh;
+            display: block;
+            transition: 0.3s ease-in-out;
+        }
+
+        .panArea {
+            width: @pan_area_width;
+            height: calc(100vh - @menu_height);
+            margin-top: @menu_height;
+            overflow-y: scroll;
+            transition: 0.3s ease-in-out;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .topPan {
+                .window {
+                    overflow: hidden;
+                    border-bottom-left-radius: @small_border_radius;
+                    border-bottom-right-radius: @small_border_radius;
+
+                    .title {
+                        height: @add_pan_title_height;
+                        line-height: @add_pan_title_height;
+                        font-size: 14px;
+                        padding-left: 10px;
+                        letter-spacing: 2px;
+                        transition: 0.3s ease-in-out;
+                    }
+
+                    .content {
+                        transition: 0.3s ease-in-out;
+
+                        .container {
+                            display: flex;
+                            flex-wrap: wrap;
+                            padding: 5px;
+                            transition: 0.3s ease-in-out;
+                        }
+                    }
+
+                    .componentAddContainer .componentAddBtn {
+                        display: block;
+                        width: max-content;
+                        height: @component_add_btn_height;
+                        line-height: calc(@component_add_btn_height - 8px);
+                        padding: 4px;
+                        padding-left: 6px;
+                        padding-right: 6px;
+                        font-size: 13px;
+                        text-align: center;
+                        margin: 5px;
+                        border-radius: @normal_border_radius;
+                        cursor: pointer;
+                        transition: 0.1s ease-in-out;
+                    }
+                }
+            }
+        }
+
+        .mainMenu {
+            z-index: 999;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: @menu_height;
+            line-height: @menu_height;
+            padding-left: 10px;
+            padding-right: 10px;
+            // box-shadow: 0 4px 12px 0 rgba(131, 131, 131, 0.126),
+            //     0 6px 30px 0 rgba(118, 118, 118, 0.19);
+            display: flex;
+            flex-direction: row;
+
+            ul {
+                display: flex;
+                flex-direction: row;
+                font-size: 15px;
+                list-style: none;
+                cursor: pointer;
+
+                .title {
+                    width: 140px;
+                    font-weight: bolder;
+                    letter-spacing: 2px;
+                }
+
+                .menuBlock {
+                    display: block;
+                    width: 120px;
+                    height: max-content;
+                    border-bottom-left-radius: @small_border_radius;
+                    border-bottom-right-radius: @small_border_radius;
+                    overflow: hidden;
+                    transition: 0.1s ease-in-out;
+
+                    p {
+                        padding-left: 10px;
+                        letter-spacing: 2px;
+                        font-weight: 100;
+                    }
+
+                    ul {
+                        overflow: hidden;
+                        display: flex;
+                        flex-direction: column;
+                        height: 0;
+
+                        li {
+                            font-size: 13px;
+                            padding-left: 10px;
+                            letter-spacing: 2px;
+                            font-weight: 100;
+                            transition: 0.1s ease-in-out;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+
+                            .subDisp {
+                                margin-left: 5px;
+                                width: 15px;
+                                height: 15px;
+                            }
+
+                            input[type=color] {
+                                cursor: pointer;
+                                padding: 0;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        ul {
+                            height: max-content;
+                        }
+                    }
+                }
+            }
+
+            .userBlock {
+                position: absolute;
+                right: 5px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: @menu_height;
+                line-height: @menu_height;
+                cursor: pointer;
+
+                .userAvatar {
+                    display: block;
+                    width: calc(@menu_height * 0.7);
+                    height: calc(@menu_height * 0.7);
+                    border-radius: 50%;
+                    overflow: hidden;
+                    margin-right: 5px;
+                    transition: 0.15s ease-in-out;
+                }
+
+                .userName {
+                    letter-spacing: 2px;
+                    font-weight: 100;
+                    transition: 0.15s ease-in-out;
+                }
+            }
+        }
+
+        .bottomArea {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: @bottom_height;
+            width: calc(100vw - @pan_area_width);
+            display: flex;
+            flex-direction: row;
+            user-select: none;
+
+            .sub {
+                line-height: @bottom_height;
+                font-size: 11px;
+                padding-right: 5px;
+                letter-spacing: 2px;
+                font-weight: 500;
+                font-family: 'Times New Roman', Times, serif;
+
+                a {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .rightMenu {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: @small_border_radius;
+
+            .menuBlock {
+                display: block;
+                height: @menu_block_height;
+                line-height: @menu_block_height;
+                font-size: 13px;
+                letter-spacing: 2px;
+                cursor: pointer;
+                padding-left: 5px;
+                padding-right: 5px;
+                transition: 0.1s ease-in-out;
+            }
+
+            .menuDivider {
+                display: block;
+                height: 2px;
+                width: 100%;
+            }
+        }
+
+        .rightMenu_show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .rightMenu_hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+}
+
+.darkMode {
+    .displayArea {
+        background-color: rgb(6, 6, 6);
+    }
+
+    .panArea {
+        background-color: rgb(35, 35, 35);
+
+        .topPan {
+            .window {
+                .title {
+                    background-color: @bg_color_d_title;
+                    color: @fg_color_d_1;
+                }
+
+                .content {
+                    .container {
+                        color: @fg_color_d_1;
+                        background-color: @bg_color_d_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_d_input;
+
+                    &:hover {
+                        background-color: @bg_color_d_title;
+                    }
+                }
+            }
+        }
+    }
+
+    .mainMenu {
+        background-color: rgb(61, 61, 61);
+        color: @fg_color_d_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: @bg_color_d_title;
+            }
+
+            ul {
+                background-color: @bg_color_d_title;
+
+                li {
+                    &:hover {
+                        background-color: rgb(61, 61, 61) !important;
+                        border-left: 4px solid @fg_color_d_1;
+                    }
+                }
+            }
+        }
+
+        .userBlock {
+            .userAvatar {
+                border: 1px solid rgba(255, 255, 255, 0.5);
+            }
+        }
+    }
+
+    .bottomArea {
+        color: rgb(125, 125, 125);
+
+        a {
+            color: rgb(192, 154, 0);
+        }
+    }
+
+    .rightMenu {
+        background-color: rgb(61, 61, 61);
+        color: @fg_color_d_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(40, 40, 40);
+            }
+        }
+
+        .menuDivider {
+            background-color: rgb(107, 107, 107);
+        }
+    }
+}
+
+.lightMode {
+    .displayArea {
+        background-color: @bg_color_d_pan;
+    }
+
+    .panArea {
+        background-color: rgb(246, 246, 246);
+
+        .topPan {
+            .window {
+                .title {
+                    background-color: @bg_color_l_title;
+                    color: @fg_color_l_1;
+                }
+
+                .content {
+                    .container {
+                        color: @fg_color_l_1;
+                        background-color: @bg_color_l_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_l_input;
+
+                    &:hover {
+                        background-color: @bg_color_l_title;
+                    }
+                }
+            }
+        }
+    }
+
+    .mainMenu {
+        background-color: rgb(246, 246, 246);
+        color: @fg_color_l_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(246, 246, 246);
+            }
+
+            ul {
+                background-color: rgb(234, 234, 234);
+
+                li {
+                    &:hover {
+                        background-color: rgb(206, 206, 206) !important;
+                        border-left: 4px solid @fg_color_l_1;
+                    }
+                }
+            }
+        }
+
+        .userBlock {
+            .userAvatar {
+                border: 1px solid rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+
+    .bottomArea {
+        color: rgb(125, 125, 125);
+
+        a {
+            color: rgb(192, 154, 0);
+        }
+    }
+
+    .rightMenu {
+        background-color: rgb(246, 246, 246);
+        color: @fg_color_l_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(230, 230, 230);
+            }
+        }
+
+        .menuDivider {
+            background-color: rgb(200, 200, 200);
+        }
+    }
+}
