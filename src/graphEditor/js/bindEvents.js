@@ -11,7 +11,8 @@ import {
     showRegister,
     userRegister,
     userLogin,
-    userLogout
+    userLogout,
+    showSaveToCloud
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -26,8 +27,9 @@ export function bindEvents(graph) {
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
     });
-    document.querySelector("#btnToJson").addEventListener("click", () => {
-        uploadToServer(graph);
+    document.querySelector("#btnToCloudSavsAs").addEventListener("click", () => {
+        // uploadToServer(graph);
+        showSaveToCloud();
     });
     document.querySelector("#btnSave").addEventListener("click", () => {
         saveGraph(graph);

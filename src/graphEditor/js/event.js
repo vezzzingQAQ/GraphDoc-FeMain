@@ -9,7 +9,7 @@ import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
 import { delCookie, getCookie, setCookie } from "../../public/js/tools";
-import { getUserData } from "./serverCom";
+import { getUserData, listUserGraph } from "./serverCom";
 
 
 // 界面色彩配置
@@ -54,41 +54,6 @@ export function exportSvg(graph) {
  */
 export function exportPng(graph) {
     graph.exportPng();
-}
-
-/**
- * 展示中央窗体
- */
-export function showAuthorList() {
-    showCenterWindow(document.querySelector("#windowAuthorList"));
-}
-export function showLogin() {
-    showCenterWindow(document.querySelector("#windowLogin"));
-}
-export function showRegister() {
-    showCenterWindow(document.querySelector("#windowRegister"))
-}
-
-function showCenterWindow(selector) {
-    document.querySelectorAll(".hint").forEach(dom => {
-        dom.classList = "hint hide";
-    })
-    selector.style.opacity = 1;
-    selector.style.pointerEvents = "all";
-    selector.style.transition = "0.3s ease-in-out";
-    // 绑定关闭事件
-    selector.querySelector(".centerWindowCloseBtn").onclick = function () {
-        hideCenterWindow(selector);
-    }
-    if (selector.querySelector(".close"))
-        selector.querySelector(".close").addEventListener("click", function () {
-            hideCenterWindow(selector);
-        });
-}
-
-function hideCenterWindow(selector) {
-    selector.style.opacity = 0;
-    selector.style.pointerEvents = "none";
 }
 
 /**
@@ -200,4 +165,64 @@ export function userLogin() {
 export function userLogout() {
     delCookie("jwt");
     getUserData();
+}
+
+/**
+ * 另存到云
+ */
+export function savsAsCloud() {
+
+}
+
+
+/**
+ * 展示中央窗体
+ */
+export function showAuthorList() {
+    showCenterWindow(document.querySelector("#windowAuthorList"));
+}
+export function showLogin() {
+    showCenterWindow(document.querySelector("#windowLogin"));
+}
+export function showRegister() {
+    showCenterWindow(document.querySelector("#windowRegister"));
+}
+export async function showSaveToCloud() {
+    document.querySelector("#windowSaveToCloud ul").innerHTML = "";
+    let graphList = await listUserGraph();
+    for (let i = 0; i < graphList.length; i++) {
+        let currentGraph = graphList[i];
+        let domGraphTag = document.createElement("li");
+        domGraphTag.innerHTML = `
+        <span class="graphName">${currentGraph.name}</span>
+        <span class="graphDate">${currentGraph.date.split("T")[0]}</span>
+        `;
+        domGraphTag.addEventListener("click", () => {
+            document.querySelector("#stc_path").value = currentGraph.name;
+        });
+        document.querySelector("#windowSaveToCloud ul").appendChild(domGraphTag);
+    }
+    showCenterWindow(document.querySelector("#windowSaveToCloud"));
+}
+
+function showCenterWindow(selector) {
+    document.querySelectorAll(".hint").forEach(dom => {
+        dom.classList = "hint hide";
+    })
+    selector.style.opacity = 1;
+    selector.style.pointerEvents = "all";
+    selector.style.transition = "0.3s ease-in-out";
+    // 绑定关闭事件
+    selector.querySelector(".centerWindowCloseBtn").onclick = function () {
+        hideCenterWindow(selector);
+    }
+    if (selector.querySelector(".close"))
+        selector.querySelector(".close").addEventListener("click", function () {
+            hideCenterWindow(selector);
+        });
+}
+
+function hideCenterWindow(selector) {
+    selector.style.opacity = 0;
+    selector.style.pointerEvents = "none";
 }

@@ -1,8 +1,11 @@
 import axios from "axios";
 import { getCookie } from "../../public/js/tools";
-import { USER_AVATAR_ROOT, USER_DATA } from "./graph/urls";
+import { USER_AVATAR_ROOT, USER_DATA, USER_LIST_GRAPH_PATH } from "./graph/urls";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 
+/**
+ * 获取用户的信息
+ */
 export function getUserData() {
     let formData = new FormData();
     formData.append('jwt', getCookie('jwt'));
@@ -22,4 +25,22 @@ export function getUserData() {
             document.querySelector("#showUserAvatar").src = defaultAvatarPng;
         }
     });
+}
+
+/**
+ * 列举用户的图谱
+ */
+export async function listUserGraph() {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    let response = await axios({
+        url: USER_LIST_GRAPH_PATH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    let graphList = response.data.msg;
+    return graphList;
 }

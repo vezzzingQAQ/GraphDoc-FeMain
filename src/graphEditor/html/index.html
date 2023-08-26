@@ -42,7 +42,8 @@
                     <p><i class="fa fa-file"></i> 文件</p>
                     <ul>
                         <li id="openFile">从本地打开</li>
-                        <li id="btnSave">保存到本地</li>
+                        <li id="btnSave">下载到本地</li>
+                        <li id="btnToCloudSavsAs">另存到云</li>
                         <li id="btnToJson">保存到云</li>
                     </ul>
                 </div>
@@ -145,6 +146,23 @@
                         <button class="btn" id="register">注册</button>
                         <button class="btn btnSub close" id="toLogin">登录</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!--另存到云-->
+        <div class="centerWindow lore" id="windowSaveToCloud">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-cloud"></i>保存到云</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <p class="info">云文件:</p>
+                    <ul>
+
+                    </ul>
+                    <input type="text" maxlength="100" id="stc_path" placeholder="文件名">
+                    <button class="btn" id="saveToCloud">保存</button>
                 </div>
             </div>
         </div>
