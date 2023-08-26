@@ -9,7 +9,8 @@ import {
     setGraphBackgroundColor,
     showLogin,
     showRegister,
-    userRegister
+    userRegister,
+    userLogin
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -62,6 +63,11 @@ export function bindEvents(graph) {
     // 注册按钮
     document.querySelector("#register").addEventListener("click", () => {
         userRegister();
+    });
+
+    // 登录按钮
+    document.querySelector("#login").addEventListener("click", () => {
+        userLogin();
     })
 }
 

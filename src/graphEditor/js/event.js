@@ -7,7 +7,7 @@
 import axios from "axios";
 import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
-import { USER_REGISTER } from "./graph/urls";
+import { USER_LOGIN, USER_REGISTER } from "./graph/urls";
 
 
 // 界面色彩配置
@@ -144,9 +144,32 @@ export function userRegister() {
             "Content-Type": "multipart/form-data"
         },
         data: formData
-    }).then(d=>{
-        if(d.data.state==1){
-            //直接登录
+    }).then(d => {
+        if (d.data.state == 1) {
+            // 跳转登录
+            hideCenterWindow(document.querySelector("windowRegister"));
+            showLogin();
         }
+    })
+}
+
+/**
+ * 用户登录
+ */
+export function userLogin() {
+    let username = document.querySelector("#login_username").value;
+    let password = document.querySelector("#login_password").value;
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    axios({
+        url: USER_LOGIN,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    }).then(d => {
+        console.log(d.data);
     })
 }

@@ -7,6 +7,7 @@ export const FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
 export const VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
 export const VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
 
-export const DOMAIN_MAIN="http://127.0.0.1:4998"
+export const DOMAIN_MAIN = "http://127.0.0.1:4998"
 
-export const USER_REGISTER=`${DOMAIN_MAIN}/user/register`;
+export const USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
+export const USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
