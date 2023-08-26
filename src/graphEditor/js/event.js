@@ -4,8 +4,10 @@
  * z z z studio
  */
 
+import axios from "axios";
 import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
+import { USER_REGISTER } from "./graph/urls";
 
 
 // 界面色彩配置
@@ -119,4 +121,32 @@ export function openGraph(graph) {
  */
 export function setGraphBackgroundColor(graph) {
     graph.setBgColor(document.querySelector("#bgColorInput").value);
+}
+
+/**
+ * 用户注册
+ */
+export function userRegister() {
+    let username = document.querySelector("#register_username").value;
+    let password1 = document.querySelector("#register_password1").value;
+    let password2 = document.querySelector("#register_password2").value;
+    if (password1 != password2) {
+        alert("两次密码不相等");
+        return;
+    }
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password1);
+    axios({
+        url: USER_REGISTER,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    }).then(d=>{
+        if(d.data.state==1){
+            //直接登录
+        }
+    })
 }
