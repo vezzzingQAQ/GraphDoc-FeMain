@@ -70,6 +70,9 @@ export function showRegister() {
 }
 
 function showCenterWindow(selector) {
+    document.querySelectorAll(".hint").forEach(dom => {
+        dom.classList = "hint hide";
+    })
     selector.style.opacity = 1;
     selector.style.pointerEvents = "all";
     selector.style.transition = "0.3s ease-in-out";
@@ -172,9 +175,18 @@ export function userLogin() {
         },
         data: formData
     }).then(d => {
-        setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
-        // 获取用户信息进行显示
-        getUserData();
+        if (d.data.state == 1) {
+            setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
+            // 获取用户信息进行显示
+            getUserData();
+        } else if (d.data.state == 2) {
+            document.querySelector("#login_password").value = "";
+            document.querySelector("#hint_password_incorrect").classList = "hint show";
+        } else if (d.data.state == 3) {
+            document.querySelector("#login_username").value = "";
+            document.querySelector("#login_password").value = "";
+            document.querySelector("#hint_user_not_exist").classList = "hint show";
+        }
     })
 }
 
