@@ -14,18 +14,19 @@ import {
     userLogout,
     showSaveToCloud,
     saveToCloud,
-    showLoadFromCloud
+    showLoadFromCloud,
+    refreshUserData
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
-import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "./serverCom.js";
+import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 
 /**
  * 
  * @param {Graph} graph initGraph()返回的图谱对象
  */
-export function bindEvents(graph) {
+export async function bindEvents(graph) {
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
     });
@@ -94,5 +95,6 @@ export function bindEvents(graph) {
     });
 
     // 上来先获取下用户信息
-    getUserData();
+    let userData = await getUserData();
+    refreshUserData(userData);
 }

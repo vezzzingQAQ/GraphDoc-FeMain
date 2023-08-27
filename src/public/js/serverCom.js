@@ -1,42 +1,47 @@
 import axios from "axios";
-import { getCookie } from "../../public/js/tools";
+import { getCookie } from "./tools";
 import {
-    USER_AVATAR_ROOT,
     USER_DATA,
     USER_DELETE_GRAPH,
     USER_LIST_GRAPH_PATH,
     USER_LOAD_FROM_CLOUD,
+    USER_ODATA,
     USER_SAVE_GRAPH_TO_CLOUD
-} from "./graph/urls";
-import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
-import { userConfig, refreshMenu } from "./event";
+} from "./urls";
+import { userConfig, refreshMenu } from "../../graphEditor/js/event";
 
 /**
- * 获取用户的信息
+ * 获取登录用户的信息
  */
-export function getUserData() {
+export async function getUserData() {
     let formData = new FormData();
     formData.append('jwt', getCookie('jwt'));
-    axios({
+    let response = await axios({
         url: USER_DATA,
         method: "POST",
         headers: {
             "Content-Type": "multipart/form-data"
         },
         data: formData
-    }).then(d => {
-        if (d.data.state == 1) {
-            document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
-            document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
-            userConfig.isLogin = true;
-            refreshMenu();
-        } else {
-            document.querySelector("#showUsername").innerHTML = "未登录";
-            document.querySelector("#showUserAvatar").src = defaultAvatarPng;
-            userConfig.isLogin = false;
-            refreshMenu();
-        }
     });
+    return response;
+}
+
+/**
+ * 获取其他用户信息
+ */
+export async function getOUtherData(username) {
+    let formData = new FormData();
+    formData.append('username', username);
+    let response = await axios({
+        url: USER_ODATA,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response;
 }
 
 /**

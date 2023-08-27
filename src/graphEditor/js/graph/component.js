@@ -57,7 +57,7 @@ import {
     FILE_STORE_PATH,
     VIDEO_UPLOAD_PATH,
     VIDEO_STORE_PATH
-} from "./urls"
+} from "../../../public/js/urls"
 
 
 class Component {

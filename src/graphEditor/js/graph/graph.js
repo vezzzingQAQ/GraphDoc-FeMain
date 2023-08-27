@@ -37,7 +37,7 @@ import {
     FILE_STORE_PATH,
     VIDEO_UPLOAD_PATH,
     VIDEO_STORE_PATH
-} from "./urls"
+} from "../../../public/js/urls"
 
 export class Graph {
     /**
@@ -1240,10 +1240,10 @@ export class Graph {
                 let domMenuBlock = document.createElement("div");
                 domMenuBlock.classList = "menuBlock";
                 domMenuBlock.innerHTML = obj.name;
-                domMenuBlock.on("click", function () {
+                domMenuBlock.onclick = function () {
                     obj.func();
                     _.hideMenu();
-                });
+                };
                 domMenu.appendChild(domMenuBlock);
             } else if (obj.divider) {
                 let domMenuDivider = document.createElement("div");

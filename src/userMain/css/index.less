@@ -1,0 +1,33 @@
+@import url(./../../public/css/vairbles.less);
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.mainWindow {
+    .userInfoBlock {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+
+        #userAvatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+        }
+
+        #username {
+            letter-spacing: 2px;
+            font-size: 25px;
+            font-weight: 100;
+        }
+    }
+}
+
+.darkMode {
+    background-color: @bg_color_d_pan;
+    color: @fg_color_d_1;
+}

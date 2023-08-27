@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: "development",
     entry: {
-        graphEditor: "./src/graphEditor/index.js"
+        graphEditor: "./src/graphEditor/index.js",
+        userMain:"./src/userMain/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -54,6 +55,14 @@ module.exports = {
             },
             template: "./src/graphEditor/html/index.html",
             chunks: ["graphEditor"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "userMain.html",
+            minify: {
+                collapseWhitespace: true
+            },
+            template: "./src/userMain/html/index.html",
+            chunks: ["userMain"]
         })
     ]
 };

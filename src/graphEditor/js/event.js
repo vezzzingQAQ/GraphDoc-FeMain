@@ -5,11 +5,11 @@
  */
 
 import axios from "axios";
-import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
-import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
-import { delCookie, getCookie, setCookie } from "../../public/js/tools";
-import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "./serverCom";
+import { USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
+import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
+import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
+import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 
 
 // 用户配置
@@ -141,11 +141,12 @@ export function userLogin() {
             "Content-Type": "multipart/form-data"
         },
         data: formData
-    }).then(d => {
+    }).then(async d => {
         if (d.data.state == 1) {
             setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
             // 获取用户信息进行显示
-            getUserData();
+            let userData = await getUserData();
+            refreshUserData(userData);
             hideCenterWindow(document.querySelector("#windowLogin"));
         } else if (d.data.state == 2) {
             document.querySelector("#login_password").value = "";
@@ -161,9 +162,10 @@ export function userLogin() {
 /**
  * 用户退出
  */
-export function userLogout() {
+export async function userLogout() {
     delCookie("jwt");
-    getUserData();
+    let userData = await getUserData();
+    refreshUserData(userData);
 }
 
 /**
@@ -209,6 +211,23 @@ export function refreshMenu() {
 export function refreshGraphName() {
     if (userConfig.currentGraphFileName)
         document.querySelector("#graphName").innerHTML = userConfig.currentGraphFileName;
+}
+
+/**
+ * 更新用户信息
+ */
+export function refreshUserData(d) {
+    if (d.data.state == 1) {
+        document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
+        document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
+        userConfig.isLogin = true;
+        refreshMenu();
+    } else {
+        document.querySelector("#showUsername").innerHTML = "未登录";
+        document.querySelector("#showUserAvatar").src = defaultAvatarPng;
+        userConfig.isLogin = false;
+        refreshMenu();
+    }
 }
 
 /**
