@@ -7,7 +7,7 @@ export const FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
 export const VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
 export const VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
 export const GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
-export const GRAPH_PNG_STORE_PARH = `${DOMAIN_RES}/media/graphImgs/png/`;
+export const GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
 
 export const DOMAIN_MAIN = "http://127.0.0.1:4998"
 

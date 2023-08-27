@@ -1,6 +1,6 @@
 import { getOUtherData } from "../public/js/serverCom";
 import { getQueryVariable } from "../public/js/tools";
-import { EDITOR_PGAE, GRAPH_PNG_STORE_PARH, USER_AVATAR_ROOT } from "./../public/js/urls";
+import { EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT } from "./../public/js/urls";
 import "./css/index.less";
 
 window.addEventListener("load", async () => {
@@ -12,7 +12,7 @@ window.addEventListener("load", async () => {
     graphList.forEach(graph => {
         let domGraphBlock = document.createElement("li");
         let domGraphBlockImg = document.createElement("div");
-        domGraphBlockImg.style.backgroundImage = `url(${GRAPH_PNG_STORE_PARH}${graph.img}.png)`;
+        domGraphBlockImg.style.backgroundImage = `url(${GRAPH_PNG_STORE_PATH}${graph.img})`;
         let domGraphBlockText = document.createElement("p");
         domGraphBlockText.innerHTML = graph.name;
         domGraphBlock.appendChild(domGraphBlockImg);

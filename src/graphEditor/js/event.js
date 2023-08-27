@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -272,6 +272,9 @@ export async function showSaveToCloud() {
         let currentGraph = graphList[i];
 
         let domGraphTag = document.createElement("li");
+        let domGraphTagImg = document.createElement("img");
+        domGraphTagImg.src = `${GRAPH_PNG_STORE_PATH}${currentGraph.img}`;
+        domGraphTagImg.classList = "showImg";
         let domGraphTagName = document.createElement("span");
         domGraphTagName.classList = "graphName";
         domGraphTagName.innerHTML = currentGraph.name;
@@ -281,7 +284,7 @@ export async function showSaveToCloud() {
         let domGraphTagClose = document.createElement("span");
         domGraphTagClose.classList = "closeBtn";
         domGraphTagClose.innerHTML = "×";
-        domGraphTagClose.addEventListener("click", async () => {
+        domGraphTagClose.onclick = async () => {
             let response = await deleteGraph(currentGraph.name);
             if (response.state == 1) {
                 domGraphTagClose.remove();
@@ -289,7 +292,8 @@ export async function showSaveToCloud() {
                 domGraphTagName.remove();
                 domGraphTag.remove();
             }
-        });
+        };
+        domGraphTag.appendChild(domGraphTagImg);
         domGraphTag.appendChild(domGraphTagName);
         domGraphTag.appendChild(domGraphTagDate);
         domGraphTag.appendChild(domGraphTagClose);
@@ -323,6 +327,9 @@ export async function showLoadFromCloud(graph) {
         let currentGraph = graphList[i];
 
         let domGraphTag = document.createElement("li");
+        let domGraphTagImg = document.createElement("img");
+        domGraphTagImg.src = `${GRAPH_PNG_STORE_PATH}${currentGraph.img}`;
+        domGraphTagImg.classList = "showImg";
         let domGraphTagName = document.createElement("span");
         domGraphTagName.classList = "graphName";
         domGraphTagName.innerHTML = currentGraph.name;
@@ -332,7 +339,7 @@ export async function showLoadFromCloud(graph) {
         let domGraphTagClose = document.createElement("span");
         domGraphTagClose.classList = "closeBtn";
         domGraphTagClose.innerHTML = "×";
-        domGraphTagClose.addEventListener("click", async () => {
+        domGraphTagClose.onclick = async () => {
             let response = await deleteGraph(currentGraph.name);
             if (response.state == 1) {
                 domGraphTagClose.remove();
@@ -340,12 +347,13 @@ export async function showLoadFromCloud(graph) {
                 domGraphTagName.remove();
                 domGraphTag.remove();
             }
-        });
+        };
+        domGraphTag.appendChild(domGraphTagImg);
         domGraphTag.appendChild(domGraphTagName);
         domGraphTag.appendChild(domGraphTagDate);
         domGraphTag.appendChild(domGraphTagClose);
 
-        domGraphTag.addEventListener("click", async () => {
+        domGraphTagName.onclick = async () => {
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
                 userConfig.currentGraphFileName = currentGraph.name;
@@ -355,7 +363,7 @@ export async function showLoadFromCloud(graph) {
                 graph.load(JSON.parse(json));
                 hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
             }
-        });
+        };
         document.querySelector("#windowLoadFromCloud ul").appendChild(domGraphTag);
     }
     showCenterWindow(document.querySelector("#windowLoadFromCloud"));

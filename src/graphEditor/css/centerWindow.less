@@ -130,8 +130,6 @@
         ul {
             padding: 5px;
             letter-spacing: 2px;
-            line-height: 20px;
-            font-size: 14px;
             list-style: none;
             max-height: 400px;
             overflow: scroll;
@@ -141,14 +139,30 @@
             }
 
             li {
-                cursor: pointer;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                height: 30px;
+                line-height: 20px;
+                font-size: 14px;
+
 
                 span {
                     display: inline-block;
                 }
 
+                .showImg {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+
                 .graphName {
                     width: 100px;
+                    cursor: pointer;
                 }
 
                 .graphDate {
@@ -158,6 +172,8 @@
 
                 .closeBtn {
                     color: red;
+                    font-size: 15px;
+                    cursor: pointer;
                 }
             }
         }
