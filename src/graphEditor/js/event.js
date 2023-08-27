@@ -71,6 +71,8 @@ export function openGraph(graph) {
             }
             reader.readAsText(elementInput.files[0]);
             reader.addEventListener("load", (readRes) => {
+                userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
+                refreshGraphName();
                 graph.clear();
                 data = JSON.parse(readRes.target.result);
                 graph.load(data);
@@ -173,8 +175,11 @@ export async function saveToCloud(graph) {
         // 保存到云
         let data = graph.toJson();
         let response = await saveGraphToCloud(data, name);
-        if (response.state == 11 || response.state == 10)
+        if (response.state == 11 || response.state == 10) {
+            userConfig.currentGraphFileName = name;
+            refreshGraphName();
             hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+        }
     }
 }
 
@@ -298,6 +303,7 @@ export async function showLoadFromCloud(graph) {
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
                 userConfig.currentGraphFileName = currentGraph.name;
+                refreshGraphName();
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));

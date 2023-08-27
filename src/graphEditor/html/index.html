@@ -41,24 +41,24 @@
                 <div class="col menuBlock">
                     <p><i class="fa fa-file"></i> 文件</p>
                     <ul>
-                        <li id="openFile">从本地打开</li>
-                        <li id="btnSave">下载到本地</li>
-                        <li id="btnToCloudSavsAs">保存到云</li>
-                        <li id="btnLoadFromCloud">从云打开</li>
+                        <li class="show" id="openFile">从本地打开</li>
+                        <li class="show" id="btnSave">下载到本地</li>
+                        <li class="hide" id="btnToCloudSavsAs">保存到云</li>
+                        <li class="hide" id="btnLoadFromCloud">从云打开</li>
                     </ul>
                 </div>
                 <div class="col menuBlock">
                     <p><i class="fa fa-camera"></i> 导出</p>
                     <ul>
-                        <li id="btnExport">导出为SVG</li>
-                        <li id="btnExport2">导出为PNG</li>
+                        <li class="show" id="btnExport">导出为SVG</li>
+                        <li class="show" id="btnExport2">导出为PNG</li>
                     </ul>
                 </div>
                 <div class="col menuBlock">
                     <p><i class="fa fa-cog"></i> 设置</p>
                     <ul>
-                        <li id="btnReverseMode">切换风格</li>
-                        <li>背景颜色
+                        <li class="show" id="btnReverseMode">切换风格</li>
+                        <li class="show">背景颜色
                             <input type="color" class="subDisp" id="bgColorInput">
                         </li>
                     </ul>
@@ -66,17 +66,17 @@
                 <div class="col menuBlock" id="userOptionsBlock">
                     <p><i class="fa fa-user"></i> 用户</p>
                     <ul>
-                        <li id="btnLogin">登录</li>
-                        <li id="btnRegister">注册</li>
-                        <li id="btnLogout">退出</li>
+                        <li class="show" id="btnLogin">登录</li>
+                        <li class="show" id="btnRegister">注册</li>
+                        <li class="hide" id="btnLogout">退出</li>
                     </ul>
                 </div>
                 <div class="col menuBlock">
                     <p><i class="fa fa-paper-plane"></i> 关于</p>
                     <ul>
-                        <li id="btnAuthorList">作者列表</li>
-                        <li>Github链接</li>
-                        <li>请作者喝咖啡</li>
+                        <li class="show" id="btnAuthorList">作者列表</li>
+                        <li class="show">Github链接</li>
+                        <li class="show">请作者喝咖啡</li>
                     </ul>
                 </div>
             </ul>
@@ -91,6 +91,9 @@
             <div class="sub" id="selectedId">选中的元素:0</div>
             <div class="sub">powered by <a target="_blank" href="http://vezzzing.cn/vezzzingsBuilding/dist/main.html">z
                     z z studio</a></div>
+        </div>
+        <div class="topArea">
+            <div class="sub" id="graphName">未命名图谱</div>
         </div>
         <div class="centerWindow" id="windowAuthorList">
             <div class="bg"></div>

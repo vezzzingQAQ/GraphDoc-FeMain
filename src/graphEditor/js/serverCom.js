@@ -9,6 +9,7 @@ import {
     USER_SAVE_GRAPH_TO_CLOUD
 } from "./graph/urls";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
+import { userConfig, refreshMenu } from "./event";
 
 /**
  * 获取用户的信息
@@ -27,9 +28,13 @@ export function getUserData() {
         if (d.data.state == 1) {
             document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
             document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
+            userConfig.isLogin = true;
+            refreshMenu();
         } else {
             document.querySelector("#showUsername").innerHTML = "未登录";
             document.querySelector("#showUserAvatar").src = defaultAvatarPng;
+            userConfig.isLogin = false;
+            refreshMenu();
         }
     });
 }
