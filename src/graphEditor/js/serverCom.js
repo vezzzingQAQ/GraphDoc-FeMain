@@ -3,6 +3,7 @@ import { getCookie } from "../../public/js/tools";
 import {
     USER_AVATAR_ROOT,
     USER_DATA,
+    USER_DELETE_GRAPH,
     USER_LIST_GRAPH_PATH,
     USER_LOAD_FROM_CLOUD,
     USER_SAVE_GRAPH_TO_CLOUD
@@ -79,6 +80,24 @@ export async function loadGraphFromCloud(filename) {
     formData.append('name', filename);
     let response = await axios({
         url: USER_LOAD_FROM_CLOUD,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 删除云图谱
+ */
+export async function deleteGraph(filename) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('name', filename);
+    let response = await axios({
+        url: USER_DELETE_GRAPH,
         method: "POST",
         headers: {
             "Content-Type": "multipart/form-data"

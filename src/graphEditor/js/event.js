@@ -9,7 +9,7 @@ import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
 import { delCookie, getCookie, setCookie } from "../../public/js/tools";
-import { getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "./serverCom";
+import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "./serverCom";
 
 
 // 界面色彩配置
@@ -193,11 +193,30 @@ export async function showSaveToCloud() {
     let graphList = await listUserGraph();
     for (let i = 0; i < graphList.length; i++) {
         let currentGraph = graphList[i];
+
         let domGraphTag = document.createElement("li");
-        domGraphTag.innerHTML = `
-        <span class="graphName">${currentGraph.name}</span>
-        <span class="graphDate">${currentGraph.date.split("T")[0]}</span>
-        `;
+        let domGraphTagName = document.createElement("span");
+        domGraphTagName.classList = "graphName";
+        domGraphTagName.innerHTML = currentGraph.name;
+        let domGraphTagDate = document.createElement("span");
+        domGraphTagDate.classList = "graphDate";
+        domGraphTagDate.innerHTML = currentGraph.date.split("T")[0];
+        let domGraphTagClose = document.createElement("span");
+        domGraphTagClose.classList = "closeBtn";
+        domGraphTagClose.innerHTML = "×";
+        domGraphTagClose.addEventListener("click", async () => {
+            let response = await deleteGraph(currentGraph.name);
+            if (response.state == 1) {
+                domGraphTagClose.remove();
+                domGraphTagDate.remove();
+                domGraphTagName.remove();
+                domGraphTag.remove();
+            }
+        });
+        domGraphTag.appendChild(domGraphTagName);
+        domGraphTag.appendChild(domGraphTagDate);
+        domGraphTag.appendChild(domGraphTagClose);
+
         domGraphTag.addEventListener("click", () => {
             document.querySelector("#stc_path").value = currentGraph.name;
             document.querySelector("#saveToCloud").innerHTML = "覆盖";
@@ -220,11 +239,30 @@ export async function showLoadFromCloud(graph) {
     let graphList = await listUserGraph();
     for (let i = 0; i < graphList.length; i++) {
         let currentGraph = graphList[i];
+
         let domGraphTag = document.createElement("li");
-        domGraphTag.innerHTML = `
-        <span class="graphName">${currentGraph.name}</span>
-        <span class="graphDate">${currentGraph.date.split("T")[0]}</span>
-        `;
+        let domGraphTagName = document.createElement("span");
+        domGraphTagName.classList = "graphName";
+        domGraphTagName.innerHTML = currentGraph.name;
+        let domGraphTagDate = document.createElement("span");
+        domGraphTagDate.classList = "graphDate";
+        domGraphTagDate.innerHTML = currentGraph.date.split("T")[0];
+        let domGraphTagClose = document.createElement("span");
+        domGraphTagClose.classList = "closeBtn";
+        domGraphTagClose.innerHTML = "×";
+        domGraphTagClose.addEventListener("click", async () => {
+            let response = await deleteGraph(currentGraph.name);
+            if (response.state == 1) {
+                domGraphTagClose.remove();
+                domGraphTagDate.remove();
+                domGraphTagName.remove();
+                domGraphTag.remove();
+            }
+        });
+        domGraphTag.appendChild(domGraphTagName);
+        domGraphTag.appendChild(domGraphTagDate);
+        domGraphTag.appendChild(domGraphTagClose);
+
         domGraphTag.addEventListener("click", async () => {
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {

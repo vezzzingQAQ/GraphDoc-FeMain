@@ -16,3 +16,4 @@ export const USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
 export const USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
 export const USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
 export const USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
+export const USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
