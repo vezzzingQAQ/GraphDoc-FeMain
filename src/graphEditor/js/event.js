@@ -12,15 +12,19 @@ import { delCookie, getCookie, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "./serverCom";
 
 
-// 界面色彩配置
-let darkMode = true;
+// 用户配置
+export let userConfig = {
+    isDark: true,
+    isLogin: false,
+    currentGraphFileName: ""
+}
 
 /**
  * 反转界面色彩风格
  */
 export function reverseColorMode() {
-    darkMode = !darkMode;
-    if (darkMode) {
+    userConfig.isDark = !userConfig.isDark;
+    if (userConfig.isDark) {
         document.querySelector(".mainWindow").classList = "mainWindow darkMode";
     } else {
         document.querySelector(".mainWindow").classList = "mainWindow lightMode";
@@ -174,6 +178,33 @@ export async function saveToCloud(graph) {
     }
 }
 
+/**
+ * 根据是否登录更新窗体
+ */
+export function refreshMenu() {
+    if (userConfig.isLogin) {
+        console.log(userConfig.isLogin)
+        document.querySelector("#btnLogin").classList = "hide";
+        document.querySelector("#btnRegister").classList = "hide";
+        document.querySelector("#btnLogout").classList = "show";
+        document.querySelector("#btnToCloudSavsAs").classList = "show";
+        document.querySelector("#btnLoadFromCloud").classList = "show";
+    } else {
+        document.querySelector("#btnLogin").classList = "show";
+        document.querySelector("#btnRegister").classList = "show";
+        document.querySelector("#btnLogout").classList = "hide";
+        document.querySelector("#btnToCloudSavsAs").classList = "hide";
+        document.querySelector("#btnLoadFromCloud").classList = "hide";
+    }
+}
+
+/**
+ * 更新导图名称
+ */
+export function refreshGraphName() {
+    if (userConfig.currentGraphFileName)
+        document.querySelector("#graphName").innerHTML = userConfig.currentGraphFileName;
+}
 
 /**
  * 展示中央窗体
@@ -266,6 +297,7 @@ export async function showLoadFromCloud(graph) {
         domGraphTag.addEventListener("click", async () => {
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
+                userConfig.currentGraphFileName = currentGraph.name;
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));
