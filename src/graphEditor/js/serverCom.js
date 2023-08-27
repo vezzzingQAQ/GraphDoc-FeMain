@@ -4,6 +4,7 @@ import {
     USER_AVATAR_ROOT,
     USER_DATA,
     USER_LIST_GRAPH_PATH,
+    USER_LOAD_FROM_CLOUD,
     USER_SAVE_GRAPH_TO_CLOUD
 } from "./graph/urls";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -60,6 +61,24 @@ export async function saveGraphToCloud(jsonData, filename) {
     formData.append('name', filename);
     let response = await axios({
         url: USER_SAVE_GRAPH_TO_CLOUD,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 从云加载导图
+ */
+export async function loadGraphFromCloud(filename) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('name', filename);
+    let response = await axios({
+        url: USER_LOAD_FROM_CLOUD,
         method: "POST",
         headers: {
             "Content-Type": "multipart/form-data"

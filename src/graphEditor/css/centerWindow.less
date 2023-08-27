@@ -117,7 +117,8 @@
     }
 }
 
-#windowSaveToCloud {
+#windowSaveToCloud,
+#windowLoadFromCloud {
     .content {
         .info {
             padding: 5px;
@@ -131,6 +132,13 @@
             letter-spacing: 2px;
             line-height: 20px;
             font-size: 14px;
+            list-style: none;
+            max-height: 400px;
+            overflow: scroll;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
 
             li {
                 cursor: pointer;

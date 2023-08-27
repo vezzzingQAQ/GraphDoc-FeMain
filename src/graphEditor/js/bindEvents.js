@@ -13,11 +13,12 @@ import {
     userLogin,
     userLogout,
     showSaveToCloud,
-    saveToCloud
+    saveToCloud,
+    showLoadFromCloud
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
-import { getUserData, saveGraphToCloud } from "./serverCom.js";
+import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "./serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 
 /**
@@ -28,11 +29,14 @@ export function bindEvents(graph) {
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
     });
+    document.querySelector("#btnSave").addEventListener("click", () => {
+        saveGraph(graph);
+    });
     document.querySelector("#btnToCloudSavsAs").addEventListener("click", () => {
         showSaveToCloud();
     });
-    document.querySelector("#btnSave").addEventListener("click", () => {
-        saveGraph(graph);
+    document.querySelector("#btnLoadFromCloud").addEventListener("click", () => {
+        showLoadFromCloud(graph);
     });
     document.querySelector("#btnExport").addEventListener("click", () => {
         exportSvg(graph);

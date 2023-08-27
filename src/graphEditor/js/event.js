@@ -9,7 +9,7 @@ import { Graph, LoadGraphFromJson } from "./graph/graph";
 import { saveAs } from 'file-saver';
 import { USER_DATA, USER_LOGIN, USER_REGISTER } from "./graph/urls";
 import { delCookie, getCookie, setCookie } from "../../public/js/tools";
-import { getUserData, listUserGraph, saveGraphToCloud } from "./serverCom";
+import { getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "./serverCom";
 
 
 // 界面色彩配置
@@ -214,6 +214,29 @@ export async function showSaveToCloud() {
         }
     });
     showCenterWindow(document.querySelector("#windowSaveToCloud"));
+}
+export async function showLoadFromCloud(graph) {
+    document.querySelector("#windowLoadFromCloud ul").innerHTML = "";
+    let graphList = await listUserGraph();
+    for (let i = 0; i < graphList.length; i++) {
+        let currentGraph = graphList[i];
+        let domGraphTag = document.createElement("li");
+        domGraphTag.innerHTML = `
+        <span class="graphName">${currentGraph.name}</span>
+        <span class="graphDate">${currentGraph.date.split("T")[0]}</span>
+        `;
+        domGraphTag.addEventListener("click", async () => {
+            let response = await loadGraphFromCloud(currentGraph.name);
+            if (response.state == 1) {
+                let json = response.msg;
+                graph.clear();
+                graph.load(JSON.parse(json));
+                hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
+            }
+        });
+        document.querySelector("#windowLoadFromCloud ul").appendChild(domGraphTag);
+    }
+    showCenterWindow(document.querySelector("#windowLoadFromCloud"));
 }
 
 function showCenterWindow(selector) {
