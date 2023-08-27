@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
+import { EDITOR_PGAE, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -209,8 +209,10 @@ export function refreshMenu() {
  * 更新导图名称
  */
 export function refreshGraphName() {
-    if (userConfig.currentGraphFileName)
+    if (userConfig.currentGraphFileName) {
         document.querySelector("#graphName").innerHTML = userConfig.currentGraphFileName;
+        window.history.replaceState("", "", `${EDITOR_PGAE}`);
+    }
 }
 
 /**
