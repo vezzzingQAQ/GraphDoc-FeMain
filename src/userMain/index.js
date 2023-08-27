@@ -1,6 +1,6 @@
 import { getOUtherData } from "../public/js/serverCom";
 import { getQueryVariable } from "../public/js/tools";
-import { EDITOR_PGAE, USER_AVATAR_ROOT } from "./../public/js/urls";
+import { EDITOR_PGAE, GRAPH_PNG_STORE_PARH, USER_AVATAR_ROOT } from "./../public/js/urls";
 import "./css/index.less";
 
 window.addEventListener("load", async () => {
@@ -11,7 +11,12 @@ window.addEventListener("load", async () => {
     let graphList = userData.data.msg.graphs;
     graphList.forEach(graph => {
         let domGraphBlock = document.createElement("li");
-        domGraphBlock.innerHTML = graph.name;
+        let domGraphBlockImg = document.createElement("div");
+        domGraphBlockImg.style.backgroundImage = `url(${GRAPH_PNG_STORE_PARH}${graph.img}.png)`;
+        let domGraphBlockText = document.createElement("p");
+        domGraphBlockText.innerHTML = graph.name;
+        domGraphBlock.appendChild(domGraphBlockImg);
+        domGraphBlock.appendChild(domGraphBlockText);
         domGraphBlock.addEventListener("click", function () {
             window.open(`${EDITOR_PGAE}?graphName=${graph.name}`);
         });
