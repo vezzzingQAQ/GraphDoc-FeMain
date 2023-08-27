@@ -18,7 +18,7 @@ import "./css/graph.less";
 import "./css/centerWindow.less";
 import { bindEvents } from "./js/bindEvents";
 
-window.addEventListener("load", () => {
-    let graph = initGraph();
+window.addEventListener("load", async () => {
+    let graph = await initGraph();
     bindEvents(graph);
 })

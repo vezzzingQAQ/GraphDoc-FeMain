@@ -25,9 +25,34 @@ body {
             font-weight: 100;
         }
     }
+
+    .graphListBlock {
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+
+            li {
+                display: block;
+                width: 20%;
+                margin: 2%;
+                height: 200px;
+                border-radius: @small_border_radius;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 .darkMode {
     background-color: @bg_color_d_pan;
     color: @fg_color_d_1;
+
+    .graphListBlock {
+        background-color: @bg_color_d_title;
+
+        li {
+            background-color: white;
+        }
+    }
 }

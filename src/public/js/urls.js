@@ -18,3 +18,7 @@ export const USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
 export const USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
 export const USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
 export const USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
+
+export const DOMAIN_FE="http://127.0.0.1:5500";
+
+export const EDITOR_PGAE=`${DOMAIN_FE}/dist/graphEditor.html` 
