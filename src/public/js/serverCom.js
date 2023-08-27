@@ -65,11 +65,12 @@ export async function listUserGraph() {
 /**
  * 储存图谱到云
  */
-export async function saveGraphToCloud(jsonData, filename) {
+export async function saveGraphToCloud(jsonData, filename, imgName) {
     let formData = new FormData();
     formData.append('jwt', getCookie('jwt'));
     formData.append('json', jsonData);
     formData.append('name', filename);
+    formData.append('imgName', imgName);
     let response = await axios({
         url: USER_SAVE_GRAPH_TO_CLOUD,
         method: "POST",

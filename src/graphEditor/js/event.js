@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -171,18 +171,34 @@ export async function userLogout() {
 /**
  * 另存到云
  */
-export async function saveToCloud(graph) {
+export function saveToCloud(graph) {
     let name = document.querySelector("#stc_path").value;
-    if (name) {
-        // 保存到云
-        let data = graph.toJson();
-        let response = await saveGraphToCloud(data, name);
-        if (response.state == 11 || response.state == 10) {
-            userConfig.currentGraphFileName = name;
-            refreshGraphName();
-            hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+    let svg = graph.genSvg();
+    // 先上传图片
+    let domFileInput = document.createElement("input");
+    domFileInput.type = "file";
+
+    let formData = new FormData();
+    formData.append('svg', svg);
+    axios({
+        url: GRAPH_SVG_UPLOAD_PATH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    }).then(async d => {
+        if (name) {
+            // 保存到云
+            let data = graph.toJson();
+            let response = await saveGraphToCloud(data, name, d.data.msg.filename);
+            if (response.state == 11 || response.state == 10) {
+                userConfig.currentGraphFileName = name;
+                refreshGraphName();
+                hideCenterWindow(document.querySelector("#windowSaveToCloud"))
+            }
         }
-    }
+    });
 }
 
 /**
@@ -244,6 +260,10 @@ export function showLogin() {
 export function showRegister() {
     showCenterWindow(document.querySelector("#windowRegister"));
 }
+
+/**
+ * 保存到云
+ */
 export async function showSaveToCloud() {
     document.querySelector("#saveToCloud").innerHTML = "保存";
     document.querySelector("#windowSaveToCloud ul").innerHTML = "";
@@ -291,6 +311,11 @@ export async function showSaveToCloud() {
     });
     showCenterWindow(document.querySelector("#windowSaveToCloud"));
 }
+
+
+/**
+ * 从云打开
+ */
 export async function showLoadFromCloud(graph) {
     document.querySelector("#windowLoadFromCloud ul").innerHTML = "";
     let graphList = await listUserGraph();

@@ -6,6 +6,8 @@ export const FILE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadFile/`;
 export const FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
 export const VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
 export const VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
+export const GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
+export const GRAPH_PNG_STORE_PARH = `${DOMAIN_RES}/media/graphImgs/png/`;
 
 export const DOMAIN_MAIN = "http://127.0.0.1:4998"
 
@@ -19,6 +21,6 @@ export const USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
 export const USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
 export const USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
 
-export const DOMAIN_FE="http://127.0.0.1:5500";
+export const DOMAIN_FE = "http://127.0.0.1:5500";
 
-export const EDITOR_PGAE=`${DOMAIN_FE}/dist/graphEditor.html` 
+export const EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html` 
