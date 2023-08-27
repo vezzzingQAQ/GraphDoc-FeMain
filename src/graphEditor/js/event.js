@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -16,7 +16,8 @@ import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 export let userConfig = {
     isDark: true,
     isLogin: false,
-    currentGraphFileName: ""
+    currentGraphFileName: "",
+    username: null
 }
 
 /**
@@ -239,13 +240,22 @@ export function refreshUserData(d) {
         document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
         document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
         userConfig.isLogin = true;
+        userConfig.username = d.data.msg.data.username;
         refreshMenu();
     } else {
         document.querySelector("#showUsername").innerHTML = "未登录";
         document.querySelector("#showUserAvatar").src = defaultAvatarPng;
         userConfig.isLogin = false;
+        userConfig.username = null;
         refreshMenu();
     }
+}
+
+/**
+ * 跳转个人主页
+ */
+export function toUserPage() {
+    window.open(`${USER_PAGE}?username=${encodeURI(userConfig.username)}`);
 }
 
 /**

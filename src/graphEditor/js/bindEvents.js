@@ -15,7 +15,8 @@ import {
     showSaveToCloud,
     saveToCloud,
     showLoadFromCloud,
-    refreshUserData
+    refreshUserData,
+    toUserPage
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -93,6 +94,11 @@ export async function bindEvents(graph) {
     document.querySelector("#saveToCloud").addEventListener("click", () => {
         saveToCloud(graph);
     });
+
+    // 点击用户头像跳转用户页
+    document.querySelector(".userBlock").addEventListener("click", () => {
+        toUserPage();
+    })
 
     // 上来先获取下用户信息
     let userData = await getUserData();
