@@ -18,7 +18,8 @@ window.addEventListener("load", async () => {
         domGraphBlock.appendChild(domGraphBlockImg);
         domGraphBlock.appendChild(domGraphBlockText);
         domGraphBlock.addEventListener("click", function () {
-            window.open(`${EDITOR_PGAE}?graphName=${graph.name}`);
+            console.log(encodeURI(graph.name))
+            window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}`);
         });
         document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
     })
