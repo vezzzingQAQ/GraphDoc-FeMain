@@ -6,7 +6,8 @@ import {
     USER_LIST_GRAPH_PATH,
     USER_LOAD_FROM_CLOUD,
     USER_ODATA,
-    USER_SAVE_GRAPH_TO_CLOUD
+    USER_SAVE_GRAPH_TO_CLOUD,
+    USER_UPDATE_AVATAR
 } from "./urls";
 import { userConfig, refreshMenu } from "../../graphEditor/js/event";
 
@@ -109,6 +110,24 @@ export async function deleteGraph(filename) {
     formData.append('name', filename);
     let response = await axios({
         url: USER_DELETE_GRAPH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 更新头像
+ */
+export async function updateAvatar(filename) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('avatar', filename);
+    let response = await axios({
+        url: USER_UPDATE_AVATAR,
         method: "POST",
         headers: {
             "Content-Type": "multipart/form-data"

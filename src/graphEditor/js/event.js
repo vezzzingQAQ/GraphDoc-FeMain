@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -238,7 +238,8 @@ export function refreshGraphName() {
 export function refreshUserData(d) {
     if (d.data.state == 1) {
         document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
-        document.querySelector("#showUserAvatar").src = `${USER_AVATAR_ROOT}${d.data.msg.data.avatar}`;
+        console.log(d.data.msg.data.avatar)
+        document.querySelector("#showUserAvatar").src = `${AVATAR_STORE_PATH}${d.data.msg.data.avatar}`;
         userConfig.isLogin = true;
         userConfig.username = d.data.msg.data.username;
         refreshMenu();
