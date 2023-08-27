@@ -207,7 +207,7 @@ export class Graph {
         initElements();
 
         // 点击空白处
-        d3.select(".displayArea").node().addEventListener("click", function (e) {
+        d3.select(".displayArea").on("click", function (e) {
             // 更新元素
             _.refreshBottomDom();
             if (e.button == 0 && e.target == this) {
@@ -233,7 +233,7 @@ export class Graph {
 
         function bindKeyEvent() {
             // 选中节点后delete删除
-            d3.select("body").node().addEventListener("keydown", function (e) {
+            d3.select("body").on("keydown", function (e) {
                 if (e.target == this) {
                     // delete删除选中的元素
                     if (e.keyCode == 46) {
@@ -263,13 +263,16 @@ export class Graph {
                     if (e.keyCode == 68 && _.isShiftDown) {
                         console.log("------------------------------------")
                         console.log("nodelist", _.nodeList);
-                        console.log("nodes", nodes);
+                        console.log("nodes", _.nodes);
                         console.log("edgelist", _.edgeList);
-                        console.log("edges", edges)
+                        console.log("edges", _.edges);
+                        console.log("selectedElementList", _.selectedElementList);
+                        console.log("copiedNodes", _.copiedNodeJsonList);
+                        console.log("cpoiedEdges", _.copiedEdgeJsonList);
                     }
                 }
             });
-            d3.select("body").node().addEventListener("keyup", function (e) {
+            d3.select("body").on("keyup", function (e) {
                 if (e.target == this) {
                     if (e.keyCode == 16) {
                         _.isShiftDown = false;
@@ -282,7 +285,7 @@ export class Graph {
         bindKeyEvent();
 
         function initRightMenu() {
-            d3.select(".displayArea svg").node().addEventListener("contextmenu", function (e) {
+            d3.select(".displayArea svg").on("contextmenu", function (e) {
                 e.preventDefault();
                 if (e.target == this && !_.isZooming) {
                     _.initMenu_Svg(e);
@@ -569,14 +572,21 @@ export class Graph {
         let endLoc = [];
         let selectionFlag = false;
         function selectionRect() {
-            let rect = d3.select(".displayArea svg").append("rect")
+            let rect;
+            if (!document.querySelector(".displayArea svg .selectionRect")) {
+                rect = d3.select(".displayArea svg").append("rect")
+            } else {
+                rect = d3.select(".displayArea svg .selectionRect");
+            }
+            rect
                 .attr("class", "selectionRect")
                 .attr("width", 0)
                 .attr("height", 0)
                 .attr("transform", "translate(0,0)")
                 .attr("id", "squareSelect");
 
-            d3.select(".displayArea svg").node().addEventListener("mousedown", function (e) {
+            // 鼠标按下开始框选
+            d3.select(".displayArea svg").on("mousedown", function (e) {
                 if (e.button == 0) {
                     clickTime = (new Date()).getTime();
                     selectionFlag = true;
@@ -588,7 +598,8 @@ export class Graph {
                 }
             });
 
-            d3.select(".displayArea svg").node().addEventListener("mousemove", function (e) {
+            // 鼠标移动更新选区
+            d3.select(".displayArea svg").on("mousemove", function (e) {
                 //判断事件target
                 if (e.target.localName == "svg" && selectionFlag == true || e.target.localName == "rect" && selectionFlag == true) {
 
@@ -607,7 +618,8 @@ export class Graph {
                 }
             })
 
-            d3.select(".displayArea svg").node().addEventListener("mouseup", function (e) {
+            // 鼠标释放,计算选中的节点
+            d3.select(".displayArea svg").on("mouseup", function (e) {
                 if (e.button == 0) {
                     if (selectionFlag == true) {
                         selectionFlag = false;
@@ -642,6 +654,9 @@ export class Graph {
                                     _.selectElement(d3.select(this).data()[0]);
                                 }
                             });
+                            for (let nodeEle of _.nodes) {
+                                console.log(nodeEle);
+                            }
                         }
                         if ("all" || _.selectMode == "edge") {
                             let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
@@ -1225,7 +1240,7 @@ export class Graph {
                 let domMenuBlock = document.createElement("div");
                 domMenuBlock.classList = "menuBlock";
                 domMenuBlock.innerHTML = obj.name;
-                domMenuBlock.addEventListener("click", function () {
+                domMenuBlock.on("click", function () {
                     obj.func();
                     _.hideMenu();
                 });
@@ -1263,20 +1278,26 @@ export class Graph {
         for (let node of this.nodeList) {
             this.nodeList = [];
             this.edgeList = [];
-            this.edges.filter(edge => {
-                d3.select(`#${edge.uuid}`).remove();
-                this.edges = this.edges.filter(currentEdge => { return currentEdge.uuid != edge.uuid });
-            });
-            this.nodes.filter(node => {
-                d3.select(`#${node.uuid}`).remove();
-                this.nodes = this.nodes.filter(currentNode => { return currentNode.uuid != node.uuid });
-            });
+            for (let currentNode of this.nodes) {
+                currentNode.remove();
+            }
+            for (let currentEdge of this.edges) {
+                currentEdge.remove();
+            }
+            // this.edges.forEach(edge => {
+            //     d3.select(`#${edge.uuid}`).remove();
+            // });
+            // this.nodes.forEach(node => {
+            //     d3.select(`#${node.uuid}`).remove();
+            // });
             d3.selectAll(".layer").remove();
             d3.select(".viewArea").remove();
             //d3.selectAll("svg").selectAll("*").remove();
             // 重启物理模拟
             this.renderProperties.simulation.on("tick", () => { })
         }
+        this.nodes = [];
+        this.edges = [];
         this.isControlDown = false;
         this.isShiftDown = false;
         this.selectedElementList = [];
