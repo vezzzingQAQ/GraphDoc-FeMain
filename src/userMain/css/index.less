@@ -3,6 +3,10 @@
 body {
     margin: 0;
     padding: 0;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .mainWindow {
@@ -64,6 +68,19 @@ body {
                     bottom: 0;
                 }
             }
+        }
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h2,
+        p {
+            font-weight: 100;
+            letter-spacing: 2px;
         }
     }
 }
