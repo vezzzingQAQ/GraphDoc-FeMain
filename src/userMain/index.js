@@ -1,4 +1,5 @@
-import { getOUtherData } from "../public/js/serverCom";
+import { userConfig } from "../graphEditor/js/event";
+import { getOUtherData, getUserData } from "../public/js/serverCom";
 import { getQueryVariable } from "../public/js/tools";
 import { EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT } from "./../public/js/urls";
 import "./css/index.less";
@@ -17,9 +18,11 @@ window.addEventListener("load", async () => {
         domGraphBlockText.innerHTML = graph.name;
         domGraphBlock.appendChild(domGraphBlockImg);
         domGraphBlock.appendChild(domGraphBlockText);
-        domGraphBlock.addEventListener("click", function () {
-            console.log(encodeURI(graph.name))
-            window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}`);
+        domGraphBlock.addEventListener("click", async function () {
+            let userData = await getUserData();
+            username = userData.data.msg.data.username;
+            if (username == graph.username)
+                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}`);
         });
         document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
     })
