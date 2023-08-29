@@ -17,7 +17,8 @@ import {
     showLoadFromCloud,
     refreshUserData,
     toUserPage,
-    userConfig
+    userConfig,
+    newGraph
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -102,6 +103,11 @@ export async function bindEvents(graph) {
             toUserPage();
         else
             showLogin();
+    });
+
+    // 新建图谱
+    document.querySelector("#btnNew").addEventListener("click", () => {
+        newGraph(graph);
     })
 
     // 上来先获取下用户信息

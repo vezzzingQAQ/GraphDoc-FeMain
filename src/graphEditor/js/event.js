@@ -10,7 +10,7 @@ import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_L
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
-
+import newGraphJson from "./../../asset/graph/new.json";
 
 // 用户配置
 export let userConfig = {
@@ -85,6 +85,16 @@ export function openGraph(graph) {
             console.error("打开文件出错");
         }
     })
+}
+
+/**
+ * 新建导图
+ */
+export function newGraph(graph) {
+    userConfig.currentGraphFileName = "未命名图谱";
+    refreshGraphName();
+    graph.clear();
+    graph.load(newGraphJson);
 }
 
 /**
