@@ -16,7 +16,8 @@ import {
     saveToCloud,
     showLoadFromCloud,
     refreshUserData,
-    toUserPage
+    toUserPage,
+    userConfig
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -97,8 +98,10 @@ export async function bindEvents(graph) {
 
     // 点击用户头像跳转用户页
     document.querySelector(".userBlock").addEventListener("click", () => {
-        if (getCookie("jwt"))
+        if (userConfig.isLogin)
             toUserPage();
+        else
+            showLogin();
     })
 
     // 上来先获取下用户信息

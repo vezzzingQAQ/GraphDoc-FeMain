@@ -144,7 +144,7 @@ export function userLogin() {
         data: formData
     }).then(async d => {
         if (d.data.state == 1) {
-            setCookie('jwt', d.data.jwt, 1000 * 60 * 60);
+            setCookie('jwt', d.data.jwt, 1000 * 60 * 60 * 1000);
             // 获取用户信息进行显示
             let userData = await getUserData();
             refreshUserData(userData);
