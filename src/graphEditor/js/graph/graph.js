@@ -1045,15 +1045,15 @@ export class Graph {
         this.renderProperties.forces.collideForce
             .radius(d => {
                 let radius = d.autoGetValue("physics_node", "collisionRadius", 20);
-                if (!d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
-                    if (d.autoGetValue("physics_node", "fixPosition", false)) {
+                if (!d.autoGetValue("physics_node", "fixPosition", false)) {
+                    if (d.autoGetValue("physics_node", "collisionRadiusAuto", false)) {
                         if (d.autoGetValue("exterior_node", "shape") == "circle")
                             radius = d3.select(`#${d.uuid} .nodeGraph`).attr("r") * 1.2;
                         else if (d.autoGetValue("exterior_node", "shape") == "rect")
                             radius = Math.sqrt((d3.select(`#${d.uuid} .nodeGraphContainer`).node().getBBox().width / 2) ** 2 + (d3.select(`#${d.uuid} .nodeGraphContainer`).node().getBBox().height / 2) ** 2) * 1.2;
-                    } else {
-                        radius = 0;
                     }
+                } else {
+                    radius = 0;
                 }
                 return radius;
             });
