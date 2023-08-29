@@ -450,9 +450,6 @@ export class Graph {
         function dragstarted(e, d) {
             if (!e.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
             d.isMove = true;
-            // 寻找要移动的节点
-            // if (!_.selectedElementList.includes(d))
-            //     _.deselectAll();
             moveList = [];
             for (let selectedElement of _.selectedElementList) {
                 if (selectedElement.type == "node") {
@@ -478,7 +475,7 @@ export class Graph {
             }
         }
         function dragended(e, d) {
-            if (!e.active) _.renderProperties.simulation.alphaTarget(0.0001);
+            if (!e.active) _.renderProperties.simulation.stop();
             d.fx = null;
             d.fy = null;
             d.cx = d.x;
@@ -1287,12 +1284,6 @@ export class Graph {
             for (let currentEdge of this.edges) {
                 currentEdge.remove();
             }
-            // this.edges.forEach(edge => {
-            //     d3.select(`#${edge.uuid}`).remove();
-            // });
-            // this.nodes.forEach(node => {
-            //     d3.select(`#${node.uuid}`).remove();
-            // });
             d3.selectAll(".layer").remove();
             d3.select(".viewArea").remove();
             //d3.selectAll("svg").selectAll("*").remove();
