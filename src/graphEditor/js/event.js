@@ -207,7 +207,6 @@ export function saveToCloud(graph) {
  */
 export function refreshMenu() {
     if (userConfig.isLogin) {
-        console.log(userConfig.isLogin)
         document.querySelector("#btnLogin").classList = "hide";
         document.querySelector("#btnRegister").classList = "hide";
         document.querySelector("#btnLogout").classList = "show";
@@ -238,7 +237,6 @@ export function refreshGraphName() {
 export function refreshUserData(d) {
     if (d.data.state == 1) {
         document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
-        console.log(d.data.msg.data.avatar)
         document.querySelector("#showUserAvatar").src = `${AVATAR_STORE_PATH}${d.data.msg.data.avatar}`;
         userConfig.isLogin = true;
         userConfig.username = d.data.msg.data.username;
