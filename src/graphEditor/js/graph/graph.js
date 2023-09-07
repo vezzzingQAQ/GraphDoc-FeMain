@@ -62,8 +62,6 @@ export class Graph {
             },
             simulation: null
         }
-        // 选择模式
-        this.selectMode = "all";
         this.isShiftDown = false;
         this.isControlDown = false;
         // 图谱中的节点
@@ -640,7 +638,7 @@ export class Graph {
                         }
 
                         // 通过和node的坐标比较，确定哪些点在圈选范围
-                        if ("all" || _.selectMode == "node") {
+                        if (document.querySelector("#check_node").checked) {
                             let nodes = d3.selectAll(".forceNode").attr("temp", function (d) {
                                 let node = d3.select(this).node();
                                 let nodePosition = {
@@ -652,7 +650,7 @@ export class Graph {
                                 }
                             });
                         }
-                        if ("all" || _.selectMode == "edge") {
+                        if (document.querySelector("#check_edge").checked) {
                             let edges = d3.selectAll(".forceEdge").attr("temp", function (d) {
                                 let node1 = d3.select(`#${d.source.uuid}`).node();
                                 let node2 = d3.select(`#${d.target.uuid}`).node();
@@ -675,6 +673,7 @@ export class Graph {
                             document.querySelector(".panArea .listPan").innerHTML = "";
                         }
                         rect.attr("width", 0).attr("height", 0);
+                        console.log(_.selectedElementList)
                         // 计算选中元素的共有属性
                         if (_.selectedElementList.length > 1) {
                             let publicComponentList = [];
