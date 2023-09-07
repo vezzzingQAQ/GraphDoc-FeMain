@@ -44,6 +44,8 @@ class SubComponent {
         this.readOnly = readOnly;
         this.value = defaultValue;
         this.dom = null;
+        // 这个key由component传入，用来进行批量修改
+        this.key;
     }
 
     /**
@@ -71,6 +73,27 @@ class SubComponent {
             this.owner.owner.owner.modifyEdgePhysics();
         } else {
             console.error(`不是Node也不是Edge的组件`);
+        }
+    }
+
+    /**
+     * 更新所有选中的同类型的值
+     */
+    updateSelectedValue(value) {
+        let selectedElementList = this.owner.owner.owner.selectedElementList
+        if (selectedElementList.length > 1) {
+            for (let ele of selectedElementList) {
+                ele.autoSetValue(this.owner.key, this.key, value);
+                if (ele.type == "node") {
+                    this.owner.owner.owner.modifyNodeExterior(ele);
+                    this.owner.owner.owner.modifyNodePhysics();
+                } else if (ele.type == "edge") {
+                    this.owner.owner.owner.modifyEdgeExterior(ele);
+                    this.owner.owner.owner.modifyEdgePhysics();
+                } else {
+                    console.error(`不是Node也不是Edge的组件`);
+                }
+            }
         }
     }
 
@@ -129,6 +152,7 @@ export class SC_NumberInput extends SubComponent {
         this.dom.step = this.step;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         });
         return this.dom;
@@ -156,6 +180,7 @@ export class SC_ColorInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         });
         return this.dom;
@@ -183,6 +208,7 @@ export class SC_TextInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         });
         return this.dom;
@@ -210,6 +236,7 @@ export class SC_UrlInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         });
         return this.dom;
@@ -243,6 +270,7 @@ export class SC_Select extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("change", () => {
             this.setValue(this.dom.options[this.dom.selectedIndex].value);
+            this.updateSelectedValue(this.dom.value);
             this.updateGraph();
         });
         return this.dom;
@@ -277,6 +305,7 @@ export class SC_Vector2 extends SubComponent {
         this.dom.addEventListener("input", () => {
             let [_, x, y] = this.dom.value.split(/[(,)]/);
             this.value = { x, y };
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         });
         return this.dom;
@@ -306,6 +335,7 @@ export class SC_Check extends SubComponent {
         this.dom.checked = this.value;
         this.dom.addEventListener("click", () => {
             this.value = this.dom.checked;
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         })
         return this.dom;
@@ -333,6 +363,7 @@ export class SC_Textarea extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.value = this.dom.value;
+            this.updateSelectedValue(this.value);
             this.updateGraph();
         })
         return this.dom;
@@ -413,7 +444,7 @@ export class SC_Tag extends SubComponent {
             spanTempDom.remove();
             tagDom.addEventListener("input", () => {
                 let tagDoms = document.querySelectorAll(".tagDom");
-                _.value=[];
+                _.value = [];
                 for (let i = 0; i < tagDoms.length; i++) {
                     let currentTagDom = tagDoms[i];
                     _.value[i] = currentTagDom.value;
@@ -433,7 +464,7 @@ export class SC_Tag extends SubComponent {
                 tagDeleteBtn.remove();
                 tagContainer.remove();
                 let tagDoms = document.querySelectorAll(".tagDom");
-                _.value=[];
+                _.value = [];
                 for (let i = 0; i < tagDoms.length; i++) {
                     let currentTagDom = tagDoms[i];
                     _.value[i] = currentTagDom.value;
