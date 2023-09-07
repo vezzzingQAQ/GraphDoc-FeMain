@@ -675,6 +675,31 @@ export class Graph {
                             document.querySelector(".panArea .listPan").innerHTML = "";
                         }
                         rect.attr("width", 0).attr("height", 0);
+                        // 计算选中元素的共有属性
+                        if (_.selectedElementList.length > 1) {
+                            let publicComponentList = [];
+                            for (let componentKey in _.selectedElementList[0].componentMap) {
+                                publicComponentList.push(componentKey);
+                            }
+                            for (let i = 1; i < _.selectedElementList.length; i++) {
+                                let element = _.selectedElementList[i];
+                                for (let j = 0; j < publicComponentList.length; j++) {
+                                    let publicComponentKey = publicComponentList[j];
+                                    let hasKey = false;
+                                    for (let componentKey in element.componentMap) {
+                                        if (componentKey == publicComponentKey) {
+                                            hasKey = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!hasKey) {
+                                        publicComponentList.splice(j, 1);
+                                        j--;
+                                    }
+                                }
+                            }
+                            console.log(publicComponentList);
+                        }
                     }
                     let times = (new Date()).getTime() - clickTime;
                     if (times < 100) {
