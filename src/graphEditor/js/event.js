@@ -14,8 +14,11 @@ import newGraphJson from "./../../asset/graph/new.json";
 
 import template_img_treeGraph from "./../../asset/img/graphTemplate/treeGraph.png";
 import template_img_timeOrder from "./../../asset/img/graphTemplate/timeOrder.png";
+import template_img_piano from "./../../asset/img/graphTemplate/piano.png";
+
 import template_json_treeGraph from "./../../asset/graph/graphTemplate/treeGraph.json";
 import template_json_timeOrder from "./../../asset/graph/graphTemplate/timeOrder.json";
+import template_json_piano from "./../../asset/graph/graphTemplate/piano.json";
 
 const templateList = [
     {
@@ -29,6 +32,12 @@ const templateList = [
         name: "timeOrder",
         img: template_img_timeOrder,
         doc: template_json_timeOrder
+    },
+    {
+        showName: "钢琴",
+        name: "piano",
+        img: template_img_piano,
+        doc: template_json_piano
     }
 ];
 
