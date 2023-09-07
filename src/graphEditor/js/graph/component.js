@@ -355,9 +355,30 @@ export class C_N_Text extends Component {
  */
 export class C_N_Audio extends Component {
     constructor(showName, key, value = {
+        soundType:"pop",
         soundVolume: 1
     }) {
         super(showName, key, true);
+        this.addValue("soundType", "音效", new SC_Select(value.soundType, false, [
+            { value: "pop", text: "pop" },
+            { value: "1", text: "钢琴C" },
+            { value: "2", text: "钢琴D" },
+            { value: "3", text: "钢琴E" },
+            { value: "4", text: "钢琴F" },
+            { value: "5", text: "钢琴G" },
+            { value: "6", text: "钢琴A" },
+            { value: "7", text: "钢琴B" },
+            { value: "G1", text: "钢琴gC" },
+            { value: "G2", text: "钢琴gD" },
+            { value: "G3", text: "钢琴gE" },
+            { value: "G4", text: "钢琴gF" },
+            { value: "G5", text: "钢琴gG" },
+            { value: "G6", text: "钢琴gA" },
+            { value: "G7", text: "钢琴gB" },
+            { value: "GG1", text: "钢琴ggC" },
+            { value: "GG2", text: "钢琴ggD" },
+            { value: "GG3", text: "钢琴ggE" },
+        ]));
         this.addValue("soundVolume", "音量", new SC_NumberInput(value.soundVolume, false, 0, 1, 0.1));
     }
 }

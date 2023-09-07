@@ -408,7 +408,10 @@ export class Graph {
                 let nodeObj = d3.select(this).data()[0];
                 // 播放音效
                 if (nodeObj.hasComponent("audio_node")) {
-                    playMusic(nodeObj.autoGetValue("audio_node", "soundVolume", 1));
+                    playMusic(
+                        nodeObj.autoGetValue("audio_node", "soundType", "pop"),
+                        nodeObj.autoGetValue("audio_node", "soundVolume", 1)
+                    );
                 }
                 // 缩放
                 let node = d3.select(this).select(".nodeGraph");
