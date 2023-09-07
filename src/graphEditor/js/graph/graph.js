@@ -699,6 +699,14 @@ export class Graph {
                                 }
                             }
                             console.log(publicComponentList);
+                            // 显示公有组件UI
+                            let domCompContianer = document.createElement("div");
+                            domCompContianer.classList = "compContainer";
+                            for (let key of publicComponentList) {
+                                domCompContianer.appendChild(_.selectedElementList[0].componentMap[key].initHtml());
+                            }
+                            document.querySelector(".panArea .listPan").innerHTML = "";
+                            document.querySelector(".panArea .listPan").appendChild(domCompContianer);
                         }
                     }
                     let times = (new Date()).getTime() - clickTime;
