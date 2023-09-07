@@ -1031,7 +1031,8 @@ export class Graph {
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
-            .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"));
+            .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"))
+            .attr("rx", d => d.autoGetValue("exterior_node", "round", 0));
 
         // 更新元素
         this.refreshBottomDom();
