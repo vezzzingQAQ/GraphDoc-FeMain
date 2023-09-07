@@ -240,12 +240,14 @@ export function refreshMenu() {
         document.querySelector("#btnLogin").classList = "hide";
         document.querySelector("#btnRegister").classList = "hide";
         document.querySelector("#btnLogout").classList = "show";
+        document.querySelector("#btnUserPage").classList = "show";
         document.querySelector("#btnToCloudSavsAs").classList = "show";
         document.querySelector("#btnLoadFromCloud").classList = "show";
     } else {
         document.querySelector("#btnLogin").classList = "show";
         document.querySelector("#btnRegister").classList = "show";
         document.querySelector("#btnLogout").classList = "hide";
+        document.querySelector("#btnUserPage").classList = "hide";
         document.querySelector("#btnToCloudSavsAs").classList = "hide";
         document.querySelector("#btnLoadFromCloud").classList = "hide";
     }

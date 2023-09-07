@@ -97,6 +97,11 @@ export async function bindEvents(graph) {
         userLogout();
     });
 
+    // 跳转用户中心
+    document.querySelector("#btnUserPage").addEventListener("click", () => {
+        toUserPage();
+    })
+
     // 保存到云
     document.querySelector("#saveToCloud").addEventListener("click", () => {
         saveToCloud(graph);
