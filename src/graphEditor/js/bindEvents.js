@@ -18,10 +18,12 @@ import {
     refreshUserData,
     toUserPage,
     userConfig,
-    newGraph
+    newGraph,
+    showPay
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
+import payJpg from "./../../asset/img/pay.jpg";
 import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 
@@ -57,13 +59,15 @@ export async function bindEvents(graph) {
     document.querySelector("#btnAuthorList").addEventListener("click", () => {
         showAuthorList();
     });
+    document.querySelector("#btnPay").addEventListener("click", () => {
+        showPay();
+    });
     document.querySelector("#openFile").addEventListener("click", () => {
         openGraph(graph);
     })
     document.querySelector("#bgColorInput").addEventListener("input", () => {
         setGraphBackgroundColor(graph);
     });
-    document.querySelector("#mainAboutImg").src = mainAboutPng;
 
     // 登录注册窗体互相跳转
     document.querySelector("#toRegister").addEventListener("click", () => {
@@ -113,4 +117,8 @@ export async function bindEvents(graph) {
     // 上来先获取下用户信息
     let userData = await getUserData();
     refreshUserData(userData);
+
+    // 加载图片
+    document.querySelector("#mainAboutImg").src = mainAboutPng;
+    document.querySelector("#payImg").src = payJpg;
 }

@@ -279,6 +279,9 @@ export function showLogin() {
 export function showRegister() {
     showCenterWindow(document.querySelector("#windowRegister"));
 }
+export function showPay() {
+    showCenterWindow(document.querySelector("#windowPay"));
+}
 
 /**
  * 保存到云
