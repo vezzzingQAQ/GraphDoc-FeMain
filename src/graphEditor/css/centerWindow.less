@@ -254,6 +254,46 @@
     }
 }
 
+#windowTemplate {
+    .content ul {
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+            display: block;
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: @normal_border_radius;
+            overflow: hidden;
+            margin: 20px;
+            background-color: white;
+            cursor: pointer;
+
+            img {
+                position: absolute;
+                width: 100%;
+                left: 0;
+                top: 0;
+            }
+
+            p {
+                position: absolute;
+                left: 0px;
+                bottom: 10px;
+                letter-spacing: 2px;
+                padding-left: 5px;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                border-top-right-radius: @small_border_radius;
+                border-bottom-right-radius: @small_border_radius;
+                color: rgb(255, 255, 255);
+                background-color: rgba(0, 0, 0, 0.612);
+            }
+        }
+    }
+}
+
 .darkMode {
     .centerWindow {
         .bg {

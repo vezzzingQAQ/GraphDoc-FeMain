@@ -12,6 +12,26 @@ import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphT
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 
+import template_img_treeGraph from "./../../asset/img/graphTemplate/treeGraph.png";
+import template_img_timeOrder from "./../../asset/img/graphTemplate/timeOrder.png";
+import template_json_treeGraph from "./../../asset/graph/graphTemplate/treeGraph.json";
+import template_json_timeOrder from "./../../asset/graph/graphTemplate/timeOrder.json";
+
+const templateList = [
+    {
+        showName: "树状图",
+        name: "treeGraph",
+        img: template_img_treeGraph,
+        doc: template_json_treeGraph
+    },
+    {
+        showName: "时间规划",
+        name: "timeOrder",
+        img: template_img_timeOrder,
+        doc: template_json_timeOrder
+    }
+];
+
 // 用户配置
 export let userConfig = {
     isDark: true,
@@ -389,6 +409,33 @@ export async function showLoadFromCloud(graph) {
         document.querySelector("#windowLoadFromCloud ul").appendChild(domGraphTag);
     }
     showCenterWindow(document.querySelector("#windowLoadFromCloud"));
+}
+
+/**
+ * 从模板新建
+ */
+export function showTemplate(graph) {
+    let domAddedContainer = document.createElement("ul");
+    for (let template of templateList) {
+        let domAddedLi = document.createElement("li");
+        domAddedLi.onclick = () => {
+            userConfig.currentGraphFileName = "未命名图谱";
+            refreshGraphName();
+            graph.clear();
+            graph.load(template.doc);
+            hideCenterWindow(document.querySelector("#windowTemplate"));
+        }
+        let domAddedImg = document.createElement("img");
+        domAddedImg.src = template.img;
+        let domAddedP = document.createElement("p");
+        domAddedP.innerHTML = template.showName;
+        domAddedLi.appendChild(domAddedImg);
+        domAddedLi.appendChild(domAddedP);
+        domAddedContainer.appendChild(domAddedLi);
+    }
+    document.querySelector("#windowTemplate .content").innerHTML = "";
+    document.querySelector("#windowTemplate .content").appendChild(domAddedContainer);
+    showCenterWindow(document.querySelector("#windowTemplate"));
 }
 
 function showCenterWindow(selector) {

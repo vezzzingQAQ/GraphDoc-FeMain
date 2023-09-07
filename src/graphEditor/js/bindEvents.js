@@ -19,7 +19,8 @@ import {
     toUserPage,
     userConfig,
     newGraph,
-    showPay
+    showPay,
+    showTemplate
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -112,7 +113,12 @@ export async function bindEvents(graph) {
     // 新建图谱
     document.querySelector("#btnNew").addEventListener("click", () => {
         newGraph(graph);
-    })
+    });
+
+    // 从模板新建图谱
+    document.querySelector("#btnTemplate").addEventListener("click", () => {
+        showTemplate(graph);
+    });
 
     // 上来先获取下用户信息
     let userData = await getUserData();
