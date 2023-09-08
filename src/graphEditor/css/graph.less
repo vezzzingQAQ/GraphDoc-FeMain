@@ -28,3 +28,17 @@
     stroke: #ccc;
     stroke-width: 2px;
 }
+
+.nodeMd {
+    ul {
+        li {
+            list-style: circle;
+
+            &::before {
+                content: "·";
+                padding-right: 4px;
+                font-size: 20px;
+            }
+        }
+    }
+}

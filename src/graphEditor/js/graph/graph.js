@@ -25,9 +25,10 @@
  */
 
 import * as d3 from "d3";
-import { v4 as uuidv4 } from 'uuid';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/ir-black.css';
+import { v4 as uuidv4 } from "uuid";
+import hljs from "highlight.js";
+import "highlight.js/styles/ir-black.css";
+import { marked } from "marked";
 
 import { CreateBasicEdge, CreateBasicNode, CreateLinkNode, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
@@ -923,6 +924,7 @@ export class Graph {
         let domAddedNodeFile = null;
         let domAddedNodeVideo = null;
         let domAddedNodeIframe = null;
+        let domAddedNodeMd = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -953,6 +955,8 @@ export class Graph {
             domAddedNodeVideo = domAddedSubComponentContainer.append("xhtml:video");
         if (nodeObj.hasComponent("iframe_node"))
             domAddedNodeIframe = domAddedSubComponentContainer.append("xhtml:iframe");
+        if (nodeObj.hasComponent("md_node"))
+            domAddedNodeMd = domAddedSubComponentContainer.append("xhtml:div");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1052,6 +1056,12 @@ export class Graph {
                 .attr("height", d => d.autoGetValue("iframe_node", "height", 200))
                 .attr("src", d => d.autoGetValue("iframe_node", "src", "#"))
                 .style("margin", "20px")
+
+        if (domAddedNodeMd)
+            domAddedNodeMd
+                .attr("class", "nodeMd")
+                .style("color", d => d.autoGetValue("md_node", "textColor", "#ffffff"))
+                .html(d => marked(d.autoGetValue("md_node", "content", "")));
 
 
         domAddedSubComponentContainer

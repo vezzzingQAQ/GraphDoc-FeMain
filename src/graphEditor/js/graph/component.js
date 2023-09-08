@@ -516,6 +516,21 @@ export class C_N_Iframe extends Component {
 }
 
 /**
+ * md组件
+ */
+export class C_N_Markdown extends Component {
+    constructor(showName, key, value = {
+        content: "",
+        textColor: "#ffffff",
+    }) {
+        super(showName, key, true);
+        this.addValue("content", "MD", new SC_Textarea(value.content, false));
+        this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
+    }
+}
+
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -608,6 +623,12 @@ export const ComponentMap = {
         type: "node",
         showName: "🎲页面",
         class: C_N_Iframe,
+    },
+    "md_node": {
+        key: "md_node",
+        type: "node",
+        showName: "📖MarkDown",
+        class: C_N_Markdown,
     }
 }
 
