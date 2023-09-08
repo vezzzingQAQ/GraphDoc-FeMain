@@ -494,6 +494,22 @@ export class C_N_Code extends Component {
 }
 
 /**
+ * iframe组件
+ */
+export class C_N_Iframe extends Component {
+    constructor(showName, key, value = {
+        src: "#",
+        width: 200,
+        height: 200
+    }) {
+        super(showName, key, true);
+        this.addValue("src", "地址", new SC_UrlInput(value.src, false));
+        this.addValue("width", "宽度", new SC_NumberInput(value.width, false, 0, 20000, 1));
+        this.addValue("height", "高度", new SC_NumberInput(value.height, false, 0, 20000, 1));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -580,6 +596,12 @@ export const ComponentMap = {
         type: "node",
         showName: "🗒️代码",
         class: C_N_Code,
+    },
+    "iframe_node": {
+        key: "iframe_node",
+        type: "node",
+        showName: "🎲页面",
+        class: C_N_Iframe,
     }
 }
 

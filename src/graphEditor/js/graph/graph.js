@@ -898,6 +898,7 @@ export class Graph {
         let domAddedNodeImg = null;
         let domAddedNodeFile = null;
         let domAddedNodeVideo = null;
+        let domAddedNodeIframe = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -926,6 +927,8 @@ export class Graph {
             domAddedNodeFile = domAddedSubComponentContainer.append("xhtml:a");
         if (nodeObj.hasComponent("video_node"))
             domAddedNodeVideo = domAddedSubComponentContainer.append("xhtml:video");
+        if (nodeObj.hasComponent("iframe_node"))
+            domAddedNodeIframe = domAddedSubComponentContainer.append("xhtml:iframe");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1017,6 +1020,15 @@ export class Graph {
                 .on("load", function () {
                     calSize();
                 })
+
+        if (domAddedNodeIframe)
+            domAddedNodeIframe
+                .attr("class", "nodeIframe")
+                .attr("width", d => d.autoGetValue("iframe_node", "width", 200))
+                .attr("height", d => d.autoGetValue("iframe_node", "height", 200))
+                .attr("src", d => d.autoGetValue("iframe_node", "src", "#"))
+                .style("margin", "20px")
+
 
         domAddedSubComponentContainer
             .style("display", "flex")
