@@ -261,17 +261,23 @@ export class C_E_Exterior extends Component {
     constructor(showName, key, value = {
         strokeColor: "#666666",
         strokeStyle: "dot",
+        strokeType: "line",
         strokeWidth: 0.6
     }) {
         super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, [
+        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle || "0", false, [
             { value: "0", text: "_______" },
             { value: "3,1", text: "-- -- -- " },
             { value: "2,1", text: "- - - -" },
             { value: "0.8", text: "........" },
             { value: "1,2", text: ". . . ." },
             { value: "3,2,1,2", text: "._._._." },
+        ]));
+        this.addValue("strokeType", "描边类型", new SC_Select(value.strokeType || "line", false, [
+            { value: "line", text: "直线" },
+            { value: "bezierH", text: "横向Bezier" },
+            { value: "bezierV", text: "纵向Bezier" },
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
     }
