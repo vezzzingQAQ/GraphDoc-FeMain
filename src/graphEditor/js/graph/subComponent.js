@@ -86,14 +86,15 @@ class SubComponent {
                 ele.autoSetValue(this.owner.key, this.key, value);
                 if (ele.type == "node") {
                     this.owner.owner.owner.modifyNodeExterior(ele);
-                    this.owner.owner.owner.modifyNodePhysics();
                 } else if (ele.type == "edge") {
                     this.owner.owner.owner.modifyEdgeExterior(ele);
-                    this.owner.owner.owner.modifyEdgePhysics();
                 } else {
                     console.error(`不是Node也不是Edge的组件`);
                 }
             }
+            this.owner.owner.owner.renderProperties.simulation.stop();
+            this.owner.owner.owner.modifyNodePhysics();
+            this.owner.owner.owner.modifyEdgePhysics();
         }
     }
 

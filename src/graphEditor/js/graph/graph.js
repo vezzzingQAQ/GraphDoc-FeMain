@@ -149,7 +149,6 @@ export class Graph {
             // 创建物理模拟
             _.renderProperties.simulation = d3.forceSimulation()
                 .force("link", _.renderProperties.forces.linkForce)
-                .force("center", _.renderProperties.forces.centerForce)
                 .force("charge", _.renderProperties.forces.chargeForce)
                 .force("collide", _.renderProperties.forces.collideForce)
                 .alphaDecay(1.1);
@@ -1127,7 +1126,7 @@ export class Graph {
             .strength(d => d.autoGetValue("physics_node", "manyBodyForceStrength", -80, value => -value))
             .distanceMax(d => d.autoGetValue("physics_node", "manyBodyForceRangeMin", 10))
             .distanceMin(d => d.autoGetValue("physics_node", "manyBodyForceRangeMax", 12))
-        this.renderProperties.simulation.restart();
+        this.renderProperties.simulation.alphaTarget(0.0).restart();
     }
 
     /**

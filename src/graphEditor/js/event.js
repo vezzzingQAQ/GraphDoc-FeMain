@@ -299,6 +299,16 @@ export function toUserPage() {
 }
 
 /**
+ * 重启物理模拟
+ */
+export function restartSim(graph) {
+    graph.renderProperties.simulation.stop();
+    graph.modifyNodePhysics();
+    graph.modifyEdgePhysics();
+    graph.renderProperties.simulation.alphaTarget(0.02).restart();
+}
+
+/**
  * 展示中央窗体
  */
 export function showAuthorList() {

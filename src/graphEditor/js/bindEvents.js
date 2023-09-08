@@ -20,7 +20,8 @@ import {
     userConfig,
     newGraph,
     showPay,
-    showTemplate
+    showTemplate,
+    restartSim
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -124,6 +125,11 @@ export async function bindEvents(graph) {
     document.querySelector("#btnTemplate").addEventListener("click", () => {
         showTemplate(graph);
     });
+
+    // 重启物理模拟
+    document.querySelector("#physicsSimBtn").addEventListener("click", () => {
+        restartSim(graph);
+    })
 
     // 上来先获取下用户信息
     let userData = await getUserData();
