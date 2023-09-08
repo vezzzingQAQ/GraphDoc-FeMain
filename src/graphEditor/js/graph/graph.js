@@ -289,11 +289,13 @@ export class Graph {
 
         function initRightMenu() {
             d3.select(".displayArea svg").on("contextmenu", function (e) {
-                e.preventDefault();
-                if (e.target == this && !_.isZooming) {
-                    _.initMenu_Svg(e);
-                } else {
-                    _.hideMenu();
+                if (e.target == this) {
+                    e.preventDefault();
+                    if (!_.isZooming) {
+                        _.initMenu_Svg(e);
+                    } else {
+                        _.hideMenu();
+                    }
                 }
             });
         }
@@ -440,8 +442,10 @@ export class Graph {
                         .style("transform", `scale(1)`);
                 }
             })
-            .on("contextmenu", function () {
-
+            .on("contextmenu", function (e) {
+                e.preventDefault();
+                let nodeObj = d3.select(this).data()[0];
+                _.initMenu_Node(e, nodeObj);
             })
         _.initDragEvents(nodes);
     }
@@ -1294,12 +1298,29 @@ export class Graph {
         ]
         this.initMenu(e, menu);
     }
+
+    /**
+     * 在节点上右键的菜单
+     */
+    initMenu_Node(e, nodeObj) {
+        let _ = this;
+        let menu = [
+            {
+                name: "test",
+                func: function () {
+
+                }
+            }
+        ]
+        this.initMenu(e, menu);
+    }
+
     initMenu(e, menuObj) {
         let _ = this;
         let domMenu = document.querySelector(".rightMenu");
         domMenu.innerHTML = "";
-        domMenu.style.left = `${e.offsetX}px`;
-        domMenu.style.top = `${e.offsetY}px`;
+        domMenu.style.left = `${e.clientX}px`;
+        domMenu.style.top = `${e.clientY}px`;
         domMenu.classList = "rightMenu rightMenu_show";
         menuObj.forEach(obj => {
             if (obj.name && obj.func) {
