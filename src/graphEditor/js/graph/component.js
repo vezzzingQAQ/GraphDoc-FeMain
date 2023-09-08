@@ -355,7 +355,7 @@ export class C_N_Text extends Component {
  */
 export class C_N_Audio extends Component {
     constructor(showName, key, value = {
-        soundType:"pop",
+        soundType: "pop",
         soundVolume: 1
     }) {
         super(showName, key, true);
@@ -482,6 +482,18 @@ export class C_N_Tag extends Component {
 }
 
 /**
+ * 代码块组件
+ */
+export class C_N_Code extends Component {
+    constructor(showName, key, value = {
+        content: ""
+    }) {
+        super(showName, key, true);
+        this.addValue("content", "代码", new SC_Textarea(value.content, false));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -562,6 +574,12 @@ export const ComponentMap = {
         type: "node",
         showName: "📃TAG",
         class: C_N_Tag,
+    },
+    "code_node": {
+        key: "code_node",
+        type: "node",
+        showName: "🗒️代码",
+        class: C_N_Code,
     }
 }
 

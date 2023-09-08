@@ -26,6 +26,9 @@
 
 import * as d3 from "d3";
 import { v4 as uuidv4 } from 'uuid';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/ir-black.css';
+
 import { CreateBasicEdge, CreateBasicNode, CreateLinkNode, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
 import { saveSvgAsPng } from "save-svg-png-ext";
@@ -890,6 +893,7 @@ export class Graph {
         let addedNodeRect = null;
 
         let domAddedNodeText = null;
+        let domAddedNodeCode = null;
         let domAddedNodeLink = null;
         let domAddedNodeImg = null;
         let domAddedNodeFile = null;
@@ -912,6 +916,8 @@ export class Graph {
 
         if (nodeObj.hasComponent("text_node"))
             domAddedNodeText = domAddedSubComponentContainer.append("xhtml:div");
+        if (nodeObj.hasComponent("code_node"))
+            domAddedNodeCode = domAddedSubComponentContainer.append("xhtml:pre");
         if (nodeObj.hasComponent("link_node"))
             domAddedNodeLink = domAddedSubComponentContainer.append("xhtml:a");
         if (nodeObj.hasComponent("img_node"))
@@ -939,6 +945,18 @@ export class Graph {
                 .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
                 .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+
+        if (domAddedNodeCode) {
+            domAddedNodeCode
+                .attr("class", "nodeCode")
+                .style("width", "max-content")
+                .style("height", "max-content")
+                .style("text-anchor", "middle")
+                .style("dominant-baseline", "middle")
+                .style("padding", "10px")
+                .html(d => `<code>${d.autoGetValue("code_node", "content", "")}</code>`)
+            hljs.highlightAll();
+        }
 
         if (domAddedNodeLink)
             domAddedNodeLink
