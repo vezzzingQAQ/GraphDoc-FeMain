@@ -390,7 +390,7 @@ export class Graph {
                         _.edges = _.edges
                             .data(_.edgeList, d => d.uuid)
                             .enter()
-                            .append("line")
+                            .append("path")
                             .merge(_.edges);
                         _.initEdges(_.edges);
 
@@ -1187,7 +1187,26 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"))
-            .style("fill", "none");
+            .style("fill", "none")
+        // .attr("d", d => {
+        //     let path = d3.path();
+        //     path.moveTo(d.source.x, d.source.y);
+        //     switch (d.autoGetValue("exterior_edge", "strokeType")) {
+        //         case "line": {
+        //             path.lineTo(d.target.x, d.target.y);
+        //             break;
+        //         }
+        //         case "bezierH": {
+        //             path.bezierCurveTo(d.target.x, d.source.y, d.source.x, d.target.y, d.target.x, d.target.y);
+        //             break;
+        //         }
+        //         case "bezierV": {
+        //             path.bezierCurveTo(d.source.x, d.target.y, d.target.x, d.source.y, d.target.x, d.target.y);
+        //             break;
+        //         }
+        //     }
+        //     return path.toString();
+        // });
         this.renderProperties.simulation.restart();
         // 更新元素
         this.refreshBottomDom();
