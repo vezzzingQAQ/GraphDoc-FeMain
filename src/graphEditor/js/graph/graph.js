@@ -40,7 +40,8 @@ import {
     FILE_UPLOAD_PATH,
     FILE_STORE_PATH,
     VIDEO_UPLOAD_PATH,
-    VIDEO_STORE_PATH
+    VIDEO_STORE_PATH,
+    FUNC1_COMP
 } from "../../../public/js/urls"
 
 export class Graph {
@@ -925,6 +926,7 @@ export class Graph {
         let domAddedNodeVideo = null;
         let domAddedNodeIframe = null;
         let domAddedNodeMd = null;
+        let domAddedNodeFunc1 = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -957,6 +959,8 @@ export class Graph {
             domAddedNodeIframe = domAddedSubComponentContainer.append("xhtml:iframe");
         if (nodeObj.hasComponent("md_node"))
             domAddedNodeMd = domAddedSubComponentContainer.append("xhtml:div");
+        if (nodeObj.hasComponent("func1_node"))
+            domAddedNodeFunc1 = domAddedSubComponentContainer.append("xhtml:iframe");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1062,6 +1066,16 @@ export class Graph {
                 .attr("class", "nodeMd")
                 .style("color", d => d.autoGetValue("md_node", "textColor", "#ffffff"))
                 .html(d => marked(d.autoGetValue("md_node", "content", "")));
+
+        if (domAddedNodeFunc1)
+            domAddedNodeFunc1
+                .attr("class", "nodeIframe nodeFunc1")
+                .attr("width", 300)
+                .attr("height", 400)
+                .attr("src", d => {
+                    console.log(`${FUNC1_COMP}?fn=${encodeURI(d.autoGetValue("func1_node", "func", "x"))}`);
+                    return `${FUNC1_COMP}?fn=${d.autoGetValue("func1_node", "func", "x")}`
+                })
 
 
         domAddedSubComponentContainer

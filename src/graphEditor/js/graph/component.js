@@ -529,6 +529,18 @@ export class C_N_Markdown extends Component {
     }
 }
 
+/**
+ * 函数组件
+ */
+export class C_N_Func1 extends Component {
+    constructor(showName, key, value = {
+        func: "x"
+    }) {
+        super(showName, key, true);
+        this.addValue("func", "函数", new SC_TextInput(value.func, false));
+    }
+}
+
 
 /**
  * 寻址映射
@@ -629,6 +641,12 @@ export const ComponentMap = {
         type: "node",
         showName: "📖MarkDown",
         class: C_N_Markdown,
+    },
+    "func1_node": {
+        key: "func1_node",
+        type: "node",
+        showName: "📈函数",
+        class: C_N_Func1,
     }
 }
 
