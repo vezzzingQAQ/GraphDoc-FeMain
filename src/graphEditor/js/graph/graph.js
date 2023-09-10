@@ -336,15 +336,23 @@ export class Graph {
             .on("click", function (d, i) {
                 let edgeObj = d3.select(this).data()[0];
                 let edge = d3.select(this);
-                edgeObj.initHtml();
                 // 清除选择集
-                if (!_.isControlDown) {
+                if (!_.isShiftDown && !_.isControlDown) {
                     _.deselectAll();
                 }
-                _.selectElement(edgeObj);
+                // 按下ctrl减选
+                if (_.isControlDown && _.selectedElementList.includes(edgeObj)) {
+                    _.deselectElement(edgeObj);
+                } else {
+                    _.selectElement(edgeObj);
+                }
+                // 计算公有属性
                 if (_.selectedElementList.length > 1) {
                     _.calPublicProperties();
+                } else {
+                    edgeObj.initHtml();
                 }
+
             })
             .on("mouseenter", function () {
                 // 缩放
@@ -414,15 +422,21 @@ export class Graph {
                         _.modifyEdgePhysics();
                     }
                 }
-                // 更新数属性面板
-                nodeObj.initHtml();
                 // 清除选择集
-                if (!_.isControlDown) {
+                if (!_.isShiftDown && !_.isControlDown) {
                     _.deselectAll();
                 }
-                _.selectElement(nodeObj);
+                // 按下ctrl减选
+                if (_.isControlDown && _.selectedElementList.includes(nodeObj)) {
+                    _.deselectElement(nodeObj);
+                } else {
+                    _.selectElement(nodeObj);
+                }
+                // 计算公有属性
                 if (_.selectedElementList.length > 1) {
                     _.calPublicProperties();
+                } else {
+                    nodeObj.initHtml();
                 }
             })
             // 双击转到编辑
