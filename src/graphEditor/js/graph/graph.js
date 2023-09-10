@@ -69,6 +69,7 @@ export class Graph {
         }
         this.isShiftDown = false;
         this.isControlDown = false;
+        this.isADown = false;
         // 图谱中的节点
         this.nodes;
         this.edges;
@@ -243,6 +244,7 @@ export class Graph {
             // 选中节点后delete删除
             d3.select("body").on("keydown", function (e) {
                 if (e.target == this) {
+                    // console.log(e.keyCode);
                     // delete删除选中的元素
                     if (e.keyCode == 46) {
                         if (_.selectedElementList.length != 0) {
@@ -258,6 +260,8 @@ export class Graph {
                         _.isShiftDown = true;
                     if (e.keyCode == 17)
                         _.isControlDown = true;
+                    if (e.keyCode == 65)
+                        _.isADown = true;
                     // ctrl+c复制选中的节点
                     if (e.keyCode == 67 && _.isControlDown) {
                         _.copyElements();
@@ -282,11 +286,12 @@ export class Graph {
             });
             d3.select("body").on("keyup", function (e) {
                 if (e.target == this) {
-                    if (e.keyCode == 16) {
+                    if (e.keyCode == 16)
                         _.isShiftDown = false;
-                    } else if (e.keyCode == 17) {
+                    if (e.keyCode == 17)
                         _.isControlDown = false;
-                    }
+                    if (e.keyCode == 65)
+                        _.isADown = false;
                 }
             });
         }
@@ -380,7 +385,7 @@ export class Graph {
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
                 // 按下shift的同时点击另一个节点，创建关系
-                if (_.isShiftDown && _.selectedElementList.length >= 1) {
+                if (_.isADown && _.selectedElementList.length >= 1) {
                     let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
                     // 遍历所有链接判断是不是已经链接过了
                     let isLinked = false;
