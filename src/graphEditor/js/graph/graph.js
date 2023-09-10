@@ -211,27 +211,30 @@ export class Graph {
         }
         initElements();
 
-        // 点击空白处
-        d3.select(".displayArea").on("click", function (e) {
-            // 更新元素
-            _.refreshBottomDom();
-            if (e.button == 0 && e.target == this) {
-                // 如果同时按着shift键，添加节点
-                if (_.selectedElementList.length >= 1 && _.isShiftDown) {
-                    let fromNode = _.selectedElementList.length >= 1 ? _.selectedElementList[_.selectedElementList.length - 1] : null;
-                    _.addNode(e, fromNode);
+        // 点击空白处&设置mouseXY
+        d3.select(".displayArea")
+            .on("click", function (e) {
+                // 更新元素
+                _.refreshBottomDom();
+                if (e.button == 0 && e.target == this) {
+                    // 如果同时按着shift键，添加节点
+                    if (_.selectedElementList.length >= 1 && _.isShiftDown) {
+                        let fromNode = _.selectedElementList.length >= 1 ? _.selectedElementList[_.selectedElementList.length - 1] : null;
+                        _.addNode(e, fromNode);
 
-                } else {
-                    // 取消选择
-                    document.querySelector(".panArea .listPan").innerHTML = "";
-                    document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                    } else {
+                        // 取消选择
+                        document.querySelector(".panArea .listPan").innerHTML = "";
+                        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                    }
                 }
-            }
-            _.mouseX = e.offsetX;
-            _.mouseY = e.offsetY;
-            if (_.isShowRightMenu)
-                _.hideMenu();
-        });
+                if (_.isShowRightMenu)
+                    _.hideMenu();
+            })
+            .on("mousemove", function (e) {
+                _.mouseX = e.offsetX;
+                _.mouseY = e.offsetY;
+            })
 
         // 框选
         _.initSelectionRect();
@@ -816,7 +819,7 @@ export class Graph {
                 this.edges = this.edges
                     .data(this.edgeList, d => d.uuid)
                     .enter()
-                    .append("line")
+                    .append("path")
                     .merge(this.edges);
                 this.initEdges(this.edges);
 
