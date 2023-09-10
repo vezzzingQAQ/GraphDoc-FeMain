@@ -44,6 +44,9 @@ import {
     FUNC1_COMP
 } from "../../../public/js/urls"
 
+// 撤销步数
+const UNDO_STEP = 10;
+
 export class Graph {
     /**
      * 图谱类
@@ -88,6 +91,8 @@ export class Graph {
         // 贝塞尔曲线参数
         this.bezierLarge = 100;
         this.bezierSmall = 10;
+        // 撤销
+        this.undoMirror = [];
     }
 
     /**
@@ -246,11 +251,14 @@ export class Graph {
                     // delete删除选中的元素
                     if (e.keyCode == 46) {
                         if (_.selectedElementList.length != 0) {
+                            // 压入撤销列表
+                            _.pushUndo();
                             for (let selectedElement of _.selectedElementList) {
                                 _.deleteElement(selectedElement);
                             }
                             // 更新底部栏
                             _.refreshBottomDom("🔑已按下delete，删除元素");
+
                             // 重启物理模拟
                             _.modifyNodePhysics();
                             _.modifyEdgePhysics();
@@ -278,6 +286,10 @@ export class Graph {
                     // ctrl+v粘贴元素
                     if (e.keyCode == 86 && _.isControlDown) {
                         _.pasteElements();
+                    }
+                    // ctrl+z撤销
+                    if (e.keyCode == 90 && _.isControlDown) {
+                        _.undo();
                     }
 
                     // Debug输出
@@ -418,6 +430,9 @@ export class Graph {
                     }
                     // 没连过就连上
                     if (!isLinked) {
+                        // 压入撤销列表
+                        _.pushUndo();
+
                         let addedEdge = CreateBasicEdge(fromNode, nodeObj);
                         addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - nodeObj.x) ** 2 + (fromNode.y - nodeObj.y) ** 2));
                         _.pushEdge(addedEdge);
@@ -506,10 +521,15 @@ export class Graph {
         // 拖动
         let _ = this;
         let moveList = [];
+        let clickTime = "";
         function dragstarted(e, d) {
+            // 压入撤销列表
+            _.pushUndo();
+
             if (!e.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
             d.isMove = true;
             moveList = [];
+            clickTime = (new Date()).getTime();
             for (let selectedElement of _.selectedElementList) {
                 if (selectedElement.type == "node") {
                     selectedElement.deltaX = selectedElement.x - d.x;
@@ -546,6 +566,11 @@ export class Graph {
                 moveNode.cx = moveNode.x;
                 moveNode.cy = moveNode.y;
                 moveNode.isMove = false;
+            }
+            let times = (new Date()).getTime() - clickTime;
+            if (times < 100) {
+                // 时间过小就不要放到撤销列表里了
+                _.undoMirror.shift();
             }
         }
         return d3.drag()
@@ -834,6 +859,9 @@ export class Graph {
      * 粘贴元素
      */
     pasteElements() {
+        // 压入撤销列表
+        this.pushUndo();
+
         // 记录新旧键值对
         let oldNewUuid = new Map();
 
@@ -1447,9 +1475,33 @@ export class Graph {
     }
 
     /**
+     * 增加步骤到撤销列表
+     */
+    pushUndo() {
+        this.undoMirror.unshift(this.toJson());
+        if (this.undoMirror.length > UNDO_STEP) {
+            this.undoMirror.pop();
+        }
+        console.log(this.undoMirror)
+    }
+
+    /**
+     * 撤销
+     */
+    undo() {
+        if (this.undoMirror.length >= 1) {
+            this.clear(false);
+            this.load(JSON.parse(this.undoMirror.shift()));
+        } else {
+            // 更新底部栏
+            this.refreshBottomDom("🤐无法撤销");
+        }
+    }
+
+    /**
      * 清空图谱
      */
-    clear() {
+    clear(cpl = true) {
         for (let node of this.nodeList) {
             this.nodeList = [];
             this.edgeList = [];
@@ -1467,11 +1519,13 @@ export class Graph {
         }
         this.nodes = [];
         this.edges = [];
-        this.isControlDown = false;
-        this.isShiftDown = false;
         this.selectedElementList = [];
-        this.copiedEdgeJsonList = [];
-        this.copiedNodeJsonList = [];
+        if (cpl) {
+            this.isControlDown = false;
+            this.isShiftDown = false;
+            this.copiedEdgeJsonList = [];
+            this.copiedNodeJsonList = [];
+        }
     }
 
     /**

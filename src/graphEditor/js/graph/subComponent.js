@@ -63,6 +63,7 @@ class SubComponent {
      * 跟新graph
      */
     updateGraph() {
+        // this.owner.owner.owner.pushUndo();
         if (this.owner.owner instanceof Node) {
             // 节点
             this.owner.owner.owner.modifyNodeExterior(this.owner.owner);
@@ -80,6 +81,7 @@ class SubComponent {
      * 更新所有选中的同类型的值
      */
     updateSelectedValue(value) {
+        this.owner.owner.owner.pushUndo();
         let selectedElementList = this.owner.owner.owner.selectedElementList
         if (selectedElementList.length > 1) {
             for (let ele of selectedElementList) {
