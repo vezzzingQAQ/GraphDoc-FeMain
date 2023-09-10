@@ -331,8 +331,15 @@ export class Graph {
             .on("click", function (d, i) {
                 let edgeObj = d3.select(this).data()[0];
                 let edge = d3.select(this);
-                _.deselectAll();
+                edgeObj.initHtml();
+                // 清除选择集
+                if (!_.isControlDown) {
+                    _.deselectAll();
+                }
                 _.selectElement(edgeObj);
+                if (_.selectedElementList.length > 1) {
+                    _.calPublicProperties();
+                }
             })
             .on("mouseenter", function () {
                 // 缩放
@@ -405,8 +412,13 @@ export class Graph {
                 // 更新数属性面板
                 nodeObj.initHtml();
                 // 清除选择集
-                _.deselectAll();
+                if (!_.isControlDown) {
+                    _.deselectAll();
+                }
                 _.selectElement(nodeObj);
+                if (_.selectedElementList.length > 1) {
+                    _.calPublicProperties();
+                }
             })
             // 双击转到编辑
             .on("dblclick", function () {
@@ -617,7 +629,7 @@ export class Graph {
 
             // 鼠标按下开始框选
             d3.select(".displayArea svg").on("mousedown", function (e) {
-                if (e.button == 0) {
+                if (e.button == 0 && e.target == this) {
                     clickTime = (new Date()).getTime();
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
@@ -710,38 +722,8 @@ export class Graph {
                         rect.attr("width", 0).attr("height", 0);
                         console.log(_.selectedElementList)
                         // 计算选中元素的共有属性
-                        if (_.selectedElementList.length > 1) {
-                            let publicComponentList = [];
-                            for (let componentKey in _.selectedElementList[0].componentMap) {
-                                publicComponentList.push(componentKey);
-                            }
-                            for (let i = 1; i < _.selectedElementList.length; i++) {
-                                let element = _.selectedElementList[i];
-                                for (let j = 0; j < publicComponentList.length; j++) {
-                                    let publicComponentKey = publicComponentList[j];
-                                    let hasKey = false;
-                                    for (let componentKey in element.componentMap) {
-                                        if (componentKey == publicComponentKey) {
-                                            hasKey = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!hasKey) {
-                                        publicComponentList.splice(j, 1);
-                                        j--;
-                                    }
-                                }
-                            }
-                            console.log(publicComponentList);
-                            // 显示公有组件UI
-                            let domCompContianer = document.createElement("div");
-                            domCompContianer.classList = "compContainer";
-                            for (let key of publicComponentList) {
-                                domCompContianer.appendChild(_.selectedElementList[0].componentMap[key].initHtml());
-                            }
-                            document.querySelector(".panArea .listPan").innerHTML = "";
-                            document.querySelector(".panArea .listPan").appendChild(domCompContianer);
-                        }
+                        if (_.selectedElementList.length > 1)
+                            _.calPublicProperties();
                     }
                     let times = (new Date()).getTime() - clickTime;
                     if (times < 100) {
@@ -752,6 +734,43 @@ export class Graph {
             })
         }
         selectionRect();
+    }
+
+    /**
+     * 计算元素的公有属性并更新DOM
+     */
+    calPublicProperties() {
+        let _ = this;
+        let publicComponentList = [];
+        for (let componentKey in _.selectedElementList[0].componentMap) {
+            publicComponentList.push(componentKey);
+        }
+        for (let i = 1; i < _.selectedElementList.length; i++) {
+            let element = _.selectedElementList[i];
+            for (let j = 0; j < publicComponentList.length; j++) {
+                let publicComponentKey = publicComponentList[j];
+                let hasKey = false;
+                for (let componentKey in element.componentMap) {
+                    if (componentKey == publicComponentKey) {
+                        hasKey = true;
+                        break;
+                    }
+                }
+                if (!hasKey) {
+                    publicComponentList.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        // 显示公有组件UI
+        let domCompContianer = document.createElement("div");
+        domCompContianer.classList = "compContainer";
+        for (let key of publicComponentList) {
+            domCompContianer.appendChild(_.selectedElementList[0].componentMap[key].initHtml());
+        }
+        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+        document.querySelector(".panArea .listPan").innerHTML = "";
+        document.querySelector(".panArea .listPan").appendChild(domCompContianer);
     }
 
     /**
