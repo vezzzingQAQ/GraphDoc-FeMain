@@ -215,8 +215,6 @@ export class Graph {
         // 点击空白处&设置mouseXY
         d3.select(".displayArea")
             .on("click", function (e) {
-                // 更新元素
-                _.refreshBottomDom();
                 if (e.button == 0 && e.target == this) {
                     // 如果同时按着shift键，添加节点
                     if (_.selectedElementList.length >= 1 && _.isShiftDown) {
@@ -251,17 +249,28 @@ export class Graph {
                             for (let selectedElement of _.selectedElementList) {
                                 _.deleteElement(selectedElement);
                             }
+                            // 更新底部栏
+                            _.refreshBottomDom("🔑已按下delete，删除元素");
                             // 重启物理模拟
                             _.modifyNodePhysics();
                             _.modifyEdgePhysics();
                         }
                     }
-                    if (e.keyCode == 16)
+                    if (e.keyCode == 16) {
+                        // 更新底部栏
+                        _.refreshBottomDom("🔑已按下shift，点击元素进行加选");
                         _.isShiftDown = true;
-                    if (e.keyCode == 17)
+                    }
+                    if (e.keyCode == 17) {
+                        // 更新底部栏
+                        _.refreshBottomDom("🔑已按下ctrl，点击元素进行减选，或者按下C/V进行复制粘贴");
                         _.isControlDown = true;
-                    if (e.keyCode == 65)
+                    }
+                    if (e.keyCode == 65) {
+                        // 更新底部栏
+                        _.refreshBottomDom("🔑已按下A，点击两个节点进行连接\\(￣︶￣*\a\))");
                         _.isADown = true;
+                    }
                     // ctrl+c复制选中的节点
                     if (e.keyCode == 67 && _.isControlDown) {
                         _.copyElements();
@@ -334,6 +343,8 @@ export class Graph {
             .attr("id", d => d.uuid)
             .style("cursor", "pointer")
             .on("click", function (d, i) {
+                // 更新底部元素
+                _.refreshBottomDom("✨已选择关系，可以在右侧的属性面板修改关系的属性");
                 let edgeObj = d3.select(this).data()[0];
                 let edge = d3.select(this);
                 // 清除选择集
@@ -392,6 +403,8 @@ export class Graph {
             // 点击选中
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
+                // 更新底部元素
+                _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字");
                 // 按下shift的同时点击另一个节点，创建关系
                 if (_.isADown && _.selectedElementList.length >= 1) {
                     let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
@@ -649,6 +662,8 @@ export class Graph {
             // 鼠标按下开始框选
             d3.select(".displayArea svg").on("mousedown", function (e) {
                 if (e.button == 0 && e.target == this) {
+                    // 更新底部栏
+                    _.refreshBottomDom("💡右键移动，左键框选，滚轮缩放");
                     clickTime = (new Date()).getTime();
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
@@ -741,8 +756,13 @@ export class Graph {
                         rect.attr("width", 0).attr("height", 0);
                         console.log(_.selectedElementList)
                         // 计算选中元素的共有属性
-                        if (_.selectedElementList.length > 1)
+                        if (_.selectedElementList.length > 1) {
                             _.calPublicProperties();
+                        }
+                        if (_.selectedElementList.length > 0) {
+                            // 更新底部栏
+                            _.refreshBottomDom(`💡已选择${_.selectedElementList.length}个元素，ctrl+C复制选中的元素，或者直接按住移动`);
+                        }
                     }
                     let times = (new Date()).getTime() - clickTime;
                     if (times < 100) {
@@ -806,6 +826,8 @@ export class Graph {
                 this.copiedEdgeJsonList.push(JSON.stringify(currentElement.toJsonObj()));
             }
         }
+        // 更新底部栏
+        this.refreshBottomDom(`🏷️已复制${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系，按下ctrl+V在鼠标位置粘贴`);
     }
 
     /**
@@ -867,6 +889,9 @@ export class Graph {
 
         this.modifyNodePhysics();
         this.modifyEdgePhysics();
+
+        // 更新底部栏
+        this.refreshBottomDom(`🏷️已粘贴${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系`);
     }
 
     /**
@@ -1188,8 +1213,6 @@ export class Graph {
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"))
             .attr("rx", d => d.autoGetValue("exterior_node", "round", 0));
 
-        // 更新元素
-        this.refreshBottomDom();
     }
 
     /**
@@ -1229,25 +1252,6 @@ export class Graph {
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"))
             .style("fill", "none")
-        // .attr("d", d => {
-        //     let path = d3.path();
-        //     path.moveTo(d.source.x, d.source.y);
-        //     switch (d.autoGetValue("exterior_edge", "strokeType")) {
-        //         case "line": {
-        //             path.lineTo(d.target.x, d.target.y);
-        //             break;
-        //         }
-        //         case "bezierH": {
-        //             path.bezierCurveTo(d.target.x, d.source.y, d.source.x, d.target.y, d.target.x, d.target.y);
-        //             break;
-        //         }
-        //         case "bezierV": {
-        //             path.bezierCurveTo(d.source.x, d.target.y, d.target.x, d.source.y, d.target.x, d.target.y);
-        //             break;
-        //         }
-        //     }
-        //     return path.toString();
-        // });
         this.renderProperties.simulation.restart();
         // 更新元素
         this.refreshBottomDom();
@@ -1518,9 +1522,14 @@ export class Graph {
     /**
      * 计算节点和关系的总数，填充DOM
      */
-    refreshBottomDom() {
-        document.querySelector("#nodeCount").innerHTML = `节点:${this.nodeList.length}`;
-        document.querySelector("#edgeCount").innerHTML = `关系:${this.edgeList.length}`;
+    refreshBottomDom(info) {
+        if (info) {
+            document.querySelector("#structionInfo").innerHTML = `${info}`;
+        } else {
+            document.querySelector("#structionInfo").innerHTML = "";
+        }
+        document.querySelector("#nodeCount").innerHTML = `节点:${this.nodeList.length} | `;
+        document.querySelector("#edgeCount").innerHTML = `关系:${this.edgeList.length} | `;
         document.querySelector("#selectedId").innerHTML = `选中的元素:<span style="letter-spacing:0">${this.selectedElementList[0] ? this.selectedElementList[0].uuid.slice(0, 11) + "..." : "#"}</span>`;
     }
 }
