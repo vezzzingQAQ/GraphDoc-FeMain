@@ -21,13 +21,15 @@ import {
     newGraph,
     showPay,
     showTemplate,
-    restartSim
+    restartSim,
+    openCode
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
 import payJpg from "./../../asset/img/pay.jpg";
 import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
+import { VGraph, VNode, VEdge } from "./graph/genJson";
 
 /**
  * 
@@ -46,6 +48,9 @@ export async function bindEvents(graph) {
     document.querySelector("#btnLoadFromCloud").addEventListener("click", () => {
         showLoadFromCloud(graph);
     });
+    document.querySelector("#btnLoadFromCode").addEventListener("click", () => {
+        openCode(graph);
+    })
     document.querySelector("#btnExport").addEventListener("click", () => {
         exportSvg(graph);
     });
@@ -138,4 +143,9 @@ export async function bindEvents(graph) {
     // 加载图片
     document.querySelector("#mainAboutImg").src = mainAboutPng;
     document.querySelector("#payImg").src = payJpg;
+
+    // 定制全局作用名
+    window.VGraph = VGraph;
+    window.VNode = VNode;
+    window.VEdge = VEdge;
 }

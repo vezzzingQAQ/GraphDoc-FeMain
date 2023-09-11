@@ -309,6 +309,43 @@ export function restartSim(graph) {
 }
 
 /**
+ * 从本地打开代码片段
+ */
+export function openCode(graph) {
+    let elementInput = document.createElement("input");
+    elementInput.type = "file";
+    elementInput.accept = "file/js";
+    elementInput.click();
+    elementInput.addEventListener("input", () => {
+        try {
+            let reader;
+            let data;
+            if (window.FileReader) {
+                reader = new FileReader();
+            } else {
+                alert("你的浏览器不支持访问本地文件");
+            }
+            reader.readAsText(elementInput.files[0]);
+            reader.addEventListener("load", (readRes) => {
+                userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
+                refreshGraphName();
+                graph.clear();
+                window.graphData = "";
+                eval(`${readRes.target.result};window.graphData=main();`);
+                console.log(window.graphData);
+                data = JSON.parse(window.graphData.toJson());
+                graph.load(data);
+            });
+            reader.addEventListener("error", () => {
+                alert("打开文件失败");
+            });
+        } catch {
+            console.error("打开文件出错");
+        }
+    })
+}
+
+/**
  * 展示中央窗体
  */
 export function showAuthorList() {

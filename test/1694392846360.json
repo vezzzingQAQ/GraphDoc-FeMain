@@ -1,0 +1,125 @@
+{
+    "bgColor": "#000000",
+    "nodeList": [
+        {
+            "uuid": "zznodeb52917d8d09f48b8aa4d36e426e30e48",
+            "components": {
+                "exterior_node": {
+                    "size": {
+                        "x": 10,
+                        "y": 1
+                    },
+                    "sizeAuto": true,
+                    "round": null,
+                    "shape": "circle",
+                    "dividerColor": null,
+                    "bgColor": "#000f00",
+                    "dividerStroke": null,
+                    "strokeColor": "#ffd500",
+                    "strokeStyle": "0",
+                    "strokeWidth": 0.5
+                },
+                "physics_node": {
+                    "dividerCollision": null,
+                    "collisionRadius": 10,
+                    "collisionRadiusAuto": true,
+                    "dividerManyBodyForce": null,
+                    "manyBodyForceStrength": 80,
+                    "manyBodyForceRangeMin": 10,
+                    "manyBodyForceRangeMax": 112,
+                    "dividerManyFixPosition": null,
+                    "fixPosition": true
+                },
+                "scaleHover_node": {
+                    "scale": "1.05",
+                    "scaleTime": 0.5
+                },
+                "text_node": {
+                    "showText": "<p style=\"font-family: 'Times New Roman', Times, serif;\">GraphDoc</p>",
+                    "textColor": "#ffffff",
+                    "textSize": "33",
+                    "textSpacing": 0,
+                    "textWeight": 5
+                },
+                "tag_node": {
+                    "tags": [
+                        "center"
+                    ]
+                }
+            },
+            "vx": 0,
+            "vy": 0,
+            "x": 729.9967166629607,
+            "y": 431.66265952165776,
+            "cx": 729.9967166629607,
+            "cy": 431.66265952165776
+        },
+        {
+            "uuid": "zznode176f06893465495d81296b8d86a9ee82",
+            "components": {
+                "exterior_node": {
+                    "size": {
+                        "x": 10,
+                        "y": 1
+                    },
+                    "sizeAuto": true,
+                    "round": null,
+                    "shape": "rect",
+                    "dividerColor": null,
+                    "bgColor": "#000f00",
+                    "dividerStroke": null,
+                    "strokeColor": "#ffffff",
+                    "strokeStyle": "0",
+                    "strokeWidth": 0.5
+                },
+                "physics_node": {
+                    "dividerCollision": null,
+                    "collisionRadius": 10,
+                    "collisionRadiusAuto": true,
+                    "dividerManyBodyForce": null,
+                    "manyBodyForceStrength": 80,
+                    "manyBodyForceRangeMin": 10,
+                    "manyBodyForceRangeMax": 112,
+                    "dividerManyFixPosition": null,
+                    "fixPosition": true
+                },
+                "text_node": {
+                    "showText": "TIPS:\n· <span style=\"color:yellow\">节点物理选项</span>：节点默认是有物理运动的，勾上物理组件的<b>固定位置</b>就可以把物理去掉\n\n· <span style=\"color:yellow\">文本编辑</span>：双击节点可以直接编辑节点的HTML组件（如果有的话）",
+                    "textColor": "#ffffff",
+                    "textSize": 4,
+                    "textSpacing": 0,
+                    "textWeight": 5
+                }
+            },
+            "vx": 0,
+            "vy": 0,
+            "x": 328.94537842320733,
+            "y": 427.5468394112367,
+            "cx": 328.94537842320733,
+            "cy": 427.5468394112367
+        }
+    ],
+    "edgeList": [
+        {
+            "uuid": "zzedge5b9bd94a8b554846a5d4a9005f2c58ec",
+            "source": "zznode176f06893465495d81296b8d86a9ee82",
+            "target": "zznodeb52917d8d09f48b8aa4d36e426e30e48",
+            "components": {
+                "exterior_edge": {
+                    "strokeColor": "#666666",
+                    "strokeStyle": "dot",
+                    "strokeType": "line",
+                    "strokeWidth": 0.6
+                },
+                "physics_edge": {
+                    "linkStrength": 0.8,
+                    "linkDistance": 398.98497018964906
+                },
+                "scaleHover_edge": {
+                    "scale": 11,
+                    "scaleTime": 0.5
+                }
+            }
+        }
+    ]
+}
