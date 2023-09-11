@@ -329,12 +329,15 @@ export function openCode(graph) {
             reader.addEventListener("load", (readRes) => {
                 userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
                 refreshGraphName();
-                graph.clear();
                 window.graphData = "";
-                eval(`${readRes.target.result};window.graphData=main();`);
-                console.log(window.graphData);
-                data = JSON.parse(window.graphData.toJson());
-                graph.load(data);
+                try {
+                    eval(`${readRes.target.result};window.graphData=main();`);
+                    graph.clear();
+                    data = JSON.parse(window.graphData.toJson());
+                    graph.load(data);
+                } catch (e) {
+                    showCodeError(e.message);
+                }
             });
             reader.addEventListener("error", () => {
                 alert("打开文件失败");
@@ -359,6 +362,13 @@ export function showRegister() {
 }
 export function showPay() {
     showCenterWindow(document.querySelector("#windowPay"));
+}
+export function showCodeError(message) {
+    showCenterWindow(document.querySelector("#windowCodeError"));
+    document.querySelector("#codeErrorShow").innerHTML = message;
+    document.querySelector("#closeCodeError").onclick = () => {
+        hideCenterWindow(document.querySelector("#windowCodeError"));
+    }
 }
 
 /**
