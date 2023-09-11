@@ -60,10 +60,6 @@ export class VNode {
         }
         this.vx = 0;
         this.vy = 0;
-        this.x = Math.random() * 100 - 50;
-        this.y = Math.random() * 100 - 50;
-        this.cx = Math.random() * 100 - 50;
-        this.cy = Math.random() * 100 - 50;
     }
     addComponent(componentKey) {
         let addedComponent = new ComponentMap[componentKey].class(ComponentMap[componentKey].showName, componentKey);

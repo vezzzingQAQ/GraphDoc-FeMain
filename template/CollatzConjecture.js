@@ -22,7 +22,7 @@ function main() {
         let node = new VNode();
         node.components["physics_node"]["fixPosition"] = false;
         node.components["exterior_node"]["sizeAuto"] = false;
-        node.components["exterior_node"]["size"] = { x: Math.max(Math.log10(num) * 10, 12), y: 10 };
+        node.components["exterior_node"]["size"] = { x: Math.max(Math.log10(num) * 11, 12), y: 10 };
         node.components["exterior_node"]["strokeWidth"] = 0;
         node.components["exterior_node"]["bgColor"] = `rgb(${Math.sin(Math.sqrt(Math.sqrt(num))) * 125 + 125},100,${255 - (Math.sin(Math.sqrt(Math.sqrt(num))) * 125 + 125)})`;
         node.addComponent("text_node");
@@ -37,7 +37,8 @@ function main() {
 
     function genEdge(from, to) {
         let edge = new VEdge(from, to);
-        edge.components["exterior_edge"]["strokeType"] = "bezierV";
+        // edge.components["exterior_edge"]["strokeType"] = "bezierV";
+        edge.components["exterior_edge"]["strokeWidth"] = 1.1;
         edge.components["physics_edge"]["linkDistance"] = Math.sqrt((from.x - to.x) ** 2 + (from.y - to.y) ** 2);
         // edge.components["physics_edge"]["linkDistance"] = 340;
         edge.components["physics_edge"]["linkStrength"] = 2;
