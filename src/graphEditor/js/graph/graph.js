@@ -1071,6 +1071,7 @@ export class Graph {
                     return retText;
                 })
                 .style("color", d => d.autoGetValue("text_node", "textColor", "#ffffff"))
+                .style("font-family", d => d.autoGetValue("text_node", "textFont", "'Courier New', Courier, monospace"))
                 .style("font-size", d => d.autoGetValue("text_node", `textSize`, "2px", value => `${value}px`))
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
                 .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
