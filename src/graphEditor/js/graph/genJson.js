@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { ComponentMap } from "./component";
 
 export class VGraph {
     constructor(config = {
@@ -63,6 +64,10 @@ export class VNode {
         this.y = Math.random() * 100 - 50;
         this.cx = Math.random() * 100 - 50;
         this.cy = Math.random() * 100 - 50;
+    }
+    addComponent(componentKey) {
+        let addedComponent = new ComponentMap[componentKey].class(ComponentMap[componentKey].showName, componentKey);
+        this.components[componentKey] = addedComponent.toJsonObj();
     }
     toJsonObj() {
         return {
