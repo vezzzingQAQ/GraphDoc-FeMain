@@ -18,6 +18,12 @@ export class VGraph {
     addEdge(edge) {
         this.edgeList.push(edge);
     }
+    findNodeByData(key, value) {
+        return this.nodeList.filter(node => node.data[key] == value);
+    }
+    findEdgeByData(key, value) {
+        return this.edgeList.filter(edge => edge.data[key] == value);
+    }
     toJson() {
         return JSON.stringify({
             bgColor: this.bgColor,
@@ -60,10 +66,14 @@ export class VNode {
         }
         this.vx = 0;
         this.vy = 0;
+        this.data = {};
     }
     addComponent(componentKey) {
         let addedComponent = new ComponentMap[componentKey].class(ComponentMap[componentKey].showName, componentKey);
         this.components[componentKey] = addedComponent.toJsonObj();
+    }
+    setData(key, value) {
+        this.data[key] = value;
     }
     toJsonObj() {
         return {
@@ -96,6 +106,10 @@ export class VEdge {
         }
         this.source = source.uuid;
         this.target = target.uuid;
+        this.data = {};
+    }
+    setData(key, value) {
+        this.data[key] = value;
     }
     toJsonObj() {
         return {
