@@ -221,6 +221,7 @@ export class C_N_Exterior extends Component {
     constructor(showName, key, value = {
         size: { x: 10, y: 1 },
         sizeAuto: true,
+        rotate: 0,
         round: 0,
         shape: "circle",
         dividerColor: "null",
@@ -233,6 +234,7 @@ export class C_N_Exterior extends Component {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
         this.addValue("sizeAuto", "自适应", new SC_Check(value.sizeAuto, false));
+        this.addValue("rotate", "旋转", new SC_NumberInput(value.rotate, false, -10000, 10000, 0.01));
         this.addValue("round", "圆角大小", new SC_NumberInput(value.round, false, 0, 1000, 0.1));
         this.addValue("shape", "形状", new SC_Select(value.shape, false, [
             { value: "circle", text: "圈圈" },

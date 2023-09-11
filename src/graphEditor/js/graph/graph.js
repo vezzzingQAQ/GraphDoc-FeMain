@@ -1180,9 +1180,13 @@ export class Graph {
             .style("flex-direction", "column")
             .style("margin", 0)
             .style("padding", 0)
+
         domAddedSubComponentContainer.selectAll("*")
             .style("margin", 0)
             .style("padding", 0)
+
+        addedSubComponentForeign
+            .style("rotate", d => d.autoGetValue("exterior_node", "rotate", 0, value => `${value}deg`))
 
         function calSize() {
             addedSubComponentForeign
@@ -1236,6 +1240,7 @@ export class Graph {
         calSize();
 
         addedNodeGraph
+            .style("rotate", d => d.autoGetValue("exterior_node", "rotate", 0, value => `${value}deg`))
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
