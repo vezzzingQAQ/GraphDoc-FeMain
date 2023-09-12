@@ -584,7 +584,7 @@ export function showTemplateDya(graph) {
                 } catch (e) {
                     showCodeError(e.message);
                 }
-                hideCenterWindow(document.querySelector("#windowTemplate"));
+                hideCenterWindow(document.querySelector("#windowTemplateDya"));
             });
         }
         let domAddedImg = document.createElement("img");
@@ -595,9 +595,9 @@ export function showTemplateDya(graph) {
         domAddedLi.appendChild(domAddedP);
         domAddedContainer.appendChild(domAddedLi);
     }
-    document.querySelector("#windowTemplate .content").innerHTML = "";
-    document.querySelector("#windowTemplate .content").appendChild(domAddedContainer);
-    showCenterWindow(document.querySelector("#windowTemplate"));
+    document.querySelector("#windowTemplateDya .content").innerHTML = "";
+    document.querySelector("#windowTemplateDya .content").appendChild(domAddedContainer);
+    showCenterWindow(document.querySelector("#windowTemplateDya"));
 }
 
 
