@@ -68,14 +68,17 @@ function main() {
 
         let edge = new VEdge(node1, node2);
         edge.components["exterior_edge"]["strokeWidth"] = 5;
+        edge.components["exterior_edge"]["strokeStyle"] = "1,2";
         graph.addEdge(edge);
 
         if (pnode1) {
             let edge1 = new VEdge(pnode1, node1);
+            edge1.components["exterior_edge"]["strokeWidth"] = 5;
             graph.addEdge(edge1);
         }
         if (pnode2) {
             let edge2 = new VEdge(pnode2, node2);
+            edge2.components["exterior_edge"]["strokeWidth"] = 5;
             graph.addEdge(edge2);
         }
 
