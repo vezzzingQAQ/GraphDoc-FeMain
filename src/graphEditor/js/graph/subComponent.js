@@ -360,6 +360,7 @@ export class SC_Textarea extends SubComponent {
     initHtml() {
         this.dom = document.createElement("textarea");
         this.dom.id = "text_node_textarea";
+        this.dom.spellcheck = false;
         if (this.readOnly) {
             this.dom.readOnly = "true";
         }
