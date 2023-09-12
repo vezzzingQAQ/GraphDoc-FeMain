@@ -39,6 +39,13 @@ const templateList = [
     },
 ];
 
+const templateDyaList = [
+    {
+        showName: "碱基对",
+        name: "gen1",
+    }
+]
+
 let currentGraph = null;
 
 // 用户配置
@@ -511,7 +518,7 @@ export async function showLoadFromCloud(graph) {
 }
 
 /**
- * 从模板新建
+ * 从范例新建
  */
 export function showTemplate(graph) {
     let domAddedContainer = document.createElement("ul");
@@ -540,6 +547,59 @@ export function showTemplate(graph) {
     document.querySelector("#windowTemplate .content").appendChild(domAddedContainer);
     showCenterWindow(document.querySelector("#windowTemplate"));
 }
+
+/**
+ * 从模板新建
+ */
+export function showTemplateDya(graph) {
+    let domAddedContainer = document.createElement("ul");
+    for (let template of templateDyaList) {
+        let domAddedLi = document.createElement("li");
+        domAddedLi.onclick = () => {
+            userConfig.currentGraphFileName = "未命名图谱";
+            refreshGraphName();
+            // 请求本地文件
+            axios.get(`./graphTemplate/${template.name}.js`).then(res => {
+                userConfig.currentGraphFileName = template.showName;
+                refreshGraphName();
+                window.graphData = "";
+                try {
+                    // 执行代码
+                    document.querySelector(".dyaTemplateArea").style.display = "block";
+                    document.querySelector("#dyaTemplateContent").innerHTML = "";
+                    let codeEval = `
+                    ${res.data};
+                    try{
+                    bind();
+                    }catch{}
+                    window.main=main;
+                    window.graphData=main();
+                    `;
+                    eval(codeEval);
+
+                    graph.clear();
+                    let data = JSON.parse(window.graphData.toJson());
+                    graph.load(data);
+                    currentGraph = graph;
+                } catch (e) {
+                    showCodeError(e.message);
+                }
+                hideCenterWindow(document.querySelector("#windowTemplate"));
+            });
+        }
+        let domAddedImg = document.createElement("img");
+        domAddedImg.src = `./graphTemplate/${template.name}.png`;
+        let domAddedP = document.createElement("p");
+        domAddedP.innerHTML = template.showName;
+        domAddedLi.appendChild(domAddedImg);
+        domAddedLi.appendChild(domAddedP);
+        domAddedContainer.appendChild(domAddedLi);
+    }
+    document.querySelector("#windowTemplate .content").innerHTML = "";
+    document.querySelector("#windowTemplate .content").appendChild(domAddedContainer);
+    showCenterWindow(document.querySelector("#windowTemplate"));
+}
+
 
 function showCenterWindow(selector) {
     document.querySelectorAll(".hint").forEach(dom => {

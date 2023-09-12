@@ -23,7 +23,8 @@ import {
     showTemplate,
     restartSim,
     openCode,
-    hideDyaTemplateArea
+    hideDyaTemplateArea,
+    showTemplateDya
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -131,6 +132,12 @@ export async function bindEvents(graph) {
     document.querySelector("#btnTemplate").addEventListener("click", () => {
         showTemplate(graph);
     });
+
+    // 从动态模板新建图谱
+    document.querySelector("#btnTemplateDya").addEventListener("click", () => {
+        showTemplateDya(graph);
+    });
+
 
     // 重启物理模拟
     document.querySelector("#physicsSimBtn").addEventListener("click", () => {
