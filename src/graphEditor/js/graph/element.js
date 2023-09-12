@@ -187,7 +187,7 @@ class Element {
         for (let key in this.componentMap) {
             keyList.push(key);
         }
-        //keyList = keyList.reverse();
+        keyList = keyList.reverse();
         for (let key of keyList) {
             domCompContianer.appendChild(this.componentMap[key].initHtml());
         }
