@@ -338,7 +338,7 @@ export class Graph {
 
         // 缩放平移
         _.initZoomEvents();
-        
+
     }
 
     /**
@@ -1274,7 +1274,8 @@ export class Graph {
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"))
-            .attr("rx", d => d.autoGetValue("exterior_node", "round", 0));
+            .attr("rx", d => d.autoGetValue("exterior_node", "round", 0))
+            .style("opacity", d => d.autoGetValue("exterior_node", "opacity", 1));
 
     }
 
