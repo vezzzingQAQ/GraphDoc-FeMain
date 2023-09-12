@@ -1,11 +1,12 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: "development",
     entry: {
         graphEditor: "./src/graphEditor/index.js",
-        userMain:"./src/userMain/index.js"
+        userMain: "./src/userMain/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -63,6 +64,19 @@ module.exports = {
             },
             template: "./src/userMain/html/index.html",
             chunks: ["userMain"]
+        }),
+        // 复制静态文件
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "src/asset/graph/graphTemplate"),
+                    to: path.resolve(__dirname, "dist/graphTemplate")
+                },
+                {
+                    from: path.resolve(__dirname, "src/asset/img/graphTemplate"),
+                    to: path.resolve(__dirname, "dist/graphTemplate")
+                }
+            ]
         })
     ]
 };
