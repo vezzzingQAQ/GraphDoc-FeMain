@@ -18,8 +18,8 @@ const templateList = [
         name: "centerGraph",
     },
     {
-        showName: "时间规划",
-        name: "timeOrder",
+        showName: "图谱",
+        name: "graph",
     },
     {
         showName: "钢琴",
