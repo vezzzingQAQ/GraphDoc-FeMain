@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
-import { loadGraphFromCode } from "../event";
+import { loadGraphFromCode, showCodeError } from "../event";
+
+let jsonValid = false;
 
 export function bindData(key, name, data, info = "") {
     let addedDomContainer = document.createElement("div");
@@ -16,10 +18,19 @@ export function bindData(key, name, data, info = "") {
     addedDomInput.classList = "templateData styleScrollBar";
     addedDomInput.value = JSON.stringify(data, null, 2);
     addedDomContainer.oninput = function () {
-        window[key] = JSON.parse(addedDomInput.value);
+        jsonValid = true;
+        try {
+            window[key] = JSON.parse(addedDomInput.value);
+        } catch {
+            jsonValid = false;
+        }
     }
     document.querySelector("#btnExecuteCode").onclick = function () {
-        loadGraphFromCode();
+        if (jsonValid) {
+            loadGraphFromCode();
+        } else {
+            showCodeError("数据有bug( ´･･)ﾉ(._.`)");
+        }
     }
     addedDomContainer.appendChild(addedDomTag);
     addedDomContainer.appendChild(addedDomInfo);
