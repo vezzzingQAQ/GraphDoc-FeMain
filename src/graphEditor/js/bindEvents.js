@@ -22,7 +22,8 @@ import {
     showPay,
     showTemplate,
     restartSim,
-    openCode
+    openCode,
+    hideDyaTemplateArea
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -143,6 +144,9 @@ export async function bindEvents(graph) {
     // 加载图片
     document.querySelector("#mainAboutImg").src = mainAboutPng;
     document.querySelector("#payImg").src = payJpg;
+
+    // 隐藏动态组件
+    hideDyaTemplateArea();
 
     // 定制全局作用名
     window.VGraph = VGraph;

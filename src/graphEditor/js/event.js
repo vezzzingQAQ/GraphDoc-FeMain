@@ -106,7 +106,7 @@ export function openGraph(graph) {
                 graph.clear();
                 data = JSON.parse(readRes.target.result);
                 graph.load(data);
-                document.querySelector("#dyaTemplateContent").innerHTML="";
+                hideDyaTemplateArea();
             });
             reader.addEventListener("error", () => {
                 alert("打开文件失败");
@@ -125,7 +125,7 @@ export function newGraph(graph) {
     refreshGraphName();
     graph.clear();
     graph.load(newGraphJson);
-    document.querySelector("#dyaTemplateContent").innerHTML="";
+    hideDyaTemplateArea();
 }
 
 /**
@@ -334,6 +334,7 @@ export function openCode(graph) {
                 window.graphData = "";
                 try {
                     // 执行代码
+                    document.querySelector(".dyaTemplateArea").style.display = "block";
                     document.querySelector("#dyaTemplateContent").innerHTML = "";
                     let codeEval = `
                     ${readRes.target.result};
@@ -500,7 +501,7 @@ export async function showLoadFromCloud(graph) {
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));
-                document.querySelector("#dyaTemplateContent").innerHTML = "";
+                hideDyaTemplateArea();
                 hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
             }
         };
@@ -523,7 +524,7 @@ export function showTemplate(graph) {
             axios.get(`./graphTemplate/${template.name}.vgd`).then(res => {
                 graph.clear();
                 graph.load(res.data);
-                document.querySelector("#dyaTemplateContent").innerHTML = "";
+                hideDyaTemplateArea();
                 hideCenterWindow(document.querySelector("#windowTemplate"));
             });
         }
@@ -560,4 +561,9 @@ function showCenterWindow(selector) {
 function hideCenterWindow(selector) {
     selector.style.opacity = 0;
     selector.style.pointerEvents = "none";
+}
+
+export function hideDyaTemplateArea() {
+    document.querySelector(".dyaTemplateArea").style.display = "none";
+    document.querySelector("#dyaTemplateContent").innerHTML = "";
 }

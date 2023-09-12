@@ -19,10 +19,29 @@
         &::-webkit-scrollbar-thumb {
             background-color: rgb(70, 70, 70);
             border-radius: 25px;
-            cursor: pointer;
+            cursor: pointer!important;
         }
     }
 }
+
+.lightMode {
+    .styleScrollBar {
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgb(207, 207, 207);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgb(149, 149, 149);
+            border-radius: 25px;
+            cursor: pointer!important;
+        }
+    }
+}
+
 
 body {
     width: 100vw;
@@ -442,6 +461,25 @@ body {
 .lightMode {
     .displayArea {
         background-color: @bg_color_d_pan;
+    }
+
+    .dyaTemplateArea {
+        background-color: rgb(242, 242, 242);
+
+        .title {
+            background-color: @bg_color_l_title;
+            color: @fg_color_l_1;
+        }
+
+        .templateTag {
+            color: @fg_color_l_1;
+        }
+
+        .templateData {
+            border: 1px solid @bg_color_l_border;
+            background-color: @bg_color_l_input;
+            color: @fg_color_l_input;
+        }
     }
 
     .panArea {
