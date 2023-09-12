@@ -558,6 +558,19 @@ export class C_N_Func1 extends Component {
     }
 }
 
+/**
+ * latex组件
+ */
+export class C_N_Latex extends Component {
+    constructor(showName, key, value = {
+        latex: "",
+        textColor: "#c2c2c2",
+    }) {
+        super(showName, key, true);
+        this.addValue("latex", "公式", new SC_Textarea(value.latex, false));
+        this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
+    }
+}
 
 /**
  * 寻址映射
@@ -664,6 +677,12 @@ export const ComponentMap = {
         type: "node",
         showName: "📈函数",
         class: C_N_Func1,
+    },
+    "latex_node": {
+        key: "latex_node",
+        type: "node",
+        showName: "🔬公式",
+        class: C_N_Latex,
     }
 }
 

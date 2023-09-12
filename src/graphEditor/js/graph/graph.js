@@ -29,6 +29,7 @@ import { v4 as uuidv4 } from "uuid";
 import hljs from "highlight.js";
 import "highlight.js/styles/ir-black.css";
 import { marked } from "marked";
+import katex from "katex";
 
 import { CreateBasicEdge, CreateBasicNode, CreateLinkNode, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
@@ -1047,6 +1048,7 @@ export class Graph {
         let domAddedNodeIframe = null;
         let domAddedNodeMd = null;
         let domAddedNodeFunc1 = null;
+        let domAddedNodeLatex = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -1081,6 +1083,8 @@ export class Graph {
             domAddedNodeMd = domAddedSubComponentContainer.append("xhtml:div");
         if (nodeObj.hasComponent("func1_node"))
             domAddedNodeFunc1 = domAddedSubComponentContainer.append("xhtml:iframe");
+        if (nodeObj.hasComponent("latex_node"))
+            domAddedNodeLatex = domAddedSubComponentContainer.append("xhtml:div");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1198,6 +1202,11 @@ export class Graph {
                     return `${FUNC1_COMP}?fn=${d.autoGetValue("func1_node", "func", "x")}`
                 })
 
+        if (domAddedNodeLatex)
+            domAddedNodeLatex
+                .attr("class", "nodeLatex")
+                .style("color", d => d.autoGetValue("latex_node", "textColor", "#ffffff"))
+                .html(d => katex.renderToString(d.autoGetValue("latex_node", "latex", ""), { throwOnError: false }));
 
         domAddedSubComponentContainer
             .style("display", "flex")
