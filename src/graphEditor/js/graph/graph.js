@@ -396,6 +396,9 @@ export class Graph {
                         .ease(d3.easeElasticOut)
                         .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
                 }
+            })
+            .on("contextmenu", function (e) {
+                e.preventDefault();
             });
     }
 
