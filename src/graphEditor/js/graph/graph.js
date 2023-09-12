@@ -1216,6 +1216,7 @@ export class Graph {
 
         addedSubComponentForeign
             .style("rotate", d => d.autoGetValue("exterior_node", "rotate", 0, value => `${value}deg`))
+            .style("scale", d => d.autoGetValue("exterior_node", "scale", 1))
 
         function calSize() {
             addedSubComponentForeign
@@ -1270,6 +1271,7 @@ export class Graph {
 
         addedNodeGraph
             .style("rotate", d => d.autoGetValue("exterior_node", "rotate", 0, value => `${value}deg`))
+            .style("scale", d => d.autoGetValue("exterior_node", "scale", 1))
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
