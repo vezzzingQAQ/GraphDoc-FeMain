@@ -13,7 +13,7 @@ export function bindData(key, name, data) {
     addedDomInput.classList = "templateData styleScrollBar";
     addedDomInput.value = JSON.stringify(data, null, 2);
     window[key] = data;
-    addedDomInput.oninput = function () {
+    document.querySelector("#btnExecuteCode").onclick = function () {
         window[key] = JSON.parse(addedDomInput.value);
         console.log(window[key])
         loadGraphFromCode();

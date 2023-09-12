@@ -19,7 +19,7 @@
         &::-webkit-scrollbar-thumb {
             background-color: rgb(70, 70, 70);
             border-radius: 25px;
-            cursor: pointer!important;
+            cursor: pointer !important;
         }
     }
 }
@@ -37,7 +37,7 @@
         &::-webkit-scrollbar-thumb {
             background-color: rgb(149, 149, 149);
             border-radius: 25px;
-            cursor: pointer!important;
+            cursor: pointer !important;
         }
     }
 }
@@ -95,6 +95,18 @@ body {
                     width: 100%;
                     resize: none;
                 }
+            }
+
+            button {
+                display: block;
+                width: calc(100% - 40px);
+                padding: 5px;
+                margin: 20px;
+                letter-spacing: 2px;
+                border: none;
+                outline: none;
+                border-radius: @small_border_radius;
+                cursor: pointer;
             }
         }
 
@@ -375,6 +387,11 @@ body {
             background-color: @bg_color_d_input;
             color: @fg_color_d_input;
         }
+
+        button {
+            background-color: @bg_color_l_pan;
+        }
+
     }
 
     .panArea {
@@ -480,6 +497,11 @@ body {
             background-color: @bg_color_l_input;
             color: @fg_color_l_input;
         }
+
+        button {
+            background-color: @bg_color_l_pan;
+        }
+
     }
 
     .panArea {
