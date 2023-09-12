@@ -14,8 +14,8 @@ import newGraphJson from "./../../asset/graph/new.json";
 
 const templateList = [
     {
-        showName: "树状图",
-        name: "treeGraph",
+        showName: "关系图",
+        name: "centerGraph",
     },
     {
         showName: "时间规划",

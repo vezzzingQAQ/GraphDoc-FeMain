@@ -43,14 +43,17 @@ export class VNode {
                     y: 1
                 },
                 sizeAuto: true,
-                round: null,
+                round: 0,
+                rotate: 0,
+                scale: 1,
                 shape: "circle",
                 dividerColor: null,
                 bgColor: "#000f00",
                 dividerStroke: null,
                 strokeColor: "#ffd500",
                 strokeStyle: "0",
-                strokeWidth: 0.5
+                strokeWidth: 0.5,
+                opacity: 1
             },
             physics_node: {
                 dividerCollision: null,
