@@ -39,6 +39,8 @@ const templateList = [
     },
 ];
 
+let currentGraph = null;
+
 // 用户配置
 export let userConfig = {
     isDark: true,
@@ -104,6 +106,7 @@ export function openGraph(graph) {
                 graph.clear();
                 data = JSON.parse(readRes.target.result);
                 graph.load(data);
+                document.querySelector("#dyaTemplateContent").innerHTML="";
             });
             reader.addEventListener("error", () => {
                 alert("打开文件失败");
@@ -122,6 +125,7 @@ export function newGraph(graph) {
     refreshGraphName();
     graph.clear();
     graph.load(newGraphJson);
+    document.querySelector("#dyaTemplateContent").innerHTML="";
 }
 
 /**
@@ -329,10 +333,22 @@ export function openCode(graph) {
                 refreshGraphName();
                 window.graphData = "";
                 try {
-                    eval(`${readRes.target.result};window.graphData=main();`);
+                    // 执行代码
+                    document.querySelector("#dyaTemplateContent").innerHTML = "";
+                    let codeEval = `
+                    ${readRes.target.result};
+                    try{
+                    bind();
+                    }catch{}
+                    window.main=main;
+                    window.graphData=main();
+                    `;
+                    eval(codeEval);
+
                     graph.clear();
-                    data = JSON.parse(window.graphData.toJson());
+                    let data = JSON.parse(window.graphData.toJson());
                     graph.load(data);
+                    currentGraph = graph;
                 } catch (e) {
                     showCodeError(e.message);
                 }
@@ -344,6 +360,21 @@ export function openCode(graph) {
             console.error("打开文件出错");
         }
     })
+}
+
+/**
+ * 从本地代码加载
+ */
+export function loadGraphFromCode() {
+    // 数据绑定的部分不需要重新执行
+    try {
+        eval("window.graphData=window.main();");
+        currentGraph.clear();
+        let data = JSON.parse(window.graphData.toJson());
+        currentGraph.load(data);
+    } catch (e) {
+        showCodeError(e.message);
+    }
 }
 
 /**
@@ -469,6 +500,7 @@ export async function showLoadFromCloud(graph) {
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));
+                document.querySelector("#dyaTemplateContent").innerHTML = "";
                 hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
             }
         };
@@ -491,6 +523,7 @@ export function showTemplate(graph) {
             axios.get(`./graphTemplate/${template.name}.vgd`).then(res => {
                 graph.clear();
                 graph.load(res.data);
+                document.querySelector("#dyaTemplateContent").innerHTML = "";
                 hideCenterWindow(document.querySelector("#windowTemplate"));
             });
         }

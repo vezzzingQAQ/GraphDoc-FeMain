@@ -6,6 +6,24 @@
     box-sizing: border-box;
 }
 
+.darkMode {
+    .styleScrollBar {
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgb(40, 40, 40);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgb(70, 70, 70);
+            border-radius: 25px;
+            cursor: pointer;
+        }
+    }
+}
+
 body {
     width: 100vw;
     height: 100vh;
@@ -24,6 +42,43 @@ body {
             transition: 0.3s ease-in-out;
         }
 
+        .dyaTemplateArea {
+            width: @template_area_width;
+            height: max-content;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            right: @pan_area_width;
+            top: @menu_height;
+
+            .title {
+                display: block;
+                height: @add_pan_title_height;
+                line-height: @add_pan_title_height;
+                font-size: 14px;
+                padding-left: 10px;
+                letter-spacing: 2px;
+                transition: 0.3s ease-in-out;
+            }
+
+            .templateContainer {
+                margin: 20px;
+
+                .templateTag {
+                    padding-bottom: 5px;
+                    padding-top: 5px;
+                }
+
+                .templateData {
+                    outline: none;
+                    border-radius: @small_border_radius;
+                    height: 400px;
+                    width: 100%;
+                    resize: none;
+                }
+            }
+        }
+
         .panArea {
             width: @pan_area_width;
             height: calc(100vh - @menu_height);
@@ -38,8 +93,6 @@ body {
             .topPan {
                 .window {
                     overflow: hidden;
-                    border-bottom-left-radius: @small_border_radius;
-                    border-bottom-right-radius: @small_border_radius;
 
                     .title {
                         height: @add_pan_title_height;
@@ -284,6 +337,25 @@ body {
 .darkMode {
     .displayArea {
         background-color: rgb(6, 6, 6);
+    }
+
+    .dyaTemplateArea {
+        background-color: rgb(51, 51, 51);
+
+        .title {
+            background-color: @bg_color_d_title;
+            color: @fg_color_d_1;
+        }
+
+        .templateTag {
+            color: @fg_color_d_1;
+        }
+
+        .templateData {
+            border: 1px solid @bg_color_d_border;
+            background-color: @bg_color_d_input;
+            color: @fg_color_d_input;
+        }
     }
 
     .panArea {

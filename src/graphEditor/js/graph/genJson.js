@@ -1,5 +1,26 @@
 import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
+import { loadGraphFromCode } from "../event";
+
+export function bindData(key, name, data) {
+    let addedDomContainer = document.createElement("div");
+    addedDomContainer.classList = "templateContainer";
+    let addedDomTag = document.createElement("p");
+    addedDomTag.classList = "templateTag";
+    addedDomTag.innerHTML = name;
+    let addedDomInput = document.createElement("textarea");
+    addedDomInput.classList = "templateData styleScrollBar";
+    addedDomInput.value = JSON.stringify(data);
+    window[key] = data;
+    addedDomInput.oninput = function () {
+        window[key] = JSON.parse(addedDomInput.value);
+        console.log(window[key])
+        loadGraphFromCode();
+    }
+    addedDomContainer.appendChild(addedDomTag);
+    addedDomContainer.appendChild(addedDomInput);
+    document.querySelector("#dyaTemplateContent").appendChild(addedDomContainer);
+}
 
 export class VGraph {
     constructor(config = {
@@ -17,12 +38,6 @@ export class VGraph {
     }
     addEdge(edge) {
         this.edgeList.push(edge);
-    }
-    findNodeByData(key, value) {
-        return this.nodeList.filter(node => node.data[key] == value);
-    }
-    findEdgeByData(key, value) {
-        return this.edgeList.filter(edge => edge.data[key] == value);
     }
     toJson() {
         return JSON.stringify({
@@ -75,9 +90,6 @@ export class VNode {
         let addedComponent = new ComponentMap[componentKey].class(ComponentMap[componentKey].showName, componentKey);
         this.components[componentKey] = addedComponent.toJsonObj();
     }
-    setData(key, value) {
-        this.data[key] = value;
-    }
     toJsonObj() {
         return {
             uuid: this.uuid,
@@ -110,9 +122,6 @@ export class VEdge {
         this.source = source.uuid;
         this.target = target.uuid;
         this.data = {};
-    }
-    setData(key, value) {
-        this.data[key] = value;
     }
     toJsonObj() {
         return {

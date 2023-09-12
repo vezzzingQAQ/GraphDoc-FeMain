@@ -29,7 +29,7 @@ import mainAboutPng from "./../../asset/img/mainAbout.png";
 import payJpg from "./../../asset/img/pay.jpg";
 import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
-import { VGraph, VNode, VEdge } from "./graph/genJson";
+import { VGraph, VNode, VEdge, bindData } from "./graph/genJson";
 
 /**
  * 
@@ -148,4 +148,5 @@ export async function bindEvents(graph) {
     window.VGraph = VGraph;
     window.VNode = VNode;
     window.VEdge = VEdge;
+    window.bindData = bindData;
 }
