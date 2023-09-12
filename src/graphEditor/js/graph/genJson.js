@@ -2,24 +2,31 @@ import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
 import { loadGraphFromCode } from "../event";
 
-export function bindData(key, name, data) {
+export function bindData(key, name, data, info = "") {
     let addedDomContainer = document.createElement("div");
     addedDomContainer.classList = "templateContainer";
     let addedDomTag = document.createElement("p");
     addedDomTag.classList = "templateTag";
     addedDomTag.innerHTML = name;
+    let addedDomInfo = document.createElement("p");
+    addedDomInfo.classList = "templateInfo";
+    addedDomInfo.innerHTML = info;
     let addedDomInput = document.createElement("textarea");
     addedDomInput.spellcheck = false;
     addedDomInput.classList = "templateData styleScrollBar";
     addedDomInput.value = JSON.stringify(data, null, 2);
-    window[key] = data;
-    document.querySelector("#btnExecuteCode").onclick = function () {
+    addedDomContainer.oninput = function () {
         window[key] = JSON.parse(addedDomInput.value);
-        console.log(window[key])
+    }
+    document.querySelector("#btnExecuteCode").onclick = function () {
         loadGraphFromCode();
     }
     addedDomContainer.appendChild(addedDomTag);
+    addedDomContainer.appendChild(addedDomInfo);
     addedDomContainer.appendChild(addedDomInput);
+
+    window[key] = data;
+
     document.querySelector("#dyaTemplateContent").appendChild(addedDomContainer);
 }
 

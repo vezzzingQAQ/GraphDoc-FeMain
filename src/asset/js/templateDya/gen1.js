@@ -11,7 +11,7 @@ const genList = ["A", "T", "C", "G"];
 const genToList = ["T", "A", "G", "C"];
 
 function bind() {
-    bindData("gen", "基因组", rawGen.split(""));
+    bindData("gen", "基因组", rawGen.split(""), "数据格式:['A/T/C/G'],...");
 }
 
 function main() {
