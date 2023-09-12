@@ -9,6 +9,7 @@ export function bindData(key, name, data) {
     addedDomTag.classList = "templateTag";
     addedDomTag.innerHTML = name;
     let addedDomInput = document.createElement("textarea");
+    addedDomInput.spellcheck = false;
     addedDomInput.classList = "templateData styleScrollBar";
     addedDomInput.value = JSON.stringify(data, null, 2);
     window[key] = data;
