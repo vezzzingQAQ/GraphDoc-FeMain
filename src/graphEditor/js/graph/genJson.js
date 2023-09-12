@@ -10,7 +10,7 @@ export function bindData(key, name, data) {
     addedDomTag.innerHTML = name;
     let addedDomInput = document.createElement("textarea");
     addedDomInput.classList = "templateData styleScrollBar";
-    addedDomInput.value = JSON.stringify(data);
+    addedDomInput.value = JSON.stringify(data, null, 2);
     window[key] = data;
     addedDomInput.oninput = function () {
         window[key] = JSON.parse(addedDomInput.value);
