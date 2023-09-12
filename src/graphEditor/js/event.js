@@ -15,10 +15,17 @@ import newGraphJson from "./../../asset/graph/new.json";
 import template_img_treeGraph from "./../../asset/img/graphTemplate/treeGraph.png";
 import template_img_timeOrder from "./../../asset/img/graphTemplate/timeOrder.png";
 import template_img_piano from "./../../asset/img/graphTemplate/piano.png";
+import template_img_cc1 from "./../../asset/img/graphTemplate/cc1.png";
+import template_img_pie from "./../../asset/img/graphTemplate/pie.png";
+import template_img_cdc from "./../../asset/img/graphTemplate/cdc.png";
+
 
 import template_json_treeGraph from "./../../asset/graph/graphTemplate/treeGraph.json";
 import template_json_timeOrder from "./../../asset/graph/graphTemplate/timeOrder.json";
 import template_json_piano from "./../../asset/graph/graphTemplate/piano.json";
+import template_json_cc1 from "./../../asset/graph/graphTemplate/cc1.json";
+import template_json_pie from "./../../asset/graph/graphTemplate/pie.json";
+import template_json_cdc from "./../../asset/graph/graphTemplate/cdc.json";
 
 const templateList = [
     {
@@ -38,7 +45,25 @@ const templateList = [
         name: "piano",
         img: template_img_piano,
         doc: template_json_piano
-    }
+    },
+    {
+        showName: "考拉兹猜想",
+        name: "cc1",
+        img: template_img_cc1,
+        doc: template_json_cc1
+    },
+    {
+        showName: "圆周率",
+        name: "pie",
+        img: template_img_pie,
+        doc: template_json_pie
+    },
+    {
+        showName: "中国行政区划",
+        name: "cdc",
+        img: template_img_cdc,
+        doc: template_json_cdc
+    },
 ];
 
 // 用户配置
@@ -490,6 +515,7 @@ export function showTemplate(graph) {
             userConfig.currentGraphFileName = "未命名图谱";
             refreshGraphName();
             graph.clear();
+            console.log(template.doc)
             graph.load(template.doc);
             hideCenterWindow(document.querySelector("#windowTemplate"));
         }
