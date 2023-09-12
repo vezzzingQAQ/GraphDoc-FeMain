@@ -338,13 +338,7 @@ export class Graph {
 
         // 缩放平移
         _.initZoomEvents();
-
-        // 加载网络资源延迟
-        window.setTimeout(() => {
-            for (let node of _.nodeList) {
-                _.modifyNodeExterior(node);
-            }
-        }, 3500);
+        
     }
 
     /**
