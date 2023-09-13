@@ -137,7 +137,7 @@ export class Graph {
     /**
      * 渲染图谱
      */
-    render() {
+    render(refreshViewArea = false) {
 
         // 重定向this，用于函数内访问
         let _ = this;
@@ -174,8 +174,16 @@ export class Graph {
                 .attr("height", renderDom.offsetHeight)
 
             // 创建绘画区域
-            _.renderProperties.viewArea = _.renderProperties.svg.append("g")
-                .attr("class", "viewArea")
+            if (!refreshViewArea) {
+                if (!_.renderProperties.viewArea)
+                    _.renderProperties.viewArea = _.renderProperties.svg.append("g")
+                        .attr("class", "viewArea")
+            } else {
+                if (d3.select(".viewArea"))
+                    d3.select(".viewArea").remove();
+                _.renderProperties.viewArea = _.renderProperties.svg.append("g")
+                    .attr("class", "viewArea")
+            }
 
             // 创建图层-节点层和关系层
             d3.select(".viewArea").append("g")
@@ -1552,7 +1560,7 @@ export class Graph {
                 currentEdge.remove();
             }
             d3.selectAll(".layer").remove();
-            d3.select(".viewArea").remove();
+            // d3.select(".viewArea").remove();
             //d3.selectAll("svg").selectAll("*").remove();
             // 重启物理模拟
             this.renderProperties.simulation.on("tick", () => { })
@@ -1571,7 +1579,7 @@ export class Graph {
     /**
      * 加载数据
      */
-    load(jsonObj) {
+    load(jsonObj, refreshViewArea = false) {
         let nodeJsonList = jsonObj.nodeList;
         let edgeJsonList = jsonObj.edgeList;
         for (let nodeJson of nodeJsonList) {
@@ -1583,7 +1591,7 @@ export class Graph {
             this.pushEdge(edge);
         }
         this.bgColor = jsonObj.bgColor;
-        this.render();
+        this.render(refreshViewArea);
         window.setTimeout(() => {
             this.renderProperties.simulation.alphaTarget(0.02).restart();
             window.setTimeout(() => {

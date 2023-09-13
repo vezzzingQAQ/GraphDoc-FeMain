@@ -118,7 +118,7 @@ export function openGraph(graph) {
                     refreshGraphName();
                     graph.clear();
                     data = JSON.parse(readRes.target.result);
-                    graph.load(data);
+                    graph.load(data, true);
                     hideDyaTemplateArea();
                 }, 1);
             });
@@ -138,7 +138,7 @@ export function newGraph(graph) {
     userConfig.currentGraphFileName = "未命名图谱";
     refreshGraphName();
     graph.clear();
-    graph.load(newGraphJson);
+    graph.load(newGraphJson, true);
     hideDyaTemplateArea();
 }
 
@@ -362,7 +362,7 @@ export function openCode(graph) {
 
                     graph.clear();
                     let data = JSON.parse(window.graphData.toJson());
-                    graph.load(data);
+                    graph.load(data, true);
                     currentGraph = graph;
                 } catch (e) {
                     document.querySelector("#loadGraph").style.opacity = 0;
@@ -516,7 +516,7 @@ export async function showLoadFromCloud(graph) {
                 refreshGraphName();
                 let json = response.msg;
                 graph.clear();
-                graph.load(JSON.parse(json));
+                graph.load(JSON.parse(json), true);
                 hideDyaTemplateArea();
                 hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
             }
@@ -540,7 +540,7 @@ export function showTemplate(graph) {
             // 请求本地文件
             axios.get(`./graphTemplate/${template.name}.vgd`).then(res => {
                 graph.clear();
-                graph.load(res.data);
+                graph.load(res.data, true);
                 hideDyaTemplateArea();
                 hideCenterWindow(document.querySelector("#windowTemplate"));
             });
@@ -590,7 +590,7 @@ export function showTemplateDya(graph) {
 
                     graph.clear();
                     let data = JSON.parse(window.graphData.toJson());
-                    graph.load(data);
+                    graph.load(data, true);
                     currentGraph = graph;
                 } catch (e) {
                     showCodeError(e.message);
