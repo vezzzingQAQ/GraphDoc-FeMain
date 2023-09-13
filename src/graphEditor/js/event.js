@@ -43,6 +43,10 @@ const templateDyaList = [
     {
         showName: "碱基对",
         name: "gen1",
+    },
+    {
+        showName: "年份图",
+        name: "dyaData",
     }
 ]
 
