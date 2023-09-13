@@ -17,6 +17,7 @@ export function bindData(key, name, data, info = "") {
     addedDomInput.spellcheck = false;
     addedDomInput.classList = "templateData styleScrollBar";
     addedDomInput.value = JSON.stringify(data, null, 2);
+    jsonValid = true;
     addedDomContainer.oninput = function () {
         jsonValid = true;
         try {
@@ -27,7 +28,10 @@ export function bindData(key, name, data, info = "") {
     }
     document.querySelector("#btnExecuteCode").onclick = function () {
         if (jsonValid) {
-            loadGraphFromCode();
+            document.querySelector("#loadGraph").style.opacity = 1;
+            window.setTimeout(() => {
+                loadGraphFromCode();
+            }, 1);
         } else {
             showCodeError("数据有bug( ´･･)ﾉ(._.`)");
         }

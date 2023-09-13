@@ -112,12 +112,15 @@ export function openGraph(graph) {
             }
             reader.readAsText(elementInput.files[0]);
             reader.addEventListener("load", (readRes) => {
-                userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
-                refreshGraphName();
-                graph.clear();
-                data = JSON.parse(readRes.target.result);
-                graph.load(data);
-                hideDyaTemplateArea();
+                document.querySelector("#loadGraph").style.opacity = 1;
+                window.setTimeout(() => {
+                    userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
+                    refreshGraphName();
+                    graph.clear();
+                    data = JSON.parse(readRes.target.result);
+                    graph.load(data);
+                    hideDyaTemplateArea();
+                }, 1);
             });
             reader.addEventListener("error", () => {
                 alert("打开文件失败");
@@ -331,8 +334,8 @@ export function openCode(graph) {
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
+            document.querySelector("#loadGraph").style.opacity = 1;
             let reader;
-            let data;
             if (window.FileReader) {
                 reader = new FileReader();
             } else {
@@ -362,6 +365,7 @@ export function openCode(graph) {
                     graph.load(data);
                     currentGraph = graph;
                 } catch (e) {
+                    document.querySelector("#loadGraph").style.opacity = 0;
                     showCodeError(e.message);
                 }
             });
@@ -505,6 +509,7 @@ export async function showLoadFromCloud(graph) {
         domGraphTag.appendChild(domGraphTagClose);
 
         domGraphTagName.onclick = async () => {
+            document.querySelector("#loadGraph").style.opacity = 1;
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
                 userConfig.currentGraphFileName = currentGraph.name;
@@ -529,7 +534,8 @@ export function showTemplate(graph) {
     for (let template of templateList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
-            userConfig.currentGraphFileName = "未命名图谱";
+            document.querySelector("#loadGraph").style.opacity = 1;
+            userConfig.currentGraphFileName = template.showName;
             refreshGraphName();
             // 请求本地文件
             axios.get(`./graphTemplate/${template.name}.vgd`).then(res => {
@@ -560,7 +566,8 @@ export function showTemplateDya(graph) {
     for (let template of templateDyaList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
-            userConfig.currentGraphFileName = "未命名图谱";
+            document.querySelector("#loadGraph").style.opacity = 1;
+            userConfig.currentGraphFileName = template.showName;
             refreshGraphName();
             // 请求本地文件
             axios.get(`./graphTemplate/${template.name}.js`).then(res => {
