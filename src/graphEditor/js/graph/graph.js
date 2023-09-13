@@ -73,7 +73,6 @@ export class Graph {
         }
         this.isShiftDown = false;
         this.isControlDown = false;
-        this.isADown = false;
         // 图谱中的节点
         this.nodes;
         this.edges;
@@ -275,18 +274,13 @@ export class Graph {
                     }
                     if (e.keyCode == 16) {
                         // 更新底部栏
-                        _.refreshBottomDom("🔑已按下shift，点击元素进行加选");
+                        _.refreshBottomDom("🔑已按下shift，点击元素进行连接");
                         _.isShiftDown = true;
                     }
                     if (e.keyCode == 17) {
                         // 更新底部栏
-                        _.refreshBottomDom("🔑已按下ctrl，点击元素进行减选，或者按下C/V进行复制粘贴");
+                        _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
                         _.isControlDown = true;
-                    }
-                    if (e.keyCode == 65) {
-                        // 更新底部栏
-                        _.refreshBottomDom("🔑已按下A，点击两个节点进行连接\\(￣︶￣*\a\))");
-                        _.isADown = true;
                     }
                     // ctrl+c复制选中的节点
                     if (e.keyCode == 67 && _.isControlDown) {
@@ -320,8 +314,6 @@ export class Graph {
                         _.isShiftDown = false;
                     if (e.keyCode == 17)
                         _.isControlDown = false;
-                    if (e.keyCode == 65)
-                        _.isADown = false;
                 }
             });
         }
@@ -422,9 +414,9 @@ export class Graph {
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
                 // 更新底部元素
-                _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字");
+                _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 按下shift的同时点击另一个节点，创建关系
-                if (_.isADown && _.selectedElementList.length >= 1) {
+                if (_.isShiftDown && _.selectedElementList.length >= 1) {
                     let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
                     // 遍历所有链接判断是不是已经链接过了
                     let isLinked = false;
