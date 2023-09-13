@@ -785,10 +785,11 @@ export class Graph {
                             document.querySelector(".panArea .listPan").innerHTML = "";
                         }
                         rect.attr("width", 0).attr("height", 0);
-                        console.log(_.selectedElementList)
                         // 计算选中元素的共有属性
                         if (_.selectedElementList.length > 1) {
                             _.calPublicProperties();
+                        } else if (_.selectedElementList.length == 1) {
+                            _.selectedElementList[0].initHtml();
                         }
                         if (_.selectedElementList.length > 0) {
                             // 更新底部栏
@@ -1357,7 +1358,6 @@ export class Graph {
             element.attr("class", "forceEdge forceElement selected");
         }
         this.selectedElementList.push(elementObj);
-        elementObj.initHtml();
     }
 
     /**
