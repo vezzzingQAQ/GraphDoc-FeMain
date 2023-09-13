@@ -1584,6 +1584,12 @@ export class Graph {
         }
         this.bgColor = jsonObj.bgColor;
         this.render();
+        window.setTimeout(() => {
+            this.renderProperties.simulation.alphaTarget(0.02).restart();
+            window.setTimeout(() => {
+                this.renderProperties.simulation.stop();
+            }, 2);
+        }, 100);
     }
 
     /**
