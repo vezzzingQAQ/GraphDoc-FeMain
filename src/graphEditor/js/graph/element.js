@@ -359,12 +359,17 @@ import {
     C_E_Physics,
     C_E_ScaleHover,
     C_N_Audio,
+    C_N_Code,
     C_N_Exterior,
+    C_N_Img,
+    C_N_Latex,
     C_N_Link,
+    C_N_Markdown,
     C_N_Physics,
     C_N_ScaleHover,
     C_N_Tag,
     C_N_Text,
+    C_N_Video,
     ComponentMap,
     LoadComponentFromJson
 } from "./component";
@@ -375,9 +380,10 @@ import {
  */
 export function CreateBasicNode() {
     let node = new Node();
-    node.addComponent(new C_N_Exterior(ComponentMap.exterior_node.showName, "exterior_node"));
-    node.addComponent(new C_N_Physics(ComponentMap.physics_node.showName, "physics_node"));
-    node.addComponent(new C_N_Tag(ComponentMap.tag_node.showName, "tag_node"));
+    node.addComponent(new C_N_Exterior(ComponentMap.exterior_node.showName, ComponentMap.exterior_node.key));
+    node.addComponent(new C_N_Physics(ComponentMap.physics_node.showName, ComponentMap.physics_node.key));
+    node.addComponent(new C_N_Tag(ComponentMap.tag_node.showName, ComponentMap.tag_node.key));
+    node.autoSetValue("physics_node", "fixPosition", true);
     return node;
 }
 
@@ -388,9 +394,9 @@ export function CreateBasicEdge(source, target) {
     let edge = new Edge();
     edge.setSource(source);
     edge.setTarget(target);
-    edge.addComponent(new C_E_Exterior(ComponentMap.exterior_edge.showName, "exterior_edge"));
-    edge.addComponent(new C_E_Physics(ComponentMap.physics_edge.showName, "physics_edge"));
-    edge.addComponent(new C_E_ScaleHover(ComponentMap.scaleHover_edge.showName, "scaleHover_edge"));
+    edge.addComponent(new C_E_Exterior(ComponentMap.exterior_edge.showName, ComponentMap.exterior_edge.key));
+    edge.addComponent(new C_E_Physics(ComponentMap.physics_edge.showName, ComponentMap.physics_edge.key));
+    edge.addComponent(new C_E_ScaleHover(ComponentMap.scaleHover_edge.showName, ComponentMap.scaleHover_edge.key));
     return edge;
 }
 
@@ -400,8 +406,8 @@ export function CreateBasicEdge(source, target) {
  */
 export function CreateLinkNode() {
     let node = CreateBasicNode();
-    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, "text_node"));
-    node.addComponent(new C_N_Link(ComponentMap.link_node.showName, "link_node"));
+    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, ComponentMap.text_node.key));
+    node.addComponent(new C_N_Link(ComponentMap.link_node.showName, ComponentMap.link_node.key));
     return node;
 }
 
@@ -411,7 +417,67 @@ export function CreateLinkNode() {
  */
 export function CreateTextNode() {
     let node = CreateBasicNode();
-    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, "text_node"));
+    node.addComponent(new C_N_Text(ComponentMap.text_node.showName, ComponentMap.text_node.key));
+    return node;
+}
+
+/**
+ * 创建图片节点
+ * @returns node节点
+ */
+export function CreateImgNode() {
+    let node = CreateBasicNode();
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.addComponent(new C_N_Img(ComponentMap.img_node.showName, ComponentMap.img_node.key));
+    return node;
+}
+
+/**
+ * 创建视频节点
+ * @returns node节点
+ */
+export function CreateVideoNode() {
+    let node = CreateBasicNode();
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.addComponent(new C_N_Video(ComponentMap.video_node.showName, ComponentMap.video_node.key));
+    return node;
+}
+
+/**
+ * 创建代码节点
+ * @returns node节点
+ */
+export function CreateCodeNode() {
+    let node = CreateBasicNode();
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.addComponent(new C_N_Code(ComponentMap.code_node.showName, ComponentMap.code_node.key));
+    node.autoSetValue("code_node", "content", `function main(){
+    console.log("hello world");
+}`);
+    return node;
+}
+
+/**
+ * 创建MD节点
+ * @returns node节点
+ */
+export function CreateMdNode() {
+    let node = CreateBasicNode();
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.addComponent(new C_N_Markdown(ComponentMap.md_node.showName, ComponentMap.md_node.key));
+    node.autoSetValue("md_node","content","# hello graph doc");
+    return node;
+}
+
+/**
+ * 创建公式节点
+ * @returns node节点
+ */
+export function CreateLatexNode() {
+    let node = CreateBasicNode();
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.addComponent(new C_N_Latex(ComponentMap.latex_node.showName, ComponentMap.latex_node.key));
+    node.autoSetValue("latex_node","latex","E=mc^2");
     return node;
 }
 

@@ -31,7 +31,7 @@ import "highlight.js/styles/ir-black.css";
 import { marked } from "marked";
 import katex from "katex";
 
-import { CreateBasicEdge, CreateBasicNode, CreateLinkNode, CreateTextNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
+import { CreateBasicEdge, CreateBasicNode, CreateCodeNode, CreateImgNode, CreateLatexNode, CreateLinkNode, CreateMdNode, CreateTextNode, CreateVideoNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
 import { saveSvgAsPng } from "save-svg-png-ext";
 
@@ -965,6 +965,21 @@ export class Graph {
             case "link":
                 addedNode = CreateLinkNode();
                 break;
+            case "img":
+                addedNode = CreateImgNode();
+                break;
+            case "video":
+                addedNode = CreateVideoNode();
+                break;
+            case "code":
+                addedNode = CreateCodeNode();
+                break;
+            case "md":
+                addedNode = CreateMdNode();
+                break;
+            case "latex":
+                addedNode = CreateLatexNode();
+                break;
             default:
                 addedNode = CreateBasicNode();
         }
@@ -989,6 +1004,9 @@ export class Graph {
         _.deselectAll();
         // 选中新添加的节点
         _.selectElement(addedNode);
+
+        // 更新属性栏
+        addedNode.initHtml();
     }
 
     /**
@@ -1447,6 +1465,36 @@ export class Graph {
                 name: "添加链接节点",
                 func: function () {
                     _.addNode(e, "link");
+                }
+            },
+            {
+                name: "添加图片节点",
+                func: function () {
+                    _.addNode(e, "img");
+                }
+            },
+            {
+                name: "添加视频节点",
+                func: function () {
+                    _.addNode(e, "video");
+                }
+            },
+            {
+                name: "添加代码节点",
+                func: function () {
+                    _.addNode(e, "code");
+                }
+            },
+            {
+                name: "添加MD节点",
+                func: function () {
+                    _.addNode(e, "md");
+                }
+            },
+            {
+                name: "添加公式节点",
+                func: function () {
+                    _.addNode(e, "latex");
                 }
             },
             // {
