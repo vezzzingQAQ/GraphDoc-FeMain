@@ -33,7 +33,6 @@ import katex from "katex";
 
 import { CreateBasicEdge, CreateBasicNode, CreateCodeNode, CreateImgNode, CreateLatexNode, CreateLinkNode, CreateMdNode, CreateTextNode, CreateVideoNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
-import { saveSvgAsPng } from "save-svg-png-ext";
 
 import {
     IMG_UPLOAD_PATH,
@@ -1439,9 +1438,30 @@ export class Graph {
         };
     }
     exportPng(scale = 5) {
-        saveSvgAsPng(this.renderProperties.svg.node(), "vezz.png", {
-            scale: scale
-        });
+        let svgNode = document.querySelector(".displayArea svg");
+        let svgData = new XMLSerializer().serializeToString(svgNode)
+        let svgDataBase64 = btoa(unescape(encodeURIComponent(svgData)))
+        let svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`
+        let img = new Image();
+        img.src = svgDataUrl;
+        img.onload = function () {
+            let width = svgNode.getAttribute("width") * scale;
+            let height = svgNode.getAttribute("height") * scale;
+            let canvas = document.createElement("canvas");
+            canvas.setAttribute("width", width)
+            canvas.setAttribute("height", height)
+
+            let context = canvas.getContext("2d")
+            context.drawImage(img, 0, 0, width, height)
+
+            let aLink = document.createElement("a");
+            aLink.style.display = "none";
+            aLink.href = canvas.toDataURL("image/png", 1.0);
+            aLink.download = "v-gd" + ("-" + new Date().getTime());
+            document.body.appendChild(aLink);
+            aLink.click();
+            document.body.removeChild(aLink);
+        }
     }
 
     /**
