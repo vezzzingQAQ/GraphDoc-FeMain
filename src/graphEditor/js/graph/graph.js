@@ -1112,7 +1112,7 @@ export class Graph {
                 .style("text-anchor", "middle")
                 .style("dominant-baseline", "middle")
                 .style("padding", "10px")
-                .html(d => `<code>${d.autoGetValue("code_node", "content", "")}</code>`)
+                .html(d => `<code>${d.autoGetValue("code_node", "content", "", value => value.replace(/</g, "&lt;").replace(/>/g, "&gt;"))}</code>`)
             hljs.highlightAll();
         }
 
