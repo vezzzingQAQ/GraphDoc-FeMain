@@ -413,11 +413,12 @@ export class Graph {
             // 点击选中
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
+                let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
                 // 更新底部元素
                 _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 按下shift的同时点击另一个节点，创建关系
-                if (_.isShiftDown && _.selectedElementList.length >= 1) {
-                    let fromNode = _.selectedElementList[_.selectedElementList.length - 1];
+                if (_.isShiftDown && selectedNodeList.length >= 1) {
+                    let fromNode = selectedNodeList[selectedNodeList.length - 1];
                     // 遍历所有链接判断是不是已经链接过了
                     let isLinked = false;
                     for (let edge of _.edgeList) {
