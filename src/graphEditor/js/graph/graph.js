@@ -1404,13 +1404,13 @@ export class Graph {
      * 查找和node关联的edge
      */
     findNodeEdges(nodeObj) {
-        let removeEdgeList = [];
+        let relatedEdgeList = [];
         for (let i = 0; i < this.edgeList.length; i++) {
             let currentEdge = this.edgeList[i];
             if (currentEdge.source == nodeObj || currentEdge.target == nodeObj)
-                removeEdgeList.push(currentEdge);
+                relatedEdgeList.push(currentEdge);
         }
-        return removeEdgeList;
+        return relatedEdgeList;
     }
 
     /**
@@ -1496,10 +1496,7 @@ export class Graph {
                 func: function () {
                     _.addNode(e, "latex");
                 }
-            },
-            // {
-            //     divider: true
-            // }
+            }
         ]
         this.initMenu(e, menu);
     }
@@ -1545,6 +1542,24 @@ export class Graph {
                         document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
                         _.nodeList.splice(_.nodeList.indexOf(nodeObj), 1);
                         _.nodeList.unshift(nodeObj);
+                    }
+                }
+            },
+            {
+                divider: true
+            },
+            {
+                name: "选中相关关系",
+                func: function () {
+                    _.deselectAll();
+                    let relatedEdgeList = _.findNodeEdges(nodeObj)
+                    relatedEdgeList.forEach(edge => {
+                        _.selectElement(edge);
+                    });
+                    if (relatedEdgeList.length > 1) {
+                        _.calPublicProperties();
+                    } else if (relatedEdgeList.length == 1) {
+                        relatedEdgeList[0].initHtml();
                     }
                 }
             }
