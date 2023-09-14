@@ -47,6 +47,10 @@ const templateDyaList = [
     {
         showName: "年份图",
         name: "dyaData",
+    },
+    {
+        showName: "CE图",
+        name: "centerGraphDya",
     }
 ]
 
