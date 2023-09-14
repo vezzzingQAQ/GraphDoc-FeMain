@@ -45,7 +45,7 @@ import {
 } from "../../../public/js/urls"
 
 // 撤销步数
-const UNDO_STEP = 10;
+const UNDO_STEP = 50;
 
 export class Graph {
     /**
