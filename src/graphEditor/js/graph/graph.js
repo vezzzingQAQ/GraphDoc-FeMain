@@ -1463,9 +1463,41 @@ export class Graph {
         let _ = this;
         let menu = [
             {
-                name: "test",
+                name: "移到顶层",
                 func: function () {
-
+                    let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                    if (selectedNodeList.length != 0) {
+                        for (let selectedNodeObj of selectedNodeList) {
+                            let node = document.querySelector(`#${selectedNodeObj.uuid}`);
+                            document.querySelector("#nodeLayer").appendChild(node);
+                            _.nodeList.splice(_.nodeList.indexOf(selectedNodeObj), 1);
+                            _.nodeList.push(selectedNodeObj);
+                        }
+                    } else {
+                        let node = document.querySelector(`#${nodeObj.uuid}`);
+                        document.querySelector("#nodeLayer").appendChild(node);
+                        _.nodeList.splice(_.nodeList.indexOf(nodeObj), 1);
+                        _.nodeList.push(nodeObj);
+                    }
+                }
+            },
+            {
+                name: "移到底层",
+                func: function () {
+                    let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                    if (selectedNodeList.length != 0) {
+                        for (let selectedNodeObj of selectedNodeList) {
+                            let node = document.querySelector(`#${selectedNodeObj.uuid}`);
+                            document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
+                            _.nodeList.splice(_.nodeList.indexOf(selectedNodeObj), 1);
+                            _.nodeList.unshift(selectedNodeObj);
+                        }
+                    } else {
+                        let node = document.querySelector(`#${nodeObj.uuid}`);
+                        document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
+                        _.nodeList.splice(_.nodeList.indexOf(nodeObj), 1);
+                        _.nodeList.unshift(nodeObj);
+                    }
                 }
             }
         ]
