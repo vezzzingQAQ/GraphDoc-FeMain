@@ -586,7 +586,7 @@ export class Graph {
         let zoomTime = 0;
         _.renderProperties.svg.call(d3.zoom()
             .extent([[0, 0], [this.renderProperties.svg.attr("width"), this.renderProperties.svg.attr("height")]])
-            .scaleExtent([0.01, 30])
+            .scaleExtent([0.001, 300])
 
             // 右键操作
             .filter(e => {
@@ -1437,7 +1437,7 @@ export class Graph {
             document.body.removeChild(link);
         };
     }
-    exportPng(scale = 5) {
+    exportPng(scale = 12) {
         let svgNode = document.querySelector(".displayArea svg");
         let svgData = new XMLSerializer().serializeToString(svgNode)
         let svgDataBase64 = btoa(unescape(encodeURIComponent(svgData)))
