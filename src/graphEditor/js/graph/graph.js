@@ -293,6 +293,18 @@ export class Graph {
                     if (e.keyCode == 90 && _.isControlDown) {
                         _.undo();
                     }
+                    // tab
+                    if (e.keyCode == 9 && _.selectedElementList.length > 0) {
+                        let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                        if (selectedNodeList.length > 0) {
+                            let curNode = selectedNodeList[selectedNodeList.length - 1];
+                            let addedNode = _.addNode({ x: _.mouseX, y: _.mouseY }, "text");
+                            let addedEdge = _.addEdge(curNode, addedNode);
+                            _.deselectAll();
+                            _.selectElement(addedNode);
+                            addedNode.initHtml();
+                        }
+                    }
 
                     // Debug输出
                     if (e.keyCode == 68 && _.isShiftDown) {
@@ -1007,6 +1019,31 @@ export class Graph {
 
         // 更新属性栏
         addedNode.initHtml();
+        return addedNode;
+    }
+
+    /**
+     * 向图谱中添加新关系
+     */
+    addEdge(source, target) {
+        let _ = this;
+
+        let addedEdge = CreateBasicEdge(source, target);
+        _.pushEdge(addedEdge);
+
+        _.edges = _.edges
+            .data(_.edgeList, d => d.uuid)
+            .enter()
+            .append("path")
+            .merge(_.edges);
+        _.initEdges(_.edges);
+
+        // 初始化组件
+        _.modifyEdgeExterior(addedEdge);
+        _.modifyEdgePhysics();
+        addedEdge.initHtml();
+
+        return addedEdge;
     }
 
     /**
