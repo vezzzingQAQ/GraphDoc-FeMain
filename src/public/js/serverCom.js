@@ -89,9 +89,13 @@ export async function saveGraphToCloud(jsonData, filename, imgName) {
 /**
  * 从云加载导图
  */
-export async function loadGraphFromCloud(filename) {
+export async function loadGraphFromCloud(filename, uid) {
     let formData = new FormData();
-    formData.append('jwt', getCookie('jwt'));
+    if (!uid) {
+        formData.append('jwt', getCookie('jwt'));
+    } else {
+        formData.append('uid', uid);
+    }
     formData.append('name', filename);
     let response = await axios({
         url: USER_LOAD_FROM_CLOUD,

@@ -20,19 +20,36 @@ import defaultGraph from "./../../asset/graph/main.json";
 export async function initGraph(graphObj) {
     let graph;
     let graphName = getQueryVariable("graphName");
+    let uid = getQueryVariable("uid");
     if (graphName) {
-        let response = await loadGraphFromCloud(graphName)
-        if (response.state == 1) {
-            userConfig.currentGraphFileName = graphName;
-            refreshGraphName();
-            let json = response.msg;
-            graph = LoadGraphFromJson(JSON.parse(json));
-            graph.render();
-            return graph;
+        if (!uid) {
+            let response = await loadGraphFromCloud(graphName)
+            if (response.state == 1) {
+                userConfig.currentGraphFileName = graphName;
+                refreshGraphName();
+                let json = response.msg;
+                graph = LoadGraphFromJson(JSON.parse(json));
+                graph.render();
+                return graph;
+            } else {
+                let graph = LoadGraphFromJson(defaultGraph);
+                graph.render();
+                return graph;
+            }
         } else {
-            let graph = LoadGraphFromJson(defaultGraph);
-            graph.render();
-            return graph;
+            let response = await loadGraphFromCloud(graphName, uid);
+            if (response.state == 1) {
+                userConfig.currentGraphFileName = graphName;
+                refreshGraphName();
+                let json = response.msg;
+                graph = LoadGraphFromJson(JSON.parse(json));
+                graph.render();
+                return graph;
+            } else {
+                let graph = LoadGraphFromJson(defaultGraph);
+                graph.render();
+                return graph;
+            }
         }
     } else {
         let graph = LoadGraphFromJson(defaultGraph);

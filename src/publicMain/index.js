@@ -1,5 +1,5 @@
 import { listPublicGraph } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT } from "../public/js/urls";
+import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT } from "../public/js/urls";
 import "./css/index.less";
 
 window.addEventListener("load", async () => {
@@ -20,7 +20,10 @@ window.addEventListener("load", async () => {
             domGraphBlockText.appendChild(domGraphName);
             domGraphBlock.appendChild(domGraphBlockImg);
             domGraphBlock.appendChild(domGraphBlockText);
-            document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
+            domGraphBlock.addEventListener("click", () => {
+                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`);
+            });
+            document.querySelector(".graphListBlock ul").appendChild(domGraphBlock);
         })
     }
 });
