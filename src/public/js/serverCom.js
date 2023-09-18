@@ -1,10 +1,12 @@
 import axios from "axios";
 import { getCookie } from "./tools";
 import {
+    USER_CONFIG_GRAPH,
     USER_DATA,
     USER_DELETE_GRAPH,
     USER_LIST_GRAPH_PATH,
     USER_LOAD_FROM_CLOUD,
+    USER_LOAD_GRAPH_CONFIG,
     USER_ODATA,
     USER_SAVE_GRAPH_TO_CLOUD,
     USER_UPDATE_AVATAR
@@ -136,3 +138,42 @@ export async function updateAvatar(filename) {
     });
     return response.data;
 }
+
+/**
+ * 配置图谱
+ */
+export async function configGraph(filename, isPublic, info) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('name', filename);
+    formData.append('isPublic', isPublic);
+    formData.append('info', info);
+    let response = await axios({
+        url: USER_CONFIG_GRAPH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 获取图谱信息
+ */
+export async function loadGraphConfig(filename) {
+    let formData = new FormData();
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('name', filename);
+    let response = await axios({
+        url: USER_LOAD_GRAPH_CONFIG,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+

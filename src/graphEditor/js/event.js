@@ -8,7 +8,7 @@ import axios from "axios";
 import { saveAs } from 'file-saver';
 import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
-import { deleteGraph, getUserData, listUserGraph, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
+import { configGraph, deleteGraph, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 
@@ -425,9 +425,28 @@ export function showCodeError(message) {
         hideCenterWindow(document.querySelector("#windowCodeError"));
     }
 }
-export function showGraphProperty() {
+export async function showGraphProperty() {
     showCenterWindow(document.querySelector("#windowGraphProperty"));
-    
+    // 获取数据填入窗体
+    let response = await loadGraphConfig(userConfig.currentGraphFileName);
+    if (response.state == 1) {
+        if (response.msg.isPublic) {
+            document.querySelector("#radioPublic").checked = true;
+        } else {
+            document.querySelector("#radioPrivate").checked = true;
+        }
+        document.querySelector("#graphInfoInput").value = response.msg.info;
+    }
+    document.querySelector("#updateGraphProperty").onclick = async () => {
+        let isPublic = 0;
+        if (document.querySelector("#radioPublic").checked) isPublic = 1;
+        let info = document.querySelector("#graphInfoInput").value;
+        // 发送请求
+        response = await configGraph(userConfig.currentGraphFileName, isPublic, info);
+        if (response.state == 1) {
+            hideCenterWindow(document.querySelector("#windowGraphProperty"));
+        }
+    }
 }
 
 /**

@@ -24,6 +24,8 @@ export const USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
 export const USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
 export const USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
 export const USER_UPDATE_AVATAR = `${DOMAIN_MAIN}/user/updateAvatar`;
+export const USER_CONFIG_GRAPH = `${DOMAIN_MAIN}/graph/configGraph`;
+export const USER_LOAD_GRAPH_CONFIG=`${DOMAIN_MAIN}/graph/loadGraphConfig`;
 
 export const DOMAIN_FE = "http://127.0.0.1:5500";
 
