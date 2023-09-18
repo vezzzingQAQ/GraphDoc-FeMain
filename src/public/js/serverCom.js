@@ -5,6 +5,7 @@ import {
     USER_CONFIG_GRAPH,
     USER_DATA,
     USER_DELETE_GRAPH,
+    USER_GET_USERLIST,
     USER_LIST_GRAPH_PATH,
     USER_LOAD_FROM_CLOUD,
     USER_LOAD_GRAPH_CONFIG,
@@ -185,7 +186,7 @@ export async function loadGraphConfig(filename) {
 /**
  * 获取所有的公共图谱
  */
-export async function listPublicGraph(filename) {
+export async function listPublicGraph() {
     let response = await axios({
         url: LIST_PUBLIC_GRAPH,
         method: "POST",
@@ -196,3 +197,16 @@ export async function listPublicGraph(filename) {
     return response.data;
 }
 
+/**
+ * 获取所有用户
+ */
+export async function listUser() {
+    let response = await axios({
+        url: USER_GET_USERLIST,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+    return response.data;
+}

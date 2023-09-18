@@ -45,6 +45,7 @@ body {
                 cursor: pointer;
                 position: relative;
                 overflow: hidden;
+                transition: 0.1s ease-in-out;
 
                 div {
                     display: block;
@@ -66,6 +67,11 @@ body {
                     border-bottom-right-radius: @small_border_radius;
                     left: 0;
                     bottom: 0;
+                    transition: 0.1s ease-in-out;
+                }
+
+                &:hover {
+                    transform: scale(1.04);
                 }
             }
         }
