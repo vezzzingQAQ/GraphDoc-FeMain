@@ -427,6 +427,28 @@ export class Graph {
                 let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
                 // 更新底部元素
                 _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
+                // 清除选择集
+                if (!_.isShiftDown && !_.isControlDown) {
+                    _.deselectAll();
+                }
+                // 按下ctrl减选
+                if (_.isControlDown && _.selectedElementList.includes(nodeObj)) {
+                    _.deselectElement(nodeObj);
+                } else {
+                    _.selectElement(nodeObj);
+                }
+                // 计算公有属性
+                if (_.selectedElementList.length > 1) {
+                    _.calPublicProperties();
+                } else {
+                    nodeObj.initHtml();
+                }
+            })
+            .on("mousedown", function () {
+                let nodeObj = d3.select(this).data()[0];
+                let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                // 更新底部元素
+                _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 按下shift的同时点击另一个节点，创建关系
                 if (_.isShiftDown && selectedNodeList.length >= 1) {
                     let fromNode = selectedNodeList[selectedNodeList.length - 1];
@@ -459,22 +481,6 @@ export class Graph {
                         _.modifyEdgeExterior(addedEdge);
                         _.modifyEdgePhysics();
                     }
-                }
-                // 清除选择集
-                if (!_.isShiftDown && !_.isControlDown) {
-                    _.deselectAll();
-                }
-                // 按下ctrl减选
-                if (_.isControlDown && _.selectedElementList.includes(nodeObj)) {
-                    _.deselectElement(nodeObj);
-                } else {
-                    _.selectElement(nodeObj);
-                }
-                // 计算公有属性
-                if (_.selectedElementList.length > 1) {
-                    _.calPublicProperties();
-                } else {
-                    nodeObj.initHtml();
                 }
             })
             // 双击转到编辑
@@ -1412,7 +1418,8 @@ export class Graph {
         } else if (elementObj.type == "edge") {
             element.attr("class", "forceEdge forceElement selected");
         }
-        this.selectedElementList.push(elementObj);
+        if (!this.selectedElementList.includes(elementObj))
+            this.selectedElementList.push(elementObj);
     }
 
     /**
