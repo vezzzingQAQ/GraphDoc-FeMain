@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getCookie } from "./tools";
 import {
+    LIST_PUBLIC_GRAPH,
     USER_CONFIG_GRAPH,
     USER_DATA,
     USER_DELETE_GRAPH,
@@ -173,6 +174,20 @@ export async function loadGraphConfig(filename) {
             "Content-Type": "multipart/form-data"
         },
         data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 获取所有的公共图谱
+ */
+export async function listPublicGraph(filename) {
+    let response = await axios({
+        url: LIST_PUBLIC_GRAPH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
     });
     return response.data;
 }

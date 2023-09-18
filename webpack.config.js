@@ -7,7 +7,8 @@ module.exports = {
     mode: "development",
     entry: {
         graphEditor: "./src/graphEditor/index.js",
-        userMain: "./src/userMain/index.js"
+        userMain: "./src/userMain/index.js",
+        publicMain: "./src/publicMain/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -66,6 +67,14 @@ module.exports = {
             },
             template: "./src/userMain/html/index.html",
             chunks: ["userMain"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "publicMain.html",
+            minify: {
+                collapseWhitespace: true
+            },
+            template: "./src/publicMain/html/index.html",
+            chunks: ["publicMain"]
         }),
         // 复制静态文件
         new CopyPlugin({
