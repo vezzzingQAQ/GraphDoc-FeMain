@@ -7,6 +7,7 @@ import "./css/index.less";
 
 window.addEventListener("load", async () => {
     let username = getQueryVariable("username");
+    let uid=getQueryVariable("uid");
     let userData = await getOUtherData(username);
     document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${userData.data.msg.avatar}`;
     document.querySelector("#username").innerHTML = userData.data.msg.username;

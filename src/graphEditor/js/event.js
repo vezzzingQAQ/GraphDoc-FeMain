@@ -65,7 +65,8 @@ export let userConfig = {
     isDark: true,
     isLogin: false,
     currentGraphFileName: "",
-    username: null
+    username: null,
+    uid: null,
 }
 
 /**
@@ -307,6 +308,7 @@ export function refreshUserData(d) {
         document.querySelector("#showUserAvatar").src = `${AVATAR_STORE_PATH}${d.data.msg.data.avatar}`;
         userConfig.isLogin = true;
         userConfig.username = d.data.msg.data.username;
+        userConfig.uid = d.data.msg.data.id;
         refreshMenu();
     } else {
         document.querySelector("#showUsername").innerHTML = "未登录";
@@ -321,7 +323,7 @@ export function refreshUserData(d) {
  * 跳转个人主页
  */
 export function toUserPage() {
-    window.open(`${USER_PAGE}?username=${encodeURI(userConfig.username)}`);
+    window.open(`${USER_PAGE}?uid=${userConfig.uid}&username=${userConfig.username}`);
 }
 
 /**
