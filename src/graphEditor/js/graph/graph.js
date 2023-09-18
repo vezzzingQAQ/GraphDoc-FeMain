@@ -1758,7 +1758,7 @@ export class Graph {
                 this.renderProperties.simulation.stop();
                 document.querySelector("#loadGraph").style.opacity = 0;
             }, 20);
-        }, 100);
+        }, 300);
     }
 
     /**

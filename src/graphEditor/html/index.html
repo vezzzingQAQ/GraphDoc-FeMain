@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>编辑器</title>
+    <style>
+        /*界面底色先刷成黑的防止闪屏*/
+        body {
+            #loadGraph {
+                background-color: black;
+            }
+        }
+    </style>
     <link href="https://cdn.bootcss.com/font-awesome/5.13.0/css/all.css" rel="stylesheet">
     <!--katex渲染-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css">
@@ -12,6 +20,7 @@
 
 <body>
     <div class="mainWindow darkMode">
+        <div id="bgForm"></div>
         <div class="displayArea">
             <div id="loadGraph">
                 <p>loading</p>
@@ -289,7 +298,8 @@
                 <div class="content">
                     <p class="info">图谱可访问性</p>
                     <div class="formSub">
-                        <label> <input name="visiableConfig" id="radioPrivate" type="radio" value="private">仅自己可见</label>
+                        <label> <input name="visiableConfig" id="radioPrivate" type="radio"
+                                value="private">仅自己可见</label>
                         <label> <input name="visiableConfig" id="radioPublic" type="radio" value="public">社区可见</label>
                     </div>
                     <div class="formSub">

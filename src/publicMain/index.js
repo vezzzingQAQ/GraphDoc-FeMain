@@ -15,7 +15,7 @@ window.addEventListener("load", async () => {
             domGraphAuthorImg.classList = "graphAuthorImg";
             domGraphAuthorImg.src = AVATAR_STORE_PATH + graph.author.img;
             let domGraphName = document.createElement("span");
-            domGraphName.innerHTML = graph.name;
+            domGraphName.innerHTML = graph.name.length <= 8 ? graph.name : graph.name.slice(0, 7) + "...";
             domGraphBlockText.appendChild(domGraphAuthorImg);
             domGraphBlockText.appendChild(domGraphName);
             domGraphBlock.appendChild(domGraphBlockImg);

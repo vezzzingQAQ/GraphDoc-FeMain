@@ -35,6 +35,8 @@ body {
             display: flex;
             flex-wrap: wrap;
             list-style: none;
+            margin-left: 10vw;
+            width: 80vw;
 
             li {
                 display: block;
@@ -73,10 +75,17 @@ body {
                     padding-right: 4px;
                     border-top-right-radius: @small_border_radius;
                     border-bottom-right-radius: @small_border_radius;
-                    left: 0;
+                    left: -300px;
                     bottom: 0;
                     display: flex;
                     align-items: center;
+                    transition: 0.3s ease-in-out;
+                }
+
+                &:hover {
+                    p {
+                        left: 0;
+                    }
                 }
             }
         }
@@ -96,7 +105,7 @@ body {
     }
 }
 
-.darkMode {
+.mainWindow {
     background-color: @bg_color_d_pan;
     color: @fg_color_d_1;
 

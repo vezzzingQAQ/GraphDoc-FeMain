@@ -54,6 +54,16 @@ body {
         display: flex;
         flex-direction: row;
 
+        #bgForm {
+            z-index: -1;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
         .displayArea {
             width: 80vw;
             height: 100vh;
@@ -73,7 +83,7 @@ body {
                 align-items: center;
                 pointer-events: none;
                 transition: 0.3s ease-in-out;
-                opacity: 0;
+                opacity: 1;
 
                 p {
                     font-size: 30px;
@@ -396,6 +406,10 @@ body {
 }
 
 .darkMode {
+    #bgForm {
+        background-color: black;
+    }
+
     .displayArea {
         background-color: rgb(6, 6, 6);
 
@@ -512,6 +526,10 @@ body {
 }
 
 .lightMode {
+    #bgForm {
+        background-color: @bg_color_d_pan;
+    }
+
     .displayArea {
         background-color: @bg_color_d_pan;
 

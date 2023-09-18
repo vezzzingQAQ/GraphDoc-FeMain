@@ -18,7 +18,7 @@ import defaultGraph from "./../../asset/graph/main.json";
  * @returns 返回创建的Graph对象
  */
 export async function initGraph(graphObj) {
-    let graph;
+    let graph = new Graph();
     let graphName = getQueryVariable("graphName");
     let uid = getQueryVariable("uid");
     if (graphName) {
@@ -28,12 +28,8 @@ export async function initGraph(graphObj) {
                 userConfig.currentGraphFileName = graphName;
                 refreshGraphName();
                 let json = response.msg;
-                graph = LoadGraphFromJson(JSON.parse(json));
-                graph.render();
-                return graph;
-            } else {
-                let graph = LoadGraphFromJson(defaultGraph);
-                graph.render();
+                graph.clear();
+                graph.load(JSON.parse(json));
                 return graph;
             }
         } else {
@@ -42,18 +38,14 @@ export async function initGraph(graphObj) {
                 userConfig.currentGraphFileName = graphName;
                 refreshGraphName();
                 let json = response.msg;
-                graph = LoadGraphFromJson(JSON.parse(json));
-                graph.render();
-                return graph;
-            } else {
-                let graph = LoadGraphFromJson(defaultGraph);
-                graph.render();
+                graph.clear();
+                graph.load(JSON.parse(json));
                 return graph;
             }
         }
     } else {
-        let graph = LoadGraphFromJson(defaultGraph);
-        graph.render();
+        graph.clear();
+        graph.load(defaultGraph);
         return graph;
     }
 }
