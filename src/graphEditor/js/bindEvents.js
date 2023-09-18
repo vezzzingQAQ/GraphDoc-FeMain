@@ -24,7 +24,8 @@ import {
     restartSim,
     openCode,
     hideDyaTemplateArea,
-    showTemplateDya
+    showTemplateDya,
+    showGraphProperty
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -142,6 +143,11 @@ export async function bindEvents(graph) {
     // 重启物理模拟
     document.querySelector("#physicsSimBtn").addEventListener("click", () => {
         restartSim(graph);
+    })
+
+    // 设置图谱属性
+    document.querySelector("#btnSetGraphProperty").addEventListener("click", () => {
+        showGraphProperty();
     })
 
     // 上来先获取下用户信息

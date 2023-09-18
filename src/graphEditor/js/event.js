@@ -276,6 +276,7 @@ export function refreshMenu() {
         document.querySelector("#btnUserPage").classList = "show";
         document.querySelector("#btnToCloudSavsAs").classList = "show";
         document.querySelector("#btnLoadFromCloud").classList = "show";
+        document.querySelector("#btnSetGraphProperty").classList = "show";
     } else {
         document.querySelector("#btnLogin").classList = "show";
         document.querySelector("#btnRegister").classList = "show";
@@ -283,6 +284,7 @@ export function refreshMenu() {
         document.querySelector("#btnUserPage").classList = "hide";
         document.querySelector("#btnToCloudSavsAs").classList = "hide";
         document.querySelector("#btnLoadFromCloud").classList = "hide";
+        document.querySelector("#btnSetGraphProperty").classList = "hide";
     }
 }
 
@@ -422,6 +424,10 @@ export function showCodeError(message) {
     document.querySelector("#closeCodeError").onclick = () => {
         hideCenterWindow(document.querySelector("#windowCodeError"));
     }
+}
+export function showGraphProperty() {
+    showCenterWindow(document.querySelector("#windowGraphProperty"));
+    
 }
 
 /**

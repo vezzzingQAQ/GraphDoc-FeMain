@@ -82,6 +82,7 @@
                         <li class="show">背景颜色
                             <input type="color" class="subDisp" id="bgColorInput">
                         </li>
+                        <li class="hide" id="btnSetGraphProperty">图谱属性设置</li>
                     </ul>
                 </div>
                 <div class="col menuBlock" id="userOptionsBlock">
@@ -275,6 +276,27 @@
                     <p>编译器的报错如下:</p>
                     <p id="codeErrorShow"></p>
                     <button class="btn" id="closeCodeError">确定</button>
+                </div>
+            </div>
+        </div>
+        <!--图谱属性设置-->
+        <div class="centerWindow graphProperty" id="windowGraphProperty">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-cog"></i>图谱属性设置</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <p class="info">图谱可访问性</p>
+                    <div class="formSub">
+                        <label> <input name="visiableConfig" id="radioPrivate" type="radio" value="private">仅自己可见</label>
+                        <label> <input name="visiableConfig" id="radioPublic" type="radio" value="public">社区可见</label>
+                    </div>
+                    <div class="formSub">
+                        <p class="info">图谱说明</p>
+                        <textarea class="styleScrollBar" placeholder="如果是公共图谱的话，说明能够被看到"></textarea>
+                    </div>
+                    <button class="btn" id="updateGraphProperty">确定</button>
                 </div>
             </div>
         </div>
