@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.opaMenu {
+    div {
+        position: fixed;
+        display: block;
+        width: max-content;
+        height: max-content;
+        border: 1px solid gray;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 1001;
+        top: 50vh;
+        transform: translateY(-50%);
+
+        p {
+            z-index: 9999;
+            margin: 0;
+            padding: 0;
+            color: rgb(102, 102, 102);
+            font-size: 50px;
+            font-weight: 100;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        &:nth-child(1) {
+            left: 30px;
+        }
+
+        &:nth-child(2) {
+            right: 30px;
+        }
+    }
+}
+
+.displayArea {
+    #loadGraph {
+        display: block;
+        background-color: black;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 999;
+        pointer-events: none;
+    }
+
+
+    z-index: 1000;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}

@@ -2,7 +2,7 @@ import ForceGraph3D from "3d-force-graph";
 import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 import { listPublicGraph, listUser } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT } from "../public/js/urls";
+import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT, VIEW_PAGE } from "../public/js/urls";
 import "./css/index.less";
 
 
@@ -41,7 +41,7 @@ window.addEventListener("load", async () => {
                 "type": "graph",
                 "name": graph.name,
                 "img": GRAPH_PNG_STORE_PATH + graph.img,
-                "toUrl": `${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`,
+                "toUrl": `${VIEW_PAGE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`,
                 "id": nodeList.length
             });
             // 寻找作者索引
@@ -89,7 +89,7 @@ window.addEventListener("load", async () => {
                         <p>${node.name}</p>
                     `;
                     domNodeWindow.addEventListener("click", function () {
-                        window.open(node.toUrl);
+                        window.location = node.toUrl;
                     })
                 }
                 return new CSS2DObject(domNodeWindow);

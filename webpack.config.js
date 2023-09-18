@@ -7,6 +7,7 @@ module.exports = {
     mode: "development",
     entry: {
         graphEditor: "./src/graphEditor/index.js",
+        graphView: "./src/graphEditor/view.js",
         userMain: "./src/userMain/index.js",
         publicMain: "./src/publicMain/index.js"
     },
@@ -59,6 +60,14 @@ module.exports = {
             },
             template: "./src/graphEditor/html/index.html",
             chunks: ["graphEditor"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "viewGraph.html",
+            minify: {
+                collapseWhitespace: true
+            },
+            template: "./src/graphEditor/html/view.html",
+            chunks: ["graphView"]
         }),
         new HtmlWebpackPlugin({
             filename: "userMain.html",
