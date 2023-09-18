@@ -540,12 +540,17 @@ export class Graph {
             d.isMove = true;
             moveList = [];
             clickTime = (new Date()).getTime();
-            for (let selectedElement of _.selectedElementList) {
-                if (selectedElement.type == "node") {
-                    selectedElement.deltaX = selectedElement.x - d.x;
-                    selectedElement.deltaY = selectedElement.y - d.y;
-                    moveList.push(selectedElement);
-                }
+            let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+            // 选中的节点和移动的节点不一样，就取消选中的节点
+            if (!selectedNodeList.includes(d)) {
+                _.deselectAll();
+                selectedNodeList = [d];
+            }
+            // 多选的节点同步移动
+            for (let selectedNode of selectedNodeList) {
+                selectedNode.deltaX = selectedNode.x - d.x;
+                selectedNode.deltaY = selectedNode.y - d.y;
+                moveList.push(selectedNode);
             }
             d.fx = d.x;
             d.fy = d.y;
@@ -577,6 +582,9 @@ export class Graph {
                 moveNode.cy = moveNode.y;
                 moveNode.isMove = false;
             }
+            // 选中被按下的节点
+            _.selectElement(d);
+            _.calPublicProperties();
             let times = (new Date()).getTime() - clickTime;
             if (times < 100) {
                 // 时间过小就不要放到撤销列表里了
