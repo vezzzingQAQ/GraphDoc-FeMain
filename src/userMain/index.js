@@ -6,12 +6,11 @@ import { AVATAR_UPLOAD_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, AVATAR_STORE_PAT
 import "./css/index.less";
 
 window.addEventListener("load", async () => {
-    let username = getQueryVariable("username");
     let uid = getQueryVariable("uid");
-    let userData = await getOUtherData(username);
-    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${userData.data.msg.avatar}`;
-    document.querySelector("#username").innerHTML = userData.data.msg.username;
-    let graphList = userData.data.msg.graphs;
+    let visitedUserData = await getOUtherData(uid);
+    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${visitedUserData.data.msg.avatar}`;
+    document.querySelector("#username").innerHTML = visitedUserData.data.msg.username;
+    let graphList = visitedUserData.data.msg.graphs;
     graphList.forEach(graph => {
         let domGraphBlock = document.createElement("li");
         let domGraphBlockImg = document.createElement("div");
@@ -21,56 +20,59 @@ window.addEventListener("load", async () => {
         domGraphBlock.appendChild(domGraphBlockImg);
         domGraphBlock.appendChild(domGraphBlockText);
         domGraphBlock.addEventListener("click", async function () {
-            let userData = await getUserData();
-            username = userData.data.msg.data.username;
-            if (username == graph.username)
-                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}`);
+            let uid = graph.uid;
+            window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${uid}`);
         });
         document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
     });
 
     // 点击头像进行更换
-    document.querySelector("#UserAvatar").addEventListener("click", () => {
-        let elementInput = document.createElement("input");
-        elementInput.type = "file";
-        elementInput.accept = "image/gif,image/jpeg,image/jpg,image/png";
-        elementInput.click();
-        elementInput.addEventListener("input", () => {
-            try {
-                let reader;
-                let data;
-                if (window.FileReader) {
-                    reader = new FileReader();
-                } else {
-                    alert("你的浏览器不支持访问本地文件");
-                }
-                reader.readAsText(elementInput.files[0]);
-                reader.addEventListener("load", () => {
-                    let formData = new FormData();
-                    formData.append('pic', elementInput.files[0]);
-                    axios({
-                        url: AVATAR_UPLOAD_PATH,
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        },
-                        data: formData
-                    }).then(async d => {
-                        let filename = d.data.msg.filename;
-                        let response = await updateAvatar(filename);
-                        if (response.state == 1) {
-                            document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
-                        }
+    let loginUserData = await getUserData();
+    let loginId = loginUserData.data.msg.data.id;
+    if (loginId == uid)
+        document.querySelector("#UserAvatar").addEventListener("click", () => {
+            let elementInput = document.createElement("input");
+            elementInput.type = "file";
+            elementInput.accept = "image/gif,image/jpeg,image/jpg,image/png";
+            elementInput.click();
+            elementInput.addEventListener("input", () => {
+                try {
+                    let reader;
+                    let data;
+                    if (window.FileReader) {
+                        reader = new FileReader();
+                    } else {
+                        alert("你的浏览器不支持访问本地文件");
+                    }
+                    reader.readAsText(elementInput.files[0]);
+                    reader.addEventListener("load", () => {
+                        let formData = new FormData();
+                        formData.append('pic', elementInput.files[0]);
+                        axios({
+                            url: AVATAR_UPLOAD_PATH,
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "multipart/form-data"
+                            },
+                            data: formData
+                        }).then(async d => {
+                            let filename = d.data.msg.filename;
+                            let response = await updateAvatar(filename);
+                            if (response.state == 1) {
+                                document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
+                            }
+                        });
                     });
-                });
-                reader.addEventListener("error", () => {
-                    alert("打开文件失败");
-                });
-            } catch {
-                console.error("打开文件出错");
-            }
-        })
-    });
+                    reader.addEventListener("error", () => {
+                        alert("打开文件失败");
+                    });
+                } catch {
+                    console.error("打开文件出错");
+                }
+            })
+        });
+    else
+        document.querySelector("#changeAvatar").style.display = "none";
 
     // 计算窗口滚动百分比
     let totalH = document.body.scrollHeight || document.documentElement.scrollHeight;

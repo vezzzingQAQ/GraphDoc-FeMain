@@ -35,6 +35,7 @@ export const DOMAIN_FE = "http://127.0.0.1:5500";
 export const EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
 export const USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
 export const DISPLAY_PAGE=`${DOMAIN_FE}/dist/visualization.html`;
+export const PUBLIC_PAGE=`${DOMAIN_FE}/dist/publicMain.html`;
 
 export const DOMAIN_COMPONENT = "http://127.0.0.1:5501";
 

@@ -35,9 +35,10 @@ export async function getUserData() {
 /**
  * 获取其他用户信息
  */
-export async function getOUtherData(username) {
+export async function getOUtherData(uid) {
     let formData = new FormData();
-    formData.append('username', username);
+    formData.append('jwt', getCookie('jwt'));
+    formData.append('uid', uid);
     let response = await axios({
         url: USER_ODATA,
         method: "POST",

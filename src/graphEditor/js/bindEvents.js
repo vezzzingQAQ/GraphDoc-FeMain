@@ -33,12 +33,16 @@ import payJpg from "./../../asset/img/pay.jpg";
 import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 import { VGraph, VNode, VEdge, bindData } from "./graph/genJson";
+import { PUBLIC_PAGE } from "../../public/js/urls.js";
 
 /**
  * 
  * @param {Graph} graph initGraph()返回的图谱对象
  */
 export async function bindEvents(graph) {
+    document.querySelector("#toPublicPage").addEventListener("click", () => {
+        window.open(PUBLIC_PAGE);
+    });
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
     });
