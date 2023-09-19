@@ -28,51 +28,56 @@ window.addEventListener("load", async () => {
 
     // 点击头像进行更换
     let loginUserData = await getUserData();
-    let loginId = loginUserData.data.msg.data.id;
-    if (loginId == uid)
-        document.querySelector("#UserAvatar").addEventListener("click", () => {
-            let elementInput = document.createElement("input");
-            elementInput.type = "file";
-            elementInput.accept = "image/gif,image/jpeg,image/jpg,image/png";
-            elementInput.click();
-            elementInput.addEventListener("input", () => {
-                try {
-                    let reader;
-                    let data;
-                    if (window.FileReader) {
-                        reader = new FileReader();
-                    } else {
-                        alert("你的浏览器不支持访问本地文件");
-                    }
-                    reader.readAsText(elementInput.files[0]);
-                    reader.addEventListener("load", () => {
-                        let formData = new FormData();
-                        formData.append('pic', elementInput.files[0]);
-                        axios({
-                            url: AVATAR_UPLOAD_PATH,
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "multipart/form-data"
-                            },
-                            data: formData
-                        }).then(async d => {
-                            let filename = d.data.msg.filename;
-                            let response = await updateAvatar(filename);
-                            if (response.state == 1) {
-                                document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
-                            }
+    if (loginUserData.data.state == 1) {
+        let loginId = loginUserData.data.msg.data.id;
+        if (loginId == uid) {
+            document.querySelector("#UserAvatar").addEventListener("click", () => {
+                let elementInput = document.createElement("input");
+                elementInput.type = "file";
+                elementInput.accept = "image/gif,image/jpeg,image/jpg,image/png";
+                elementInput.click();
+                elementInput.addEventListener("input", () => {
+                    try {
+                        let reader;
+                        let data;
+                        if (window.FileReader) {
+                            reader = new FileReader();
+                        } else {
+                            alert("你的浏览器不支持访问本地文件");
+                        }
+                        reader.readAsText(elementInput.files[0]);
+                        reader.addEventListener("load", () => {
+                            let formData = new FormData();
+                            formData.append('pic', elementInput.files[0]);
+                            axios({
+                                url: AVATAR_UPLOAD_PATH,
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "multipart/form-data"
+                                },
+                                data: formData
+                            }).then(async d => {
+                                let filename = d.data.msg.filename;
+                                let response = await updateAvatar(filename);
+                                if (response.state == 1) {
+                                    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
+                                }
+                            });
                         });
-                    });
-                    reader.addEventListener("error", () => {
-                        alert("打开文件失败");
-                    });
-                } catch {
-                    console.error("打开文件出错");
-                }
-            })
-        });
-    else
+                        reader.addEventListener("error", () => {
+                            alert("打开文件失败");
+                        });
+                    } catch {
+                        console.error("打开文件出错");
+                    }
+                })
+            });
+        } else {
+            document.querySelector("#changeAvatar").style.display = "none";
+        }
+    } else {
         document.querySelector("#changeAvatar").style.display = "none";
+    }
 
     // 计算窗口滚动百分比
     let totalH = document.body.scrollHeight || document.documentElement.scrollHeight;
@@ -81,7 +86,6 @@ window.addEventListener("load", async () => {
         let validH = totalH - clientH;
         let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
         let result = scrollH / validH;
-        console.log(result);
         document.querySelector(".mainWindow").style.backgroundColor = `rgb(
                 ${255 - result * 255},
                 ${255 - result * 255},
