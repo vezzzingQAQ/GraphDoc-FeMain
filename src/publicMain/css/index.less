@@ -1,4 +1,6 @@
 @import url(./../../public/css/vairbles.less);
+@import url(./../../public/css/footer.less);
+@import url(./../../public/css/aniFloat.less);
 
 body {
     margin: 0;
@@ -43,12 +45,6 @@ body {
             margin-bottom: 15px;
         }
 
-        .ani-float {
-            animation-name: float;
-            animation-timing-function: ease-in-out;
-            animation-iteration-count: infinite;
-            animation-duration: 5s;
-        }
 
         .menuBlock {
             display: flex;
@@ -143,41 +139,6 @@ body {
             }
         }
     }
-
-    .footer {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-top: 50px;
-
-        h2,
-        p {
-            font-weight: 100;
-            letter-spacing: 2px;
-        }
-
-        .col {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            padding-bottom: 50px;
-
-            .listPan {
-                display: flex;
-                flex-direction: column;
-                margin-left: 30px;
-                margin-right: 30px;
-
-                a {
-                    color: rgb(140, 140, 140);
-                    text-decoration: none;
-                    letter-spacing: 2px;
-                    padding: 5px;
-                }
-            }
-        }
-    }
 }
 
 .darkMode {
@@ -197,19 +158,5 @@ body {
 
     .footer {
         background-color: rgb(15, 15, 15);
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(-4px);
-    }
-
-    50% {
-        transform: translateY(4px);
-    }
-
-    100% {
-        transform: translateY(-4px);
     }
 }

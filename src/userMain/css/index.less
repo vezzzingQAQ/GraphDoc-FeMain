@@ -1,4 +1,6 @@
 @import url(./../../public/css/vairbles.less);
+@import url(./../../public/css/footer.less);
+@import url(./../../public/css/aniFloat.less);
 
 body {
     margin: 0;
@@ -21,12 +23,20 @@ body {
             width: 300px;
             height: 300px;
             border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.4);
         }
 
         #username {
             letter-spacing: 2px;
             font-size: 25px;
             font-weight: 100;
+            color: black;
+            margin: 0;
+        }
+
+        .sub {
+            color: rgba(100, 100, 100, 0.386);
+            letter-spacing: 2px;
         }
     }
 
@@ -35,13 +45,16 @@ body {
             display: flex;
             flex-wrap: wrap;
             list-style: none;
+            padding-left: 10vw;
+            padding-right: 10vw;
+            width: 80vw;
 
             li {
                 display: block;
                 width: 20%;
                 margin: 2%;
                 height: 200px;
-                border-radius: @small_border_radius;
+                border: 1px solid rgba(0, 0, 0, 0.4);
                 cursor: pointer;
                 position: relative;
                 overflow: hidden;
@@ -76,28 +89,13 @@ body {
             }
         }
     }
-
-    .footer {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        h2,
-        p {
-            font-weight: 100;
-            letter-spacing: 2px;
-        }
-    }
 }
 
 .darkMode {
-    background-color: @bg_color_d_pan;
+    background-color: white;
     color: @fg_color_d_1;
 
     .graphListBlock {
-        background-color: @bg_color_d_title;
-
         li {
             background-color: white;
 

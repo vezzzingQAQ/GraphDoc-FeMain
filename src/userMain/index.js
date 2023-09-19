@@ -7,7 +7,7 @@ import "./css/index.less";
 
 window.addEventListener("load", async () => {
     let username = getQueryVariable("username");
-    let uid=getQueryVariable("uid");
+    let uid = getQueryVariable("uid");
     let userData = await getOUtherData(username);
     document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${userData.data.msg.avatar}`;
     document.querySelector("#username").innerHTML = userData.data.msg.username;
@@ -28,10 +28,12 @@ window.addEventListener("load", async () => {
         });
         document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
     });
+
     // 点击头像进行更换
     document.querySelector("#UserAvatar").addEventListener("click", () => {
         let elementInput = document.createElement("input");
         elementInput.type = "file";
+        elementInput.accept = "image/gif,image/jpeg,image/jpg,image/png";
         elementInput.click();
         elementInput.addEventListener("input", () => {
             try {
@@ -68,5 +70,20 @@ window.addEventListener("load", async () => {
                 console.error("打开文件出错");
             }
         })
-    })
+    });
+
+    // 计算窗口滚动百分比
+    let totalH = document.body.scrollHeight || document.documentElement.scrollHeight;
+    let clientH = window.innerHeight || document.documentElement.clientHeight;
+    window.addEventListener("scroll", function (e) {
+        let validH = totalH - clientH;
+        let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
+        let result = scrollH / validH;
+        console.log(result);
+        document.querySelector(".mainWindow").style.backgroundColor = `rgb(
+                ${255 - result * 255},
+                ${255 - result * 255},
+                ${255 - result * 255}
+            )`
+    });
 });
