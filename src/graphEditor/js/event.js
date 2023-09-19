@@ -165,6 +165,7 @@ export function userRegister() {
     let username = document.querySelector("#register_username").value;
     let password1 = document.querySelector("#register_password1").value;
     let password2 = document.querySelector("#register_password2").value;
+    let email = document.querySelector("#register_email").value;
     if (password1 != password2) {
         document.querySelector("#password_conflict").classList = "hint show";
         return;
@@ -172,6 +173,7 @@ export function userRegister() {
     let formData = new FormData();
     formData.append("username", username);
     formData.append("password", password1);
+    formData.append("email", email);
     axios({
         url: USER_REGISTER,
         method: "POST",
