@@ -41,7 +41,7 @@ window.addEventListener("load", async () => {
                 "type": "graph",
                 "name": graph.name,
                 "img": GRAPH_PNG_STORE_PATH + graph.img,
-                "toUrl": `${VIEW_PAGE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`,
+                "toUrl": `${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`,
                 "id": nodeList.length
             });
             // 寻找作者索引

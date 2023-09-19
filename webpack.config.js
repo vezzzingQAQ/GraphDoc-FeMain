@@ -7,9 +7,8 @@ module.exports = {
     mode: "development",
     entry: {
         graphEditor: "./src/graphEditor/index.js",
-        graphView: "./src/graphEditor/view.js",
         userMain: "./src/userMain/index.js",
-        publicMain: "./src/publicMain/index.js"
+        visualization: "./src/visualization/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -62,14 +61,6 @@ module.exports = {
             chunks: ["graphEditor"]
         }),
         new HtmlWebpackPlugin({
-            filename: "viewGraph.html",
-            minify: {
-                collapseWhitespace: true
-            },
-            template: "./src/graphEditor/html/view.html",
-            chunks: ["graphView"]
-        }),
-        new HtmlWebpackPlugin({
             filename: "userMain.html",
             minify: {
                 collapseWhitespace: true
@@ -78,12 +69,12 @@ module.exports = {
             chunks: ["userMain"]
         }),
         new HtmlWebpackPlugin({
-            filename: "publicMain.html",
+            filename: "visualization.html",
             minify: {
                 collapseWhitespace: true
             },
-            template: "./src/publicMain/html/index.html",
-            chunks: ["publicMain"]
+            template: "./src/visualization/html/index.html",
+            chunks: ["visualization"]
         }),
         // 复制静态文件
         new CopyPlugin({
