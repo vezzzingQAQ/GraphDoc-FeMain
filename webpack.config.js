@@ -8,7 +8,8 @@ module.exports = {
     entry: {
         graphEditor: "./src/graphEditor/index.js",
         userMain: "./src/userMain/index.js",
-        visualization: "./src/visualization/index.js"
+        visualization: "./src/visualization/index.js",
+        publicMain:"./src/publicMain/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -75,6 +76,14 @@ module.exports = {
             },
             template: "./src/visualization/html/index.html",
             chunks: ["visualization"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "publicMain.html",
+            minify: {
+                collapseWhitespace: true
+            },
+            template: "./src/publicMain/html/index.html",
+            chunks: ["publicMain"]
         }),
         // 复制静态文件
         new CopyPlugin({
