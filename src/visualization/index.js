@@ -2,7 +2,7 @@ import ForceGraph3D from "3d-force-graph";
 import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 
 import { listPublicGraph, listUser } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT, VIEW_PAGE } from "../public/js/urls";
+import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_AVATAR_ROOT, USER_PAGE, VIEW_PAGE } from "../public/js/urls";
 import "./css/index.less";
 
 
@@ -27,6 +27,7 @@ window.addEventListener("load", async () => {
                 "type": "user",
                 "name": user.name,
                 "img": AVATAR_STORE_PATH + user.img,
+                "toUrl": `${USER_PAGE}?uid=${user.id}`,
                 "id": nodeList.length
             });
             edgeList.push({
@@ -82,6 +83,9 @@ window.addEventListener("load", async () => {
                     domNodeWindow.innerHTML = `
                         <img src='${node.img}'>
                     `;
+                    domNodeWindow.addEventListener("click", function () {
+                        window.location = node.toUrl;
+                    })
                 } else {
                     domNodeWindow.classList = "ngraphWindow graph";
                     domNodeWindow.innerHTML = `
