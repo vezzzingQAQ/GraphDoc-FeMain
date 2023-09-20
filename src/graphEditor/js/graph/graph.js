@@ -588,9 +588,14 @@ export class Graph {
                 moveNode.cy = moveNode.y;
                 moveNode.isMove = false;
             }
-            // 选中被按下的节点
-            _.selectElement(d);
-            _.calPublicProperties();
+            if (moveList.length == 1) {
+                moveList[0].initHtml();
+                _.selectElement(moveList[0]);
+            } else {
+                // 选中被按下的节点
+                _.selectElement(d);
+                _.calPublicProperties();
+            }
             let times = (new Date()).getTime() - clickTime;
             if (times < 100) {
                 // 时间过小就不要放到撤销列表里了
