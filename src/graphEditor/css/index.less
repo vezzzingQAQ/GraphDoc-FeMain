@@ -151,6 +151,7 @@ body {
         }
 
         .panArea {
+            display: block;
             width: @pan_area_width;
             height: calc(100vh - @menu_height);
             margin-top: @menu_height;
@@ -337,6 +338,7 @@ body {
                 letter-spacing: 2px;
                 font-weight: 500;
                 font-family: 'Times New Roman', Times, serif;
+                cursor: pointer;
 
                 a {
                     text-decoration: none;
@@ -344,7 +346,6 @@ body {
 
                 i {
                     margin-left: 5px;
-                    cursor: pointer;
                 }
             }
         }
@@ -362,7 +363,7 @@ body {
         }
 
         .topArea {
-            top: @menu_height;
+            top: calc(@menu_height + 5px);
             height: @bottom_height;
             flex-direction: row;
         }

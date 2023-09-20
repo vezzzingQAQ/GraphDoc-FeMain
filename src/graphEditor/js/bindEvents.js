@@ -25,7 +25,9 @@ import {
     openCode,
     hideDyaTemplateArea,
     showTemplateDya,
-    showGraphProperty
+    showGraphProperty,
+    fullScreen,
+    refreshFullScreen
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -153,6 +155,20 @@ export async function bindEvents(graph) {
     document.querySelector("#btnSetGraphProperty").addEventListener("click", () => {
         showGraphProperty();
     })
+
+    // 全屏浏览
+    document.querySelector("#fullScreenBtn").addEventListener("click",()=>{
+        refreshFullScreen(graph);
+    })
+
+    // 窗体大小改变时自动缩放画布
+    // window.addEventListener("resize", () => {
+    //     let renderDom = document.querySelector(".displayArea");
+    //     graph.renderProperties.svg
+    //         .attr("width", renderDom.offsetWidth)
+    //         .attr("height", renderDom.offsetHeight)
+    //     console.log(renderDom.offsetWidth)
+    // })
 
     // 上来先获取下用户信息
     let userData = await getUserData();

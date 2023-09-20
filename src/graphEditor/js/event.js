@@ -67,6 +67,7 @@ export let userConfig = {
     currentGraphFileName: "",
     username: null,
     uid: null,
+    isFullScreen: false
 }
 
 /**
@@ -405,6 +406,32 @@ export function loadGraphFromCode() {
     } catch (e) {
         showCodeError(e.message);
     }
+}
+
+/**
+ * 全屏浏览
+ */
+export function refreshFullScreen(graph) {
+    if (!userConfig.isFullScreen) {
+        graph.renderProperties.svg
+            .attr("width", window.innerWidth)
+            .attr("height", window.innerWidth)
+        document.querySelector(".displayArea").style.zInde = 9999;
+        document.querySelector(".mainMenu").style.zIndex = -1;
+        document.querySelector(".topArea").style.top = "5px";
+        document.querySelector(".panArea").style.display = "none";
+        document.querySelector("#fullScreenBtn").innerHTML = `| 返回编辑<i class="fa fa-cube"></i>`;
+    } else {
+        graph.renderProperties.svg
+            .attr("width", document.querySelector(".displayArea").offsetWidth)
+            .attr("height", document.querySelector(".displayArea").offsetHeight)
+        document.querySelector(".displayArea").style.zInde = 1;
+        document.querySelector(".mainMenu").style.zIndex = 99;
+        document.querySelector(".topArea").style.top = document.querySelector(".mainMenu").offsetHeight + 5 + "px";
+        document.querySelector(".panArea").style.display = "block";
+        document.querySelector("#fullScreenBtn").innerHTML = `| 全屏浏览<i class="fa fa-cube"></i>`;
+    }
+    userConfig.isFullScreen = !userConfig.isFullScreen;
 }
 
 /**
