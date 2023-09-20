@@ -4,7 +4,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: {
         graphEditor: "./src/graphEditor/index.js",
         userMain: "./src/userMain/index.js",
