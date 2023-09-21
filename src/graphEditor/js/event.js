@@ -415,7 +415,7 @@ export function refreshFullScreen(graph) {
     if (!userConfig.isFullScreen) {
         graph.renderProperties.svg
             .attr("width", window.innerWidth)
-            .attr("height", window.innerWidth)
+            .attr("height", window.innerHeight)
         document.querySelector(".displayArea").style.zInde = 9999;
         document.querySelector(".mainMenu").style.zIndex = -1;
         document.querySelector(".topArea").style.top = "5px";
