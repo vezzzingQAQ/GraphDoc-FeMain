@@ -350,7 +350,7 @@ export class C_N_Text extends Component {
         showText: "",
         textColor: "#ffffff",
         textFont: "'Courier New', Courier, monospace",
-        textSize: 4,
+        textSize: 12,
         textSpacing: 0,
         textWeight: 5
     }) {
