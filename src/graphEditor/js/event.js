@@ -435,6 +435,16 @@ export function refreshFullScreen(graph) {
 }
 
 /**
+ * 启用/撤销格点吸附模式
+ */
+export function refreshAlignBlock(graph, value) {
+    if (value)
+        graph.alignBlock = true
+    else
+        graph.alignBlock = false;
+}
+
+/**
  * 展示中央窗体
  */
 export function showAuthorList() {

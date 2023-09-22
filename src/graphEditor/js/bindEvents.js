@@ -27,7 +27,8 @@ import {
     showTemplateDya,
     showGraphProperty,
     fullScreen,
-    refreshFullScreen
+    refreshFullScreen,
+    refreshAlignBlock
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -159,6 +160,12 @@ export async function bindEvents(graph) {
     // 全屏浏览
     document.querySelector("#fullScreenBtn").addEventListener("click", () => {
         refreshFullScreen(graph);
+    })
+
+    // 对齐格点
+    document.querySelector("#btnRefreshAlignBlock").addEventListener("click", () => {
+        refreshAlignBlock(graph, !document.querySelector("#check_alignBlock").hasAttribute("checked"));
+        console.log(graph.alignBlock);
     })
 
     // 窗体大小改变时自动缩放画布

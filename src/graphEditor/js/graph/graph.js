@@ -46,6 +46,8 @@ import {
 
 // 撤销步数
 const UNDO_STEP = 50;
+// 格点大小
+const BLOCK_SIZE = 10;
 
 export class Graph {
     /**
@@ -92,6 +94,8 @@ export class Graph {
         this.bezierSmall = 10;
         // 撤销
         this.undoMirror = [];
+        // 格点对齐
+        this.alignBlock = false;
     }
 
     /**
@@ -572,20 +576,29 @@ export class Graph {
             }
         }
         function dragged(e, d) {
-            d.fx = e.x;
-            d.fy = e.y;
-            for (let moveNode of moveList) {
-                moveNode.fx = e.x + moveNode.deltaX;
-                moveNode.fy = e.y + moveNode.deltaY;
+            if (!_.alignBlock) {
+                d.fx = e.x;
+                d.fy = e.y;
+                for (let moveNode of moveList) {
+                    moveNode.fx = e.x + moveNode.deltaX;
+                    moveNode.fy = e.y + moveNode.deltaY;
+                }
+            } else {
+                d.fx = Math.floor(e.x / BLOCK_SIZE) * BLOCK_SIZE;
+                d.fy = Math.floor(e.y / BLOCK_SIZE) * BLOCK_SIZE;
+                for (let moveNode of moveList) {
+                    moveNode.fx = Math.floor(e.x / BLOCK_SIZE) * BLOCK_SIZE + moveNode.deltaX;
+                    moveNode.fy = Math.floor(e.y / BLOCK_SIZE) * BLOCK_SIZE + moveNode.deltaY;
+                }
             }
         }
         function dragended(e, d) {
             if (!e.active) _.renderProperties.simulation.stop();
+            d.isMove = false;
             d.fx = null;
             d.fy = null;
             d.cx = d.x;
             d.cy = d.y;
-            d.isMove = false;
             for (let moveNode of moveList) {
                 moveNode.fx = null;
                 moveNode.fy = null;
