@@ -359,7 +359,7 @@ export class SC_Textarea extends SubComponent {
     }
     initHtml() {
         this.dom = document.createElement("textarea");
-        this.dom.id = "text_node_textarea";
+        this.dom.id = "text_cop_textarea";
         this.dom.classList="styleScrollBar";
         this.dom.spellcheck = false;
         if (this.readOnly) {
