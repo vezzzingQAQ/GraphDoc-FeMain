@@ -524,8 +524,13 @@ export class Graph {
             })
             .on("contextmenu", function (e) {
                 e.preventDefault();
-                let nodeObj = d3.select(this).data()[0];
-                _.initMenu_Node(e, nodeObj);
+                e.preventDefault();
+                if (!_.isZooming) {
+                    let nodeObj = d3.select(this).data()[0];
+                    _.initMenu_Node(e, nodeObj);
+                } else {
+                    _.hideMenu();
+                }
             })
         _.initDragEvents(nodes);
     }
