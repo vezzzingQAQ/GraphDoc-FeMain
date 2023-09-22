@@ -157,7 +157,7 @@ export async function bindEvents(graph) {
     })
 
     // 全屏浏览
-    document.querySelector("#fullScreenBtn").addEventListener("click",()=>{
+    document.querySelector("#fullScreenBtn").addEventListener("click", () => {
         refreshFullScreen(graph);
     })
 
@@ -177,6 +177,19 @@ export async function bindEvents(graph) {
     // 加载图片
     document.querySelector("#mainAboutImg").src = mainAboutPng;
     document.querySelector("#payImg").src = payJpg;
+
+    // 菜单栏设置：点击直接进行checkbox选择
+    document.querySelectorAll(".checkBoxContainer").forEach(ele => {
+        let domChildInput = ele.querySelector("input");
+        ele.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (domChildInput.hasAttribute("checked")) {
+                domChildInput.removeAttribute("checked");
+            } else {
+                domChildInput.setAttribute("checked", true);
+            }
+        });
+    })
 
     // 隐藏动态组件
     hideDyaTemplateArea();
