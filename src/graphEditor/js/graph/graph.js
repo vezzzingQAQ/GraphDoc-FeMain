@@ -76,6 +76,7 @@ export class Graph {
         }
         this.isShiftDown = false;
         this.isControlDown = false;
+        this.isAltDown = false;
         // 图谱中的节点
         this.nodes;
         this.edges;
@@ -287,6 +288,10 @@ export class Graph {
                         _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
                         _.isControlDown = true;
                     }
+                    // alt
+                    if (e.keyCode == 18) {
+                        _.isAltDown = true;
+                    }
                     // ctrl+c复制选中的节点
                     if (e.keyCode == 67 && _.isControlDown) {
                         _.copyElements();
@@ -331,6 +336,8 @@ export class Graph {
                         _.isShiftDown = false;
                     if (e.keyCode == 17)
                         _.isControlDown = false;
+                    if (e.keyCode == 18)
+                        _.isAltDown = false;
                 }
             });
         }
@@ -553,10 +560,13 @@ export class Graph {
             // 压入撤销列表
             _.pushUndo();
 
+            // 启动物理模拟
             if (!e.active) _.renderProperties.simulation.alphaTarget(0.02).restart();
+
             d.isMove = true;
             moveList = [];
             clickTime = (new Date()).getTime();
+
             let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
             // 选中的节点和移动的节点不一样，就取消选中的节点
             if (!selectedNodeList.includes(d)) {
@@ -571,6 +581,8 @@ export class Graph {
             }
             d.fx = d.x;
             d.fy = d.y;
+
+            // 移动所有在列表中的元素
             for (let moveNode of moveList) {
                 moveNode.fx = d.x + moveNode.deltaX;
                 moveNode.fy = d.y + moveNode.deltaY;
@@ -926,7 +938,6 @@ export class Graph {
         try {
             let clipboardObj = navigator.clipboard;
             let pasteData = await clipboardObj.readText();
-            console.log(pasteData);
             let pasteDataDecoded = JSON.parse(pasteData);
             if (pasteDataDecoded.from != "vgd") throw new Error("不合法的剪贴板");
             if (!pasteDataDecoded.content.nodeList) throw new Error("不合法的剪贴板");
@@ -940,6 +951,10 @@ export class Graph {
 
         // 记录新旧键值对
         let oldNewUuid = new Map();
+
+        // 记录所有粘贴的元素
+        let pastedNodeObjs = [];
+        let pastedEdgeObjs = [];
 
         // 粘贴node
         for (let i = 0; i < this.copiedNodeJsonList.length; i++) {
@@ -957,17 +972,18 @@ export class Graph {
             nodeStore.cy = nodeStore.y + Math.random() / 100;
             let loadedNode = LoadNodeFromJson(nodeStore);
             this.pushNode(loadedNode);
+            pastedNodeObjs.push(loadedNode);
 
             oldNewUuid.set(oldUuid, loadedNode.uuid);
-
-            this.nodes = this.nodes
-                .data(this.nodeList, d => d.uuid)
-                .enter()
-                .append("g")
-                .merge(this.nodes);
-            this.initNodes(this.nodes);
-
-            this.modifyNodeExterior(loadedNode);
+        }
+        this.nodes = this.nodes
+            .data(this.nodeList, d => d.uuid)
+            .enter()
+            .append("g")
+            .merge(this.nodes);
+        this.initNodes(this.nodes);
+        for (let pastedNodeObj of pastedNodeObjs) {
+            this.modifyNodeExterior(pastedNodeObj);
         }
 
         // 粘贴edge
@@ -979,23 +995,30 @@ export class Graph {
                 edgeStore.uuid = null;
                 let loadedEdge = LoadEdgeFromJson(edgeStore, this.nodeList);
                 this.pushEdge(loadedEdge);
-
-                this.edges = this.edges
-                    .data(this.edgeList, d => d.uuid)
-                    .enter()
-                    .append("path")
-                    .merge(this.edges);
-                this.initEdges(this.edges);
-
-                this.modifyEdgeExterior(loadedEdge);
+                pastedEdgeObjs.push(loadedEdge);
             }
         });
+        this.edges = this.edges
+            .data(this.edgeList, d => d.uuid)
+            .enter()
+            .append("path")
+            .merge(this.edges);
+        this.initEdges(this.edges);
+        for (let pastedEdgeObj of pastedEdgeObjs) {
+            this.modifyEdgeExterior(pastedEdgeObj);
+        }
 
         this.modifyNodePhysics();
         this.modifyEdgePhysics();
 
         // 更新底部栏
         this.refreshBottomDom(`🏷️已粘贴${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系`);
+
+        // 返回复制的元素
+        return {
+            nodes: pastedNodeObjs,
+            edges: pastedEdgeObjs
+        }
     }
 
     /**
