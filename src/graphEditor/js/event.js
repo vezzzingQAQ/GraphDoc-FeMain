@@ -421,6 +421,7 @@ export function refreshFullScreen(graph) {
         document.querySelector(".mainMenu").style.zIndex = -1;
         document.querySelector(".topArea").style.top = "5px";
         document.querySelector(".panArea").style.display = "none";
+        document.querySelector(".dyaTemplateArea").style.display = "none";
         document.querySelector("#fullScreenBtn").innerHTML = `| 返回编辑<i class="fa fa-cube"></i>`;
     } else {
         graph.renderProperties.svg
