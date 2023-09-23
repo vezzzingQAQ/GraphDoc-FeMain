@@ -355,7 +355,7 @@ export class C_N_Text extends Component {
         textWeight: 5
     }) {
         super(showName, key, true);
-        this.addValue("showText", "HTML", new SC_Textarea(value.showText, false));
+        this.addValue("showText", "文本内容", new SC_Textarea(value.showText, false));
         this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
         this.addValue("textFont", "字体", new SC_Select(value.textFont, false, [
             { value: "'Courier New', Courier, monospace", text: "Courier New" },
@@ -601,7 +601,7 @@ export const ComponentMap = {
     "text_node": {
         key: "text_node",
         type: "node",
-        showName: "📃HTML",
+        showName: "📃文本",
         class: C_N_Text,
     },
     "exterior_edge": {
