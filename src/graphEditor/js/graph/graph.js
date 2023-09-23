@@ -1614,6 +1614,7 @@ export class Graph {
             {
                 name: "移到顶层",
                 func: function () {
+                    _.pushUndo();
                     let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
                     if (selectedNodeList.length != 0) {
                         for (let selectedNodeObj of selectedNodeList) {
@@ -1633,6 +1634,7 @@ export class Graph {
             {
                 name: "移到底层",
                 func: function () {
+                    _.pushUndo();
                     let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
                     if (selectedNodeList.length != 0) {
                         for (let selectedNodeObj of selectedNodeList) {
@@ -1673,8 +1675,8 @@ export class Graph {
             {
                 name: "自动换行",
                 func: function () {
-                    // let node = document.querySelector(`#${nodeObj.uuid}`);
                     if (nodeObj.hasComponent("text_node")) {
+                        _.pushUndo();
                         let text = nodeObj.autoGetValue("text_node", "showText");
                         let lineList = text.split("\n");
                         let newText = "";
