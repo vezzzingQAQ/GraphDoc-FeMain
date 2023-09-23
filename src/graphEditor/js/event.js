@@ -489,6 +489,19 @@ export async function showGraphProperty() {
         }
     }
 }
+export function showTextEditor(toComp) {
+    showCenterWindow(document.querySelector("#windowTextEditor"));
+    document.querySelector("#textEditorTextarea").value = toComp.dom.value;
+    document.querySelector("#textEditorTextarea").oninput = () => {
+        toComp.dom.value = document.querySelector("#textEditorTextarea").value;
+        toComp.value = toComp.dom.value;
+        toComp.updateSelectedValue(toComp.value);
+        toComp.updateGraph();
+    }
+    document.querySelector("#editTextFinish").onclick = () => {
+        hideCenterWindow(document.querySelector("#windowTextEditor"));
+    }
+}
 
 /**
  * 保存到云

@@ -65,8 +65,10 @@
                 <div class="col menuBlock">
                     <p><i class="fa fa-object-ungroup"></i> 选择</p>
                     <ul>
-                        <li class="checkBoxContainer show"><input class="menuCheck" id="check_node" type="checkbox" checked> 节点</li>
-                        <li class="checkBoxContainer show"><input class="menuCheck" id="check_edge" type="checkbox" checked> 关系</li>
+                        <li class="checkBoxContainer show"><input class="menuCheck" id="check_node" type="checkbox"
+                                checked> 节点</li>
+                        <li class="checkBoxContainer show"><input class="menuCheck" id="check_edge" type="checkbox"
+                                checked> 关系</li>
                     </ul>
                 </div>
                 <div class="col menuBlock">
@@ -84,7 +86,8 @@
                             <input type="color" class="subDisp" id="bgColorInput">
                         </li>
                         <li class="hide" id="btnSetGraphProperty">图谱属性设置</li>
-                        <li class="checkBoxContainer show" id="btnRefreshAlignBlock"><input class="menuCheck" id="check_alignBlock" type="checkbox"> 格点对齐</li>
+                        <li class="checkBoxContainer show" id="btnRefreshAlignBlock"><input class="menuCheck"
+                                id="check_alignBlock" type="checkbox"> 格点对齐</li>
                     </ul>
                 </div>
                 <div class="col menuBlock" id="userOptionsBlock">
@@ -293,9 +296,26 @@
                     </div>
                     <div class="formSub">
                         <p class="info">图谱说明</p>
-                        <textarea class="styleScrollBar" id="graphInfoInput" placeholder="如果是公共图谱的话，说明能够被看到"></textarea>
+                        <textarea class="styleScrollBar defaultTextArea" id="graphInfoInput" spellcheck="false"
+                            placeholder="如果是公共图谱的话，说明能够被看到"></textarea>
                     </div>
                     <button class="btn" id="updateGraphProperty">确定</button>
+                </div>
+            </div>
+        </div>
+        <!--文本编辑器窗口-->
+        <div class="centerWindow graphProperty" id="windowTextEditor">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-cubes"></i>编辑器</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <div class="menuArea">
+                    </div>
+                    <textarea class="styleScrollBar defaultTextArea" id="textEditorTextarea" spellcheck="false"
+                        placeholder="在这里编辑文本"></textarea>
+                    <button class="btn" id="editTextFinish">确定</button>
                 </div>
             </div>
         </div>

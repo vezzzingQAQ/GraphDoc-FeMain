@@ -31,6 +31,7 @@
 import axios from "axios";
 
 import { Node, Edge } from "./element";
+import { showTextEditor } from "../event";
 
 class SubComponent {
     /**
@@ -360,7 +361,7 @@ export class SC_Textarea extends SubComponent {
     initHtml() {
         this.dom = document.createElement("textarea");
         this.dom.id = "text_cop_textarea";
-        this.dom.classList="styleScrollBar";
+        this.dom.classList = "styleScrollBar";
         this.dom.spellcheck = false;
         if (this.readOnly) {
             this.dom.readOnly = "true";
@@ -376,6 +377,11 @@ export class SC_Textarea extends SubComponent {
                 e.preventDefault();
             }
         };
+        // 双击进入细节编辑模式
+        let toComp = this;
+        this.dom.ondblclick = function (e) {
+            showTextEditor(toComp);
+        }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.value = this.dom.value;
