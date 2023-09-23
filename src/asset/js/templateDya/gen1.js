@@ -1,4 +1,4 @@
-let rawGen = `TCGAAAGGTGTTTACATAAGCCCAAAAATTCTACCAGCTTTTGGTACGGTGCGTCATAGCACACATAAATGTTGCGAGTCATTGGATAGATATTGTGAGTCATAGCATGCATTTGTGTTGCCTAAAAATTCAACTACATGAAAAGAAACAAAACATAAATGTGATTTTGAAAGATGATTTATCAACTTTCCTTATCCATGCAAGCTACCTTCCACTGCATAACCACTTCTTTTAGATAAAAATAGCAGATCGATATACAAACGTCTACACTTCTGTAAACAGTACCCAAAAGCCAGAATTAGGATTGAACTGATTACGTGGCTTTAGCAGACCGTCCAAAAATCTGTTTTGCAAAGCTCCAATTGCTCCTTGCTTATCCAGCTTCTTTTGTGTTGGCAAATTGCTCTTTTACAACTGACTTTATTCTTCTTGTGTTTCTTAGGCTGAACTAACATCACCGTACACACAACCATTGTCATGAACCTTCACCACGTCCCTATAAAAGCCCAA`;
+let rawGen = `CTTGTGTTTCTTAGGCTGAACTAACATCACCGTACACACAACCATTGTCATGAACCTTCACCACGTCCCTATAAAAGCCCAA`;
 
 const colorList = [
     "#757761",
@@ -35,7 +35,7 @@ function main() {
         node1.components["exterior_node"]["shape"] = "rect";
         node1.components["exterior_node"]["round"] = 5;
 
-        node1.x = Math.sin(i / 4) * 140 + Math.random() * 10;
+        node1.x = Math.sin(i / 4 + 1) * 140 + Math.random() * 10;
         node1.y = i * 75 + Math.random() * 10;
 
         node1.addComponent("text_node");
@@ -57,7 +57,7 @@ function main() {
         node2.components["exterior_node"]["shape"] = "rect";
         node2.components["exterior_node"]["round"] = 5;
 
-        node2.x = Math.sin(i / 4 - Math.PI) * 140 + Math.random() * 10;
+        node2.x = Math.sin(i / 4 - Math.PI + 1) * 140 + Math.random() * 10;
         node2.y = i * 75 + Math.random() * 10;
 
         node2.addComponent("text_node");
