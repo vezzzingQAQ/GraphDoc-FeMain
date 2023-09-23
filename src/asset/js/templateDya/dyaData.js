@@ -51,7 +51,7 @@ Cuba,CUB,Access to clean fuels and technologies for cooking (% of population),EG
 Curacao,CUW,Access to clean fuels and technologies for cooking (% of population),EG.CFT.ACCS.ZS,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..,..`;
 
 function bind() {
-    bindData("dataObj", "CSV", { csv: rawCsv }, "csv源数据");
+    bindData("dataObj", "CSV", rawCsv, "csv源数据", "csv");
 }
 
 function main() {
@@ -71,7 +71,7 @@ function main() {
     });
 
     // 处理数据
-    let conuntryData = dataObj.csv.split("\n");
+    let conuntryData = dataObj.split("\n");
 
     for (let i = 0; i < conuntryData.length; i++) {
         let currentRawData = conuntryData[i];

@@ -1,5 +1,5 @@
 function bind() {
-    bindData("oreo", "奥利奥", "奥利奥", "数据格式:奥利奥奥利奥奥利奥");
+    bindData("oreo", "奥利奥", "奥利奥", "数据格式:奥利奥奥利奥奥利奥", "text");
 }
 
 function main() {

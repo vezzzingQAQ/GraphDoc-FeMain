@@ -4,36 +4,61 @@ import { loadGraphFromCode, showCodeError } from "../event";
 
 let jsonValid = false;
 
-export function bindData(key, name, data, info = "") {
+/**
+ * 绑定数据
+ * 这里的type可以为
+ * json
+ * text
+ * csv
+ */
+export function bindData(key, name, data, info = "", type = "json") {
     let addedDomContainer = document.createElement("div");
     addedDomContainer.classList = "templateContainer";
     let addedDomTag = document.createElement("p");
     addedDomTag.classList = "templateTag";
-    addedDomTag.innerHTML = name;
+    addedDomTag.innerHTML = `${name}<span>${type.toUpperCase()}</span>`;
     let addedDomInfo = document.createElement("p");
     addedDomInfo.classList = "templateInfo";
     addedDomInfo.innerHTML = info;
     let addedDomInput = document.createElement("textarea");
     addedDomInput.spellcheck = false;
     addedDomInput.classList = "templateData styleScrollBar";
-    addedDomInput.value = JSON.stringify(data, null, 2);
-    jsonValid = true;
-    addedDomContainer.oninput = function () {
+    if (type == "json") {
+        addedDomInput.value = JSON.stringify(data, null, 2);
         jsonValid = true;
-        try {
-            window[key] = JSON.parse(addedDomInput.value);
-        } catch {
-            jsonValid = false;
-        }
+    } else if (type == "text") {
+        addedDomInput.value = data;
+    } else if (type == "csv") {
+        addedDomInput.value = data;
     }
     document.querySelector("#btnExecuteCode").onclick = function () {
-        if (jsonValid) {
+        if (type == "json") {
+            jsonValid = true;
+            try {
+                window[key] = JSON.parse(addedDomInput.value);
+            } catch {
+                jsonValid = false;
+            }
+            if (jsonValid) {
+                document.querySelector("#loadGraph").style.opacity = 1;
+                window.setTimeout(() => {
+                    loadGraphFromCode();
+                }, 1);
+            } else {
+                showCodeError("数据有bug( ´･･)ﾉ(._.`)");
+            }
+        } else if (type == "text") {
+            window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 1);
-        } else {
-            showCodeError("数据有bug( ´･･)ﾉ(._.`)");
+        } else if (type == "csv") {
+            window[key] = addedDomInput.value;
+            document.querySelector("#loadGraph").style.opacity = 1;
+            window.setTimeout(() => {
+                loadGraphFromCode();
+            }, 1);
         }
     }
     addedDomContainer.appendChild(addedDomTag);
