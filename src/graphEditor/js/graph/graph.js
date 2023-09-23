@@ -48,6 +48,8 @@ import {
 const UNDO_STEP = 50;
 // 格点大小
 const BLOCK_SIZE = 10;
+// 自动换行每一行的最大长度
+const MAX_LINE_LENGTH = 40;
 
 export class Graph {
     /**
@@ -1664,6 +1666,32 @@ export class Graph {
                         relatedEdgeList[0].initHtml();
                     }
                 }
+            },
+            {
+                divider: true
+            },
+            {
+                name: "自动换行",
+                func: function () {
+                    // let node = document.querySelector(`#${nodeObj.uuid}`);
+                    if (nodeObj.hasComponent("text_node")) {
+                        let text = nodeObj.autoGetValue("text_node", "showText");
+                        let lineList = text.split("\n");
+                        let newText = "";
+                        for (let i = 0; i < lineList.length; i++) {
+                            let currentLine = lineList[i];
+                            let j = 0;
+                            for (j = 0; j < currentLine.length; j += MAX_LINE_LENGTH) {
+                                newText += `${currentLine.slice(j, j + MAX_LINE_LENGTH)}\n`;
+                            }
+                            newText += `${currentLine.slice(j)}\n`;
+                        }
+                        nodeObj.autoSetValue("text_node", "showText", newText);
+                        _.modifyNodeExterior(nodeObj);
+                        _.modifyNodePhysics();
+                    }
+                }
+
             }
         ]
         this.initMenu(e, menu);
