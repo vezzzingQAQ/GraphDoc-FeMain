@@ -94,14 +94,21 @@ body {
 
         .dyaTemplateArea {
             width: @template_area_width;
-            height: max-content;
+            height: calc(100vh - @menu_height);
+            overflow-y: scroll;
             display: flex;
             flex-direction: column;
             position: absolute;
             right: @pan_area_width;
             top: @menu_height;
 
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
             .title {
+                position: sticky;
+                top: 0;
                 display: block;
                 height: @add_pan_title_height;
                 line-height: @add_pan_title_height;
@@ -111,36 +118,40 @@ body {
                 transition: 0.3s ease-in-out;
             }
 
-            .templateContainer {
-                margin-left: 20px;
-                margin-right: 20px;
-                margin-top: 5px;
-                margin-bottom: 5px;
+            .content {
+                height: max-content;
 
-                .templateTag {
-                    padding-bottom: 5px;
-                    padding-top: 5px;
-                    font-size: 15px;
+                .templateContainer {
+                    margin-left: 20px;
+                    margin-right: 20px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
 
-                    span {
-                        font-size: 13px;
-                        margin-left: 5px;
-                        padding: 2px;
-                        border-radius: @small_border_radius;
+                    .templateTag {
+                        padding-bottom: 5px;
+                        padding-top: 5px;
+                        font-size: 15px;
+
+                        span {
+                            font-size: 13px;
+                            margin-left: 5px;
+                            padding: 2px;
+                            border-radius: @small_border_radius;
+                        }
                     }
-                }
 
-                .templateInfo {
-                    font-size: 11px;
-                    padding-bottom: 5px;
-                }
+                    .templateInfo {
+                        font-size: 11px;
+                        padding-bottom: 5px;
+                    }
 
-                .templateData {
-                    outline: none;
-                    border-radius: @small_border_radius;
-                    height: 400px;
-                    width: 100%;
-                    resize: none;
+                    .templateData {
+                        outline: none;
+                        border-radius: @small_border_radius;
+                        height: 400px;
+                        width: 100%;
+                        resize: none;
+                    }
                 }
             }
 
@@ -155,6 +166,7 @@ body {
                 border-radius: @small_border_radius;
                 cursor: pointer;
             }
+
         }
 
         .panArea {
@@ -169,18 +181,23 @@ body {
                 display: none;
             }
 
+            .title {
+                position: sticky;
+                top: 0;
+                height: @add_pan_title_height;
+                line-height: @add_pan_title_height;
+                font-size: 14px;
+                padding-left: 10px;
+                letter-spacing: 2px;
+                transition: 0.3s ease-in-out;
+                z-index: 100;
+            }
+
             .topPan {
+                z-index: 100;
+
                 .window {
                     overflow: hidden;
-
-                    .title {
-                        height: @add_pan_title_height;
-                        line-height: @add_pan_title_height;
-                        font-size: 14px;
-                        padding-left: 10px;
-                        letter-spacing: 2px;
-                        transition: 0.3s ease-in-out;
-                    }
 
                     .content {
                         transition: 0.3s ease-in-out;
@@ -465,12 +482,13 @@ body {
     .panArea {
         background-color: rgb(35, 35, 35);
 
+        .title {
+            background-color: @bg_color_d_title;
+            color: @fg_color_d_1;
+        }
+
         .topPan {
             .window {
-                .title {
-                    background-color: @bg_color_d_title;
-                    color: @fg_color_d_1;
-                }
 
                 .content {
                     .container {
@@ -590,12 +608,13 @@ body {
     .panArea {
         background-color: rgb(246, 246, 246);
 
+        .title {
+            background-color: @bg_color_l_title;
+            color: @fg_color_l_1;
+        }
+
         .topPan {
             .window {
-                .title {
-                    background-color: @bg_color_l_title;
-                    color: @fg_color_l_1;
-                }
 
                 .content {
                     .container {
