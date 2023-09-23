@@ -378,9 +378,15 @@ export class SC_Textarea extends SubComponent {
             }
         };
         // 双击进入细节编辑模式
-        let toComp = this;
+        let _ = this;
         this.dom.ondblclick = function (e) {
-            showTextEditor(toComp);
+            console.log(this);
+            showTextEditor(this, newValue => {
+                _.dom.value = newValue;
+                _.value = _.dom.value;
+                _.updateSelectedValue(_.value);
+                _.updateGraph();
+            });
         }
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {

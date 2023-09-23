@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
-import { loadGraphFromCode, showCodeError } from "../event";
+import { loadGraphFromCode, showCodeError, showTextEditor } from "../event";
 
 let jsonValid = false;
 
@@ -23,6 +23,11 @@ export function bindData(key, name, data, info = "", type = "json") {
     let addedDomInput = document.createElement("textarea");
     addedDomInput.spellcheck = false;
     addedDomInput.classList = "templateData styleScrollBar";
+    addedDomInput.ondblclick = function () {
+        showTextEditor(this, () => { }, () => {
+            genGraph();
+        });
+    }
     if (type == "json") {
         addedDomInput.value = JSON.stringify(data, null, 2);
         jsonValid = true;
@@ -31,7 +36,7 @@ export function bindData(key, name, data, info = "", type = "json") {
     } else if (type == "csv") {
         addedDomInput.value = data;
     }
-    document.querySelector("#btnExecuteCode").onclick = function () {
+    function genGraph() {
         if (type == "json") {
             jsonValid = true;
             try {
@@ -60,6 +65,9 @@ export function bindData(key, name, data, info = "", type = "json") {
                 loadGraphFromCode();
             }, 1);
         }
+    }
+    document.querySelector("#btnExecuteCode").onclick = function () {
+        genGraph();
     }
     addedDomContainer.appendChild(addedDomTag);
     addedDomContainer.appendChild(addedDomInfo);

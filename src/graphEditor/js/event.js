@@ -489,16 +489,14 @@ export async function showGraphProperty() {
         }
     }
 }
-export function showTextEditor(toComp) {
+export function showTextEditor(toDom, fnChange = () => { }, fnDone = () => { }) {
     showCenterWindow(document.querySelector("#windowTextEditor"));
-    document.querySelector("#textEditorTextarea").value = toComp.dom.value;
+    document.querySelector("#textEditorTextarea").value = toDom.value;
     document.querySelector("#textEditorTextarea").oninput = () => {
-        toComp.dom.value = document.querySelector("#textEditorTextarea").value;
-        toComp.value = toComp.dom.value;
-        toComp.updateSelectedValue(toComp.value);
-        toComp.updateGraph();
+        toDom.value = document.querySelector("#textEditorTextarea").value;
+        fnChange(toDom.value);
     }
-    document.querySelector("#textEditorTextarea").onkeydown = (e) => {
+    document.querySelector("#textEditorTextarea").onkeydown = function (e) {
         if (e.keyCode == 9) {
             let position = this.selectionStart + 2;
             this.value = this.value.substr(0, this.selectionStart) + '  ' + this.value.substr(this.selectionStart);
@@ -510,6 +508,7 @@ export function showTextEditor(toComp) {
     };
     document.querySelector("#editTextFinish").onclick = () => {
         hideCenterWindow(document.querySelector("#windowTextEditor"));
+        fnDone();
     }
 }
 
