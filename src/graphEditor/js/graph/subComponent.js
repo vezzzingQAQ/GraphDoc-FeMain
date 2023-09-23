@@ -369,7 +369,7 @@ export class SC_Textarea extends SubComponent {
         // 支持tab缩进
         this.dom.onkeydown = function (e) {
             if (e.keyCode == 9) {
-                var position = this.selectionStart + 2;//此处我用了两个空格表示缩进，其实无所谓几个，只要和下面保持一致就好了。
+                let position = this.selectionStart + 2;
                 this.value = this.value.substr(0, this.selectionStart) + '  ' + this.value.substr(this.selectionStart);
                 this.selectionStart = position;
                 this.selectionEnd = position;

@@ -498,6 +498,16 @@ export function showTextEditor(toComp) {
         toComp.updateSelectedValue(toComp.value);
         toComp.updateGraph();
     }
+    document.querySelector("#textEditorTextarea").onkeydown = (e) => {
+        if (e.keyCode == 9) {
+            let position = this.selectionStart + 2;
+            this.value = this.value.substr(0, this.selectionStart) + '  ' + this.value.substr(this.selectionStart);
+            this.selectionStart = position;
+            this.selectionEnd = position;
+            this.focus();
+            e.preventDefault();
+        }
+    };
     document.querySelector("#editTextFinish").onclick = () => {
         hideCenterWindow(document.querySelector("#windowTextEditor"));
     }
