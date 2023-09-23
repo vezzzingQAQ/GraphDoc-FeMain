@@ -365,6 +365,7 @@ export function openCode(graph) {
                     // 执行代码
                     document.querySelector(".dyaTemplateArea").style.display = "block";
                     document.querySelector("#dyaTemplateContent").innerHTML = "";
+                    document.querySelector(".dyaTemplateArea").style.display = "none";
                     let codeEval = `
                     ${readRes.target.result};
                     try{
@@ -674,6 +675,7 @@ export function showTemplateDya(graph) {
                     // 执行代码
                     document.querySelector(".dyaTemplateArea").style.display = "block";
                     document.querySelector("#dyaTemplateContent").innerHTML = "";
+                    document.querySelector(".dyaTemplateArea").style.display = "none";
                     let codeEval = `
                     ${res.data};
                     try{

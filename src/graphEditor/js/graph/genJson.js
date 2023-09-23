@@ -75,6 +75,7 @@ export function bindData(key, name, data, info = "", type = "json") {
 
     window[key] = data;
 
+    document.querySelector(".dyaTemplateArea").style.display="block";
     document.querySelector("#dyaTemplateContent").appendChild(addedDomContainer);
 }
 
