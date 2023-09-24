@@ -7,7 +7,7 @@
 import { loadGraphFromCloud } from "../../public/js/serverCom";
 import { getQueryVariable } from "../../public/js/tools";
 import { CreateBasicEdge, CreateBasicNode, CreateLinkNode } from "./graph/element";
-import { userConfig, refreshGraphName, refreshFullScreen } from "./event";
+import { userConfig, refreshGraphName, refreshFullScreen, refreshEditMode } from "./event";
 import { LoadGraphFromJson, Graph } from "./graph/graph";
 
 import defaultGraph from "./../../asset/graph/main.json";
@@ -22,6 +22,7 @@ export async function initGraph(graphObj) {
     let graphName = getQueryVariable("graphName");
     let uid = getQueryVariable("uid");
     let fullScreen = getQueryVariable("fs");
+    let locked = getQueryVariable("lc");
     if (graphName) {
         if (!uid) {
             let response = await loadGraphFromCloud(graphName)
@@ -48,6 +49,9 @@ export async function initGraph(graphObj) {
     }
     if (fullScreen) {
         refreshFullScreen(graph);
+    }
+    if (locked) {
+        refreshEditMode(graph);
     }
     return graph;
 }

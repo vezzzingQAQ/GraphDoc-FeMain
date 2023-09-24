@@ -28,7 +28,8 @@ import {
     showGraphProperty,
     fullScreen,
     refreshFullScreen,
-    refreshAlignBlock
+    refreshAlignBlock,
+    refreshEditMode
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -160,6 +161,11 @@ export async function bindEvents(graph) {
     // 全屏浏览
     document.querySelector("#fullScreenBtn").addEventListener("click", () => {
         refreshFullScreen(graph);
+    })
+
+    // 切换编辑/浏览模式
+    document.querySelector("#editGraphBtn").addEventListener("click", () => {
+        refreshEditMode(graph);
     })
 
     // 对齐格点

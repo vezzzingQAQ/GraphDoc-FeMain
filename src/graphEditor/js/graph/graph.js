@@ -1863,6 +1863,18 @@ export class Graph {
     }
 
     /**
+     * 重新加载图谱
+     */
+    reload() {
+        document.querySelector("#loadGraph").style.opacity = 1;
+        window.setTimeout(() => {
+            let graphJson = this.toJsonObj();
+            this.clear();
+            this.load(graphJson, false);
+        }, 300);
+    }
+
+    /**
      * 转为JSON object
      */
     toJsonObj() {

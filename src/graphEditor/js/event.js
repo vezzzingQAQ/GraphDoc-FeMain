@@ -67,7 +67,8 @@ export let userConfig = {
     currentGraphFileName: "",
     username: null,
     uid: null,
-    isFullScreen: false
+    isFullScreen: false,
+    isEditMode: true
 }
 
 /**
@@ -412,8 +413,11 @@ export function loadGraphFromCode() {
 /**
  * 全屏浏览
  */
-export function refreshFullScreen(graph) {
-    if (!userConfig.isFullScreen) {
+export function refreshFullScreen(graph, refresh = true) {
+    if (refresh)
+        userConfig.isFullScreen = !userConfig.isFullScreen;
+    if (userConfig.isFullScreen) {
+        // 全屏模式
         graph.renderProperties.svg
             .attr("width", window.innerWidth)
             .attr("height", window.innerHeight)
@@ -422,8 +426,9 @@ export function refreshFullScreen(graph) {
         document.querySelector(".topArea").style.top = "5px";
         document.querySelector(".panArea").style.display = "none";
         document.querySelector(".dyaTemplateArea").style.display = "none";
-        document.querySelector("#fullScreenBtn").innerHTML = `| 返回编辑<i class="fa fa-cube"></i>`;
+        document.querySelector("#fullScreenBtn").innerHTML = `| 全屏模式<i class="fa fa-cube"></i>`;
     } else {
+        // 窗口模式
         graph.renderProperties.svg
             .attr("width", document.querySelector(".displayArea").offsetWidth)
             .attr("height", document.querySelector(".displayArea").offsetHeight)
@@ -431,9 +436,27 @@ export function refreshFullScreen(graph) {
         document.querySelector(".mainMenu").style.zIndex = 99;
         document.querySelector(".topArea").style.top = document.querySelector(".mainMenu").offsetHeight + 5 + "px";
         document.querySelector(".panArea").style.display = "block";
-        document.querySelector("#fullScreenBtn").innerHTML = `| 全屏浏览<i class="fa fa-cube"></i>`;
+        document.querySelector("#fullScreenBtn").innerHTML = `| 窗口模式<i class="fa fa-cube"></i>`;
     }
-    userConfig.isFullScreen = !userConfig.isFullScreen;
+}
+
+/**
+ * 切换编辑/浏览模式
+ */
+export function refreshEditMode(graph) {
+    if (userConfig.isEditMode) {
+        graph.locked = true;
+        graph.reload();
+        document.querySelector("#editGraphBtn").innerHTML = `| 锁定模式<i class="fa fa-lock"></i>`;
+    } else {
+        graph.locked = false;
+        graph.reload();
+        document.querySelector("#editGraphBtn").innerHTML = `| 编辑模式<i class="fa fa-edit"></i>`;
+    }
+    window.setTimeout(() => {
+        refreshFullScreen(graph, false);
+    }, 300);
+    userConfig.isEditMode = !userConfig.isEditMode;
 }
 
 /**
