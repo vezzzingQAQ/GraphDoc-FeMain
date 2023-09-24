@@ -1033,6 +1033,13 @@ export class Graph {
         // 绑定节点的drag事件
         this.initDragEvents(this.nodes);
 
+        window.setTimeout(() => {
+            this.renderProperties.simulation.alphaTarget(0.02).restart();
+            window.setTimeout(() => {
+                this.renderProperties.simulation.stop();
+            }, 20);
+        }, 300);
+
         // 返回复制的元素
         return {
             nodes: pastedNodeObjs,
