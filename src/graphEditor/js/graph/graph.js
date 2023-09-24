@@ -1169,6 +1169,24 @@ export class Graph {
      * 修改单个节点
      */
     modifyNodeExterior(nodeObj) {
+        // 图片转为base64
+        function convertImgToBase64(url, callback) {
+            var canvas = document.createElement("CANVAS"),
+                ctx = canvas.getContext("2d"),
+                img = new Image;
+            img.crossOrigin = "Anonymous";
+            img.src = url;
+            img.onload = function () {
+                canvas.height = img.height;
+                canvas.width = img.width;
+                ctx.drawImage(img, 0, 0);
+                console.log(img);
+                var dataURL = canvas.toDataURL("image/png");
+                callback(this, dataURL);
+                canvas = null;
+            };
+        }
+
         const findedNode = this.renderProperties.viewArea.select(`#${nodeObj.uuid}`);
 
         // 先删除原来绘制的形状
@@ -1287,12 +1305,17 @@ export class Graph {
         if (domAddedNodeImg)
             domAddedNodeImg
                 .attr("class", "nodeImg")
-                .attr("src", d => d.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
+                // .attr("src", d => d.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .style("display", "block")
                 .style("width", d => d.autoGetValue("img_node", "width", "200px"))
                 .on("load", function () {
                     calSize();
                 })
+        let imgSrc = nodeObj.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value);
+        convertImgToBase64(imgSrc, function (_, blob) {
+            calSize();
+            domAddedNodeImg.attr("src", blob);
+        })
 
         if (domAddedNodeFile)
             domAddedNodeFile
