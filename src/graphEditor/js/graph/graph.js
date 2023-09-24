@@ -1592,7 +1592,7 @@ export class Graph {
             document.body.removeChild(link);
         };
     }
-    exportPng(scale = 12) {
+    exportImg(scale = 12, type = "png") {
         let svgNode = document.querySelector(".displayArea svg");
         let svgData = new XMLSerializer().serializeToString(svgNode)
         let svgDataBase64 = btoa(unescape(encodeURIComponent(svgData)))
@@ -1611,12 +1611,18 @@ export class Graph {
 
             let aLink = document.createElement("a");
             aLink.style.display = "none";
-            aLink.href = canvas.toDataURL("image/png", 1.0);
-            aLink.download = "v-gd" + ("-" + new Date().getTime());
+            aLink.href = canvas.toDataURL(`image/${type}`, 1.0);
+            aLink.download = "v-gd" + ("-" + new Date().getTime()) + "." + type;
             document.body.appendChild(aLink);
             aLink.click();
             document.body.removeChild(aLink);
         }
+    }
+    exportPng(scale = 12) {
+        this.exportImg(scale, "png");
+    }
+    exportJpg(scale = 12) {
+        this.exportImg(scale, "jpg");
     }
 
     /**

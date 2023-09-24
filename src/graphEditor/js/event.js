@@ -106,6 +106,13 @@ export function exportPng(graph) {
 }
 
 /**
+ * 导出为JPG
+ */
+export function exportJpg(graph){
+    graph.exportJpg();
+}
+
+/**
  * 从本地打开导图文件
  */
 export function openGraph(graph) {

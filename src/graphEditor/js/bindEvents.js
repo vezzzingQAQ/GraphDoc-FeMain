@@ -29,7 +29,8 @@ import {
     fullScreen,
     refreshFullScreen,
     refreshAlignBlock,
-    refreshEditMode
+    refreshEditMode,
+    exportJpg
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -67,6 +68,9 @@ export async function bindEvents(graph) {
     });
     document.querySelector("#btnExport2").addEventListener("click", () => {
         exportPng(graph);
+    });
+    document.querySelector("#btnExport3").addEventListener("click", () => {
+        exportJpg(graph);
     });
     document.querySelector("#btnLogin").addEventListener("click", () => {
         showLogin();
