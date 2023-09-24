@@ -99,6 +99,8 @@ export class Graph {
         this.undoMirror = [];
         // 格点对齐
         this.alignBlock = false;
+        // 锁定模式
+        this.locked = false;
     }
 
     /**
@@ -254,108 +256,123 @@ export class Graph {
                 _.mouseY = e.offsetY;
             })
 
-        // 框选
-        _.initSelectionRect();
+        if (!_.locked) {
+            // 编辑模式
+            // 初始化框选
+            _.initSelectionRect();
 
-        function bindKeyEvent() {
-            // 选中节点后delete删除
-            d3.select("body").on("keydown", function (e) {
-                if (e.target == this) {
-                    // console.log(e.keyCode);
-                    // delete删除选中的元素
-                    if (e.keyCode == 46) {
-                        if (_.selectedElementList.length != 0) {
-                            // 压入撤销列表
-                            _.pushUndo();
-                            for (let selectedElement of _.selectedElementList) {
-                                _.deleteElement(selectedElement);
+            // 初始化窗口的键盘事件绑定
+            function bindKeyEvent() {
+                // 选中节点后delete删除
+                d3.select("body").on("keydown", function (e) {
+                    if (e.target == this) {
+                        // console.log(e.keyCode);
+                        // delete删除选中的元素
+                        if (e.keyCode == 46) {
+                            if (_.selectedElementList.length != 0) {
+                                // 压入撤销列表
+                                _.pushUndo();
+                                for (let selectedElement of _.selectedElementList) {
+                                    _.deleteElement(selectedElement);
+                                }
+                                // 更新底部栏
+                                _.refreshBottomDom("🔑已按下delete，删除元素");
+
+                                // 重启物理模拟
+                                _.modifyNodePhysics();
+                                _.modifyEdgePhysics();
                             }
+                        }
+                        if (e.keyCode == 16) {
                             // 更新底部栏
-                            _.refreshBottomDom("🔑已按下delete，删除元素");
+                            _.refreshBottomDom("🔑已按下shift，点击元素进行连接");
+                            _.isShiftDown = true;
+                        }
+                        if (e.keyCode == 17) {
+                            // 更新底部栏
+                            _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
+                            _.isControlDown = true;
+                        }
+                        // alt
+                        if (e.keyCode == 18) {
+                            _.isAltDown = true;
+                        }
+                        // ctrl+c复制选中的节点
+                        if (e.keyCode == 67 && _.isControlDown) {
+                            _.copyElements();
+                        }
+                        // ctrl+v粘贴元素
+                        if (e.keyCode == 86 && _.isControlDown) {
+                            _.pasteElements();
+                        }
+                        // ctrl+z撤销
+                        if (e.keyCode == 90 && _.isControlDown) {
+                            _.undo();
+                        }
+                        // tab
+                        if (e.keyCode == 9 && _.selectedElementList.length > 0) {
+                            // let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                            // if (selectedNodeList.length > 0) {
+                            //     let curNode = selectedNodeList[selectedNodeList.length - 1];
+                            //     let addedNode = _.addNode({ x: _.mouseX, y: _.mouseY }, "text");
+                            //     let addedEdge = _.addEdge(curNode, addedNode);
+                            //     _.deselectAll();
+                            //     _.selectElement(addedNode);
+                            //     addedNode.initHtml();
+                            // }
+                        }
 
-                            // 重启物理模拟
-                            _.modifyNodePhysics();
-                            _.modifyEdgePhysics();
+                        // Debug输出
+                        if (e.keyCode == 68 && _.isShiftDown) {
+                            console.log("------------------------------------")
+                            console.log("nodelist", _.nodeList);
+                            console.log("nodes", _.nodes);
+                            console.log("edgelist", _.edgeList);
+                            console.log("edges", _.edges);
+                            console.log("selectedElementList", _.selectedElementList);
+                            console.log("copiedNodes", _.copiedNodeJsonList);
+                            console.log("cpoiedEdges", _.copiedEdgeJsonList);
                         }
                     }
-                    if (e.keyCode == 16) {
-                        // 更新底部栏
-                        _.refreshBottomDom("🔑已按下shift，点击元素进行连接");
-                        _.isShiftDown = true;
+                });
+                d3.select("body").on("keyup", function (e) {
+                    if (e.target == this) {
+                        if (e.keyCode == 16)
+                            _.isShiftDown = false;
+                        if (e.keyCode == 17)
+                            _.isControlDown = false;
+                        if (e.keyCode == 18)
+                            _.isAltDown = false;
                     }
-                    if (e.keyCode == 17) {
-                        // 更新底部栏
-                        _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
-                        _.isControlDown = true;
-                    }
-                    // alt
-                    if (e.keyCode == 18) {
-                        _.isAltDown = true;
-                    }
-                    // ctrl+c复制选中的节点
-                    if (e.keyCode == 67 && _.isControlDown) {
-                        _.copyElements();
-                    }
-                    // ctrl+v粘贴元素
-                    if (e.keyCode == 86 && _.isControlDown) {
-                        _.pasteElements();
-                    }
-                    // ctrl+z撤销
-                    if (e.keyCode == 90 && _.isControlDown) {
-                        _.undo();
-                    }
-                    // tab
-                    if (e.keyCode == 9 && _.selectedElementList.length > 0) {
-                        let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
-                        if (selectedNodeList.length > 0) {
-                            let curNode = selectedNodeList[selectedNodeList.length - 1];
-                            let addedNode = _.addNode({ x: _.mouseX, y: _.mouseY }, "text");
-                            let addedEdge = _.addEdge(curNode, addedNode);
-                            _.deselectAll();
-                            _.selectElement(addedNode);
-                            addedNode.initHtml();
+                });
+            }
+            bindKeyEvent();
+
+            // 初始化窗口右键菜单
+            function initRightMenu() {
+                d3.select(".displayArea svg").on("contextmenu", function (e) {
+                    if (e.target == this) {
+                        e.preventDefault();
+                        if (!_.isZooming) {
+                            _.initMenu_Svg(e);
+                        } else {
+                            _.hideMenu();
                         }
                     }
+                });
+            }
+            initRightMenu();
 
-                    // Debug输出
-                    if (e.keyCode == 68 && _.isShiftDown) {
-                        console.log("------------------------------------")
-                        console.log("nodelist", _.nodeList);
-                        console.log("nodes", _.nodes);
-                        console.log("edgelist", _.edgeList);
-                        console.log("edges", _.edges);
-                        console.log("selectedElementList", _.selectedElementList);
-                        console.log("copiedNodes", _.copiedNodeJsonList);
-                        console.log("cpoiedEdges", _.copiedEdgeJsonList);
-                    }
-                }
-            });
-            d3.select("body").on("keyup", function (e) {
-                if (e.target == this) {
-                    if (e.keyCode == 16)
-                        _.isShiftDown = false;
-                    if (e.keyCode == 17)
-                        _.isControlDown = false;
-                    if (e.keyCode == 18)
-                        _.isAltDown = false;
-                }
-            });
-        }
-        bindKeyEvent();
-
-        function initRightMenu() {
+            // 绑定节点的drag事件
+            _.initDragEvents(_.nodes);
+        } else {
+            // 浏览模式
             d3.select(".displayArea svg").on("contextmenu", function (e) {
                 if (e.target == this) {
                     e.preventDefault();
-                    if (!_.isZooming) {
-                        _.initMenu_Svg(e);
-                    } else {
-                        _.hideMenu();
-                    }
                 }
             });
         }
-        initRightMenu();
 
         // 计算物理模拟
         _.calPhysics();
@@ -545,7 +562,6 @@ export class Graph {
                     _.hideMenu();
                 }
             })
-        _.initDragEvents(nodes);
     }
 
     /**
@@ -1013,6 +1029,9 @@ export class Graph {
 
         // 更新底部栏
         this.refreshBottomDom(`🏷️已粘贴${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系`);
+
+        // 绑定节点的drag事件
+        this.initDragEvents(this.nodes);
 
         // 返回复制的元素
         return {
