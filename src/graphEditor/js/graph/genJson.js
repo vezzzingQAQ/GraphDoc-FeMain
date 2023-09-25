@@ -77,19 +77,19 @@ export function bindData(key, name, data, info = "", type = "json") {
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
-            }, 1);
+            }, 300);
         } else if (type == "csv") {
             window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
-            }, 1);
+            }, 300);
         } else if (type == "number") {
             window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
-            }, 1);
+            }, 300);
         }
     }
     document.querySelector("#btnExecuteCode").onclick = function () {
