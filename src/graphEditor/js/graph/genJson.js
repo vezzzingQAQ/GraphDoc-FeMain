@@ -2,9 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
 import { loadGraphFromCode, showCodeError, showTextEditor } from "../event";
 
-let jsonValid = false;
-
-let dataList = [];
+let jsonValid = true;
 
 /**
  * 绑定数据
@@ -15,6 +13,7 @@ let dataList = [];
  * number
  */
 export function bindData(key, name, data, info = "", type = "json") {
+    jsonValid = true;
     let addedDomContainer = document.createElement("div");
     addedDomContainer.classList = "templateContainer";
     let addedDomTag = document.createElement("p");
@@ -41,7 +40,9 @@ export function bindData(key, name, data, info = "", type = "json") {
         };
         // 双击进入编辑模式
         addedDomInput.ondblclick = function () {
-            showTextEditor(this, () => { }, () => {
+            showTextEditor(this, () => {
+                updateData(key, type, addedDomInput);
+            }, () => {
                 genGraph();
             });
         }
@@ -49,9 +50,9 @@ export function bindData(key, name, data, info = "", type = "json") {
         addedDomInput = document.createElement("input");
         addedDomInput.type = "number";
     }
+
     if (type == "json") {
         addedDomInput.value = JSON.stringify(data, null, 2);
-        jsonValid = true;
     } else if (type == "text") {
         addedDomInput.value = data;
     } else if (type == "csv") {
@@ -59,53 +60,27 @@ export function bindData(key, name, data, info = "", type = "json") {
     } else if (type == "number") {
         addedDomInput.value = data;
     }
+
     // 用户输入时更新数据
     addedDomInput.oninput = function () {
-        if (type == "json") {
-            jsonValid = true;
-            try {
-                window[key] = JSON.parse(addedDomInput.value);
-            } catch {
-                jsonValid = false;
-            }
-        } else if (type == "text") {
-            window[key] = addedDomInput.value;
-        } else if (type == "csv") {
-            window[key] = addedDomInput.value;
-        } else if (type == "number") {
-            window[key] = addedDomInput.value;
-        }
+        updateData(key, type, addedDomInput);
     }
+
     function genGraph() {
-        if (type == "json") {
-            if (jsonValid) {
-                document.querySelector("#loadGraph").style.opacity = 1;
-                window.setTimeout(() => {
-                    loadGraphFromCode();
-                }, 1);
-            } else {
-                showCodeError("数据有bug( ´･･)ﾉ(._.`)");
-            }
-        } else if (type == "text") {
+        if (jsonValid) {
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 300);
-        } else if (type == "csv") {
-            document.querySelector("#loadGraph").style.opacity = 1;
-            window.setTimeout(() => {
-                loadGraphFromCode();
-            }, 300);
-        } else if (type == "number") {
-            document.querySelector("#loadGraph").style.opacity = 1;
-            window.setTimeout(() => {
-                loadGraphFromCode();
-            }, 300);
+        } else {
+            showCodeError("JSON格式错误");
         }
     }
+
     document.querySelector("#btnExecuteCode").onclick = function () {
         genGraph();
     }
+
     addedDomContainer.appendChild(addedDomTag);
     addedDomContainer.appendChild(addedDomInfo);
     addedDomContainer.appendChild(addedDomInput);
@@ -114,6 +89,19 @@ export function bindData(key, name, data, info = "", type = "json") {
 
     document.querySelector(".dyaTemplateArea").style.display = "block";
     document.querySelector("#dyaTemplateContent").appendChild(addedDomContainer);
+}
+
+export function updateData(key, type, addedDomInput) {
+    jsonValid = true;
+    if (type == "json") {
+        try {
+            window[key] = JSON.parse(addedDomInput.value);
+        } catch {
+            jsonValid = false;
+        }
+    } else {
+        window[key] = addedDomInput.value;
+    }
 }
 
 export class VGraph {
