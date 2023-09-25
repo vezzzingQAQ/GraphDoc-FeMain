@@ -4,6 +4,8 @@ import { loadGraphFromCode, showCodeError, showTextEditor } from "../event";
 
 let jsonValid = false;
 
+let dataList = [];
+
 /**
  * 绑定数据
  * 这里的type可以为
@@ -37,6 +39,7 @@ export function bindData(key, name, data, info = "", type = "json") {
                 e.preventDefault();
             }
         };
+        // 双击进入编辑模式
         addedDomInput.ondblclick = function () {
             showTextEditor(this, () => { }, () => {
                 genGraph();
@@ -56,7 +59,8 @@ export function bindData(key, name, data, info = "", type = "json") {
     } else if (type == "number") {
         addedDomInput.value = data;
     }
-    function genGraph() {
+    // 用户输入时更新数据
+    addedDomInput.oninput = function () {
         if (type == "json") {
             jsonValid = true;
             try {
@@ -64,6 +68,16 @@ export function bindData(key, name, data, info = "", type = "json") {
             } catch {
                 jsonValid = false;
             }
+        } else if (type == "text") {
+            window[key] = addedDomInput.value;
+        } else if (type == "csv") {
+            window[key] = addedDomInput.value;
+        } else if (type == "number") {
+            window[key] = addedDomInput.value;
+        }
+    }
+    function genGraph() {
+        if (type == "json") {
             if (jsonValid) {
                 document.querySelector("#loadGraph").style.opacity = 1;
                 window.setTimeout(() => {
@@ -73,19 +87,16 @@ export function bindData(key, name, data, info = "", type = "json") {
                 showCodeError("数据有bug( ´･･)ﾉ(._.`)");
             }
         } else if (type == "text") {
-            window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 300);
         } else if (type == "csv") {
-            window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 300);
         } else if (type == "number") {
-            window[key] = addedDomInput.value;
             document.querySelector("#loadGraph").style.opacity = 1;
             window.setTimeout(() => {
                 loadGraphFromCode();
