@@ -55,6 +55,10 @@ const templateDyaList = [
     {
         showName: "奥利奥",
         name: "oreo",
+    },
+    {
+        showName: "格式化文本1",
+        name: "blockText",
     }
 ]
 
@@ -108,7 +112,7 @@ export function exportPng(graph) {
 /**
  * 导出为JPG
  */
-export function exportJpg(graph){
+export function exportJpg(graph) {
     graph.exportJpg();
 }
 
