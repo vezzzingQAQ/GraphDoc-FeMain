@@ -1,6 +1,7 @@
 import { listPublicGraph, listUser } from "../public/js/serverCom";
 import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
+import mainBg from "./../asset/img/icon/mainBg.png";
 
 window.addEventListener("load", async () => {
     let graphListResponse = await listPublicGraph();
@@ -35,23 +36,33 @@ window.addEventListener("load", async () => {
         });
     }
 
-    // 计算窗口滚动百分比
+    // 计算窗口滚动百分比&背景变色
     let totalH = document.body.scrollHeight || document.documentElement.scrollHeight;
     let clientH = window.innerHeight || document.documentElement.clientHeight;
     window.addEventListener("scroll", function (e) {
         let validH = totalH - clientH;
         let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
         let result = scrollH / validH;
-        console.log(result);
         document.querySelector(".mainWindow").style.backgroundColor = `rgb(
             ${255 - result * 255},
             ${255 - result * 255},
             ${255 - result * 255}
-        )`
+        )`;
+        // 改变图片位置
+        document.querySelector("#mainBg").style.marginTop = `${result * document.querySelector("body").offsetHeight / 10}px`;
+        document.querySelector("#mainBg").style.opacity = (1 - result * 3);
+        this.document.querySelector(".menuBlock").style.marginBottom = `${30 + result * document.querySelector("body").offsetHeight / 10}px`;
+        document.querySelector(".menuBlock").style.opacity = (1 - result * 3);
+        document.querySelectorAll(".sub").forEach(dom => {
+            dom.style.opacity = (1 - result * 3);
+        });
     });
 
     // 点击按钮进入编辑器
     document.querySelector("#editor").addEventListener("click", function () {
         window.location = EDITOR_PGAE;
-    })
+    });
+
+    // 绑定图片
+    document.querySelector("#mainBg").src = mainBg;
 });

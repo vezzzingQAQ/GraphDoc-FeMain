@@ -18,8 +18,10 @@ import "./css/graph.less";
 import "./css/centerWindow.less";
 import "./css/loadGraph.less";
 import { bindEvents } from "./js/bindEvents";
+import { setWindowIcon } from "../public/js/iconSetter";
 
 window.addEventListener("load", async () => {
+    setWindowIcon();
     let graph = await initGraph();
     bindEvents(graph);
 })
