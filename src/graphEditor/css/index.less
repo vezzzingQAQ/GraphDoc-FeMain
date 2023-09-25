@@ -125,13 +125,19 @@ body {
                         padding-bottom: 5px;
                     }
 
-                    .templateData {
+                    textarea {
                         outline: none;
                         border-radius: @small_border_radius;
                         height: 400px;
                         width: 100%;
                         resize: none;
                         padding: 5px;
+                    }
+
+                    input[type="number"] {
+                        width: 100%;
+                        padding: 5px;
+                        border-radius: @small_border_radius;
                     }
                 }
             }
@@ -444,7 +450,13 @@ body {
 
         }
 
-        .templateData {
+        textarea {
+            border: 1px solid @bg_color_d_border;
+            background-color: @bg_color_d_input;
+            color: @fg_color_d_input;
+        }
+
+        input[type="number"] {
             border: 1px solid @bg_color_d_border;
             background-color: @bg_color_d_input;
             color: @fg_color_d_input;
@@ -566,7 +578,13 @@ body {
             }
         }
 
-        .templateData {
+        textarea {
+            border: 1px solid @bg_color_l_border;
+            background-color: @bg_color_l_input;
+            color: @fg_color_l_input;
+        }
+
+        input[type="number"] {
             border: 1px solid @bg_color_l_border;
             background-color: @bg_color_l_input;
             color: @fg_color_l_input;

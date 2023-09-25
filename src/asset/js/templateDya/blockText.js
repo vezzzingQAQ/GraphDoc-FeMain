@@ -8,6 +8,7 @@ function bind() {
   二级内容2
     三级内容
       四级内容`, "以两个空格(TAB)控制缩进", "text");
+    bindData("paddingX", "横向间距", 200, "图谱绘制的横向间距", "number");
 }
 
 function main() {
@@ -79,7 +80,7 @@ function main() {
             node.components["exterior_node"]["shape"] = "rect";
             node.components["exterior_node"]["round"] = 3;
 
-            node.x = i * 200;
+            node.x = i * paddingX;
             node.y = j * 50;
 
             node.addComponent("text_node");

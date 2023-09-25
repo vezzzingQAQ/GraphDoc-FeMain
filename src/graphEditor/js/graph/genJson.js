@@ -10,6 +10,7 @@ let jsonValid = false;
  * json
  * text
  * csv
+ * number
  */
 export function bindData(key, name, data, info = "", type = "json") {
     let addedDomContainer = document.createElement("div");
@@ -20,13 +21,30 @@ export function bindData(key, name, data, info = "", type = "json") {
     let addedDomInfo = document.createElement("p");
     addedDomInfo.classList = "templateInfo";
     addedDomInfo.innerHTML = info;
-    let addedDomInput = document.createElement("textarea");
-    addedDomInput.spellcheck = false;
-    addedDomInput.classList = "templateData styleScrollBar";
-    addedDomInput.ondblclick = function () {
-        showTextEditor(this, () => { }, () => {
-            genGraph();
-        });
+    let addedDomInput;
+    if (type == "json" || type == "text" || type == "csv") {
+        addedDomInput = document.createElement("textarea");
+        addedDomInput.spellcheck = false;
+        addedDomInput.classList = "templateData styleScrollBar";
+        // 支持tab缩进
+        addedDomInput.onkeydown = function (e) {
+            if (e.keyCode == 9) {
+                let position = this.selectionStart + 2;
+                this.value = this.value.substr(0, this.selectionStart) + '  ' + this.value.substr(this.selectionStart);
+                this.selectionStart = position;
+                this.selectionEnd = position;
+                this.focus();
+                e.preventDefault();
+            }
+        };
+        addedDomInput.ondblclick = function () {
+            showTextEditor(this, () => { }, () => {
+                genGraph();
+            });
+        }
+    } else if (type == "number") {
+        addedDomInput = document.createElement("input");
+        addedDomInput.type = "number";
     }
     if (type == "json") {
         addedDomInput.value = JSON.stringify(data, null, 2);
@@ -34,6 +52,8 @@ export function bindData(key, name, data, info = "", type = "json") {
     } else if (type == "text") {
         addedDomInput.value = data;
     } else if (type == "csv") {
+        addedDomInput.value = data;
+    } else if (type == "number") {
         addedDomInput.value = data;
     }
     function genGraph() {
@@ -64,6 +84,12 @@ export function bindData(key, name, data, info = "", type = "json") {
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 1);
+        } else if (type == "number") {
+            window[key] = addedDomInput.value;
+            document.querySelector("#loadGraph").style.opacity = 1;
+            window.setTimeout(() => {
+                loadGraphFromCode();
+            }, 1);
         }
     }
     document.querySelector("#btnExecuteCode").onclick = function () {
@@ -75,7 +101,7 @@ export function bindData(key, name, data, info = "", type = "json") {
 
     window[key] = data;
 
-    document.querySelector(".dyaTemplateArea").style.display="block";
+    document.querySelector(".dyaTemplateArea").style.display = "block";
     document.querySelector("#dyaTemplateContent").appendChild(addedDomContainer);
 }
 
