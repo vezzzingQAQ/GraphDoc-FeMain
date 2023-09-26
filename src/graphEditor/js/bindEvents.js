@@ -30,7 +30,8 @@ import {
     refreshFullScreen,
     refreshAlignBlock,
     refreshEditMode,
-    exportJpg
+    exportJpg,
+    initNodeAddWindow
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -207,6 +208,9 @@ export async function bindEvents(graph) {
             }
         });
     })
+
+    // 节点添加窗口
+    initNodeAddWindow(graph);
 
     // 隐藏动态组件
     hideDyaTemplateArea();

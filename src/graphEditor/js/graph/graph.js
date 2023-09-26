@@ -1115,6 +1115,50 @@ export class Graph {
     }
 
     /**
+     * 从节点字符串添加节点
+     */
+    addNodeFromString(nodeString) {
+        nodeString = JSON.parse(nodeString);
+        // 记录所有粘贴的元素
+        let pastedNodeObjs = [];
+        // 粘贴node
+        for (let i = 0; i < nodeString.length; i++) {
+            let nodeStore = nodeString[i];
+            nodeStore.uuid = null;
+            // 计算鼠标在svg中的相对位置
+            let transform = d3.zoomTransform(this.renderProperties.viewArea.node());
+            let pt = transform.invert([this.mouseX + 350, this.mouseY]);
+            nodeStore.x = pt[0];
+            nodeStore.y = pt[1];
+            nodeStore.cx = nodeStore.x + Math.random() / 100;
+            nodeStore.cy = nodeStore.y + Math.random() / 100;
+            let loadedNode = LoadNodeFromJson(nodeStore);
+            this.pushNode(loadedNode);
+            pastedNodeObjs.push(loadedNode);
+        }
+        this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
+            .enter()
+            .append("g")
+            .merge(this.nodes);
+        this.initNodes(this.nodes);
+        for (let pastedNodeObj of pastedNodeObjs) {
+            this.modifyNodeExterior(pastedNodeObj);
+        }
+
+        this.modifyNodePhysics();
+
+        // 绑定节点的drag事件
+        this.initDragEvents(this.nodes);
+
+        window.setTimeout(() => {
+            this.renderProperties.simulation.alphaTarget(0.02).restart();
+            window.setTimeout(() => {
+                this.renderProperties.simulation.stop();
+            }, 20);
+        }, 300);
+    }
+
+    /**
      * 向图谱中添加新关系
      */
     addEdge(source, target) {

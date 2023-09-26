@@ -62,6 +62,34 @@ const templateDyaList = [
     }
 ]
 
+const addNodeList = [
+    {
+        showName: "基本节点",
+        name: "basicNode",
+        nodeString: `[{"uuid":"zznodec2c3816edc514bbbb4e79b3e08cea7b7","components":{"exterior_node":{"size":{"x":"50","y":"50"},"sizeAuto":false,"rotate":0,"scale":1,"round":"3","shape":"rect","dividerColor":null,"bgColor":"#4d4d4d","dividerStroke":null,"strokeColor":"#7d7d7d","strokeStyle":"0","strokeWidth":0.5,"opacity":1},"physics_node":{"dividerCollision":null,"collisionRadius":10,"collisionRadiusAuto":true,"dividerManyBodyForce":null,"manyBodyForceStrength":80,"manyBodyForceRangeMin":10,"manyBodyForceRangeMax":112,"dividerManyFixPosition":null,"fixPosition":true},"tag_node":{"tags":[]}},"vx":0,"vy":0,"x":-1738.0653873971237,"y":1439.1985275827697}]`
+    },
+    {
+        showName: "文本节点",
+        name: "textNode",
+        nodeString: `[{\"uuid\":\"zznode75c1e2c897e74b6fb2ee6701c009ec7b\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击输入文本\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":4,\"textSpacing\":0,\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":980,\"y\":500,\"cx\":980,\"cy\":500}]`
+    },
+    {
+        showName: "图片节点",
+        name: "imgNode",
+        nodeString: `[{\"uuid\":\"zznode2ea1771a99f946b9ac3d5aea05dc90ea\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"c4b37798bf1d7be72a839f663536340_189343.jpg\",\"width\":\"50\"}},\"vx\":0,\"vy\":0,\"x\":830,\"y\":1150,\"cx\":830,\"cy\":1150}]`
+    },
+    {
+        showName: "代码节点",
+        name: "codeNode",
+        nodeString: `[{\"uuid\":\"zznode31af7649e7e74d35b70e00356384a3d1\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"code_node\":{\"content\":\"void main()\\n{\\n  print(\\\"vezz\\\");\\n}\"}},\"vx\":0,\"vy\":0,\"x\":400,\"y\":1170,\"cx\":400,\"cy\":1170}]`
+    },
+    {
+        showName: "链接节点",
+        name: "linkNode",
+        nodeString: `[{\"uuid\":\"zznode3582a00a27c647409c7cdce9cc1c9831\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"link_node\":{\"url\":\"http://vezzzing.cn/vezzzingsLibrary/dist/main.html\"}},\"vx\":0,\"vy\":0,\"x\":900,\"y\":1140,\"cx\":900,\"cy\":1140}]`
+    }
+]
+
 let currentGraph = null;
 
 // 用户配置
@@ -437,6 +465,7 @@ export function refreshFullScreen(graph, refresh = true) {
         document.querySelector(".topArea").style.top = "5px";
         document.querySelector(".panArea").style.display = "none";
         document.querySelector(".dyaTemplateArea").style.display = "none";
+        document.querySelector(".addNodeArea").style.display = "none";
         document.querySelector("#fullScreenBtn").innerHTML = `| 全屏模式<i class="fa fa-cube"></i>`;
     } else {
         // 窗口模式
@@ -447,6 +476,7 @@ export function refreshFullScreen(graph, refresh = true) {
         document.querySelector(".mainMenu").style.zIndex = 99;
         document.querySelector(".topArea").style.top = document.querySelector(".mainMenu").offsetHeight + 5 + "px";
         document.querySelector(".panArea").style.display = "block";
+        document.querySelector(".addNodeArea").style.display = "block";
         document.querySelector("#fullScreenBtn").innerHTML = `| 窗口模式<i class="fa fa-cube"></i>`;
     }
 }
@@ -478,6 +508,29 @@ export function refreshAlignBlock(graph, value) {
         graph.alignBlock = true
     else
         graph.alignBlock = false;
+}
+
+/**
+ * 从模板添加节点
+ */
+function addTpNode(nodeTp, graph) {
+    graph.addNodeFromString(nodeTp.nodeString);
+}
+
+/**
+ * 加载节点添加列表
+ */
+export function initNodeAddWindow(graph) {
+    let domContainer = document.querySelector(".addNodeArea .content ul");
+    for (let i = 0; i < addNodeList.length; i++) {
+        let currentNodeTp = addNodeList[i];
+        let nodeContainer = document.createElement("li");
+        nodeContainer.style.backgroundImage = `url(./nodeTp/${currentNodeTp.name}.png)`;
+        nodeContainer.onclick = function () {
+            addTpNode(currentNodeTp, graph);
+        }
+        domContainer.appendChild(nodeContainer);
+    }
 }
 
 /**

@@ -97,6 +97,10 @@ module.exports = {
                     to: path.resolve(__dirname, "dist/graphTemplate")
                 },
                 {
+                    from: path.resolve(__dirname, "src/asset/img/nodeTp"),
+                    to: path.resolve(__dirname, "dist/nodeTp")
+                },
+                {
                     from: path.resolve(__dirname, "src/asset/js/templateDya"),
                     to: path.resolve(__dirname, "dist/graphTemplate")
                 }

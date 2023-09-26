@@ -72,6 +72,32 @@ body {
             position: relative;
         }
 
+        .addNodeArea {
+            position: fixed;
+            left: 0;
+            top: calc(@menu_height + 100px);
+            width: 150px;
+            height: calc(100vh - @menu_height * 2 -30px);
+
+            .content {
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    li {
+                        width: 30px;
+                        margin: 10px;
+                        height: 30px;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        cursor: pointer;
+                        list-style: none;
+                    }
+                }
+            }
+        }
+
         .dyaTemplateArea {
             width: @template_area_width;
             height: calc(100vh - @menu_height);
@@ -429,6 +455,17 @@ body {
     .displayArea {
         background-color: rgb(6, 6, 6);
 
+    }
+
+    .addNodeArea {
+        .content {
+            background-color: rgb(51, 51, 51);
+
+            li {
+                background-color: rgb(80, 80, 80);
+                border-radius: @small_border_radius;
+            }
+        }
     }
 
     .dyaTemplateArea {
