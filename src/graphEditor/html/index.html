@@ -88,10 +88,11 @@
                         <li class="show" id="btnExport">导出为SVG</li>
                         <li class="show" id="btnExport2">导出为PNG</li>
                         <li class="show" id="btnExport3">导出为JPG</li>
+                        <li class="show" id="btnShare">以链接分享</li>
                     </ul>
                 </div>
                 <div class="col menuBlock">
-                    <p><i class="fa fa-cog"></i> 设置</p>
+                    <p><i class="fa fa-map"></i> 图谱</p>
                     <ul>
                         <li class="show" id="btnReverseMode">切换风格</li>
                         <li class="show">背景颜色
@@ -336,7 +337,32 @@
                 </div>
             </div>
         </div>
-
+        <!--链接分享窗口-->
+        <div class="centerWindow shareLink" id="windowShareLink">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-link"></i>分享链接</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <p id="linkShowArea"></p>
+                    <div class="btn" id="btnWindowShare">复制</div>
+                </div>
+            </div>
+        </div>
+        <!--消息窗口-->
+        <div class="centerWindow message" id="windowShowMessage">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-hint"></i>消息</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <p id="msgShowArea"></p>
+                    <button class="btn" id="msgAccept">确定</button>
+                </div>
+            </div>
+        </div>
 
         <div class="rightMenu rightMenu_hide">
 

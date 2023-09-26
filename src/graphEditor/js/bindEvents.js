@@ -31,7 +31,8 @@ import {
     refreshAlignBlock,
     refreshEditMode,
     exportJpg,
-    initNodeAddWindow
+    initNodeAddWindow,
+    showShareLink
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -176,8 +177,13 @@ export async function bindEvents(graph) {
     // 对齐格点
     document.querySelector("#btnRefreshAlignBlock").addEventListener("click", () => {
         refreshAlignBlock(graph, !document.querySelector("#check_alignBlock").hasAttribute("checked"));
-        console.log(graph.alignBlock);
     })
+
+    // 分享图谱
+    document.querySelector("#btnShare").addEventListener("click", () => {
+        showShareLink();
+    })
+
 
     // 窗体大小改变时自动缩放画布
     // window.addEventListener("resize", () => {
@@ -207,7 +213,7 @@ export async function bindEvents(graph) {
                 domChildInput.setAttribute("checked", true);
             }
         });
-    })
+    });
 
     // 节点添加窗口
     initNodeAddWindow(graph);

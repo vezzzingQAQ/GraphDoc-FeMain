@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { configGraph, deleteGraph, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -553,6 +553,31 @@ export function showCodeError(message) {
     document.querySelector("#codeErrorShow").innerHTML = message;
     document.querySelector("#closeCodeError").onclick = () => {
         hideCenterWindow(document.querySelector("#windowCodeError"));
+    }
+}
+export function showMessage(message) {
+    showCenterWindow(document.querySelector("#windowShowMessage"));
+    document.querySelector("#msgShowArea").innerHTML = message;
+    document.querySelector("#msgAccept").onclick = () => {
+        hideCenterWindow(document.querySelector("#windowShowMessage"));
+    }
+}
+export async function showShareLink() {
+    showCenterWindow(document.querySelector("#windowShareLink"));
+    // 获取数据填入窗体
+    let response = await loadGraphConfig(userConfig.currentGraphFileName);
+    if (response.state == 1) {
+        let graphName = response.msg.name;
+        let uid = response.msg.author.id;
+        let url = `${EDITOR_PGAE}?graphName=${encodeURI(graphName)}&uid=${uid}&fs=true&lc=true`;
+        document.querySelector("#linkShowArea").innerHTML = url;
+        document.querySelector("#btnWindowShare").onclick = function () {
+            let clipboardObj = navigator.clipboard;
+            clipboardObj.writeText(url);
+        }
+    } else {
+        hideCenterWindow(document.querySelector("#windowShareLink"));
+        showMessage("请先保存到云再分享");
     }
 }
 export async function showGraphProperty() {
