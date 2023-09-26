@@ -942,8 +942,8 @@ export class Graph {
                 edgeList: this.copiedEdgeJsonList
             }
         });
-        // let clipboardObj = navigator.clipboard;
-        // clipboardObj.writeText(storeText);
+        let clipboardObj = navigator.clipboard;
+        clipboardObj.writeText(storeText);
         // 将元素复制到sessionStorage
         window.localStorage.setItem("gdClipBoard", storeText);
 
@@ -1146,10 +1146,10 @@ export class Graph {
             // 计算鼠标在svg中的相对位置
             let transform = d3.zoomTransform(this.renderProperties.viewArea.node());
             let pt = transform.invert([this.mouseX + 350, this.mouseY]);
-            nodeStore.x = pt[0];
-            nodeStore.y = pt[1];
-            nodeStore.cx = nodeStore.x + Math.random() / 100;
-            nodeStore.cy = nodeStore.y + Math.random() / 100;
+            nodeStore.x = pt[0] + Math.random() * 10;
+            nodeStore.y = pt[1] + Math.random() * 10;
+            nodeStore.cx = nodeStore.x + Math.random() * 10;
+            nodeStore.cy = nodeStore.y + Math.random() * 10;
             let loadedNode = LoadNodeFromJson(nodeStore);
             this.pushNode(loadedNode);
             pastedNodeObjs.push(loadedNode);

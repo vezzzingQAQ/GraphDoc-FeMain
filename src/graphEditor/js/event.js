@@ -64,29 +64,59 @@ const templateDyaList = [
 
 const addNodeList = [
     {
-        showName: "基本节点",
+        showName: "THEME1-基本节点",
         name: "basicNode",
-        nodeString: `[{"uuid":"zznodec2c3816edc514bbbb4e79b3e08cea7b7","components":{"exterior_node":{"size":{"x":"50","y":"50"},"sizeAuto":false,"rotate":0,"scale":1,"round":"3","shape":"rect","dividerColor":null,"bgColor":"#4d4d4d","dividerStroke":null,"strokeColor":"#7d7d7d","strokeStyle":"0","strokeWidth":0.5,"opacity":1},"physics_node":{"dividerCollision":null,"collisionRadius":10,"collisionRadiusAuto":true,"dividerManyBodyForce":null,"manyBodyForceStrength":80,"manyBodyForceRangeMin":10,"manyBodyForceRangeMax":112,"dividerManyFixPosition":null,"fixPosition":true},"tag_node":{"tags":[]}},"vx":0,"vy":0,"x":-1738.0653873971237,"y":1439.1985275827697}]`
+        nodeString: `[{\"uuid\":\"zznode5fce92bb815d46bdb08fdba48c9232ab\",\"components\":{\"exterior_node\":{\"size\":{\"x\":\"50\",\"y\":\"50\"},\"sizeAuto\":false,\"rotate\":0,\"scale\":1,\"round\":\"3\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#7d7d7d\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":1},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"tag_node\":{\"tags\":[]}},\"vx\":0,\"vy\":0,\"x\":527.0015162736321,\"y\":175.00199834396233,\"cx\":527.0015162736321,\"cy\":175.00199834396233}]`
     },
     {
-        showName: "文本节点",
+        showName: "THEME1-文本节点",
         name: "textNode",
-        nodeString: `[{\"uuid\":\"zznode75c1e2c897e74b6fb2ee6701c009ec7b\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击输入文本\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":4,\"textSpacing\":0,\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":980,\"y\":500,\"cx\":980,\"cy\":500}]`
+        nodeString: `[{\"uuid\":\"zznode09033a8888a84d4abb0e31c62f781740\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击输入文本\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":\"12\",\"textSpacing\":0,\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":513.000875308945,\"y\":257.0073881942305,\"cx\":513.000875308945,\"cy\":257.0073881942305}]`
     },
     {
-        showName: "图片节点",
+        showName: "THEME1-图片节点",
         name: "imgNode",
         nodeString: `[{\"uuid\":\"zznode2ea1771a99f946b9ac3d5aea05dc90ea\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"c4b37798bf1d7be72a839f663536340_189343.jpg\",\"width\":\"50\"}},\"vx\":0,\"vy\":0,\"x\":830,\"y\":1150,\"cx\":830,\"cy\":1150}]`
     },
     {
-        showName: "代码节点",
+        showName: "THEME1-代码节点",
         name: "codeNode",
         nodeString: `[{\"uuid\":\"zznode31af7649e7e74d35b70e00356384a3d1\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"code_node\":{\"content\":\"void main()\\n{\\n  print(\\\"vezz\\\");\\n}\"}},\"vx\":0,\"vy\":0,\"x\":400,\"y\":1170,\"cx\":400,\"cy\":1170}]`
     },
     {
-        showName: "链接节点",
-        name: "linkNode",
-        nodeString: `[{\"uuid\":\"zznode3582a00a27c647409c7cdce9cc1c9831\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"link_node\":{\"url\":\"http://vezzzing.cn/vezzzingsLibrary/dist/main.html\"}},\"vx\":0,\"vy\":0,\"x\":900,\"y\":1140,\"cx\":900,\"cy\":1140}]`
+        showName: "THEME1-大标题",
+        name: "mainTitle",
+        nodeString: `[{\"uuid\":\"zznodea8da78876fa44fdebcb4be52a3b3878f\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"大标题\",\"textColor\":\"#ffffff\",\"textFont\":\"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif\",\"textSize\":\"43\",\"textSpacing\":\"2\",\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":995.2551945338789,\"y\":267.678045336371,\"cx\":995.2551945338789,\"cy\":267.678045336371}]`
+    },
+    {
+        showName: "THEME1-二级标题",
+        name: "subTitle",
+        nodeString: `[{\"uuid\":\"zznodebcb2759d47ff404f813236302652ea26\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"二级标题\",\"textColor\":\"#ffffff\",\"textFont\":\"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif\",\"textSize\":\"25\",\"textSpacing\":\"2\",\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":1295.7432925411065,\"y\":218.4163803645765,\"cx\":1295.7432925411065,\"cy\":218.4163803645765}]`
+    },
+    {
+        showName: "THEME1-三级标题",
+        name: "thirdTitle",
+        nodeString: `[{\"uuid\":\"zznodec41d8a17d73c4f88ad938aff57511c90\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"3\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"三级标题\",\"textColor\":\"#ffffff\",\"textFont\":\"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif\",\"textSize\":\"17\",\"textSpacing\":\"0\",\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":1336.9187711200038,\"y\":332.92370430768125,\"cx\":1336.9187711200038,\"cy\":332.92370430768125}]`
+    },
+    {
+        showName: "THEME1-带物理的球",
+        name: "physicsCircle",
+        nodeString: `[{\"uuid\":\"zznodefff61927fc594203a0cc03abcd542b0c\",\"components\":{\"exterior_node\":{\"size\":{\"x\":\"50\",\"y\":\"50\"},\"sizeAuto\":false,\"rotate\":0,\"scale\":1,\"round\":\"3\",\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#7d7d7d\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":1},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":false},\"tag_node\":{\"tags\":[]}},\"vx\":0,\"vy\":0,\"x\":1043.0721448651723,\"y\":273.94929186700404,\"cx\":1043.0721448651723,\"cy\":273.94929186700404}]`
+    },
+    {
+        showName: "THEME1-黑色小块块",
+        name: "blackBlock",
+        nodeString: `[{\"uuid\":\"zznodec0af3010b7ac47c78a3e54e0a7249a72\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":null,\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#000f00\",\"dividerStroke\":null,\"strokeColor\":\"#000000\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":false,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击输入文字\",\"textColor\":\"#ffffff\",\"textFont\":null,\"textSize\":12,\"textSpacing\":0,\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":279.0078503190116,\"y\":889.0014288102573,\"cx\":279.0078503190116,\"cy\":889.0014288102573}]`
+    },
+    {
+        showName: "THEME1-黑色小块块",
+        name: "whiteBlock",
+        nodeString: `[{\"uuid\":\"zznodedf282d490cae46508c9c4bc2e162298a\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"3\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#ffffff\",\"dividerStroke\":null,\"strokeColor\":\"#000000\",\"strokeStyle\":\"0\",\"strokeWidth\":\"1\",\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":false,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击输入文字\",\"textColor\":\"#3b3b3b\",\"textFont\":null,\"textSize\":\"12\",\"textSpacing\":0,\"textWeight\":5}},\"vx\":0,\"vy\":0,\"x\":354.50554328165146,\"y\":50.6152804502658,\"cx\":354.50554328165146,\"cy\":50.6152804502658}]`
+    },
+    {
+        showName: "THEME1-中心圈圈",
+        name: "circleCenter",
+        nodeString: `[{\"uuid\":\"zznodeb52917d8d09f48b8aa4d36e426e30e48\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":null,\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#5e5e5e\",\"dividerStroke\":null,\"strokeColor\":\"#000000\",\"strokeStyle\":\"0\",\"strokeWidth\":\"0\",\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"GraphDoc\",\"textColor\":\"#ffffff\",\"textFont\":\"'Times New Roman', Times, serif\",\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":5},\"tag_node\":{\"tags\":[\"center\"]}},\"vx\":0,\"vy\":0,\"x\":720,\"y\":430,\"cx\":720,\"cy\":430}]`
     }
 ]
 
@@ -526,6 +556,7 @@ export function initNodeAddWindow(graph) {
         let currentNodeTp = addNodeList[i];
         let nodeContainer = document.createElement("li");
         nodeContainer.style.backgroundImage = `url(./nodeTp/${currentNodeTp.name}.png)`;
+        nodeContainer.title = currentNodeTp.showName;
         nodeContainer.onclick = function () {
             addTpNode(currentNodeTp, graph);
         }
