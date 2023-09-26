@@ -117,6 +117,11 @@ const addNodeList = [
         showName: "THEME1-中心圈圈",
         name: "circleCenter",
         nodeString: `[{\"uuid\":\"zznodeb52917d8d09f48b8aa4d36e426e30e48\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":null,\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#5e5e5e\",\"dividerStroke\":null,\"strokeColor\":\"#000000\",\"strokeStyle\":\"0\",\"strokeWidth\":\"0\",\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"GraphDoc\",\"textColor\":\"#ffffff\",\"textFont\":\"'Times New Roman', Times, serif\",\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":5},\"tag_node\":{\"tags\":[\"center\"]}},\"vx\":0,\"vy\":0,\"x\":720,\"y\":430,\"cx\":720,\"cy\":430}]`
+    },
+    {
+        showName: "中心节点",
+        name: "mainCenter2",
+        nodeString: `[{\"uuid\":\"zznode176f06893465495d81296b8d86a9ee82\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击编辑文字\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":5},\"css_node\":{\"content\":\"background:linear-gradient(to right,rgb(100,100,200),rgb(10,150,200));\\nborder-radius:5px;\\npadding:10px;\\ntext-shadow: 2px 2px 4px #000000;\"}},\"vx\":0,\"vy\":0,\"x\":238.73768968917716,\"y\":465.8087704277939,\"cx\":238.73768968917716,\"cy\":465.8087704277939}]`
     }
 ]
 
