@@ -997,15 +997,9 @@ export class Graph {
 
             oldNewUuid.set(oldUuid, loadedNode.uuid);
         }
-
-        let addedNodes = this.nodes.data(this.nodeList, d => d.uuid)
+        this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
             .enter()
-            .append("g");
-
-        // 绑定节点的drag事件
-        this.initDragEvents(addedNodes);
-
-        this.nodes = addedNodes
+            .append("g")
             .merge(this.nodes);
         this.initNodes(this.nodes);
         for (let pastedNodeObj of pastedNodeObjs) {
@@ -1040,6 +1034,8 @@ export class Graph {
         // 更新底部栏
         this.refreshBottomDom(`🏷️已粘贴${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系`);
 
+        // 绑定节点的drag事件
+        this.initDragEvents(this.nodes);
 
         window.setTimeout(() => {
             this.renderProperties.simulation.alphaTarget(0.02).restart();
