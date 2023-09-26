@@ -584,7 +584,7 @@ export class C_N_Css extends Component {
         content: ""
     }) {
         super(showName, key, true);
-        this.addValue("content", "CSS", new SC_Textarea(value.content, false));
+        this.addValue("content", "CSS", new SC_Textarea(value.content, false, false));
     }
 }
 

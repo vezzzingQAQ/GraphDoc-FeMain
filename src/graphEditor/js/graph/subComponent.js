@@ -355,12 +355,14 @@ export class SC_Check extends SubComponent {
  * Textarea框
  */
 export class SC_Textarea extends SubComponent {
-    constructor(defaultValue = false, readOnly = false) {
+    constructor(defaultValue = false, readOnly = false, focusAble = true) {
         super(defaultValue, readOnly);
+        this.focusAble = focusAble;
     }
     initHtml() {
         this.dom = document.createElement("textarea");
-        this.dom.id = "text_cop_textarea";
+        if (this.focusAble)
+            this.dom.id = "text_cop_textarea";
         this.dom.classList = "styleScrollBar";
         this.dom.spellcheck = false;
         if (this.readOnly) {
