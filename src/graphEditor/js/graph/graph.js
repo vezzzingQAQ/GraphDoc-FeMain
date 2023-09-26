@@ -554,7 +554,6 @@ export class Graph {
             })
             .on("contextmenu", function (e) {
                 e.preventDefault();
-                e.preventDefault();
                 if (!_.isZooming) {
                     let nodeObj = d3.select(this).data()[0];
                     _.initMenu_Node(e, nodeObj);
@@ -654,6 +653,7 @@ export class Graph {
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended)
+            .clickDistance(2)
             (nodes);
     }
 
@@ -678,19 +678,19 @@ export class Graph {
             })
             .on("end", () => {
                 let deltaTime = (new Date()).getTime() - zoomTime;
-                if (deltaTime > 100) {
+                if (deltaTime < 200) {
+                    _.isZooming = false;
+                } else {
                     setTimeout(() => {
                         _.isZooming = false;
                     }, 0);
-                } else {
-                    _.isZooming = false;
                 }
             })
             .on("zoom", ({ transform }) => {
                 _.renderProperties.viewArea.attr("transform", transform);
             }))
             // 取消双击放大事件
-            .on("dblclick.zoom", null);
+            .on("dblclick.zoom", null)
     }
 
     /**
