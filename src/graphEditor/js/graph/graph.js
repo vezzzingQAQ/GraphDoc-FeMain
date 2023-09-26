@@ -43,6 +43,7 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
+import { saveGraph } from "../event";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -308,6 +309,11 @@ export class Graph {
                         // ctrl+z撤销
                         if (e.keyCode == 90 && _.isControlDown) {
                             _.undo();
+                        }
+                        // ctrls保存
+                        if (e.keyCode == 83 && _.isControlDown) {
+                            e.preventDefault();
+                            saveGraph(_);
                         }
                         // tab
                         if (e.keyCode == 9 && _.selectedElementList.length > 0) {
