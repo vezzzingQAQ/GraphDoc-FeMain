@@ -577,6 +577,18 @@ export class C_N_Latex extends Component {
 }
 
 /**
+ * CSS组件
+ */
+export class C_N_Css extends Component {
+    constructor(showName, key, value = {
+        content: ""
+    }) {
+        super(showName, key, true);
+        this.addValue("content", "CSS", new SC_Textarea(value.content, false));
+    }
+}
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -637,7 +649,7 @@ export const ComponentMap = {
     "img_node": {
         key: "img_node",
         type: "node",
-        showName: "📏图片",
+        showName: "📰图片",
         class: C_N_Img,
     },
     "file_node": {
@@ -687,6 +699,12 @@ export const ComponentMap = {
         type: "node",
         showName: "🔬公式",
         class: C_N_Latex,
+    },
+    "css_node": {
+        key: "css_node",
+        type: "node",
+        showName: "🧾CSS样式",
+        class: C_N_Css,
     }
 }
 

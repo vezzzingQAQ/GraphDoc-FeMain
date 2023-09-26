@@ -1521,6 +1521,11 @@ export class Graph {
             .attr("rx", d => d.autoGetValue("exterior_node", "round", 0))
             .style("opacity", d => d.autoGetValue("exterior_node", "opacity", 1));
 
+        // 绑定CSS样式
+        if (nodeObj.hasComponent("css_node")) {
+            domAddedSubComponentContainer.node().style.cssText += nodeObj.autoGetValue("css_node", "content", "");
+            calSize();
+        }
     }
 
     /**
