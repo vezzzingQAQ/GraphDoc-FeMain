@@ -1125,6 +1125,8 @@ export class Graph {
         // 选中新添加的节点
         _.selectElement(addedNode);
 
+        _.initDragEvents(_.nodes);
+
         // 更新属性栏
         addedNode.initHtml();
         return addedNode;
