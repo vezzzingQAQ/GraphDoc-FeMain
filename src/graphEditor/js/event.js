@@ -122,7 +122,27 @@ const addNodeList = [
         showName: "中心节点",
         name: "mainCenter2",
         nodeString: `[{\"uuid\":\"zznode176f06893465495d81296b8d86a9ee82\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击编辑文字\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":5},\"css_node\":{\"content\":\"background:linear-gradient(to right,rgb(100,100,200),rgb(10,150,200));\\nborder-radius:5px;\\npadding:10px;\\ntext-shadow: 2px 2px 4px #000000;\"}},\"vx\":0,\"vy\":0,\"x\":238.73768968917716,\"y\":465.8087704277939,\"cx\":238.73768968917716,\"cy\":465.8087704277939}]`
-    }
+    },
+    {
+        showName: "毛玻璃效果",
+        name: "glass1",
+        nodeString: `[{\"uuid\":\"zznode02f4a7ac46a94169bd0ffdf8fd27021c\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击编辑文字\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":5},\"css_node\":{\"content\":\"background:rgba(0,0,0,0.2);\\nborder-radius:5px;\\npadding:10px;\\nbackdrop-filter:blur(2px);\"}},\"vx\":0,\"vy\":0,\"x\":348.2864239713068,\"y\":706.9979625330783,\"cx\":348.2864239713068,\"cy\":706.9979625330783}]`
+    },
+    {
+        showName: "发光文字",
+        name: "textShadow1",
+        nodeString: `[{\"uuid\":\"zznode8cb9af4826ce4b56acc303d595c9a67e\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"双击编辑文字\",\"textColor\":\"#ffffff\",\"textFont\":null,\"textSize\":\"33\",\"textSpacing\":0,\"textWeight\":\"1\"},\"css_node\":{\"content\":\"text-shadow: 0 0 3px rgba(250,250,250,1);\"}},\"vx\":0,\"vy\":0,\"x\":1096.8509069511992,\"y\":680.6208863492665,\"cx\":1096.8509069511992,\"cy\":680.6208863492665}]`
+    },
+    {
+        showName: "图片滤镜-去色",
+        name: "filter1",
+        nodeString: `[{\"uuid\":\"zznode35dc49c5a15048cdb276252759739f45\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"c4b37798bf1d7be72a839f663536340_189343.jpg\",\"width\":\"50\"},\"css_node\":{\"content\":\"filter:grayscale(1);\"}},\"vx\":0,\"vy\":0,\"x\":1141.849142014348,\"y\":914.4217347693485,\"cx\":1141.849142014348,\"cy\":914.4217347693485}]`
+    },
+    {
+        showName: "图片滤镜-提纯",
+        name: "filter2",
+        nodeString: `[{\"uuid\":\"zznode35dc49c5a15048cdb276252759739f45\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"c4b37798bf1d7be72a839f663536340_189343.jpg\",\"width\":\"50\"},\"css_node\":{\"content\":\"filter:contrast(2);\"}},\"vx\":0,\"vy\":0,\"x\":1141.849142014348,\"y\":914.4217347693485,\"cx\":1141.849142014348,\"cy\":914.4217347693485}]`
+    },
 ]
 
 let currentGraph = null;
