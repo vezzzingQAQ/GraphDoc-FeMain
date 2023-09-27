@@ -1468,11 +1468,11 @@ export class Graph {
             addedSubComponentForeign
                 .attr("width", function () {
                     let containerDom = d3.select(this).select(".nodeGraphDomContainer");
-                    return containerDom.node().offsetWidth + 2;
+                    return containerDom.node().offsetWidth + 1;
                 })
                 .attr("height", function () {
                     let containerDom = d3.select(this).select(".nodeGraphDomContainer");
-                    return containerDom.node().offsetHeight + 2;
+                    return containerDom.node().offsetHeight + 1;
                 })
                 .attr("x", function () { return -d3.select(this).attr("width") / 2 })
                 .attr("y", function () { return -d3.select(this).attr("height") / 2 })
