@@ -676,6 +676,9 @@ export async function showGraphProperty() {
         response = await configGraph(userConfig.currentGraphFileName, isPublic, info);
         if (response.state == 1) {
             hideCenterWindow(document.querySelector("#windowGraphProperty"));
+        }else{
+            hideCenterWindow(document.querySelector("#windowGraphProperty"));
+            showMessage("请先保存到云再设置");
         }
     }
 }
