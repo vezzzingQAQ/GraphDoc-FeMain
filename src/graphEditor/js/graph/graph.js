@@ -102,6 +102,8 @@ export class Graph {
         this.alignBlock = false;
         // 锁定模式
         this.locked = false;
+        // blob暂存列表
+        this.blobTempList = [];
     }
 
     /**
@@ -1374,6 +1376,8 @@ export class Graph {
                 // .attr("src", d => d.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .style("display", "block")
                 .style("width", d => d.autoGetValue("img_node", "width", "200px"))
+                .attr("class", "nodeImg")
+                .attr("dataSource", nodeObj.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .on("load", function () {
                     calSize();
                 })
@@ -1643,12 +1647,22 @@ export class Graph {
      * 下载为图片
      */
     genSvg() {
+        let _ = this;
         const svg = document.querySelector('svg');
+        // 将blob转换为src
+        let index = 0;
+        _.blobTempList = [];
+        document.querySelectorAll(".nodeImg").forEach(ele => {
+            _.blobTempList.push(ele.getAttribute("src"));
+            ele.setAttribute("src", ele.getAttribute("datasource"));
+            index++;
+        });
         let source = new XMLSerializer().serializeToString(svg); //将整个SVG document 对象序列化为一个 XML 字符串
         let blob = new Blob([source], { type: "text/xml" }); // 返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成
         return blob;
     }
     exportSvg() {
+        let _ = this;
         onDownload(this.genSvg(), 'test.svg'); // 下载 
         function onDownload(data, name) {
             const url = window.URL.createObjectURL(data); //创建一个url
@@ -1661,6 +1675,14 @@ export class Graph {
             link.click(); // 触发a标签的点击事件
             URL.revokeObjectURL(url); // 清除Url
             document.body.removeChild(link);
+
+            // src再转为blob
+            let index = 0;
+            document.querySelectorAll(".nodeImg").forEach(ele => {
+                ele.setAttribute("datasource", ele.getAttribute("src"));
+                ele.setAttribute("src", _.blobTempList[index]);
+                index++;
+            });
         };
     }
     exportImg(scale = 12, type = "png") {
