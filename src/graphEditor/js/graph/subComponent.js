@@ -435,8 +435,12 @@ export class SC_FileInput extends SubComponent {
                 },
                 data: formData
             }).then(d => {
-                this.setValue(d.data.msg.filename);
-                this.updateGraph();
+                if (d.data.state == 1) {
+                    this.setValue(d.data.msg.filename);
+                    this.updateGraph();
+                }else{
+                    console.log("文件上传失败")
+                }
             });
         });
         return this.dom;
