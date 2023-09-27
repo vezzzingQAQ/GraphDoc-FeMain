@@ -944,8 +944,8 @@ export class Graph {
                 edgeList: this.copiedEdgeJsonList
             }
         });
-        let clipboardObj = navigator.clipboard;
-        clipboardObj.writeText(storeText);
+        // let clipboardObj = navigator.clipboard;
+        // clipboardObj.writeText(storeText);
         // 将元素复制到sessionStorage
         window.localStorage.setItem("gdClipBoard", storeText);
 
