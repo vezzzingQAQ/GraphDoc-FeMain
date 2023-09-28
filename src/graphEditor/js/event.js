@@ -167,6 +167,16 @@ const addNodeList = [
         name: "borderBottom1",
         nodeString: `[{\"uuid\":\"zznodef6b383c429b342a897f6121c85a6d9a5\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"0\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#ffffff\",\"strokeStyle\":\"0\",\"strokeWidth\":\"0\",\"opacity\":\"1\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"text_node\":{\"showText\":\"下划线节点，双击编辑文字\",\"textColor\":\"#bfbfbf\",\"textFont\":null,\"textSize\":4,\"textSpacing\":0,\"textWeight\":5},\"css_node\":{\"content\":\"border-bottom:2px solid rgba(255,255,255,0.5);\"}},\"vx\":0,\"vy\":0,\"x\":1067.272659176477,\"y\":-20.870662972764347,\"cx\":1067.272659176477,\"cy\":-20.870662972764347}]`
     },
+    {
+        showName: "公式",
+        name: "fun1",
+        nodeString: `[{\"uuid\":\"zznodec1fc06b7913e4832bf381e31e5d7029f\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":\"0.5\",\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4d4d4d\",\"dividerStroke\":null,\"strokeColor\":\"#808080\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":\"0\"},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"latex_node\":{\"latex\":\"f(x)=\\\\sum_1^n \\\\omega_ix_i+\\\\omega_0\",\"textColor\":\"#c2c2c2\"}},\"vx\":0,\"vy\":0,\"x\":1320.0000000000268,\"y\":29.29609245605468,\"cx\":1320.0000000000268,\"cy\":29.29609245605468}]`
+    },
+    {
+        showName: "外链",
+        name: "link1",
+        nodeString: `[{\"uuid\":\"zznode3582a00a27c647409c7cdce9cc1c9831\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"circle\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":null},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"link_node\":{\"url\":\"http://vezzzing.cn/vezzzingsLibrary/dist/main.html\"}},\"vx\":0,\"vy\":0,\"x\":900,\"y\":1140,\"cx\":900,\"cy\":1140}]`
+    },
 ]
 
 let currentGraph = null;
