@@ -146,15 +146,20 @@ export class SC_NumberInput extends SubComponent {
     }
     initHtml() {
         this.dom = document.createElement("input");
-        this.dom.type = "number";
+        this.dom.type = "text";
         if (this.readOnly) {
             this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
-        this.dom.min = this.minValue;
-        this.dom.max = this.maxValue;
-        this.dom.step = this.step;
+        // this.dom.min = this.minValue;
+        // this.dom.max = this.maxValue;
+        // this.dom.step = this.step;
         this.dom.addEventListener("input", () => {
+            if (this.dom.value < this.minValue) {
+                this.dom.value = this.minValue;
+            } else if (this.dom.value > this.maxValue) {
+                this.dom.value = this.maxValue;
+            }
             this.setValue(this.dom.value);
             this.updateSelectedValue(this.value);
             this.updateGraph();
@@ -438,7 +443,7 @@ export class SC_FileInput extends SubComponent {
                 if (d.data.state == 1) {
                     this.setValue(d.data.msg.filename);
                     this.updateGraph();
-                }else{
+                } else {
                     console.log("文件上传失败")
                 }
             });
