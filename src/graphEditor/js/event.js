@@ -59,6 +59,10 @@ const templateDyaList = [
     {
         showName: "格式化文本1",
         name: "blockText",
+    },
+    {
+        showName: "格式化文本2",
+        name: "blockText2",
     }
 ]
 
