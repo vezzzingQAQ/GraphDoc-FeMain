@@ -221,8 +221,6 @@ export class C_N_Exterior extends Component {
     constructor(showName, key, value = {
         size: { x: 10, y: 1 },
         sizeAuto: true,
-        rotate: 0,
-        scale: 1,
         round: 0,
         shape: "circle",
         dividerColor: null,
@@ -231,6 +229,9 @@ export class C_N_Exterior extends Component {
         strokeColor: "#ffd500",
         strokeStyle: "0",
         strokeWidth: 0.5,
+        divideTotal: null,
+        rotate: 0,
+        scale: 1,
         opacity: 1,
         dividerAni: null,
         aniDelayRand: 0,
@@ -239,16 +240,14 @@ export class C_N_Exterior extends Component {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
         this.addValue("sizeAuto", "自适应", new SC_Check(value.sizeAuto, false));
-        this.addValue("rotate", "旋转", new SC_NumberInput(value.rotate, false, -10000, 10000, 0.01));
-        this.addValue("scale", "缩放", new SC_NumberInput(value.scale, false, -10000, 10000, 0.01));
         this.addValue("round", "圆角大小", new SC_NumberInput(value.round, false, 0, 1000, 0.1));
         this.addValue("shape", "形状", new SC_Select(value.shape, false, [
             { value: "circle", text: "圈圈" },
             { value: "rect", text: "方块" },
         ]))
-        this.addValue("dividerColor", null, new SC_Divider());
+        this.addValue("dividerColor", "▼背景设置", new SC_Divider());
         this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor, false));
-        this.addValue("dividerStroke", null, new SC_Divider());
+        this.addValue("dividerStroke", "▼描边设置", new SC_Divider());
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
         this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle, false, [
             { value: "0", text: "_______" },
@@ -259,8 +258,11 @@ export class C_N_Exterior extends Component {
             { value: "3,2,1,2", text: "._._._." },
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100, 0.1));
+        this.addValue("divideTotal", "▼整体控制", new SC_Divider());
+        this.addValue("rotate", "旋转", new SC_NumberInput(value.rotate, false, -10000, 10000, 0.01));
+        this.addValue("scale", "缩放", new SC_NumberInput(value.scale, false, -10000, 10000, 0.01));
         this.addValue("opacity", "透明度", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
-        this.addValue("dividerAni", "入场动画", new SC_Divider());
+        this.addValue("dividerAni", "▼入场动画", new SC_Divider());
         this.addValue("aniDelayRand", "随机延时", new SC_NumberInput(value.aniDelayRand, false, 0, 1000, 0.1));
         this.addValue("aniDuration", "持续时间", new SC_NumberInput(value.aniDuration, false, 0, 1000, 0.1));
     }
