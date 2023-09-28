@@ -1517,13 +1517,20 @@ export class Graph {
 
         addedNodeGraph
             .style("rotate", d => d.autoGetValue("exterior_node", "rotate", 0, value => `${value}deg`))
-            .style("scale", d => d.autoGetValue("exterior_node", "scale", 1))
+            .style("scale", 0)
             .style("fill", d => d.autoGetValue("exterior_node", "bgColor", "#000000"))
             .style("stroke", d => d.autoGetValue("exterior_node", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_node", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_node", "strokeStyle", "0"))
             .attr("rx", d => d.autoGetValue("exterior_node", "round", 0))
-            .style("opacity", d => d.autoGetValue("exterior_node", "opacity", 1));
+            .style("opacity", d => d.autoGetValue("exterior_node", "opacity", 1))
+            // 开机动画
+            .transition()
+            .ease(d3.easeBounceInOut)
+            .duration(d => d.autoGetValue("exterior_node", "aniDuration", 0, value => value * 1000))
+            .delay(d => Math.random() * d.autoGetValue("exterior_node", "aniDuration", 0, value => value * 1000))
+            .style("scale", d => d.autoGetValue("exterior_node", "scale", 1))
+
 
         // 绑定CSS样式
         if (nodeObj.hasComponent("css_node")) {

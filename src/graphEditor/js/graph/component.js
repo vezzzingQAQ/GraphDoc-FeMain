@@ -225,13 +225,16 @@ export class C_N_Exterior extends Component {
         scale: 1,
         round: 0,
         shape: "circle",
-        dividerColor: "null",
+        dividerColor: null,
         bgColor: "#000f00",
         dividerStroke: null,
         strokeColor: "#ffd500",
         strokeStyle: "0",
         strokeWidth: 0.5,
-        opacity: 1
+        opacity: 1,
+        dividerAni: null,
+        aniDelayRand: 3,
+        aniDuration: 0.5
     }) {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
@@ -257,6 +260,9 @@ export class C_N_Exterior extends Component {
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100, 0.1));
         this.addValue("opacity", "透明度", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
+        this.addValue("dividerAni", "入场动画", new SC_Divider());
+        this.addValue("aniDelayRand", "随机延时", new SC_NumberInput(value.aniDelayRand, false, 0, 1000, 0.1));
+        this.addValue("aniDuration", "持续时间", new SC_NumberInput(value.aniDuration, false, 0, 1000, 0.1));
     }
 }
 
