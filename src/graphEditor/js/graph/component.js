@@ -274,7 +274,10 @@ export class C_E_Exterior extends Component {
         strokeColor: "#666666",
         strokeStyle: "dot",
         strokeType: "line",
-        strokeWidth: 0.6
+        strokeWidth: 0.6,
+        dividerAni: null,
+        aniDelayRand: 3,
+        aniDuration: 0.5
     }) {
         super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
@@ -292,6 +295,9 @@ export class C_E_Exterior extends Component {
             { value: "bezierV", text: "纵向Bezier" },
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
+        this.addValue("dividerAni", "入场动画", new SC_Divider());
+        this.addValue("aniDelayRand", "随机延时", new SC_NumberInput(value.aniDelayRand, false, 0, 1000, 0.1));
+        this.addValue("aniDuration", "持续时间", new SC_NumberInput(value.aniDuration, false, 0, 1000, 0.1));
     }
 }
 
