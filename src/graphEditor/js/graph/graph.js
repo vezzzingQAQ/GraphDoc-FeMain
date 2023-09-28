@@ -1585,13 +1585,11 @@ export class Graph {
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"))
             .style("fill", "none")
-            .style("scale", 0)
             .style("opacity", 0)
             .transition()
             .ease(d3.easeBounceInOut)
             .duration(d => d.autoGetValue("exterior_edge", "aniDuration", 0, value => value * 1000))
             .delay(d => Math.random() * d.autoGetValue("exterior_edge", "aniDelayRand", 0, value => value * 1000))
-            .style("scale", 1)
             .style("opacity", 1)
 
             
