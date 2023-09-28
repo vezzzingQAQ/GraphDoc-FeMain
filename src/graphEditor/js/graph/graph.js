@@ -685,7 +685,7 @@ export class Graph {
             })
             .on("end", () => {
                 let deltaTime = (new Date()).getTime() - zoomTime;
-                if (deltaTime < 200) {
+                if (deltaTime < 150) {
                     _.isZooming = false;
                 } else {
                     setTimeout(() => {
