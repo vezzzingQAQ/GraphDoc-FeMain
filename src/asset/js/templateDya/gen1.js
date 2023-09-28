@@ -30,6 +30,8 @@ function main() {
             x: 50,
             y: 50
         };
+        node1.components["exterior_node"]["aniDelayRand"] = 3;
+        node1.components["exterior_node"]["aniDuration"] = 1;
         node1.components["exterior_node"]["strokeWidth"] = 0;
         node1.components["exterior_node"]["bgColor"] = colorList[genList.indexOf(gen[i])];
         node1.components["exterior_node"]["shape"] = "rect";
@@ -52,6 +54,8 @@ function main() {
             x: 50,
             y: 50
         };
+        node2.components["exterior_node"]["aniDelayRand"] = 3;
+        node2.components["exterior_node"]["aniDuration"] = 1;
         node2.components["exterior_node"]["strokeWidth"] = 0;
         node2.components["exterior_node"]["bgColor"] = colorList[genList.indexOf(genCode)];
         node2.components["exterior_node"]["shape"] = "rect";
@@ -69,16 +73,25 @@ function main() {
         let edge = new VEdge(node1, node2);
         edge.components["exterior_edge"]["strokeWidth"] = 5;
         edge.components["exterior_edge"]["strokeStyle"] = "1,2";
+        edge.components["exterior_edge"]["aniDelayRand"] = 3;
+        edge.components["exterior_edge"]["aniDuration"] = 1;
+
         graph.addEdge(edge);
 
         if (pnode1) {
             let edge1 = new VEdge(pnode1, node1);
             edge1.components["exterior_edge"]["strokeWidth"] = 5;
+            edge1.components["exterior_edge"]["aniDelayRand"] = 3;
+            edge1.components["exterior_edge"]["aniDuration"] = 1;
+
             graph.addEdge(edge1);
         }
         if (pnode2) {
             let edge2 = new VEdge(pnode2, node2);
             edge2.components["exterior_edge"]["strokeWidth"] = 5;
+            edge2.components["exterior_edge"]["aniDelayRand"] = 3;
+            edge2.components["exterior_edge"]["aniDuration"] = 1;
+
             graph.addEdge(edge2);
         }
 
