@@ -233,8 +233,8 @@ export class C_N_Exterior extends Component {
         strokeWidth: 0.5,
         opacity: 1,
         dividerAni: null,
-        aniDelayRand: 3,
-        aniDuration: 0.5
+        aniDelayRand: 0,
+        aniDuration: 0
     }) {
         super(showName, key, false);
         this.addValue("size", "大小", new SC_Vector2(value.size, false));
@@ -276,8 +276,8 @@ export class C_E_Exterior extends Component {
         strokeType: "line",
         strokeWidth: 0.6,
         dividerAni: null,
-        aniDelayRand: 3,
-        aniDuration: 0.5
+        aniDelayRand: 0,
+        aniDuration: 0
     }) {
         super(showName, key, false);
         this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
