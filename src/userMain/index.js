@@ -4,6 +4,7 @@ import { getOUtherData, getUserData, updateAvatar } from "../public/js/serverCom
 import { getQueryVariable } from "../public/js/tools";
 import { AVATAR_UPLOAD_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, AVATAR_STORE_PATH } from "./../public/js/urls";
 import "./css/index.less";
+import mainBg from "./../asset/img/icon/mainBg.png";
 
 window.addEventListener("load", async () => {
     let uid = getQueryVariable("uid");
@@ -92,4 +93,7 @@ window.addEventListener("load", async () => {
                 ${255 - result * 255}
             )`
     });
+
+    // 引入图片
+    document.querySelector("#footerImg").src = mainBg;
 });
