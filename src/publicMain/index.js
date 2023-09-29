@@ -64,6 +64,5 @@ window.addEventListener("load", async () => {
     });
 
     // 绑定图片
-    document.querySelector("#mainBg").src = mainBg;
     document.querySelector("#footerImg").src = mainBg;
 });
