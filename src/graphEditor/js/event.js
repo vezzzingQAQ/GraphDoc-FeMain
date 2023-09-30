@@ -660,11 +660,8 @@ export async function showShareLink() {
         let graphName = response.msg.name;
         let uid = response.msg.author.id;
         let url = `${EDITOR_PGAE}?graphName=${encodeURI(graphName)}&uid=${uid}&fs=true&lc=true`;
+        document.querySelector("#linkShowArea").href = url;
         document.querySelector("#linkShowArea").innerHTML = url;
-        document.querySelector("#btnWindowShare").onclick = function () {
-            let clipboardObj = navigator.clipboard;
-            clipboardObj.writeText(url);
-        }
     } else {
         hideCenterWindow(document.querySelector("#windowShareLink"));
         showMessage("请先保存到云再分享");
