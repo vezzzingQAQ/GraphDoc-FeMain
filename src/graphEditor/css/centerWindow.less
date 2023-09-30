@@ -164,7 +164,6 @@
                 line-height: 20px;
                 font-size: 14px;
 
-
                 span {
                     display: inline-block;
                 }
@@ -442,6 +441,19 @@
             border: 1px solid @bg_color_d_border;
             background-color: @bg_color_d_input;
             color: @fg_color_d_input;
+        }
+    }
+
+    #windowSaveToCloud,
+    #windowLoadFromCloud {
+        .content {
+            ul {
+                li {
+                    &:hover {
+                        color: yellow;
+                    }
+                }
+            }
         }
     }
 }
