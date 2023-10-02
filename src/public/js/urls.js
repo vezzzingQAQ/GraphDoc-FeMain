@@ -73,6 +73,7 @@ export const USER_UPDATE_AVATAR = `${DOMAIN_MAIN}/user/updateAvatar`;
 export const USER_CONFIG_GRAPH = `${DOMAIN_MAIN}/graph/configGraph`;
 export const USER_LOAD_GRAPH_CONFIG = `${DOMAIN_MAIN}/graph/loadGraphConfig`;
 export const USER_GET_USERLIST = `${DOMAIN_MAIN}/user/getUserList`;
+export const EXTRACT_TEXT=`${DOMAIN_MAIN}/tagger/extractText`;
 
 export const LIST_PUBLIC_GRAPH = `${DOMAIN_MAIN}/graph/listPublicGraph`;
 

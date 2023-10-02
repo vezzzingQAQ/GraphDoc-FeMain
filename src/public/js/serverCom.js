@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getCookie } from "./tools";
 import {
+    EXTRACT_TEXT,
     LIST_PUBLIC_GRAPH,
     USER_CONFIG_GRAPH,
     USER_DATA,
@@ -208,6 +209,23 @@ export async function listUser() {
         headers: {
             "Content-Type": "multipart/form-data"
         }
+    });
+    return response.data;
+}
+
+/**
+ * 提取文本关键词
+ */
+export async function extract_text(text) {
+    let formData = new FormData();
+    formData.append('text', text);
+    let response = await axios({
+        url: EXTRACT_TEXT,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
     });
     return response.data;
 }

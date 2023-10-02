@@ -287,6 +287,21 @@ export class Node extends Element {
         this.owner.modifyNodeExterior(this);
         this.owner.modifyNodePhysics();
     }
+
+    /**
+     * 增加TAG
+     */
+    addTag(tagText) {
+        if (this.hasComponent("tag_node")) {
+            let tagComp = this.getComponent("tag_node");
+            tagComp.addTag(tagText);
+        } else {
+            let tagComp = new ComponentMap["tag_node"].class(ComponentMap["tag_node"].showName, ComponentMap["tag_node"].key);
+            document.querySelector(".compContainer").insertBefore(tagComp.initHtml(),document.querySelector(".compContainer").firstChild);
+            this.addComponent(tagComp);
+            tagComp.addTag(tagText);
+        }
+    }
 }
 
 export class Edge extends Element {
@@ -465,7 +480,7 @@ export function CreateMdNode() {
     let node = CreateBasicNode();
     node.autoSetValue("exterior_node", "shape", "rect");
     node.addComponent(new C_N_Markdown(ComponentMap.md_node.showName, ComponentMap.md_node.key));
-    node.autoSetValue("md_node","content","# hello graph doc");
+    node.autoSetValue("md_node", "content", "# hello graph doc");
     return node;
 }
 
@@ -477,7 +492,7 @@ export function CreateLatexNode() {
     let node = CreateBasicNode();
     node.autoSetValue("exterior_node", "shape", "rect");
     node.addComponent(new C_N_Latex(ComponentMap.latex_node.showName, ComponentMap.latex_node.key));
-    node.autoSetValue("latex_node","latex","E=mc^2");
+    node.autoSetValue("latex_node", "latex", "E=mc^2");
     return node;
 }
 

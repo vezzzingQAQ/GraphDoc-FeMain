@@ -520,6 +520,10 @@ export class C_N_Tag extends Component {
         super(showName, key, true);
         this.addValue("tags", "", new SC_Tag(value.tags, false));
     }
+    addTag(tagText) {
+        let tagDom = this.valueMap["tags"].subComp.initBtnDom(tagText);
+        this.valueMap["tags"].subComp.pushTagDom(tagDom);
+    }
 }
 
 /**

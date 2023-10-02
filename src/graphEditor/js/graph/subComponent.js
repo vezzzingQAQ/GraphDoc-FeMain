@@ -459,10 +459,10 @@ export class SC_FileInput extends SubComponent {
 export class SC_Tag extends SubComponent {
     constructor(defaultValue = ["测试"], readOnly = false) {
         super(defaultValue);
+        this.addBtnDom;
     }
-    initHtml() {
-        let _ = this;
-        function initBtnDom(value) {
+    initBtnDom(value, write = false) {
+        let createDom = value => {
             let tagContainer = document.createElement("div");
             tagContainer.classList = "tagContainer";
             let tagDeleteBtn = document.createElement("p");
@@ -483,10 +483,10 @@ export class SC_Tag extends SubComponent {
             spanTempDom.remove();
             tagDom.addEventListener("input", () => {
                 let tagDoms = document.querySelectorAll(".tagDom");
-                _.value = [];
+                this.value = [];
                 for (let i = 0; i < tagDoms.length; i++) {
                     let currentTagDom = tagDoms[i];
-                    _.value[i] = currentTagDom.value;
+                    this.value[i] = currentTagDom.value;
                 }
                 // 宽度自适应
                 let spanTempDom = document.createElement("span");
@@ -503,10 +503,10 @@ export class SC_Tag extends SubComponent {
                 tagDeleteBtn.remove();
                 tagContainer.remove();
                 let tagDoms = document.querySelectorAll(".tagDom");
-                _.value = [];
+                this.value = [];
                 for (let i = 0; i < tagDoms.length; i++) {
                     let currentTagDom = tagDoms[i];
-                    _.value[i] = currentTagDom.value;
+                    this.value[i] = currentTagDom.value;
                 }
             });
 
@@ -515,24 +515,55 @@ export class SC_Tag extends SubComponent {
 
             return tagContainer;
         }
+        // 如果是新值再插入
+        if (write) {
+            return createDom(value);
+        } else {
+            if (!this.value.includes(value)) {
+                return createDom(value);
+            }
+        }
+    }
+    pushTagDom(dom, write = false) {
+        if (dom) {
+            this.dom.appendChild(dom);
+            // 把增加按钮放到最后
+            if (this.addBtnDom)
+                this.dom.appendChild(this.addBtnDom);
+
+            if (!write) {
+                // 绑定value
+                let tagDoms = document.querySelectorAll(".tagDom");
+                for (let i = 0; i < tagDoms.length; i++) {
+                    let currentTagDom = tagDoms[i];
+                    this.value[i] = currentTagDom.value;
+                }
+            }
+        }
+    }
+
+    initHtml() {
         this.dom = document.createElement("div");
         this.dom.id = "tag_node";
         if (this.readOnly) {
             this.dom.readOnly = "true";
         }
-        for (let i = 0; i < this.value.length; i++) {
-            let tag = this.value[i];
-            this.dom.appendChild(initBtnDom(tag));
-        }
-        let addBtnDom = document.createElement("div");
-        addBtnDom.classList = "addBtnDom tagBtn";
-        addBtnDom.innerHTML = "+";
-        addBtnDom.addEventListener("click", () => {
-            let tagDom = initBtnDom("");
-            this.dom.insertBefore(tagDom, addBtnDom);
+
+        this.addBtnDom = document.createElement("div");
+        this.addBtnDom.classList = "addBtnDom tagBtn";
+        this.addBtnDom.innerHTML = "+";
+        this.addBtnDom.addEventListener("click", () => {
+            let tagDom = this.initBtnDom("");
+            this.dom.insertBefore(tagDom, this.addBtnDom);
             tagDom.querySelector("input").focus();
         })
-        this.dom.appendChild(addBtnDom);
+        this.dom.appendChild(this.addBtnDom);
+
+        for (let i = 0; i < this.value.length; i++) {
+            let tag = this.value[i];
+            this.pushTagDom(this.initBtnDom(tag, true));
+        }
+
         return this.dom;
     }
     updateHtml() {

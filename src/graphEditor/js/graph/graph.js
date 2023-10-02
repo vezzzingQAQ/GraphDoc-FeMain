@@ -44,6 +44,7 @@ import {
     FUNC1_COMP
 } from "../../../public/js/urls"
 import { saveGraph } from "../event";
+import { extract_text } from "../../../public/js/serverCom";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -1592,7 +1593,7 @@ export class Graph {
             .delay(d => Math.random() * d.autoGetValue("exterior_edge", "aniDelayRand", 0, value => value * 1000))
             .style("opacity", 1)
 
-            
+
         this.renderProperties.simulation.restart();
         // 更新元素
         this.refreshBottomDom();
@@ -1888,9 +1889,26 @@ export class Graph {
                         _.modifyNodePhysics();
                     }
                 }
-
             }
         ]
+        if (nodeObj.hasComponent("text_node")) {
+            menu.push({
+                divider: true
+            });
+            menu.push({
+                name: "提取关键词",
+                func: async function () {
+                    if (nodeObj.hasComponent("text_node")) {
+                        let text = nodeObj.autoGetValue("text_node", "showText");
+                        let data = await extract_text(text);
+                        // 修改TAG组件
+                        for (let i = 0; i < data.msg.length; i++) {
+                            nodeObj.addTag(data.msg[i].keyword);
+                        }
+                    }
+                }
+            });
+        }
         this.initMenu(e, menu);
     }
 
