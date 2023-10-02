@@ -1905,6 +1905,7 @@ export class Graph {
                         for (let i = 0; i < data.msg.length; i++) {
                             nodeObj.addTag(data.msg[i].keyword);
                         }
+                        nodeObj.initHtml();
                     }
                 }
             });

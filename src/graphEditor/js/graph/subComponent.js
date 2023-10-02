@@ -461,17 +461,34 @@ export class SC_Tag extends SubComponent {
         super(defaultValue);
         this.addBtnDom;
     }
-    initBtnDom(value, write = false) {
-        let createDom = value => {
-            let tagContainer = document.createElement("div");
-            tagContainer.classList = "tagContainer";
-            let tagDeleteBtn = document.createElement("p");
-            tagDeleteBtn.classList = "tagDeleteBtn";
-            tagDeleteBtn.innerHTML = "×";
-            let tagDom = document.createElement("input");
-            tagDom.classList = "tagDom tagBtn";
-            tagDom.type = "text";
-            tagDom.value = value;
+
+    // 生成指定valueTag的DOM元素
+    initBtnDom(value) {
+        let tagContainer = document.createElement("div");
+        tagContainer.classList = "tagContainer";
+        let tagDeleteBtn = document.createElement("p");
+        tagDeleteBtn.classList = "tagDeleteBtn";
+        tagDeleteBtn.innerHTML = "×";
+        let tagDom = document.createElement("input");
+        tagDom.classList = "tagDom tagBtn";
+        tagDom.type = "text";
+        tagDom.value = value;
+        // 宽度自适应
+        let spanTempDom = document.createElement("span");
+        spanTempDom.innerHTML = tagDom.value;
+        spanTempDom.style.display = "hidden";
+        document.querySelector("body").appendChild(spanTempDom)
+        if (spanTempDom.offsetWidth > 10) {
+            tagContainer.style.width = spanTempDom.offsetWidth + 35 + "px";
+        }
+        spanTempDom.remove();
+        tagDom.addEventListener("input", () => {
+            let tagDoms = document.querySelectorAll(".tagDom");
+            this.value = [];
+            for (let i = 0; i < tagDoms.length; i++) {
+                let currentTagDom = tagDoms[i];
+                this.value[i] = currentTagDom.value;
+            }
             // 宽度自适应
             let spanTempDom = document.createElement("span");
             spanTempDom.innerHTML = tagDom.value;
@@ -481,64 +498,47 @@ export class SC_Tag extends SubComponent {
                 tagContainer.style.width = spanTempDom.offsetWidth + 35 + "px";
             }
             spanTempDom.remove();
-            tagDom.addEventListener("input", () => {
-                let tagDoms = document.querySelectorAll(".tagDom");
-                this.value = [];
-                for (let i = 0; i < tagDoms.length; i++) {
-                    let currentTagDom = tagDoms[i];
-                    this.value[i] = currentTagDom.value;
-                }
-                // 宽度自适应
-                let spanTempDom = document.createElement("span");
-                spanTempDom.innerHTML = tagDom.value;
-                spanTempDom.style.display = "hidden";
-                document.querySelector("body").appendChild(spanTempDom)
-                if (spanTempDom.offsetWidth > 10) {
-                    tagContainer.style.width = spanTempDom.offsetWidth + 35 + "px";
-                }
-                spanTempDom.remove();
-            });
-            tagDeleteBtn.addEventListener("click", () => {
-                tagDom.remove();
-                tagDeleteBtn.remove();
-                tagContainer.remove();
-                let tagDoms = document.querySelectorAll(".tagDom");
-                this.value = [];
-                for (let i = 0; i < tagDoms.length; i++) {
-                    let currentTagDom = tagDoms[i];
-                    this.value[i] = currentTagDom.value;
-                }
-            });
-
-            tagContainer.appendChild(tagDom);
-            tagContainer.appendChild(tagDeleteBtn);
-
-            return tagContainer;
-        }
-        // 如果是新值再插入
-        if (write) {
-            return createDom(value);
-        } else {
-            if (!this.value.includes(value)) {
-                return createDom(value);
+        });
+        tagDeleteBtn.addEventListener("click", () => {
+            tagDom.remove();
+            tagDeleteBtn.remove();
+            tagContainer.remove();
+            let tagDoms = document.querySelectorAll(".tagDom");
+            this.value = [];
+            for (let i = 0; i < tagDoms.length; i++) {
+                let currentTagDom = tagDoms[i];
+                this.value[i] = currentTagDom.value;
             }
-        }
+        });
+
+        tagContainer.appendChild(tagDom);
+        tagContainer.appendChild(tagDeleteBtn);
+
+        return tagContainer;
     }
-    pushTagDom(dom, write = false) {
+
+    // 将指定的TAG DOM元素放入框架
+    pushTagDom(dom) {
         if (dom) {
             this.dom.appendChild(dom);
+
             // 把增加按钮放到最后
             if (this.addBtnDom)
                 this.dom.appendChild(this.addBtnDom);
 
-            if (!write) {
-                // 绑定value
-                let tagDoms = document.querySelectorAll(".tagDom");
-                for (let i = 0; i < tagDoms.length; i++) {
-                    let currentTagDom = tagDoms[i];
-                    this.value[i] = currentTagDom.value;
-                }
+            // 绑定value
+            let tagDoms = document.querySelectorAll(".tagDom");
+            for (let i = 0; i < tagDoms.length; i++) {
+                let currentTagDom = tagDoms[i];
+                this.value[i] = currentTagDom.value;
             }
+        }
+    }
+
+    // 加入TAG
+    addTag(value) {
+        if (!this.value.includes(value)) {
+            this.value.push(value);
         }
     }
 
@@ -549,6 +549,7 @@ export class SC_Tag extends SubComponent {
             this.dom.readOnly = "true";
         }
 
+        // 增添插入按钮
         this.addBtnDom = document.createElement("div");
         this.addBtnDom.classList = "addBtnDom tagBtn";
         this.addBtnDom.innerHTML = "+";
@@ -559,9 +560,10 @@ export class SC_Tag extends SubComponent {
         })
         this.dom.appendChild(this.addBtnDom);
 
+        // 插入所有TAG的DOM元素
         for (let i = 0; i < this.value.length; i++) {
             let tag = this.value[i];
-            this.pushTagDom(this.initBtnDom(tag, true));
+            this.pushTagDom(this.initBtnDom(tag));
         }
 
         return this.dom;

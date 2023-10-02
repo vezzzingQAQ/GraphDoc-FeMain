@@ -521,8 +521,7 @@ export class C_N_Tag extends Component {
         this.addValue("tags", "", new SC_Tag(value.tags, false));
     }
     addTag(tagText) {
-        let tagDom = this.valueMap["tags"].subComp.initBtnDom(tagText);
-        this.valueMap["tags"].subComp.pushTagDom(tagDom);
+        this.valueMap["tags"].subComp.addTag(tagText);
     }
 }
 
