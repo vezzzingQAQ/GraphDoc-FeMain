@@ -297,7 +297,7 @@ export class Node extends Element {
             tagComp.addTag(tagText);
         } else {
             let tagComp = new ComponentMap["tag_node"].class(ComponentMap["tag_node"].showName, ComponentMap["tag_node"].key);
-            document.querySelector(".compContainer").insertBefore(tagComp.initHtml(),document.querySelector(".compContainer").firstChild);
+            // document.querySelector(".compContainer").insertBefore(tagComp.initHtml(),document.querySelector(".compContainer").firstChild);
             this.addComponent(tagComp);
             tagComp.addTag(tagText);
         }

@@ -43,8 +43,8 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
-import { saveGraph } from "../event";
-import { extract_text } from "../../../public/js/serverCom";
+import { saveGraph, showMessage } from "../event";
+import { extractText } from "../../../public/js/serverCom";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -1796,6 +1796,30 @@ export class Graph {
                 func: function () {
                     _.addNode(e, "latex");
                 }
+            },
+            {
+                divider: true
+            },
+            {
+                name: "提取所有节点关键词",
+                func: async function () {
+                    let taggedNodeList = _.nodeList.filter(nodeObj => nodeObj.hasComponent("text_node"));
+                    async function extractNode(cNodeObj) {
+                        let text = cNodeObj.autoGetValue("text_node", "showText");
+                        let data = await extractText(text);
+                        // 修改TAG组件
+                        for (let i = 0; i < data.msg.length; i++) {
+                            cNodeObj.addTag(data.msg[i].keyword);
+                        }
+                        // cNodeObj.initHtml();
+                    }
+                    for (let cNodeObj of taggedNodeList) {
+                        extractNode(cNodeObj);
+                    }
+                    window.setTimeout(() => {
+                        showMessage(`关键词提取完成,共${taggedNodeList.length}个节点`);
+                    }, 700);
+                }
             }
         ]
         this.initMenu(e, menu);
@@ -1900,7 +1924,7 @@ export class Graph {
                 func: async function () {
                     if (nodeObj.hasComponent("text_node")) {
                         let text = nodeObj.autoGetValue("text_node", "showText");
-                        let data = await extract_text(text);
+                        let data = await extractText(text);
                         // 修改TAG组件
                         for (let i = 0; i < data.msg.length; i++) {
                             nodeObj.addTag(data.msg[i].keyword);

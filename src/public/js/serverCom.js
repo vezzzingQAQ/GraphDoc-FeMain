@@ -216,7 +216,7 @@ export async function listUser() {
 /**
  * 提取文本关键词
  */
-export async function extract_text(text) {
+export async function extractText(text) {
     let formData = new FormData();
     formData.append('text', text);
     let response = await axios({
