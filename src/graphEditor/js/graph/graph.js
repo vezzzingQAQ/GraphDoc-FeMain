@@ -1747,6 +1747,7 @@ export class Graph {
      * 提取节点的关键词TAG
      */
     async extractNode(nodeObj, afterFn = () => { }) {
+        let isEmptyNode = true;
         if (nodeObj.hasComponent("text_node")) {
             let text = nodeObj.autoGetValue("text_node", "showText");
             let data = await extractText(text, "text");
@@ -1754,9 +1755,13 @@ export class Graph {
             for (let i = 0; i < data.msg.length; i++) {
                 nodeObj.addTag(data.msg[i].keyword);
             }
-        } else if (nodeObj.hasComponent("code_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("code_node")) {
             nodeObj.addTag("代码块");
-        } else if (nodeObj.hasComponent("md_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("md_node")) {
             nodeObj.addTag("Markdown");
             let text = nodeObj.autoGetValue("md_node", "content");
             let data = await extractText(text, "markdown");
@@ -1764,21 +1769,37 @@ export class Graph {
             for (let i = 0; i < data.msg.length; i++) {
                 nodeObj.addTag(data.msg[i].keyword);
             }
-        } else if (nodeObj.hasComponent("link_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("link_node")) {
             nodeObj.addTag("链接");
-        } else if (nodeObj.hasComponent("img_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("img_node")) {
             nodeObj.addTag("图片");
-        } else if (nodeObj.hasComponent("file_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("file_node")) {
             nodeObj.addTag("文件");
-        } else if (nodeObj.hasComponent("video_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("video_node")) {
             nodeObj.addTag("视频");
-        } else if (nodeObj.hasComponent("iframe_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("iframe_node")) {
             nodeObj.addTag("页面");
-        } else if (nodeObj.hasComponent("func1_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("func1_node")) {
             nodeObj.addTag("函数");
-        } else if (nodeObj.hasComponent("latex_node")) {
+            isEmptyNode = false;
+        }
+        if (nodeObj.hasComponent("latex_node")) {
             nodeObj.addTag("公式");
-        } else {
+            isEmptyNode = false;
+        }
+        if (isEmptyNode) {
             nodeObj.addTag("装饰节点");
         }
         afterFn(nodeObj);
