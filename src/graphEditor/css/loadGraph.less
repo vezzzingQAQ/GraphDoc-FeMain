@@ -2,7 +2,7 @@
 
 #loadGraph {
     position: absolute;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     left: 0;
     top: 0;
@@ -13,23 +13,63 @@
     pointer-events: none;
     transition: 0.3s ease-in-out;
     opacity: 1;
+    z-index: 10000;
 
     p {
         font-size: 30px;
         letter-spacing: 5px;
     }
+
+    .loadingp {
+        position: absolute;
+        z-index: 10001;
+        font-size: 14px;
+        letter-spacing: 0;
+    }
+
+    .loading_ul {
+        text-align: left;
+        top: 20px;
+        left: 20px;
+    }
+
+    .loading_ur {
+        text-align: right;
+        top: 20px;
+        right: 20px;
+    }
+
+    .loading_bl {
+        text-align: left;
+        bottom: 20px;
+        left: 20px;
+    }
+
+    .loading_br {
+        text-align: right;
+        bottom: 20px;
+        right: 20px;
+    }
 }
 
 .darkMode {
     #loadGraph {
-        background-color: rgb(6, 6, 6);
+        background-color: rgb(46, 46, 46);
         color: white;
+
+        .loadingp {
+            color: rgba(255, 255, 255, 0.112);
+        }
     }
 }
 
 .lightMode {
     #loadGraph {
-        background-color: @bg_color_d_pan;
-        color: rgb(36, 36, 36);
+        background-color: rgb(194, 194, 194);
+        color: rgb(40, 40, 40);
+    }
+
+    .loadingp {
+        color: rgba(0, 0, 0, 0.1);
     }
 }
