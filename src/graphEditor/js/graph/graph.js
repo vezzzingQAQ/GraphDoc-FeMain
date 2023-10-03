@@ -1744,6 +1744,47 @@ export class Graph {
     }
 
     /**
+     * 提取节点的关键词TAG
+     */
+    async extractNode(nodeObj, afterFn = () => { }) {
+        if (nodeObj.hasComponent("text_node")) {
+            let text = nodeObj.autoGetValue("text_node", "showText");
+            let data = await extractText(text, "text");
+            // 修改TAG组件
+            for (let i = 0; i < data.msg.length; i++) {
+                nodeObj.addTag(data.msg[i].keyword);
+            }
+        } else if (nodeObj.hasComponent("code_node")) {
+            nodeObj.addTag("代码块");
+        } else if (nodeObj.hasComponent("md_node")) {
+            nodeObj.addTag("Markdown");
+            let text = nodeObj.autoGetValue("md_node", "content");
+            let data = await extractText(text, "markdown");
+            // 修改TAG组件
+            for (let i = 0; i < data.msg.length; i++) {
+                nodeObj.addTag(data.msg[i].keyword);
+            }
+        } else if (nodeObj.hasComponent("link_node")) {
+            nodeObj.addTag("链接");
+        } else if (nodeObj.hasComponent("img_node")) {
+            nodeObj.addTag("图片");
+        } else if (nodeObj.hasComponent("file_node")) {
+            nodeObj.addTag("文件");
+        } else if (nodeObj.hasComponent("video_node")) {
+            nodeObj.addTag("视频");
+        } else if (nodeObj.hasComponent("iframe_node")) {
+            nodeObj.addTag("页面");
+        } else if (nodeObj.hasComponent("func1_node")) {
+            nodeObj.addTag("函数");
+        } else if (nodeObj.hasComponent("latex_node")) {
+            nodeObj.addTag("公式");
+        } else {
+            nodeObj.addTag("装饰节点");
+        }
+        afterFn(nodeObj);
+    }
+
+    /**
      * 在空白处点击的菜单
      */
     initMenu_Svg(e) {
@@ -1803,21 +1844,13 @@ export class Graph {
             {
                 name: "提取所有节点关键词",
                 func: async function () {
-                    let taggedNodeList = _.nodeList.filter(nodeObj => nodeObj.hasComponent("text_node"));
-                    async function extractNode(cNodeObj) {
-                        let text = cNodeObj.autoGetValue("text_node", "showText");
-                        let data = await extractText(text);
-                        // 修改TAG组件
-                        for (let i = 0; i < data.msg.length; i++) {
-                            cNodeObj.addTag(data.msg[i].keyword);
-                        }
-                        // cNodeObj.initHtml();
-                    }
-                    for (let cNodeObj of taggedNodeList) {
-                        extractNode(cNodeObj);
+                    // let taggedNodeList = _.nodeList.filter(nodeObj => nodeObj.hasComponent("text_node"));
+
+                    for (let cNodeObj of _.nodeList) {
+                        _.extractNode(cNodeObj);
                     }
                     window.setTimeout(() => {
-                        showMessage(`关键词提取完成,共${taggedNodeList.length}个节点`);
+                        showMessage(`关键词提取完成,共${_.nodeList.length}个节点`);
                     }, 700);
                 }
             }
@@ -1913,27 +1946,19 @@ export class Graph {
                         _.modifyNodePhysics();
                     }
                 }
-            }
-        ]
-        if (nodeObj.hasComponent("text_node")) {
-            menu.push({
+            },
+            {
                 divider: true
-            });
-            menu.push({
+            },
+            {
                 name: "提取关键词",
                 func: async function () {
-                    if (nodeObj.hasComponent("text_node")) {
-                        let text = nodeObj.autoGetValue("text_node", "showText");
-                        let data = await extractText(text);
-                        // 修改TAG组件
-                        for (let i = 0; i < data.msg.length; i++) {
-                            nodeObj.addTag(data.msg[i].keyword);
-                        }
-                        nodeObj.initHtml();
-                    }
+                    _.extractNode(nodeObj, obj => {
+                        obj.initHtml();
+                    });
                 }
-            });
-        }
+            }
+        ]
         this.initMenu(e, menu);
     }
 

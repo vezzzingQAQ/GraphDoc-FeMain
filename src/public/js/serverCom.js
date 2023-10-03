@@ -216,9 +216,10 @@ export async function listUser() {
 /**
  * 提取文本关键词
  */
-export async function extractText(text) {
+export async function extractText(text, type = "text") {
     let formData = new FormData();
     formData.append('text', text);
+    formData.append('type', type)
     let response = await axios({
         url: EXTRACT_TEXT,
         method: "POST",
