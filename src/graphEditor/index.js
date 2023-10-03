@@ -24,4 +24,8 @@ window.addEventListener("load", async () => {
     setWindowIcon();
     let graph = await initGraph();
     bindEvents(graph);
+});
+
+window.addEventListener("beforeunload", function (e) {
+    e.returnValue = "确定离开当前页面吗？";
 })
