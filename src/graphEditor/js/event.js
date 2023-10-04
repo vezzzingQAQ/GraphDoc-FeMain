@@ -14,6 +14,10 @@ import newGraphJson from "./../../asset/graph/new.json";
 
 const templateList = [
     {
+        showName: "节点示例",
+        name: "nodeEx",
+    },
+    {
         showName: "关系图",
         name: "centerGraph",
     },
@@ -687,7 +691,7 @@ export async function showGraphProperty() {
         response = await configGraph(userConfig.currentGraphFileName, isPublic, info);
         if (response.state == 1) {
             hideCenterWindow(document.querySelector("#windowGraphProperty"));
-        }else{
+        } else {
             hideCenterWindow(document.querySelector("#windowGraphProperty"));
             showMessage("请先保存到云再设置");
         }
