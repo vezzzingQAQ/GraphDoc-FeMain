@@ -55,8 +55,6 @@ function main() {
         return !filterList.includes(tagObj.key);
     })
 
-    console.log(keyOrder);
-
     // 生成词云
     for (let i = 0; i < keyOrder.length; i++) {
         let currentTag = keyOrder[i];
