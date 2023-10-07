@@ -49,6 +49,10 @@ export function bindData(key, name, data, info = "", type = "json") {
     } else if (type == "number") {
         addedDomInput = document.createElement("input");
         addedDomInput.type = "number";
+    } else if (type == "vgd") {
+        addedDomInput = document.createElement("input");
+        addedDomInput.type = "file";
+        addedDomInput.accept=".vgd";
     }
 
     if (type == "json") {
@@ -98,6 +102,25 @@ export function updateData(key, type, addedDomInput) {
             window[key] = JSON.parse(addedDomInput.value);
         } catch {
             jsonValid = false;
+        }
+    } else if (type == "vgd") {
+        try {
+            let reader;
+            if (window.FileReader) {
+                reader = new FileReader();
+            } else {
+                alert("你的浏览器不支持访问本地文件");
+            }
+            reader.readAsText(addedDomInput.files[0]);
+            reader.addEventListener("load", (readRes) => {
+                let data = JSON.parse(readRes.target.result);
+                window[key] = data;
+            });
+            reader.addEventListener("error", () => {
+                alert("打开文件失败");
+            });
+        } catch {
+            console.error("打开文件出错");
         }
     } else {
         window[key] = addedDomInput.value;

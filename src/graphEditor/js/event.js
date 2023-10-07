@@ -67,6 +67,10 @@ const templateDyaList = [
     {
         showName: "格式化文本2",
         name: "blockText2",
+    },
+    {
+        showName: "词云",
+        name: "wordCloud",
     }
 ]
 
