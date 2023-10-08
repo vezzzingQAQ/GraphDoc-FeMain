@@ -1,6 +1,7 @@
 function bind() {
     bindData("doc", "VGD文件", "", "打开一个VGD文件来生成", "vgd");
     bindData("filterWords", "过滤关键词", "图片,链接,null,undefined,style,公式,装饰节点,center", "不想要呈现的关键词", "text");
+    bindData("bumpRadius", "碰撞半径", "1", "碰撞大小", "number");
 }
 
 function main() {
@@ -63,8 +64,8 @@ function main() {
         node.components["exterior_node"]["opacity"] = 0;
         node.components["exterior_node"]["sizeAuto"] = false;
         node.components["exterior_node"]["size"] = {
-            x: Math.floor((currentTag.num + 12) * currentTag.num * 0.5),
-            y: Math.floor((currentTag.num + 12) * currentTag.num * 0.5)
+            x: Math.floor((currentTag.num + 12) * currentTag.num * 0.5 * bumpRadius),
+            y: Math.floor((currentTag.num + 12) * currentTag.num * 0.5 * bumpRadius)
         };
 
         node.x = Math.random() * 100;
