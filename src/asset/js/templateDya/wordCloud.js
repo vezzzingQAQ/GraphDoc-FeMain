@@ -51,7 +51,6 @@ function main() {
 
     // 过滤掉不要的关键词
     let filterList = filterWords.split(",");
-    console.log(filterList);
     keyOrder = keyOrder.filter(tagObj => {
         return !filterList.includes(tagObj.key);
     })

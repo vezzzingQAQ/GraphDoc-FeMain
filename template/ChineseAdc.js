@@ -4,7 +4,6 @@ function bind() {
 }
 
 function main() {
-    console.log(provinces)
     function findProvince(code) {
         return provinces.filter(province => province.code == code)[0];
     }

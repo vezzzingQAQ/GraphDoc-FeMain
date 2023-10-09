@@ -556,7 +556,6 @@ export function LoadEdgeFromJson(jsonObj, nodeList) {
     if (createdEdge.setSource(sourceNode) && createdEdge.setTarget(targetNode)) {
         return createdEdge;
     } else {
-        console.log(sourceNode, targetNode)
         return null;
     }
 }

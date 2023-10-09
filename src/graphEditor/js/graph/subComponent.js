@@ -387,7 +387,6 @@ export class SC_Textarea extends SubComponent {
         // 双击进入细节编辑模式
         let _ = this;
         this.dom.ondblclick = function (e) {
-            console.log(this);
             showTextEditor(this, newValue => {
                 _.dom.value = newValue;
                 _.value = _.dom.value;

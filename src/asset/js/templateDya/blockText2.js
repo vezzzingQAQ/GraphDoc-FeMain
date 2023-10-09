@@ -137,7 +137,5 @@ function main() {
         }
     }
 
-    console.log(layerBlock);
-
     return graph;
 }

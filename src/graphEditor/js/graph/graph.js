@@ -1250,7 +1250,6 @@ export class Graph {
                 canvas.height = img.height;
                 canvas.width = img.width;
                 ctx.drawImage(img, 0, 0);
-                console.log(img);
                 var dataURL = canvas.toDataURL("image/png");
                 callback(this, dataURL);
                 canvas = null;
