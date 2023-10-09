@@ -278,6 +278,7 @@ export function exportJpg(graph) {
 export function openGraph(graph) {
     let elementInput = document.createElement("input");
     elementInput.type = "file";
+    elementInput.accept=".vgd";
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
@@ -513,7 +514,7 @@ export function restartSim(graph) {
 export function openCode(graph) {
     let elementInput = document.createElement("input");
     elementInput.type = "file";
-    elementInput.accept = "file/js";
+    elementInput.accept = ".js";
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
