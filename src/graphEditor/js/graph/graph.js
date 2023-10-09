@@ -30,6 +30,7 @@ import hljs from "highlight.js";
 import "highlight.js/styles/ir-black.css";
 import { marked } from "marked";
 import katex from "katex";
+import QRCode from "qrcode";
 
 import { CreateBasicEdge, CreateBasicNode, CreateCodeNode, CreateImgNode, CreateLatexNode, CreateLinkNode, CreateMdNode, CreateTextNode, CreateVideoNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
@@ -1277,6 +1278,7 @@ export class Graph {
         let domAddedNodeMd = null;
         let domAddedNodeFunc1 = null;
         let domAddedNodeLatex = null;
+        let domAddedNodeQrCode = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -1313,6 +1315,8 @@ export class Graph {
             domAddedNodeFunc1 = domAddedSubComponentContainer.append("xhtml:iframe");
         if (nodeObj.hasComponent("latex_node"))
             domAddedNodeLatex = domAddedSubComponentContainer.append("xhtml:div");
+        if (nodeObj.hasComponent("qrcode_node"))
+            domAddedNodeQrCode = domAddedSubComponentContainer.append("xhtml:img");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1448,6 +1452,22 @@ export class Graph {
                 .attr("class", "nodeLatex")
                 .style("color", d => d.autoGetValue("latex_node", "textColor", "#ffffff"))
                 .html(d => katex.renderToString(d.autoGetValue("latex_node", "latex", ""), { throwOnError: false }));
+
+        if (domAddedNodeQrCode)
+            domAddedNodeQrCode
+                .attr("class", "nodeQrCode")
+                .on("load", function () {
+                    calSize();
+                })
+                .attr("temp", d => {
+                    QRCode.toDataURL(d.autoGetValue("qrcode_node", "url", "#"))
+                        .then(url => {
+                            domAddedNodeQrCode.attr("src", url);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                })
 
         domAddedSubComponentContainer
             .style("display", "flex")

@@ -606,6 +606,19 @@ export class C_N_Css extends Component {
 }
 
 /**
+ * 二维码组件
+ */
+export class C_N_QrCode extends Component {
+    constructor(showName, key, value = {
+        url: ""
+    }) {
+        super(showName, key, true);
+        this.addValue("url", "URL", new SC_Textarea(value.url, false, false));
+    }
+}
+
+
+/**
  * 寻址映射
  */
 export const ComponentMap = {
@@ -722,6 +735,12 @@ export const ComponentMap = {
         type: "node",
         showName: "🧾CSS样式",
         class: C_N_Css,
+    },
+    "qrcode_node":{
+        key:"qrcode_node",
+        type:"node",
+        showName:"⛓️二维码",
+        class:C_N_QrCode,
     }
 }
 
