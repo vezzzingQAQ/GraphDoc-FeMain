@@ -32,7 +32,8 @@ import {
     refreshEditMode,
     exportJpg,
     initNodeAddWindow,
-    showShareLink
+    showShareLink,
+    refreshAddNodeArea
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -182,6 +183,11 @@ export async function bindEvents(graph) {
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {
         showShareLink();
+    })
+
+    // 展开收起节点添加面板
+    document.querySelector("#slideUpBtn").addEventListener("click", () => {
+        refreshAddNodeArea();
     })
 
 

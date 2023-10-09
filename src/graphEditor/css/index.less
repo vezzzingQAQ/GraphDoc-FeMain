@@ -79,13 +79,29 @@ body {
             height: calc(100vh - @menu_height * 2 -30px);
 
             .title {
-                display: block;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
                 height: @add_pan_title_height;
                 line-height: @add_pan_title_height;
                 font-size: 14px;
                 padding-left: 10px;
                 letter-spacing: 2px;
                 transition: 0.3s ease-in-out;
+
+                p {
+                    margin-left: 4px;
+                }
+
+                #slideUpBtn {
+                    float: right;
+                    text-align: right;
+                    flex-grow: 2;
+                    line-height: @add_pan_title_height;
+                    cursor: pointer;
+                    margin-right: 5px;
+                    border-radius: @normal_border_radius;
+                }
             }
 
             .content {

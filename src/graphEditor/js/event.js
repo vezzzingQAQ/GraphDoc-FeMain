@@ -227,7 +227,8 @@ export let userConfig = {
     username: null,
     uid: null,
     isFullScreen: false,
-    isEditMode: true
+    isEditMode: true,
+    addNodeAreaSlideUp: false
 }
 
 /**
@@ -976,4 +977,26 @@ function hideCenterWindow(selector) {
 export function hideDyaTemplateArea() {
     document.querySelector(".dyaTemplateArea").style.display = "none";
     document.querySelector("#dyaTemplateContent").innerHTML = "";
+}
+
+/**
+ * 收起节点面板
+ */
+export function refreshAddNodeArea() {
+    if (!userConfig.addNodeAreaSlideUp) {
+        document.querySelector(".addNodeArea .content").style.opacity = 0;
+        document.querySelector(".addNodeArea .content").style.pointerEvents = "none";
+        document.querySelector(".addNodeArea").style.width = "30px";
+        document.querySelector(".addNodeArea .title #slideUpBtn").classList = "fa fa-angle-double-right";
+        document.querySelector(".addNodeArea .title .icon").style.display = "none";
+        document.querySelector(".addNodeArea .title p").style.display = "none";
+    } else {
+        document.querySelector(".addNodeArea .content").style.opacity = 1;
+        document.querySelector(".addNodeArea .content").style.pointerEvents = "all";
+        document.querySelector(".addNodeArea").style.width = "163px";
+        document.querySelector(".addNodeArea .title #slideUpBtn").classList = "fa fa-angle-double-left";
+        document.querySelector(".addNodeArea .title .icon").style.display = "inline";
+        document.querySelector(".addNodeArea .title p").style.display = "inline";
+    }
+    userConfig.addNodeAreaSlideUp = !userConfig.addNodeAreaSlideUp;
 }
