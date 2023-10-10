@@ -278,7 +278,7 @@ export function exportJpg(graph) {
 export function openGraph(graph) {
     let elementInput = document.createElement("input");
     elementInput.type = "file";
-    elementInput.accept=".vgd";
+    elementInput.accept = ".vgd";
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
@@ -677,6 +677,9 @@ export function showRegister() {
 }
 export function showPay() {
     showCenterWindow(document.querySelector("#windowPay"));
+}
+export function showBugReport() {
+    showCenterWindow(document.querySelector("#windowBugReport"));
 }
 export function showCodeError(message) {
     showCenterWindow(document.querySelector("#windowCodeError"));

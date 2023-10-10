@@ -33,7 +33,8 @@ import {
     exportJpg,
     initNodeAddWindow,
     showShareLink,
-    refreshAddNodeArea
+    refreshAddNodeArea,
+    showBugReport
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -188,6 +189,11 @@ export async function bindEvents(graph) {
     // 展开收起节点添加面板
     document.querySelector("#slideUpBtn").addEventListener("click", () => {
         refreshAddNodeArea();
+    })
+
+    // bug反馈窗口
+    document.querySelector("#btnBugReport").addEventListener("click",()=>{
+        showBugReport();
     })
 
 
