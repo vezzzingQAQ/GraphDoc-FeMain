@@ -306,6 +306,10 @@ export class Graph {
                         if (e.keyCode == 67 && _.isControlDown) {
                             _.copyElements();
                         }
+                        // ctrl+x剪切选中的节点
+                        if (e.keyCode == 88 && _.isControlDown) {
+                            _.cutElements();
+                        }
                         // ctrl+v粘贴元素
                         if (e.keyCode == 86 && _.isControlDown) {
                             _.pasteElements();
@@ -334,14 +338,14 @@ export class Graph {
 
                         // Debug输出
                         if (e.keyCode == 68 && _.isShiftDown) {
-                            console.log("------------------------------------")
-                            console.log("nodelist", _.nodeList);
-                            console.log("nodes", _.nodes);
-                            console.log("edgelist", _.edgeList);
-                            console.log("edges", _.edges);
-                            console.log("selectedElementList", _.selectedElementList);
-                            console.log("copiedNodes", _.copiedNodeJsonList);
-                            console.log("cpoiedEdges", _.copiedEdgeJsonList);
+                            // console.log("------------------------------------")
+                            // console.log("nodelist", _.nodeList);
+                            // console.log("nodes", _.nodes);
+                            // console.log("edgelist", _.edgeList);
+                            // console.log("edges", _.edges);
+                            // console.log("selectedElementList", _.selectedElementList);
+                            // console.log("copiedNodes", _.copiedNodeJsonList);
+                            // console.log("cpoiedEdges", _.copiedEdgeJsonList);
                         }
                     }
                 });
@@ -953,6 +957,43 @@ export class Graph {
 
         // 更新底部栏
         this.refreshBottomDom(`🏷️已复制${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系，按下ctrl+V在鼠标位置粘贴`);
+    }
+
+    /**
+     * 剪切元素
+     */
+    cutElements() {
+        this.copiedNodeJsonList = [];
+        this.copiedEdgeJsonList = [];
+        for (let i = 0; i < this.selectedElementList.length; i++) {
+            let currentElement = this.selectedElementList[i];
+            if (currentElement.type == "node") {
+                this.copiedNodeJsonList.push(JSON.stringify(currentElement.toJsonObj()));
+            } else if (currentElement.type == "edge") {
+                this.copiedEdgeJsonList.push(JSON.stringify(currentElement.toJsonObj()));
+            }
+        }
+        // 将元素复制到剪贴板，需要HTTPS
+        let storeText = JSON.stringify({
+            from: "vgd",
+            content: {
+                nodeList: this.copiedNodeJsonList,
+                edgeList: this.copiedEdgeJsonList
+            }
+        });
+        // let clipboardObj = navigator.clipboard;
+        // clipboardObj.writeText(storeText);
+        // 将元素复制到sessionStorage
+        window.localStorage.setItem("gdClipBoard", storeText);
+
+        // 删除原来的元素
+        for (let i = 0; i < this.selectedElementList.length; i++) {
+            let currentElement = this.selectedElementList[i];
+            this.deleteElement(currentElement);
+        }
+
+        // 更新底部栏
+        this.refreshBottomDom(`🏷️已剪切${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系，按下ctrl+V在鼠标位置粘贴`);
     }
 
     /**
