@@ -51,7 +51,7 @@ import { PUBLIC_PAGE } from "../../public/js/urls.js";
  */
 export async function bindEvents(graph) {
     document.querySelector("#toPublicPage").addEventListener("click", () => {
-        window.location = PUBLIC_PAGE;
+        window.open(PUBLIC_PAGE);
     });
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
@@ -193,14 +193,14 @@ export async function bindEvents(graph) {
     })
 
     // bug反馈窗口
-    document.querySelector("#btnBugReport").addEventListener("click", () => {
+    document.querySelector("#btnBugReport").addEventListener("click",()=>{
         showBugReport();
     })
 
 
     // 窗体大小改变时自动缩放画布
     window.addEventListener("resize", () => {
-        recalSize(graph);
+        recalSize(graph)
     })
 
     // 上来先获取下用户信息
