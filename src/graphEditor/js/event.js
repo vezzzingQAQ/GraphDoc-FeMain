@@ -495,7 +495,7 @@ export function refreshUserData(d) {
  * 跳转个人主页
  */
 export function toUserPage() {
-    window.open(`${USER_PAGE}?uid=${userConfig.uid}&username=${userConfig.username}`);
+    window.location = `${USER_PAGE}?uid=${userConfig.uid}&username=${userConfig.username}`;
 }
 
 /**

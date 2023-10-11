@@ -51,7 +51,7 @@ import { PUBLIC_PAGE } from "../../public/js/urls.js";
  */
 export async function bindEvents(graph) {
     document.querySelector("#toPublicPage").addEventListener("click", () => {
-        window.open(PUBLIC_PAGE);
+        window.location = PUBLIC_PAGE;
     });
     document.querySelector("#btnReverseMode").addEventListener("click", () => {
         reverseColorMode();
