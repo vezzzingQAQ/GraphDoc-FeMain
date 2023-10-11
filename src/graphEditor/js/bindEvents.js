@@ -34,7 +34,8 @@ import {
     initNodeAddWindow,
     showShareLink,
     refreshAddNodeArea,
-    showBugReport
+    showBugReport,
+    recalSize
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -192,19 +193,15 @@ export async function bindEvents(graph) {
     })
 
     // bug反馈窗口
-    document.querySelector("#btnBugReport").addEventListener("click",()=>{
+    document.querySelector("#btnBugReport").addEventListener("click", () => {
         showBugReport();
     })
 
 
     // 窗体大小改变时自动缩放画布
-    // window.addEventListener("resize", () => {
-    //     let renderDom = document.querySelector(".displayArea");
-    //     graph.renderProperties.svg
-    //         .attr("width", renderDom.offsetWidth)
-    //         .attr("height", renderDom.offsetHeight)
-    //     console.log(renderDom.offsetWidth)
-    // })
+    window.addEventListener("resize", () => {
+        recalSize(graph);
+    })
 
     // 上来先获取下用户信息
     let userData = await getUserData();

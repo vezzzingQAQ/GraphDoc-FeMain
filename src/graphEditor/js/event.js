@@ -1004,3 +1004,12 @@ export function refreshAddNodeArea() {
     }
     userConfig.addNodeAreaSlideUp = !userConfig.addNodeAreaSlideUp;
 }
+
+/**
+ * 窗口大小自适应
+ */
+export function recalSize(graph) {
+    graph.renderProperties.svg
+        .attr("width", document.querySelector(".displayArea").offsetWidth)
+        .attr("height", document.querySelector(".displayArea").offsetHeight)
+}
