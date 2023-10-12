@@ -295,6 +295,11 @@ export class C_E_Exterior extends Component {
             { value: "line", text: "直线" },
             { value: "bezierH", text: "横向Bezier" },
             { value: "bezierV", text: "纵向Bezier" },
+            { value: "straightH1", text: "横向折线1" },
+            { value: "straightH2", text: "横向折线2" },
+            { value: "straightV1", text: "纵向线1" },
+            { value: "straightV2", text: "纵向线2" },
+            { value: "pointer1", text: "->-" }
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
         this.addValue("dividerAni", "入场动画", new SC_Divider());
@@ -736,11 +741,11 @@ export const ComponentMap = {
         showName: "🧾CSS样式",
         class: C_N_Css,
     },
-    "qrcode_node":{
-        key:"qrcode_node",
-        type:"node",
-        showName:"⛓️二维码",
-        class:C_N_QrCode,
+    "qrcode_node": {
+        key: "qrcode_node",
+        type: "node",
+        showName: "⛓️二维码",
+        class: C_N_QrCode,
     }
 }
 

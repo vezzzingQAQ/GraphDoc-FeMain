@@ -46,6 +46,7 @@ import {
 } from "../../../public/js/urls"
 import { saveGraph, showMessage } from "../event";
 import { extractText } from "../../../public/js/serverCom";
+import { setMarkerColors } from "./marker";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -713,10 +714,7 @@ export class Graph {
         let _ = this;
         _.renderProperties.simulation.on("tick", () => {
             _.edges
-                // .attr("x1", d => d.source.x)
-                // .attr("y1", d => d.source.y)
-                // .attr("x2", d => d.target.x)
-                // .attr("y2", d => d.target.y);
+                /// 连线位置重新计算
                 .attr("d", d => {
                     let path = d3.path();
                     path.moveTo(d.source.x, d.source.y);
@@ -732,6 +730,34 @@ export class Graph {
                         case "bezierV": {
                             path.bezierCurveTo(d.source.x, d.target.y, d.target.x, d.source.y, d.target.x, d.target.y);
                             break;
+                        }
+                        case "straightH1": {
+                            path.lineTo(d.source.x + 100, d.source.y);
+                            path.lineTo(d.target.x - 100, d.target.y);
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "straightH2": {
+                            path.lineTo(d.source.x + 200, d.source.y);
+                            path.lineTo(d.target.x - 200, d.target.y);
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "straightV1": {
+                            path.lineTo(d.source.x, d.source.y + 100);
+                            path.lineTo(d.target.x, d.target.y - 100);
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "straightV2": {
+                            path.lineTo(d.source.x, d.source.y + 200);
+                            path.lineTo(d.target.x, d.target.y - 200);
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "pointer1": {
+                            path.lineTo((d.target.x + d.source.x) / 2, (d.target.y + d.source.y) / 2);
+                            path.lineTo(d.target.x, d.target.y);
                         }
                     }
                     return path.toString();
@@ -1641,11 +1667,12 @@ export class Graph {
      */
     modifyEdgeExterior(edgeObj) {
         const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
+
         findedEdge
-            .style("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
+            .attr("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
             .style("stroke-width", d => d.autoGetValue("exterior_edge", "strokeWidth", "1px", value => `${value}px`))
             .style("stroke-dasharray", d => d.autoGetValue("exterior_edge", "strokeStyle", "0"))
-            .style("fill", "none")
+            .attr("fill", "none")
             .style("opacity", 0)
             .transition()
             .ease(d3.easeBounceInOut)
@@ -1653,6 +1680,12 @@ export class Graph {
             .delay(d => Math.random() * d.autoGetValue("exterior_edge", "aniDelayRand", 0, value => value * 1000))
             .style("opacity", 1)
 
+        switch (edgeObj.autoGetValue("exterior_edge", "strokeType")) {
+            case "pointer1": {
+                findedEdge.style("marker-mid", "url(#marker_triangle)");
+                setMarkerColors([findedEdge.node()], document.querySelector("#marker_triangle"));
+            }
+        }
 
         this.renderProperties.simulation.restart();
         // 更新元素

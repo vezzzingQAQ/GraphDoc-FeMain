@@ -23,14 +23,19 @@
                 <p>loading</p>
             </div>
             <svg>
-                <!--滤镜设置-->
-                <filter id="filter-blur">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
-                </filter>
+                <!--marker设置-->
+                <defs>
+                    <marker id="marker_triangle" markerUnits="strokeWidth" markerWidth="30" markerHeight="24" refX="0"
+                        refY="6" orient="auto">
+                        <path id="marker_triangle_path" d="M 0 0 L 15 6 L 0 12 z" />
+                    </marker>
+                </defs>
             </svg>
         </div>
         <div class="addNodeArea">
-            <div class="title"><i class="icon fa fa-list-ul"></i><p> 节点模板</p><i id="slideUpBtn" class="fa fa-angle-double-left"></i></div>
+            <div class="title"><i class="icon fa fa-list-ul"></i>
+                <p> 节点模板</p><i id="slideUpBtn" class="fa fa-angle-double-left"></i>
+            </div>
             <div class="content">
                 <ul>
 
@@ -101,8 +106,9 @@
                             <input type="color" class="subDisp" id="bgColorInput">
                         </li>
                         <li class="hide" id="btnSetGraphProperty"><i class="fa fa-cog"></i> 图谱属性设置</li>
-                        <li class="checkBoxContainer show" id="btnRefreshAlignBlock"><i class="fa fa-sticky-note"></i><input class="menuCheck"
-                                id="check_alignBlock" type="checkbox"> 格点对齐</li>
+                        <li class="checkBoxContainer show" id="btnRefreshAlignBlock"><i
+                                class="fa fa-sticky-note"></i><input class="menuCheck" id="check_alignBlock"
+                                type="checkbox"> 格点对齐</li>
                     </ul>
                 </div>
                 <div class="col menuBlock" id="userOptionsBlock">
