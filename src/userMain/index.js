@@ -96,4 +96,13 @@ window.addEventListener("load", async () => {
 
     // 引入图片
     document.querySelector("#footerImg").src = mainBg;
+
+    // 页脚模式切换
+    if (process.env.RUN_ENV == "app") {
+        document.querySelector(".webFooter").style.display = "none";
+        document.querySelector(".appFooter").style.display = "flex";
+    } else {
+        document.querySelector(".webFooter").style.display = "flex";
+        document.querySelector(".appFooter").style.display = "none";
+    }
 });

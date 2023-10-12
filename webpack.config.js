@@ -2,14 +2,18 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ConditionCompilePlugin = require("condition-compile-plugin");
+const webpack = require("webpack");
+
+const APP_MODE = "development";
 
 module.exports = {
-    mode: "development",
+    mode: APP_MODE,
     entry: {
         graphEditor: "./src/graphEditor/index.js",
         userMain: "./src/userMain/index.js",
         visualization: "./src/visualization/index.js",
-        publicMain:"./src/publicMain/index.js"
+        publicMain: "./src/publicMain/index.js"
     },
     output: {
         filename: "[name].bundle.js",
@@ -105,6 +109,20 @@ module.exports = {
                     to: path.resolve(__dirname, "dist/graphTemplate")
                 }
             ]
-        })
+        }),
+        // 条件编译
+        // RUN_ENV
+        // · web-打包浏览器端
+        // · app-打包app端
+        // TYPE
+        // · production-生产环境
+        // · development-开发环境
+        new webpack.DefinePlugin({
+            "process.env": {
+                "RUN_ENV": JSON.stringify("web"),
+                "APP_MODE": JSON.stringify(APP_MODE)
+            }
+        }),
+        new ConditionCompilePlugin(),
     ]
 };

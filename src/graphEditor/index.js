@@ -26,6 +26,8 @@ window.addEventListener("load", async () => {
     bindEvents(graph);
 });
 
-window.addEventListener("beforeunload", function (e) {
-    e.returnValue = "确定离开当前页面吗？";
-})
+if (process.env.APP_MODE == "production")
+    if (process.env.RUN_ENV == "web")
+        window.addEventListener("beforeunload", function (e) {
+            e.returnValue = "确定离开当前页面吗？";
+        });
