@@ -40,6 +40,7 @@ import {
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
 import payJpg from "./../../asset/img/pay.jpg";
+import wcAvatarJpg from "./../../asset/img/wcAvatar.jpg";
 import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom.js";
 import { getCookie } from "../../public/js/tools.js";
 import { VGraph, VNode, VEdge, bindData } from "./graph/genJson";
@@ -193,7 +194,7 @@ export async function bindEvents(graph) {
     })
 
     // bug反馈窗口
-    document.querySelector("#btnBugReport").addEventListener("click",()=>{
+    document.querySelector("#btnBugReport").addEventListener("click", () => {
         showBugReport();
     })
 
@@ -210,6 +211,7 @@ export async function bindEvents(graph) {
     // 加载图片
     document.querySelector("#mainAboutImg").src = mainAboutPng;
     document.querySelector("#payImg").src = payJpg;
+    document.querySelector("#wcAvatarImg").src = wcAvatarJpg;
 
     // 菜单栏设置：点击直接进行checkbox选择
     document.querySelectorAll(".checkBoxContainer").forEach(ele => {
