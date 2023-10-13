@@ -292,14 +292,17 @@ export class C_E_Exterior extends Component {
             { value: "3,2,1,2", text: "._._._." },
         ]));
         this.addValue("strokeType", "描边类型", new SC_Select(value.strokeType || "line", false, [
-            { value: "line", text: "直线" },
+            { value: "line", text: "-------" },
             { value: "bezierH", text: "横向Bezier" },
             { value: "bezierV", text: "纵向Bezier" },
             { value: "straightH1", text: "横向折线1" },
             { value: "straightH2", text: "横向折线2" },
             { value: "straightV1", text: "纵向线1" },
             { value: "straightV2", text: "纵向线2" },
-            { value: "pointer1", text: "->-" }
+            { value: "pointer1", text: "--->---" },
+            { value: "pointer2", text: "->--->-" },
+            { value: "pointer3", text: "->->->-" },
+            { value: "pointer4", text: ">>>>>>>" },
         ]));
         this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
         this.addValue("dividerAni", "入场动画", new SC_Divider());

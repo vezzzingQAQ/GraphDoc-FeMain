@@ -758,6 +758,43 @@ export class Graph {
                         case "pointer1": {
                             path.lineTo((d.target.x + d.source.x) / 2, (d.target.y + d.source.y) / 2);
                             path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "pointer2": {
+                            let lineLength = Math.sqrt((d.target.x - d.source.x) ** 2 + (d.target.y - d.source.y) ** 2);
+                            let clen = 0;
+                            while (clen < lineLength) {
+                                path.lineTo(
+                                    (d.target.x - d.source.x) * (clen / lineLength) + d.source.x,
+                                    (d.target.y - d.source.y) * (clen / lineLength) + d.source.y,
+                                );
+                                clen += 30;
+                            }
+                            break;
+                        }
+                        case "pointer3": {
+                            let lineLength = Math.sqrt((d.target.x - d.source.x) ** 2 + (d.target.y - d.source.y) ** 2);
+                            let clen = 0;
+                            while (clen < lineLength) {
+                                path.lineTo(
+                                    (d.target.x - d.source.x) * (clen / lineLength) + d.source.x,
+                                    (d.target.y - d.source.y) * (clen / lineLength) + d.source.y,
+                                );
+                                clen += 15;
+                            }
+                            break;
+                        }
+                        case "pointer4": {
+                            let lineLength = Math.sqrt((d.target.x - d.source.x) ** 2 + (d.target.y - d.source.y) ** 2);
+                            let clen = 0;
+                            while (clen < lineLength) {
+                                path.lineTo(
+                                    (d.target.x - d.source.x) * (clen / lineLength) + d.source.x,
+                                    (d.target.y - d.source.y) * (clen / lineLength) + d.source.y,
+                                );
+                                clen += 7.5;
+                            }
+                            break;
                         }
                     }
                     return path.toString();
@@ -1681,9 +1718,13 @@ export class Graph {
             .style("opacity", 1)
 
         switch (edgeObj.autoGetValue("exterior_edge", "strokeType")) {
-            case "pointer1": {
+            case "pointer1": { }
+            case "pointer2": { }
+            case "pointer3": { }
+            case "pointer4": {
                 findedEdge.style("marker-mid", "url(#marker_triangle)");
                 setMarkerColors([findedEdge.node()], document.querySelector("#marker_triangle"));
+                break;
             }
         }
 
