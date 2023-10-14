@@ -236,5 +236,5 @@ export async function bindEvents(graph) {
     window.VGraph = VGraph;
     window.VNode = VNode;
     window.VEdge = VEdge;
-    window.bindData = bindData;    
+    window.bindData = bindData;
 }

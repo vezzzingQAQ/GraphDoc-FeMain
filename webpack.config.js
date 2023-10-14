@@ -119,7 +119,7 @@ module.exports = {
         // · development-开发环境
         new webpack.DefinePlugin({
             "process.env": {
-                "RUN_ENV": JSON.stringify("web"),
+                "RUN_ENV": JSON.stringify("app"),
                 "APP_MODE": JSON.stringify(APP_MODE)
             }
         }),
