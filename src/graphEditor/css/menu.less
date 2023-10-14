@@ -1,0 +1,207 @@
+@import url(./../../public/css/vairbles.less);
+
+.mainMenu {
+    z-index: 99;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: @menu_height;
+    line-height: @menu_height;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        font-size: 15px;
+        list-style: none;
+        cursor: pointer;
+
+        .title {
+            width: 140px;
+            font-weight: bolder;
+            letter-spacing: 2px;
+        }
+
+        .menuBlock {
+            display: block;
+            width: 90px;
+            height: max-content;
+            border-bottom-left-radius: @small_border_radius;
+            border-bottom-right-radius: @small_border_radius;
+            overflow: hidden;
+            transition: 0.1s ease-in-out;
+
+            p {
+                padding-left: 10px;
+                letter-spacing: 2px;
+                font-weight: 100;
+                font-size: 15px;
+            }
+
+            ul {
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                height: 0;
+
+                .show {
+                    font-size: 13px;
+                    padding-left: 10px;
+                    letter-spacing: 2px;
+                    font-weight: 100;
+                    transition: 0.1s ease-in-out;
+                    width: 140px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .subDisp {
+                        margin-left: 5px;
+                        width: 15px;
+                        height: 15px;
+                    }
+
+                    input[type=color] {
+                        cursor: pointer;
+                        padding: 0;
+                    }
+
+                    input[type=checkbox] {
+                        cursor: pointer;
+                        margin-right: 5px;
+                    }
+
+                    .menuCheck {
+                        pointer-events: none;
+                    }
+
+                    i {
+                        margin-right: 5px;
+                        font-size: 11px;
+                        padding: 2px;
+                        border-radius: @small_border_radius;
+                    }
+                }
+
+                .hide {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                width: 140px;
+
+                ul {
+                    height: max-content;
+                }
+            }
+        }
+    }
+
+    .userBlock {
+        position: absolute;
+        right: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: @menu_height;
+        line-height: @menu_height;
+        cursor: pointer;
+
+        .userAvatar {
+            display: block;
+            width: calc(@menu_height * 0.7);
+            height: calc(@menu_height * 0.7);
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 5px;
+            transition: 0.15s ease-in-out;
+        }
+
+        .userName {
+            letter-spacing: 2px;
+            font-weight: 100;
+            transition: 0.15s ease-in-out;
+        }
+    }
+}
+
+.darkMode {
+    .mainMenu {
+        background-color: rgb(61, 61, 61);
+        color: @fg_color_d_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: @bg_color_d_title;
+            }
+
+            ul {
+                background-color: @bg_color_d_title;
+
+                li {
+                    i {
+                        color: rgb(142, 142, 142);
+                    }
+
+                    &:hover {
+                        background-color: rgb(61, 61, 61) !important;
+                        border-left: 4px solid @fg_color_d_1;
+
+                        i {
+                            color: yellow;
+                        }
+                    }
+                }
+            }
+        }
+
+        .userBlock {
+            .userAvatar {
+                border: 1px solid rgba(255, 255, 255, 0.5);
+            }
+        }
+    }
+}
+
+.lightMode {
+    .mainMenu {
+        background-color: rgb(246, 246, 246);
+        color: @fg_color_l_1;
+
+        .menuBlock {
+            &:hover {
+                background-color: rgb(246, 246, 246);
+            }
+
+            ul {
+                background-color: rgb(234, 234, 234);
+
+                li {
+                    i {
+                        color: rgb(150, 150, 150);
+                    }
+
+                    &:hover {
+                        background-color: rgb(206, 206, 206) !important;
+                        border-left: 4px solid @fg_color_l_1;
+
+                        i {
+                            color: black;
+                        }
+                    }
+                }
+            }
+        }
+
+        .userBlock {
+            .userAvatar {
+                border: 1px solid rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+}

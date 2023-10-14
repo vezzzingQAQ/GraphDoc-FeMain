@@ -17,6 +17,7 @@ import "./css/component.less";
 import "./css/graph.less";
 import "./css/centerWindow.less";
 import "./css/loadGraph.less";
+import "./css/menu.less";
 import { bindEvents } from "./js/bindEvents";
 import { setWindowIcon } from "../public/js/iconSetter";
 
