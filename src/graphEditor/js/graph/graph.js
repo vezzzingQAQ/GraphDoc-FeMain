@@ -107,6 +107,8 @@ export class Graph {
         this.locked = false;
         // blob暂存列表
         this.blobTempList = [];
+        // 上一个修改过的关系
+        this.edgePrevJson = null;
     }
 
     /**
@@ -510,7 +512,15 @@ export class Graph {
                         // 压入撤销列表
                         _.pushUndo();
 
-                        let addedEdge = CreateBasicEdge(fromNode, nodeObj);
+                        let addedEdge;
+                        if (!_.edgePrevJson) {
+                            addedEdge = CreateBasicEdge(nodeObj, fromNode);
+                        } else {
+                            addedEdge = LoadEdgeFromJson(_.edgePrevJson, _.nodeList);
+                            addedEdge.source = fromNode;
+                            addedEdge.target = nodeObj;
+                            addedEdge.uuid = null;
+                        }
                         addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - nodeObj.x) ** 2 + (fromNode.y - nodeObj.y) ** 2));
                         _.pushEdge(addedEdge);
 
@@ -1731,6 +1741,11 @@ export class Graph {
         this.renderProperties.simulation.restart();
         // 更新元素
         this.refreshBottomDom();
+
+        // 更新edgePrev
+        if (this.selectedElementList.length == 1) {
+            this.edgePrevJson = edgeObj.toJsonObj();
+        }
     }
 
     /**
