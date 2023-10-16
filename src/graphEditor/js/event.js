@@ -418,25 +418,37 @@ export function saveToCloud(graph) {
 
     let formData = new FormData();
     formData.append('svg', svg);
-    axios({
-        url: GRAPH_SVG_UPLOAD_PATH,
-        method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        data: formData
-    }).then(async d => {
-        if (name) {
-            // 保存到云
-            let data = graph.toJson();
-            let response = await saveGraphToCloud(data, name, d.data.msg.filename);
-            if (response.state == 11 || response.state == 10) {
-                userConfig.currentGraphFileName = name;
-                refreshGraphName();
-                hideCenterWindow(document.querySelector("#windowSaveToCloud"))
-            }
-        }
-    });
+
+    document.querySelector("#saveToCloud").innerHTML = "保存中...";
+
+    // 多次保存
+    let repeatNum = 0;
+    let saveInterval = window.setInterval(() => {
+        if (repeatNum < 5)
+            axios({
+                url: GRAPH_SVG_UPLOAD_PATH,
+                method: "POST",
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                data: formData
+            }).then(async d => {
+                if (name) {
+                    // 保存到云
+                    let data = graph.toJson();
+                    let response = await saveGraphToCloud(data, name, d.data.msg.filename);
+                    if (response.state == 11 || response.state == 10) {
+                        userConfig.currentGraphFileName = name;
+                        refreshGraphName();
+                        hideCenterWindow(document.querySelector("#windowSaveToCloud"))
+                    }
+                }
+            });
+        else
+            window.clearInterval(saveInterval);
+        repeatNum++;
+
+    }, 300);
 }
 
 /**
