@@ -12,6 +12,7 @@
     padding-right: 10px;
     display: flex;
     flex-direction: row;
+    -webkit-app-region: drag;
 
     ul {
         display: flex;
@@ -34,6 +35,7 @@
             border-bottom-right-radius: @small_border_radius;
             overflow: hidden;
             transition: 0.1s ease-in-out;
+            -webkit-app-region: no-drag;
 
             p {
                 padding-left: 10px;
@@ -53,11 +55,14 @@
                     padding-left: 10px;
                     letter-spacing: 2px;
                     font-weight: 100;
+                    height: @menu_block_height;
+                    line-height: @menu_block_height;
                     transition: 0.1s ease-in-out;
                     width: 140px;
                     display: flex;
                     flex-direction: row;
                     align-items: center;
+                    -webkit-app-region: no-drag;
 
                     .subDisp {
                         margin-left: 5px;
@@ -102,6 +107,25 @@
         }
     }
 
+    .longBtn {
+        padding: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 12.5px;
+        height: 25px;
+        line-height: 25px;
+        width: max-content;
+        border-radius: 15px;
+        font-size: 13px;
+        letter-spacing: 2px;
+        background: linear-gradient(to right, yellow, rgb(255, 153, 0));
+        color: black;
+        -webkit-app-region: no-drag;
+        cursor: pointer;
+    }
+
     .userBlock {
         position: absolute;
         right: 5px;
@@ -126,6 +150,23 @@
             letter-spacing: 2px;
             font-weight: 100;
             transition: 0.15s ease-in-out;
+        }
+
+        .appDivBlock {
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            display: none;
+
+            .opaBtn {
+                display: block;
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 25px;
+                text-align: center;
+                -webkit-app-region: no-drag;
+            }
         }
     }
 }

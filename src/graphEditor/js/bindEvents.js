@@ -90,6 +90,9 @@ export async function bindEvents(graph) {
     document.querySelector("#btnPay").addEventListener("click", () => {
         showPay();
     });
+    document.querySelector("#btnPayLongBtn").addEventListener("click", () => {
+        showPay();
+    });
     document.querySelector("#openFile").addEventListener("click", () => {
         openGraph(graph);
     })
@@ -238,8 +241,13 @@ export async function bindEvents(graph) {
     window.VEdge = VEdge;
     window.bindData = bindData;
 
-    // app版本特化
-    // 取消用户中心菜单
-    if (process.env.RUN_ENV == "app")
+    if (process.env.RUN_ENV == "app") {
+        // app版本特化
         document.querySelector("#btnUserPage").style.display = "none";
+    } else {
+        // web版本
+        document.querySelectorAll(".showInApp").forEach(ele => {
+            ele.style.display = "none";
+        });
+    }
 }
