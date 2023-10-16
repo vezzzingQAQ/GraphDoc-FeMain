@@ -447,7 +447,8 @@ export function refreshMenu() {
         document.querySelector("#btnLogin").classList = "hide";
         document.querySelector("#btnRegister").classList = "hide";
         document.querySelector("#btnLogout").classList = "show";
-        document.querySelector("#btnUserPage").classList = "show";
+        if (process.env.RUN_ENV == "web")
+            document.querySelector("#btnUserPage").classList = "show";
         document.querySelector("#btnToCloudSavsAs").classList = "show";
         document.querySelector("#btnLoadFromCloud").classList = "show";
         document.querySelector("#btnSetGraphProperty").classList = "show";
@@ -496,7 +497,9 @@ export function refreshUserData(d) {
  * 跳转个人主页
  */
 export function toUserPage() {
-    window.open(`${USER_PAGE}?uid=${userConfig.uid}&username=${userConfig.username}`);
+    if (process.env.RUN_ENV == "web") {
+        window.open(`${USER_PAGE}?uid=${userConfig.uid}&username=${userConfig.username}`);
+    }
 }
 
 /**

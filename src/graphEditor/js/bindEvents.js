@@ -237,4 +237,8 @@ export async function bindEvents(graph) {
     window.VNode = VNode;
     window.VEdge = VEdge;
     window.bindData = bindData;
+
+    // app版本特化
+    // 取消用户中心菜单
+    document.querySelector("#btnUserPage").style.display = "none";
 }
