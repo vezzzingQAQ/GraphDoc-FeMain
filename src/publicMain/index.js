@@ -30,7 +30,7 @@ window.addEventListener("load", async () => {
             domGraphBlock.appendChild(domGraphBlockImg);
             domGraphBlock.appendChild(domGraphBlockText);
             domGraphBlockImg.addEventListener("click", async function (e) {
-                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}&lc=true`);
+                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`);
             });
             document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
         });

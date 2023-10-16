@@ -240,5 +240,6 @@ export async function bindEvents(graph) {
 
     // app版本特化
     // 取消用户中心菜单
-    document.querySelector("#btnUserPage").style.display = "none";
+    if (process.env.RUN_ENV == "app")
+        document.querySelector("#btnUserPage").style.display = "none";
 }
