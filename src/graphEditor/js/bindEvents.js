@@ -36,7 +36,8 @@ import {
     refreshAddNodeArea,
     showBugReport,
     recalSize,
-    showImgExport
+    showImgExport,
+    showMessage
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -264,4 +265,10 @@ export async function bindEvents(graph) {
             ele.style.display = "none";
         });
     }
+
+    // 联网检测
+    window.addEventListener("offline", () => {
+        // 掉线
+        showMessage("网络断开，请及时保存图谱");
+    })
 }
