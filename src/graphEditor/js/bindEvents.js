@@ -107,10 +107,17 @@ export async function bindEvents(graph) {
     document.querySelector("#toLogin").addEventListener("click", () => {
         showLogin();
     });
-    document.querySelector(".userBlock").addEventListener("click", () => {
+
+    // 点击用户头像或者名字登录
+    document.querySelector("#showUsername").addEventListener("click", () => {
         if (!getCookie("jwt"))
             showLogin();
     });
+    document.querySelector("#showUserAvatar").addEventListener("click", () => {
+        if (!getCookie("jwt"))
+            showLogin();
+    });
+
 
     // 注册按钮
     document.querySelector("#register").addEventListener("click", () => {
@@ -138,7 +145,13 @@ export async function bindEvents(graph) {
     });
 
     // 点击用户头像跳转用户页
-    document.querySelector(".userBlock").addEventListener("click", () => {
+    document.querySelector("#showUsername").addEventListener("click", () => {
+        if (userConfig.isLogin)
+            toUserPage();
+        else
+            showLogin();
+    });
+    document.querySelector("#showUserAvatar").addEventListener("click", () => {
         if (userConfig.isLogin)
             toUserPage();
         else
