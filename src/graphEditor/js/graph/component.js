@@ -152,6 +152,7 @@ class Component {
 
         let domTitleInnerText = document.createElement("p");
         domTitleInnerText.classList = "compPanTitleText"
+        domTitleInnerText.title = this.key;
         domTitleInnerText.innerText = this.showName;
 
         domTitle.appendChild(domTitleInnerText);
@@ -176,6 +177,7 @@ class Component {
 
             let domPropertyKey = document.createElement("p");
             domPropertyKey.classList = "compPanPropertyKey";
+            domPropertyKey.title = key;
             domPropertyKey.innerText = value.showName;
 
             let domPropertyValue = value.subComp.initHtml();
