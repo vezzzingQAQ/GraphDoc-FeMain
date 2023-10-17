@@ -704,10 +704,11 @@ export function showCodeError(message) {
         hideCenterWindow(document.querySelector("#windowCodeError"));
     }
 }
-export function showMessage(message) {
+export function showMessage(message, afterFn = () => { }) {
     showCenterWindow(document.querySelector("#windowShowMessage"));
     document.querySelector("#msgShowArea").innerHTML = message;
     document.querySelector("#msgAccept").onclick = () => {
+        afterFn();
         hideCenterWindow(document.querySelector("#windowShowMessage"));
     }
 }
@@ -815,14 +816,16 @@ export async function showSaveToCloud() {
         let domGraphTagClose = document.createElement("span");
         domGraphTagClose.classList = "closeBtn";
         domGraphTagClose.innerHTML = "×";
-        domGraphTagClose.onclick = async () => {
-            let response = await deleteGraph(currentGraph.name);
-            if (response.state == 1) {
-                domGraphTagClose.remove();
-                domGraphTagDate.remove();
-                domGraphTagName.remove();
-                domGraphTag.remove();
-            }
+        domGraphTagClose.onclick = () => {
+            showMessage(`确定要删除 ${currentGraph.name} 吗`, async () => {
+                let response = await deleteGraph(currentGraph.name);
+                if (response.state == 1) {
+                    domGraphTagClose.remove();
+                    domGraphTagDate.remove();
+                    domGraphTagName.remove();
+                    domGraphTag.remove();
+                }
+            });
         };
         domGraphTag.appendChild(domGraphTagImg);
         domGraphTag.appendChild(domGraphTagName);
@@ -870,14 +873,16 @@ export async function showLoadFromCloud(graph) {
         let domGraphTagClose = document.createElement("span");
         domGraphTagClose.classList = "closeBtn";
         domGraphTagClose.innerHTML = "×";
-        domGraphTagClose.onclick = async () => {
-            let response = await deleteGraph(currentGraph.name);
-            if (response.state == 1) {
-                domGraphTagClose.remove();
-                domGraphTagDate.remove();
-                domGraphTagName.remove();
-                domGraphTag.remove();
-            }
+        domGraphTagClose.onclick = () => {
+            showMessage(`确定要删除 ${currentGraph.name} 吗`, async () => {
+                let response = await deleteGraph(currentGraph.name);
+                if (response.state == 1) {
+                    domGraphTagClose.remove();
+                    domGraphTagDate.remove();
+                    domGraphTagName.remove();
+                    domGraphTag.remove();
+                }
+            });
         };
         domGraphTag.appendChild(domGraphTagImg);
         domGraphTag.appendChild(domGraphTagName);
