@@ -393,7 +393,7 @@ export class C_N_Text extends Component {
             { value: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif", text: "Impact" },
             { value: "Verdana, Geneva, Tahoma, sans-serif", text: "Verdana" }
         ]));
-        this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 12, Infinity));
+        this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
         this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
     }
