@@ -856,7 +856,8 @@ export class Graph {
                     selectionFlag = true;
                     rect.attr("transform", "translate(" + e.layerX + "," + e.layerY + ")");
                     startLoc = [e.layerX, e.layerY];
-                    _.deselectAll();
+                    if (!_.isControlDown)
+                        _.deselectAll();
                     if (_.isShowRightMenu)
                         _.hideMenu();
                 }
