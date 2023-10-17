@@ -341,14 +341,14 @@ export class Graph {
 
                         // Debug输出
                         if (e.keyCode == 68 && _.isShiftDown) {
-                            // console.log("------------------------------------")
-                            // console.log("nodelist", _.nodeList);
-                            // console.log("nodes", _.nodes);
-                            // console.log("edgelist", _.edgeList);
-                            // console.log("edges", _.edges);
-                            // console.log("selectedElementList", _.selectedElementList);
-                            // console.log("copiedNodes", _.copiedNodeJsonList);
-                            // console.log("cpoiedEdges", _.copiedEdgeJsonList);
+                            console.log("------------------------------------")
+                            console.log("nodelist", _.nodeList);
+                            console.log("nodes", _.nodes);
+                            console.log("edgelist", _.edgeList);
+                            console.log("edges", _.edges);
+                            console.log("selectedElementList", _.selectedElementList);
+                            console.log("copiedNodes", _.copiedNodeJsonList);
+                            console.log("cpoiedEdges", _.copiedEdgeJsonList);
                         }
                     }
                 });
@@ -471,7 +471,7 @@ export class Graph {
             // 点击选中
             .on("click", function () {
                 let nodeObj = d3.select(this).data()[0];
-                let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                // let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
                 // 更新底部元素
                 _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 清除选择集
@@ -516,7 +516,7 @@ export class Graph {
                         if (!_.edgePrevJson) {
                             addedEdge = CreateBasicEdge(nodeObj, fromNode);
                         } else {
-                            addedEdge = LoadEdgeFromJson(_.edgePrevJson, _.nodeList);
+                            addedEdge = LoadEdgeFromJson(_.edgePrevJson, _.nodeList, false);
                             addedEdge.source = fromNode;
                             addedEdge.target = nodeObj;
                             addedEdge.uuid = null;

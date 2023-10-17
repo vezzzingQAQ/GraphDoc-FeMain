@@ -538,7 +538,7 @@ export function LoadNodeFromJson(jsonObj) {
  * @param {object} jsonObj 节点的JSON储存
  * @param {Node} nodeList node列表
  */
-export function LoadEdgeFromJson(jsonObj, nodeList) {
+export function LoadEdgeFromJson(jsonObj, nodeList, check = true) {
     let createdEdge = new Edge();
     createdEdge.uuid = jsonObj.uuid;
     for (let componentKey in jsonObj.components) {
@@ -553,9 +553,13 @@ export function LoadEdgeFromJson(jsonObj, nodeList) {
             targetNode = node;
         }
     }
-    if (createdEdge.setSource(sourceNode) && createdEdge.setTarget(targetNode)) {
-        return createdEdge;
+    if (check) {
+        if (createdEdge.setSource(sourceNode) && createdEdge.setTarget(targetNode)) {
+            return createdEdge;
+        } else {
+            return null;
+        }
     } else {
-        return null;
+        return createdEdge;
     }
 }

@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ConditionCompilePlugin = require("condition-compile-plugin");
 const webpack = require("webpack");
 
-const APP_MODE = "development";
+const APP_MODE = "production";
 
 module.exports = {
     mode: APP_MODE,
@@ -119,7 +119,7 @@ module.exports = {
         // · development-开发环境
         new webpack.DefinePlugin({
             "process.env": {
-                "RUN_ENV": JSON.stringify("web"),
+                "RUN_ENV": JSON.stringify("app"),
                 "APP_MODE": JSON.stringify(APP_MODE)
             }
         }),
