@@ -137,7 +137,7 @@
                     <div class="showInApp opaBtn minimize">-</div>
                     <div class="showInApp opaBtn reset">●</div>
                     <div class="showInApp opaBtn close">×</div>
-                </div>    
+                </div>
             </div>
         </div>
         <div class="bottomArea">
@@ -396,7 +396,20 @@
                 </div>
             </div>
         </div>
-
+        <!--位图导出-->
+        <div class="centerWindow" id="windowExportImg">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-paper-plane"></i>图片导出</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <input id="exportImgScale" type="number" placeholder="图片缩放倍数" min="0" max="200">
+                    <p class="info">PS:导出过大的图片可能导致页面崩溃...</p>
+                    <button class="btn" id="btnImgExport">导出</button>
+                </div>
+            </div>
+        </div>
         <div class="rightMenu rightMenu_hide">
 
         </div>

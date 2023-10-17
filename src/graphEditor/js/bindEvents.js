@@ -35,7 +35,8 @@ import {
     showShareLink,
     refreshAddNodeArea,
     showBugReport,
-    recalSize
+    recalSize,
+    showImgExport
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -73,10 +74,10 @@ export async function bindEvents(graph) {
         exportSvg(graph);
     });
     document.querySelector("#btnExport2").addEventListener("click", () => {
-        exportPng(graph);
+        showImgExport(graph, "png");
     });
     document.querySelector("#btnExport3").addEventListener("click", () => {
-        exportJpg(graph);
+        showImgExport(graph, "jpg");
     });
     document.querySelector("#btnLogin").addEventListener("click", () => {
         showLogin();

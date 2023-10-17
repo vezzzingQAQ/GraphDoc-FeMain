@@ -261,15 +261,15 @@ export function exportSvg(graph) {
 /**
  * 导出为PNG
  */
-export function exportPng(graph) {
-    graph.exportPng();
+export function exportPng(graph, scale = 12) {
+    graph.exportPng(scale);
 }
 
 /**
  * 导出为JPG
  */
-export function exportJpg(graph) {
-    graph.exportJpg();
+export function exportJpg(graph, scale = 12) {
+    graph.exportJpg(scale);
 }
 
 /**
@@ -709,6 +709,23 @@ export function showMessage(message) {
     document.querySelector("#msgShowArea").innerHTML = message;
     document.querySelector("#msgAccept").onclick = () => {
         hideCenterWindow(document.querySelector("#windowShowMessage"));
+    }
+}
+export function showImgExport(graph, type) {
+    showCenterWindow(document.querySelector("#windowExportImg"));
+    document.querySelector("#btnImgExport").innerHTML = "导出";
+    document.querySelector("#exportImgScale").value = "";
+    document.querySelector("#btnImgExport").onclick = function () {
+        let scale = document.querySelector("#exportImgScale").value;
+        if (type == "jpg") {
+            exportJpg(graph, scale);
+        } else if (type == "png") {
+            exportPng(graph, scale);
+        }
+        document.querySelector("#btnImgExport").innerHTML = "导出中...";
+        window.setTimeout(() => {
+            hideCenterWindow(document.querySelector("#windowExportImg"));
+        }, 500);
     }
 }
 export async function showShareLink() {
