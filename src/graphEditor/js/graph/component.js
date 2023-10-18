@@ -455,7 +455,7 @@ export class C_N_ScaleHover extends Component {
  */
 export class C_E_ScaleHover extends Component {
     constructor(showName, key, value = {
-        scale: 11,
+        scale: 2,
         scaleTime: 0.5
     }) {
         super(showName, key, true);
