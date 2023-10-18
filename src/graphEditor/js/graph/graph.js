@@ -1844,13 +1844,15 @@ export class Graph {
         }
         let source = new XMLSerializer().serializeToString(svg); //将整个SVG document 对象序列化为一个 XML 字符串
         let blob = new Blob([source], { type: "text/xml" }); // 返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成
-        let index = 0;
-        _.blobTempList = [];
-        document.querySelectorAll(".nodeImg").forEach(ele => {
-            _.blobTempList.push(ele.getAttribute("src"));
-            ele.setAttribute("src", ele.getAttribute("datasource"));
-            index++;
-        });
+        // src再转为blob
+        if (toSrc) {
+            let index = 0;
+            document.querySelectorAll(".nodeImg").forEach(ele => {
+                ele.setAttribute("datasource", ele.getAttribute("src"));
+                ele.setAttribute("src", _.blobTempList[index]);
+                index++;
+            });
+        }
         return blob;
     }
     exportSvg() {
@@ -1867,14 +1869,6 @@ export class Graph {
             link.click(); // 触发a标签的点击事件
             URL.revokeObjectURL(url); // 清除Url
             document.body.removeChild(link);
-
-            // src再转为blob
-            let index = 0;
-            document.querySelectorAll(".nodeImg").forEach(ele => {
-                ele.setAttribute("datasource", ele.getAttribute("src"));
-                ele.setAttribute("src", _.blobTempList[index]);
-                index++;
-            });
         };
     }
     exportImg(scale = 12, type = "png") {
