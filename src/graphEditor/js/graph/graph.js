@@ -1821,10 +1821,21 @@ export class Graph {
     /**
      * 下载为图片
      */
-    genSvg() {
+    genSvg(toSrc = true) {
         let _ = this;
         const svg = document.querySelector('svg');
         // 将blob转换为src
+        if (toSrc) {
+            let index = 0;
+            _.blobTempList = [];
+            document.querySelectorAll(".nodeImg").forEach(ele => {
+                _.blobTempList.push(ele.getAttribute("src"));
+                ele.setAttribute("src", ele.getAttribute("datasource"));
+                index++;
+            });
+        }
+        let source = new XMLSerializer().serializeToString(svg); //将整个SVG document 对象序列化为一个 XML 字符串
+        let blob = new Blob([source], { type: "text/xml" }); // 返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成
         let index = 0;
         _.blobTempList = [];
         document.querySelectorAll(".nodeImg").forEach(ele => {
@@ -1832,13 +1843,11 @@ export class Graph {
             ele.setAttribute("src", ele.getAttribute("datasource"));
             index++;
         });
-        let source = new XMLSerializer().serializeToString(svg); //将整个SVG document 对象序列化为一个 XML 字符串
-        let blob = new Blob([source], { type: "text/xml" }); // 返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成
         return blob;
     }
     exportSvg() {
         let _ = this;
-        onDownload(this.genSvg(), 'test.svg'); // 下载 
+        onDownload(this.genSvg(false), 'test.svg'); // 下载 
         function onDownload(data, name) {
             const url = window.URL.createObjectURL(data); //创建一个url
             const link = document.createElement('a'); //创建一个a标签
