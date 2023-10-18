@@ -292,6 +292,8 @@ export class C_E_Exterior extends Component {
             { value: "0.8", text: "........" },
             { value: "1,2", text: ". . . ." },
             { value: "3,2,1,2", text: "._._._." },
+            { value: "1,5", text: ".  .  .  ." },
+            { value: "5,1", text: "___ ___ ___" },
         ]));
         this.addValue("strokeType", "描边类型", new SC_Select(value.strokeType || "line", false, [
             { value: "line", text: "-------" },
