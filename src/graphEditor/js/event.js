@@ -807,6 +807,11 @@ export async function showSaveToCloud() {
         let domGraphTagImg = document.createElement("img");
         domGraphTagImg.src = `${GRAPH_PNG_STORE_PATH}${currentGraph.img}`;
         domGraphTagImg.classList = "showImg";
+        let domIsPublicTag;
+        if (currentGraph.isPublic) {
+            domIsPublicTag = document.createElement("i");
+            domIsPublicTag.classList = "fa fa-eye showBlockTag";
+        }
         let domGraphTagName = document.createElement("span");
         domGraphTagName.classList = "graphName";
         domGraphTagName.innerHTML = currentGraph.name;
@@ -828,6 +833,8 @@ export async function showSaveToCloud() {
             });
         };
         domGraphTag.appendChild(domGraphTagImg);
+        if (currentGraph.isPublic)
+            domGraphTag.appendChild(domIsPublicTag);
         domGraphTag.appendChild(domGraphTagName);
         domGraphTag.appendChild(domGraphTagDate);
         domGraphTag.appendChild(domGraphTagClose);
@@ -864,6 +871,11 @@ export async function showLoadFromCloud(graph) {
         let domGraphTagImg = document.createElement("img");
         domGraphTagImg.src = `${GRAPH_PNG_STORE_PATH}${currentGraph.img}`;
         domGraphTagImg.classList = "showImg";
+        let domIsPublicTag;
+        if (currentGraph.isPublic) {
+            domIsPublicTag = document.createElement("i");
+            domIsPublicTag.classList = "fa fa-eye showBlockTag";
+        }
         let domGraphTagName = document.createElement("span");
         domGraphTagName.classList = "graphName";
         domGraphTagName.innerHTML = currentGraph.name;
@@ -885,6 +897,8 @@ export async function showLoadFromCloud(graph) {
             });
         };
         domGraphTag.appendChild(domGraphTagImg);
+        if (currentGraph.isPublic)
+            domGraphTag.appendChild(domIsPublicTag);
         domGraphTag.appendChild(domGraphTagName);
         domGraphTag.appendChild(domGraphTagDate);
         domGraphTag.appendChild(domGraphTagClose);
