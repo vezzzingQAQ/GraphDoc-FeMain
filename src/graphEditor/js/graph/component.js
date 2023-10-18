@@ -278,7 +278,7 @@ export class C_E_Exterior extends Component {
         strokeColor: "#666666",
         strokeStyle: "dot",
         strokeType: "line",
-        strokeWidth: 0.6,
+        strokeWidth: 1,
         dividerAni: null,
         aniDelayRand: 0,
         aniDuration: 0
