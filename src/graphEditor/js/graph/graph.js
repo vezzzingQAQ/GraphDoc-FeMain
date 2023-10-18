@@ -1443,6 +1443,11 @@ export class Graph {
                 .style("cursor", "pointer")
                 .html(d => {
                     let rawText = d.autoGetValue("text_node", "showText", "");
+                    rawText = rawText.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
                     let retText = rawText.replace(/\n/g, "<div></div>");
                     return retText;
                 })
