@@ -133,7 +133,7 @@ if (process.env.APP_MODE == "production") {
 }
 
 if (process.env.RUN_ENV == "app") {
-    DOMAIN_FE = "http://127.0.0.1:5500";
+    DOMAIN_FE = "http://vezzzing.cn/GraphDoc/Main";
 
     EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
     USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
