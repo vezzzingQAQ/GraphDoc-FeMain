@@ -1,5 +1,5 @@
 import { listPublicGraph, listUser } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../public/js/urls";
+import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.png";
 
@@ -74,4 +74,17 @@ window.addEventListener("load", async () => {
         document.querySelector(".webFooter").style.display = "flex";
         document.querySelector(".appFooter").style.display = "none";
     }
+
+    // 下载APP
+    document.querySelector("#download").addEventListener("click", function () {
+        const downloadElement = document.createElement("a");
+        downloadElement.style.display = "none";
+        downloadElement.href = DOWNLOAD_LINK;
+        downloadElement.target = "_blank";
+        downloadElement.rel = "noopener noreferrer";
+        downloadElement.download = "GraphDoc";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);
+    })
 });
