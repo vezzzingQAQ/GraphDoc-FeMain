@@ -218,7 +218,7 @@ export class Graph {
         _.edges = d3.select("#edgeLayer").selectAll(".forceLine")
             .data(_.edgeList, d => d.uuid)
             .enter()
-            .append("path")
+            .append("g")
         _.initEdges(_.edges);
 
         // 绘制node
@@ -406,6 +406,7 @@ export class Graph {
         let _ = this;
         edges
             .attr("id", d => d.uuid)
+            .append("path")
             .style("cursor", "pointer")
             .on("click", function (d, i) {
                 // 更新底部元素
@@ -528,7 +529,7 @@ export class Graph {
                         _.edges = _.edges
                             .data(_.edgeList, d => d.uuid)
                             .enter()
-                            .append("path")
+                            .append("g")
                             .merge(_.edges);
                         _.initEdges(_.edges);
 
@@ -726,7 +727,7 @@ export class Graph {
     calPhysics() {
         let _ = this;
         _.renderProperties.simulation.on("tick", () => {
-            _.edges
+            _.edges.select("path")
                 /// 连线位置重新计算
                 .attr("d", d => {
                     let path = d3.path();
@@ -1310,7 +1311,7 @@ export class Graph {
         _.edges = _.edges
             .data(_.edgeList, d => d.uuid)
             .enter()
-            .append("path")
+            .append("g")
             .merge(_.edges);
         _.initEdges(_.edges);
 
@@ -1722,7 +1723,7 @@ export class Graph {
      * 修改单个关系
      */
     modifyEdgeExterior(edgeObj) {
-        const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
+        const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`).select("path");
 
         findedEdge
             .attr("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))

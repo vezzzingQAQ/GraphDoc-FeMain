@@ -230,7 +230,8 @@ class Element {
                     this.owner.modifyNodeExterior(this);
                     this.owner.modifyNodePhysics();
                 } else {
-                    this.owner.modifyEdge(this);
+                    this.owner.modifyEdgeExterior(this);
+                    this.owner.modifyEdgePhysics(this);
                 }
             });
             domContainer.appendChild(domComponentAddBtn);

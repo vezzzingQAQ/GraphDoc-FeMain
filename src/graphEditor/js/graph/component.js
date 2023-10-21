@@ -629,6 +629,41 @@ export class C_N_QrCode extends Component {
     }
 }
 
+/**
+ * 关系的文本组件
+ */
+export class C_E_Text extends Component {
+    constructor(showName, key, value = {
+        showText: "",
+        textColor: "#ffffff",
+        textFont: "'Courier New', Courier, monospace",
+        textSize: 12,
+        textSpacing: 0,
+        textWeight: 5
+    }) {
+        super(showName, key, true);
+        this.addValue("showText", "文本内容", new SC_Textarea(value.showText, false));
+        this.addValue("textColor", "文字颜色", new SC_ColorInput(value.textColor, false));
+        this.addValue("textFont", "字体", new SC_Select(value.textFont, false, [
+            { value: "'Courier New', Courier, monospace", text: "Courier New" },
+            { value: "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", text: "Franklin Gothic Medium" },
+            { value: "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif", text: "Gill Sans" },
+            { value: "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif", text: "Lucida Sans" },
+            { value: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", text: "Segoe UI" },
+            { value: "'Times New Roman', Times, serif", text: "Times New Roman" },
+            { value: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;", text: "Trebuchet MS" },
+            { value: "Arial, Helvetica, sans-serif", text: "Arial" },
+            { value: "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif", text: "Cambria" },
+            { value: "Georgia, 'Times New Roman', Times, serif", text: "Georgia" },
+            { value: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif", text: "Impact" },
+            { value: "Verdana, Geneva, Tahoma, sans-serif", text: "Verdana" }
+        ]));
+        this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
+        this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
+        this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
+    }
+}
+
 
 /**
  * 寻址映射
@@ -753,6 +788,12 @@ export const ComponentMap = {
         type: "node",
         showName: "⛓️二维码",
         class: C_N_QrCode,
+    },
+    "text_edge": {
+        key: "text_edge",
+        type: "edge",
+        showName: "📃文本",
+        class: C_E_Text,
     }
 }
 
