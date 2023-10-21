@@ -639,7 +639,11 @@ export class C_E_Text extends Component {
         textFont: "'Courier New', Courier, monospace",
         textSize: 12,
         textSpacing: 0,
-        textWeight: 5
+        textWeight: 5,
+        dividerMore: null,
+        offsetX: 0,
+        offsetY: 0,
+        opacity: 1,
     }) {
         super(showName, key, true);
         this.addValue("showText", "文本内容", new SC_Textarea(value.showText, false));
@@ -661,6 +665,10 @@ export class C_E_Text extends Component {
         this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
         this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
+        this.addValue("dividerMore", "▼更多", new SC_Divider());
+        this.addValue("offsetX", "X偏移", new SC_NumberInput(value.offsetX, 0, false, 0, 5000, 0.01));
+        this.addValue("offsetY", "Y偏移", new SC_NumberInput(value.offsetY, false, 0, 5000, 0.01));
+        this.addValue("opacity", "透明度", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
     }
 }
 

@@ -813,6 +813,10 @@ export class Graph {
                     }
                     return path.toString();
                 });
+            // 计算foreignObject的位置
+            _.edges.select(".edgeGraphContainer")
+                .attr("x", d => (d.target.x + d.source.x) / 2 - d.domWidth / 2)
+                .attr("y", d => (d.target.y + d.source.y) / 2 - d.domHeight / 2)
             _.nodes.attr("transform", d => {
                 if (!d.isMove)
                     if (d.autoGetValue("physics_node", "fixPosition")) {
@@ -1723,7 +1727,8 @@ export class Graph {
      * 修改单个关系
      */
     modifyEdgeExterior(edgeObj) {
-        const findedEdge = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`).select("path");
+        let findedEdgeGroup = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
+        let findedEdge = findedEdgeGroup.select("path");
 
         findedEdge
             .attr("stroke", d => d.autoGetValue("exterior_edge", "strokeColor", "#ffffff"))
@@ -1736,6 +1741,94 @@ export class Graph {
             .duration(d => d.autoGetValue("exterior_edge", "aniDuration", 0, value => value * 1000))
             .delay(d => Math.random() * d.autoGetValue("exterior_edge", "aniDelayRand", 0, value => value * 1000))
             .style("opacity", 1)
+
+        // 先删除原来绘制的形状
+        findedEdgeGroup.selectAll(".edgeGraphContainer").remove();
+
+        // 在这里指定组件的绘制顺序
+        let domAddedNodeText = null;
+
+        // 容器
+        let addedSubComponentForeign = null;
+        let domAddedSubComponentContainer = null;
+
+        addedSubComponentForeign = findedEdgeGroup.append("foreignObject").attr("class", "edgeGraphContainer");
+        domAddedSubComponentContainer = addedSubComponentForeign.append("xhtml:body").attr("class", "edgeGraphDomContainer");
+
+        if (edgeObj.hasComponent("text_edge"))
+            domAddedNodeText = domAddedSubComponentContainer.append("xhtml:div");
+
+        // 在这里绑定组件的属性
+        if (domAddedNodeText)
+            domAddedNodeText
+                .attr("class", "nodeText")
+                .style("width", "max-content")
+                .style("height", "max-content")
+                .style("text-anchor", "middle")
+                .style("pointer-events", "null")
+                .style("dominant-baseline", "middle")
+                .html(d => {
+                    let rawText = d.autoGetValue("text_edge", "showText", "");
+                    rawText = rawText.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                    let retText = rawText.replace(/\n/g, "<div></div>");
+                    return retText;
+                })
+                .style("color", d => d.autoGetValue("text_edge", "textColor", "#ffffff"))
+                .style("font-family", d => d.autoGetValue("text_edge", "textFont", "'Courier New', Courier, monospace"))
+                .style("font-size", d => d.autoGetValue("text_edge", `textSize`, "2px", value => {
+                    if (value < 12) {
+                        return `12px`;
+                    } else {
+                        return `${value}px`;
+                    }
+                }))
+                .style("letter-spacing", d => d.autoGetValue("text_edge", `textSpacing`, "0", value => `${value}px`))
+                .style("font-weight", d => d.autoGetValue("text_edge", "textWeight", 100, value => value * 100))
+                .style("opacity", d => d.autoGetValue("text_edge", "opacity", 1))
+
+        domAddedSubComponentContainer
+            .style("display", "flex")
+            .style("width", "max-content")
+            .style("height", "max-content")
+            .style("flex-direction", "column")
+            .style("margin", 0)
+            .style("padding", 0)
+            // 偏移
+            .style("padding-left", d => d.autoGetValue("text_edge","offsetX",0))
+            .style("padding-bottom", d => d.autoGetValue("text_edge","offsetY",0))
+            .style("scale", 0)
+            .style("opacity", 0)
+            .transition()
+            .ease(d3.easeBounceInOut)
+            .duration(d => d.autoGetValue("exterior_edge", "aniDuration", 0, value => value * 1000))
+            .delay(d => Math.random() * d.autoGetValue("exterior_edge", "aniDelayRand", 0, value => value * 1000))
+            .style("scale", 1)
+            .style("opacity", 1)
+
+
+        domAddedSubComponentContainer.selectAll("*")
+            .style("margin", 0)
+            .style("padding", 0)
+
+        function calSize() {
+            addedSubComponentForeign
+                .attr("width", function () {
+                    let containerDom = domAddedSubComponentContainer;
+                    let width = containerDom.node().offsetWidth + 1;
+                    edgeObj.domWidth = width;
+                    return width;
+                })
+                .attr("height", function () {
+                    let containerDom = domAddedSubComponentContainer;
+                    let height = containerDom.node().offsetHeight + 1;
+                    edgeObj.domHeight = height;
+                    return height;
+                })
+        }
 
         switch (edgeObj.autoGetValue("exterior_edge", "strokeType")) {
             case "pointer1": { }
@@ -1756,6 +1849,7 @@ export class Graph {
         if (this.selectedElementList.length == 1) {
             this.edgePrevJson = edgeObj.toJsonObj();
         }
+        calSize();
     }
 
     /**
