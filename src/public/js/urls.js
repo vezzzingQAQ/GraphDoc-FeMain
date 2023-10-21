@@ -43,6 +43,7 @@ let DOMAIN_COMPONENT;
 let FUNC1_COMP;
 
 let DOWNLOAD_LINK = "http://vezzzing.cn/GraphDoc/Download/GraphDoc-win32-x64.zip";
+let LAW_LINK = "http://vezzzing.cn/GraphDoc/Download/readme.md";
 
 if (process.env.APP_MODE == "production") {
     DOMAIN_RES = "http://121.40.159.180:7891";
@@ -187,5 +188,6 @@ export {
 
     FUNC1_COMP,
 
-    DOWNLOAD_LINK
+    DOWNLOAD_LINK,
+    LAW_LINK
 }

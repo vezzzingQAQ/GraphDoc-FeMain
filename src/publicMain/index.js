@@ -1,5 +1,5 @@
 import { listPublicGraph, listUser } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, USER_PAGE } from "../public/js/urls";
+import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, LAW_LINK, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.png";
 
@@ -86,5 +86,18 @@ window.addEventListener("load", async () => {
         document.body.appendChild(downloadElement);
         downloadElement.click();
         document.body.removeChild(downloadElement);
-    })
+    });
+
+    // 下载使用条款
+    document.querySelector("#laws").addEventListener("click", function () {
+        const downloadElement = document.createElement("a");
+        downloadElement.style.display = "none";
+        downloadElement.href = LAW_LINK;
+        downloadElement.target = "_blank";
+        downloadElement.rel = "noopener noreferrer";
+        downloadElement.download = "GraphDoc";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);
+    });
 });
