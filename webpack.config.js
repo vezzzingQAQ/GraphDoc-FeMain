@@ -5,7 +5,9 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ConditionCompilePlugin = require("condition-compile-plugin");
 const webpack = require("webpack");
 
-const APP_MODE = "development";
+const APP_MODE = "production";
+
+const VERSION = new Date().getTime();
 
 module.exports = {
     mode: APP_MODE,
@@ -16,7 +18,7 @@ module.exports = {
         publicMain: "./src/publicMain/index.js"
     },
     output: {
-        filename: "[name].bundle.js",
+        filename: `[name].vezzzing.${VERSION}.bundle.js`,
         path: path.resolve(__dirname, "dist")
     },
     module: {
