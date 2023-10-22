@@ -656,6 +656,14 @@ export function refreshAlignBlock(graph, value) {
 }
 
 /**
+ * 刷新是否显示坐标系
+ */
+export function refreshShowCoord(graph, value) {
+    graph.refreshCoord(value);
+}
+
+
+/**
  * 从模板添加节点
  */
 function addTpNode(nodeTp, graph) {

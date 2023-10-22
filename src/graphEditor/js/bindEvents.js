@@ -37,7 +37,8 @@ import {
     showBugReport,
     recalSize,
     showImgExport,
-    showMessage
+    showMessage,
+    refreshShowCoord
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -200,6 +201,12 @@ export async function bindEvents(graph) {
     document.querySelector("#btnRefreshAlignBlock").addEventListener("click", () => {
         refreshAlignBlock(graph, !document.querySelector("#check_alignBlock").hasAttribute("checked"));
     })
+
+    // 显示坐标系
+    document.querySelector("#btnRefreshShowCoord").addEventListener("click", () => {
+        refreshShowCoord(graph, !document.querySelector("#check_showCoord").hasAttribute("checked"));
+    })
+
 
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {

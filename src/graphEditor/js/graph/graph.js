@@ -109,6 +109,8 @@ export class Graph {
         this.blobTempList = [];
         // 上一个修改过的关系
         this.edgePrevJson = null;
+        // 是否显示坐标系
+        this.isShowCoord = false;
     }
 
     /**
@@ -200,7 +202,11 @@ export class Graph {
                     .attr("class", "viewArea")
             }
 
-            // 创建图层-节点层和关系层
+            // 创建图层-底面层节点层和关系层
+            d3.select(".viewArea").append("g")
+                .attr("class", "bottomLayer layer")
+                .attr("id", "bottomLayer")
+
             d3.select(".viewArea").append("g")
                 .attr("class", "edgeLayer layer")
                 .attr("id", "edgeLayer")
@@ -208,6 +214,70 @@ export class Graph {
             d3.select(".viewArea").append("g")
                 .attr("class", "nodeLayer layer")
                 .attr("id", "nodeLayer")
+
+            // 绘制坐标
+            function drawCoord() {
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(-50000, 0);
+                        path.lineTo(50000, 0);
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(150,150,150,0.8)");
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(0, -50000);
+                        path.lineTo(0, 50000);
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(150,150,150,0.8)");
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(_.renderProperties.svg.attr("width") / 2, -50000);
+                        path.lineTo(_.renderProperties.svg.attr("width") / 2, 50000);
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(250,150,150,0.8)");
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(-50000, _.renderProperties.svg.attr("height") / 2);
+                        path.lineTo(50000, _.renderProperties.svg.attr("height") / 2);
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(250,150,150,0.8)");
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(_.renderProperties.svg.attr("width"), -50000);
+                        path.lineTo(_.renderProperties.svg.attr("width"), 50000);
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(150,250,150,0.8)");
+                d3.select("#bottomLayer").append("path")
+                    .attr("class", "coordLine")
+                    .attr("d", () => {
+                        let path = d3.path();
+                        path.moveTo(-50000, _.renderProperties.svg.attr("height"));
+                        path.lineTo(50000, _.renderProperties.svg.attr("height"));
+                        return path.toString();
+                    })
+                    .style("stroke", "rgba(150,250,150,0.8)");
+                d3.selectAll(".coordLine")
+                    .style("fill", "none")
+                    .style("opacity", _.isShowCoord ? 1 : 0)
+                    .style("stroke-width", 0.5)
+                    .style("transition", "0.3s ease-in-out");
+            }
+            drawCoord();
         }
         initSvg();
 
@@ -2303,6 +2373,18 @@ export class Graph {
         } else {
             // 更新底部栏
             this.refreshBottomDom("🤐无法撤销");
+        }
+    }
+
+    /**
+     * 显示坐标系
+     */
+    refreshCoord(show = true) {
+        this.isShowCoord = show;
+        if (show) {
+            d3.selectAll(".coordLine").style("opacity", 1);
+        } else {
+            d3.selectAll(".coordLine").style("opacity", 0);
         }
     }
 
