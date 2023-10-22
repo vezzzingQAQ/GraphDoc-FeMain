@@ -746,26 +746,26 @@ export class Graph {
                             break;
                         }
                         case "straightH1": {
+                            path.lineTo(d.source.x + 50, d.source.y);
+                            path.lineTo(d.target.x - 50, d.target.y);
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
+                        case "straightH2": {
                             path.lineTo(d.source.x + 100, d.source.y);
                             path.lineTo(d.target.x - 100, d.target.y);
                             path.lineTo(d.target.x, d.target.y);
                             break;
                         }
-                        case "straightH2": {
-                            path.lineTo(d.source.x + 200, d.source.y);
-                            path.lineTo(d.target.x - 200, d.target.y);
-                            path.lineTo(d.target.x, d.target.y);
-                            break;
-                        }
                         case "straightV1": {
-                            path.lineTo(d.source.x, d.source.y + 100);
-                            path.lineTo(d.target.x, d.target.y - 100);
+                            path.lineTo(d.source.x, d.source.y + 50);
+                            path.lineTo(d.target.x, d.target.y - 50);
                             path.lineTo(d.target.x, d.target.y);
                             break;
                         }
                         case "straightV2": {
-                            path.lineTo(d.source.x, d.source.y + 200);
-                            path.lineTo(d.target.x, d.target.y - 200);
+                            path.lineTo(d.source.x, d.source.y + 100);
+                            path.lineTo(d.target.x, d.target.y - 100);
                             path.lineTo(d.target.x, d.target.y);
                             break;
                         }
@@ -784,6 +784,7 @@ export class Graph {
                                 );
                                 clen += 30;
                             }
+                            path.lineTo(d.target.x, d.target.y);
                             break;
                         }
                         case "pointer3": {
@@ -796,6 +797,7 @@ export class Graph {
                                 );
                                 clen += 15;
                             }
+                            path.lineTo(d.target.x, d.target.y);
                             break;
                         }
                         case "pointer4": {
@@ -808,6 +810,7 @@ export class Graph {
                                 );
                                 clen += 7.5;
                             }
+                            path.lineTo(d.target.x, d.target.y);
                             break;
                         }
                     }
@@ -1798,8 +1801,8 @@ export class Graph {
             .style("margin", 0)
             .style("padding", 0)
             // 偏移
-            .style("padding-left", d => d.autoGetValue("text_edge","offsetX",0))
-            .style("padding-bottom", d => d.autoGetValue("text_edge","offsetY",0))
+            .style("padding-left", d => d.autoGetValue("text_edge", "offsetX", 0))
+            .style("padding-bottom", d => d.autoGetValue("text_edge", "offsetY", 0))
             .style("scale", 0)
             .style("opacity", 0)
             .transition()
