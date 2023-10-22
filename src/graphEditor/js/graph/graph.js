@@ -476,9 +476,9 @@ export class Graph {
                 // 更新底部元素
                 _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 清除选择集
-                if (!_.isShiftDown && !_.isControlDown) {
-                    _.deselectAll();
-                }
+                // if (!_.isShiftDown && !_.isControlDown) {
+                //     _.deselectAll();
+                // }
                 // 按下ctrl减选
                 if (_.isControlDown && _.selectedElementList.includes(nodeObj)) {
                     _.deselectElement(nodeObj);
@@ -664,8 +664,6 @@ export class Graph {
             if (moveList.length == 1) {
                 moveList[0].initHtml();
                 _.selectElement(moveList[0]);
-            } else if (moveList.length == 0) {
-                _.selectElement(d);
             } else {
                 // 选中被按下的节点
                 _.selectElement(d);
