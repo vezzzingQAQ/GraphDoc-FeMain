@@ -263,7 +263,7 @@ export class C_N_Exterior extends Component {
         this.addValue("divideTotal", "▼整体控制", new SC_Divider());
         this.addValue("rotate", "旋转", new SC_NumberInput(value.rotate, false, -10000, 10000, 0.01));
         this.addValue("scale", "缩放", new SC_NumberInput(value.scale, false, -10000, 10000, 0.01));
-        this.addValue("opacity", "透明度", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
+        this.addValue("opacity", "透明背景", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
         this.addValue("dividerAni", "▼入场动画", new SC_Divider());
         this.addValue("aniDelayRand", "随机延时", new SC_NumberInput(value.aniDelayRand, false, 0, 1000, 0.1));
         this.addValue("aniDuration", "持续时间", new SC_NumberInput(value.aniDuration, false, 0, 1000, 0.1));
