@@ -1235,7 +1235,7 @@ export class Graph {
         this.edges = this.edges
             .data(this.edgeList, d => d.uuid)
             .enter()
-            .append("path")
+            .append("g")
             .merge(this.edges);
         this.initEdges(this.edges);
         for (let pastedEdgeObj of pastedEdgeObjs) {
