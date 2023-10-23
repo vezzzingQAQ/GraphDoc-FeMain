@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ConditionCompilePlugin = require("condition-compile-plugin");
 const webpack = require("webpack");
 
-const APP_MODE = "development";
+const APP_MODE = "production";
 
 const VERSION = new Date().getTime();
 
