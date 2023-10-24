@@ -1333,7 +1333,7 @@ export class Graph {
     /**
      * 从节点字符串添加节点
      */
-    addNodeFromString(nodeString) {
+    addNodeFromString(nodeString, addOffset = true) {
         nodeString = JSON.parse(nodeString);
         // 记录所有粘贴的元素
         let pastedNodeObjs = [];
@@ -1343,7 +1343,7 @@ export class Graph {
             nodeStore.uuid = null;
             // 计算鼠标在svg中的相对位置
             let transform = d3.zoomTransform(this.renderProperties.viewArea.node());
-            let pt = transform.invert([this.mouseX + 350, this.mouseY]);
+            let pt = transform.invert([addOffset ? this.mouseX + 350 : this.mouseX, this.mouseY]);
             nodeStore.x = pt[0] + Math.random() * 10;
             nodeStore.y = pt[1] + Math.random() * 10;
             nodeStore.cx = nodeStore.x + Math.random() * 10;

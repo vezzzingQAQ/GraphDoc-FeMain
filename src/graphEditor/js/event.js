@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH } from "../../public/js/urls";
 import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
 import { configGraph, deleteGraph, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -1072,4 +1072,54 @@ export function recalSize(graph) {
     graph.renderProperties.svg
         .attr("width", document.querySelector(".displayArea").offsetWidth)
         .attr("height", document.querySelector(".displayArea").offsetHeight)
+}
+
+/**
+ * 拖入图片自动创建图片节点
+ */
+export function bindFileDropEvent(graph) {
+    let domDropContainer = document.querySelector("svg");
+    function dragEvent(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.type == "drop") {
+            // 放下文件
+            // 遍历拖入的文件
+            for (let file of e.dataTransfer.files) {
+                // 图片上传
+                // 判断文件类型
+                let imgAcceptList = ["png", "jpg", "PNG", "JPG", "webp", "WEBP", "gif", "GIF", "jpeg", "JPEG"];
+                if (imgAcceptList.includes(file.name.split(".")[file.name.split(".").length - 1])) {
+                    let formData = new FormData();
+                    formData.append("pic", file);
+                    axios({
+                        url: IMG_UPLOAD_PATH,
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        },
+                        data: formData
+                    }).then(d => {
+                        if (d.data.state == 1) {
+                            let returnImgName = d.data.msg.filename;
+                            let nodeString = `
+                        [{\"uuid\":\"zznode2ea1771a99f946b9ac3d5aea05dc90ea\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":0},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"${returnImgName}\",\"width\":\"50\"}},\"vx\":0,\"vy\":0,\"x\":830,\"y\":1150,\"cx\":830,\"cy\":1150}]
+                        `;
+                            graph.addNodeFromString(nodeString, false);
+                        } else {
+                            console.log("文件上传失败")
+                        }
+                    });
+                }
+            }
+        } else if (e.type == "dragleave") {
+            // 离开
+        } else {
+            // 进入
+        }
+    }
+    domDropContainer.ondragenter = dragEvent;
+    domDropContainer.ondragover = dragEvent;
+    domDropContainer.ondrop = dragEvent;
+    domDropContainer.ondragleave = dragEvent;
 }

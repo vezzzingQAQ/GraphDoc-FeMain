@@ -38,7 +38,8 @@ import {
     recalSize,
     showImgExport,
     showMessage,
-    refreshShowCoord
+    refreshShowCoord,
+    bindFileDropEvent
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -278,4 +279,7 @@ export async function bindEvents(graph) {
         // 掉线
         showMessage("网络断开，请及时保存图谱");
     })
+
+    // 图片上传
+    bindFileDropEvent(graph);
 }
