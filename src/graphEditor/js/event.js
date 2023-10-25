@@ -13,7 +13,7 @@ import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
 import { templateDyaList } from "./templateDyaList";
-import { addNodeList } from "./nodeAddList";
+import { addNodeList, imgInNode } from "./nodeAddList";
 
 let currentGraph = null;
 
@@ -900,10 +900,7 @@ export function bindFileDropEvent(graph) {
                     }).then(d => {
                         if (d.data.state == 1) {
                             let returnImgName = d.data.msg.filename;
-                            let nodeString = `
-                        [{\"uuid\":\"zznode2ea1771a99f946b9ac3d5aea05dc90ea\",\"components\":{\"exterior_node\":{\"size\":{\"x\":10,\"y\":1},\"sizeAuto\":true,\"rotate\":null,\"scale\":null,\"round\":\"5\",\"shape\":\"rect\",\"dividerColor\":null,\"bgColor\":\"#4f4f4f\",\"dividerStroke\":null,\"strokeColor\":\"#ababab\",\"strokeStyle\":\"0\",\"strokeWidth\":0.5,\"opacity\":0},\"physics_node\":{\"dividerCollision\":null,\"collisionRadius\":10,\"collisionRadiusAuto\":true,\"dividerManyBodyForce\":null,\"manyBodyForceStrength\":80,\"manyBodyForceRangeMin\":10,\"manyBodyForceRangeMax\":112,\"dividerManyFixPosition\":null,\"fixPosition\":true},\"img_node\":{\"path\":\"${returnImgName}\",\"width\":\"50\"}},\"vx\":0,\"vy\":0,\"x\":830,\"y\":1150,\"cx\":830,\"cy\":1150}]
-                        `;
-                            graph.addNodeFromString(nodeString, false);
+                            graph.addNodeFromString(imgInNode(returnImgName), false);
                         } else {
                             console.log("文件上传失败")
                         }
