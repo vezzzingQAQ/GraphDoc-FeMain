@@ -2441,6 +2441,9 @@ export class Graph {
                 document.querySelector("#loadGraph").style.opacity = 0;
             }, 20);
         }, 300);
+        // 清空组件列表
+        document.querySelector(".panArea .listPan").innerHTML = "";
+        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
     }
 
     /**
@@ -2453,6 +2456,9 @@ export class Graph {
             this.clear();
             this.load(graphJson, false);
         }, 300);
+        // 清空组件列表
+        document.querySelector(".panArea .listPan").innerHTML = "";
+        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
     }
 
     /**
