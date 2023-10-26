@@ -666,7 +666,7 @@ export class C_E_Text extends Component {
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
         this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
         this.addValue("dividerMore", "▼更多", new SC_Divider());
-        this.addValue("offsetX", "X偏移", new SC_NumberInput(value.offsetX, 0, false, 0, 5000, 0.01));
+        this.addValue("offsetX", "X偏移", new SC_NumberInput(value.offsetX, false, 0, 5000, 0.01));
         this.addValue("offsetY", "Y偏移", new SC_NumberInput(value.offsetY, false, 0, 5000, 0.01));
         this.addValue("opacity", "透明度", new SC_NumberInput(value.opacity, false, 0, 1, 0.01));
     }
