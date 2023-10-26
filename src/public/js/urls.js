@@ -42,107 +42,81 @@ let DOMAIN_COMPONENT;
 
 let FUNC1_COMP;
 
-let DOWNLOAD_LINK = "http://vezzzing.cn/GraphDoc/Download/GraphDoc-win32-x64.zip";
-let LAW_LINK = "http://vezzzing.cn/GraphDoc/Download/readme.md";
+let DOMAIN_DOWNLOAD;
 
-if (process.env.APP_MODE == "production") {
+let DOWNLOAD_LINK;
+let LAW_LINK;
+
+// 生产和测试环境
+if (process.env.PACK_MODE == "production") {
     DOMAIN_RES = "http://121.40.159.180:7891";
-
-    IMG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadImg/`;
-    IMG_STORE_PATH = `${DOMAIN_RES}/media/images/`;
-    FILE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadFile/`;
-    FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
-    VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
-    VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
-    GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
-    GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
-    AVATAR_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadAvatar/`;
-    AVATAR_STORE_PATH = `${DOMAIN_RES}/media/avatars/`;
-
-
     DOMAIN_MAIN = "http://121.40.159.180:7892";
-
-    USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
-    USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
-    USER_DATA = `${DOMAIN_MAIN}/user/data`;
-    USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
-    USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
-    USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
-    USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
-    USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
-    USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
-    USER_UPDATE_AVATAR = `${DOMAIN_MAIN}/user/updateAvatar`;
-    USER_CONFIG_GRAPH = `${DOMAIN_MAIN}/graph/configGraph`;
-    USER_LOAD_GRAPH_CONFIG = `${DOMAIN_MAIN}/graph/loadGraphConfig`;
-    USER_GET_USERLIST = `${DOMAIN_MAIN}/user/getUserList`;
-    EXTRACT_TEXT = `${DOMAIN_MAIN}/tagger/extractText`;
-
-    LIST_PUBLIC_GRAPH = `${DOMAIN_MAIN}/graph/listPublicGraph`;
-
     DOMAIN_FE = "http://vezzzing.cn/GraphDoc/Main";
-
-    EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
-    USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
-    DISPLAY_PAGE = `${DOMAIN_FE}/dist/visualization.html`;
-    PUBLIC_PAGE = `${DOMAIN_FE}/dist/publicMain.html`;
-
     DOMAIN_COMPONENT = "http://vezzzing.cn/GraphDoc/Component";
-
-    FUNC1_COMP = `${DOMAIN_COMPONENT}/dist/function1Plot.html`;
+    DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 } else {
     DOMAIN_RES = "http://127.0.0.1:4999";
-
-    IMG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadImg/`;
-    IMG_STORE_PATH = `${DOMAIN_RES}/media/images/`;
-    FILE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadFile/`;
-    FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
-    VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
-    VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
-    GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
-    GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
-    AVATAR_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadAvatar/`;
-    AVATAR_STORE_PATH = `${DOMAIN_RES}/media/avatars/`;
-
-
     DOMAIN_MAIN = "http://127.0.0.1:4998";
-
-    USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
-    USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
-    USER_DATA = `${DOMAIN_MAIN}/user/data`;
-    USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
-    USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
-    USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
-    USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
-    USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
-    USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
-    USER_UPDATE_AVATAR = `${DOMAIN_MAIN}/user/updateAvatar`;
-    USER_CONFIG_GRAPH = `${DOMAIN_MAIN}/graph/configGraph`;
-    USER_LOAD_GRAPH_CONFIG = `${DOMAIN_MAIN}/graph/loadGraphConfig`;
-    USER_GET_USERLIST = `${DOMAIN_MAIN}/user/getUserList`;
-    EXTRACT_TEXT = `${DOMAIN_MAIN}/tagger/extractText`;
-
-    LIST_PUBLIC_GRAPH = `${DOMAIN_MAIN}/graph/listPublicGraph`;
-
     DOMAIN_FE = "http://127.0.0.1:5500";
-
-    EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
-    USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
-    DISPLAY_PAGE = `${DOMAIN_FE}/dist/visualization.html`;
-    PUBLIC_PAGE = `${DOMAIN_FE}/dist/publicMain.html`;
-
     DOMAIN_COMPONENT = "http://127.0.0.1:5501";
-
-    FUNC1_COMP = `${DOMAIN_COMPONENT}/dist/function1Plot.html`;
+    DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 }
 
 if (process.env.RUN_ENV == "app") {
     DOMAIN_FE = "http://vezzzing.cn/GraphDoc/Main";
-
-    EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
-    USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
-    DISPLAY_PAGE = `${DOMAIN_FE}/dist/visualization.html`;
-    PUBLIC_PAGE = `${DOMAIN_FE}/dist/publicMain.html`;
 }
+
+// 适配学校服务器
+if (process.env.DEP_ENV == "school") {
+    DOMAIN_RES = "http://127.0.0.1:3291";
+    DOMAIN_MAIN = "http://127.0.0.1:3292";
+    DOMAIN_FE = "http://sdi.havigor.com/gdoc/Main";
+    DOMAIN_COMPONENT = "http://sdi.havigor.com/gdoc/Component";
+    DOMAIN_DOWNLOAD = "http://sdi.havigor.com/gdoc/Download";
+}
+
+// DOMAIN RES
+IMG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadImg/`;
+IMG_STORE_PATH = `${DOMAIN_RES}/media/images/`;
+FILE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadFile/`;
+FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
+VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
+VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
+GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
+GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
+AVATAR_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadAvatar/`;
+AVATAR_STORE_PATH = `${DOMAIN_RES}/media/avatars/`;
+
+// DOMAIN_MAIN
+USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
+USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
+USER_DATA = `${DOMAIN_MAIN}/user/data`;
+USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
+USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
+USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
+USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
+USER_DELETE_GRAPH = `${DOMAIN_MAIN}/graph/deleteGraph`;
+USER_ODATA = `${DOMAIN_MAIN}/user/odata`;
+USER_UPDATE_AVATAR = `${DOMAIN_MAIN}/user/updateAvatar`;
+USER_CONFIG_GRAPH = `${DOMAIN_MAIN}/graph/configGraph`;
+USER_LOAD_GRAPH_CONFIG = `${DOMAIN_MAIN}/graph/loadGraphConfig`;
+USER_GET_USERLIST = `${DOMAIN_MAIN}/user/getUserList`;
+EXTRACT_TEXT = `${DOMAIN_MAIN}/tagger/extractText`;
+LIST_PUBLIC_GRAPH = `${DOMAIN_MAIN}/graph/listPublicGraph`;
+
+// DOMAIN_FE
+EDITOR_PGAE = `${DOMAIN_FE}/dist/graphEditor.html`;
+USER_PAGE = `${DOMAIN_FE}/dist/userMain.html`;
+DISPLAY_PAGE = `${DOMAIN_FE}/dist/visualization.html`;
+PUBLIC_PAGE = `${DOMAIN_FE}/dist/publicMain.html`;
+
+// DOMAIN_COMPONENT
+FUNC1_COMP = `${DOMAIN_COMPONENT}/dist/function1Plot.html`;
+
+// DOMAIN_DOWNLOAD
+DOWNLOAD_LINK = `${DOMAIN_DOWNLOAD}/GraphDoc-win32-x64.zip`;
+LAW_LINK = `${DOMAIN_DOWNLOAD}/readme.md`;
+
 export {
     DOMAIN_RES,
 

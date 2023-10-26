@@ -60,7 +60,6 @@ window.addEventListener("load", async () => {
             });
         }
 
-        console.log(nodeList, edgeList);
         // 生成图谱
         const graph3d = ForceGraph3D({
             extraRenderers: [new CSS2DRenderer()]

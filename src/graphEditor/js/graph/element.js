@@ -468,7 +468,6 @@ export function CreateCodeNode() {
     node.autoSetValue("exterior_node", "shape", "rect");
     node.addComponent(new C_N_Code(ComponentMap.code_node.showName, ComponentMap.code_node.key));
     node.autoSetValue("code_node", "content", `function main(){
-    console.log("hello world");
 }`);
     return node;
 }

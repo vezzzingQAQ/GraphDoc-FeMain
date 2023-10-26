@@ -5,12 +5,22 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ConditionCompilePlugin = require("condition-compile-plugin");
 const webpack = require("webpack");
 
-const APP_MODE = "production";
+
+// 条件编译
+// RUN_ENV
+// · web-打包浏览器端
+// · app-打包app端
+// TYPE
+// · production-生产环境
+// · development-开发环境
+const PACK_MODE = "production";
+const DEPLOY_MODE = "self";
+const APP_MODE = "web";
 
 const VERSION = new Date().getTime();
 
 module.exports = {
-    mode: APP_MODE,
+    mode: PACK_MODE,
     entry: {
         graphEditor: "./src/graphEditor/index.js",
         userMain: "./src/userMain/index.js",
@@ -112,17 +122,14 @@ module.exports = {
                 }
             ]
         }),
-        // 条件编译
-        // RUN_ENV
-        // · web-打包浏览器端
-        // · app-打包app端
-        // TYPE
-        // · production-生产环境
-        // · development-开发环境
         new webpack.DefinePlugin({
             "process.env": {
-                "RUN_ENV": JSON.stringify("web"),
-                "APP_MODE": JSON.stringify(APP_MODE)
+                // 打包方式[production development]
+                "PACK_MODE": JSON.stringify(PACK_MODE),
+                // 运行环境[app web]
+                "RUN_ENV": JSON.stringify(APP_MODE),
+                // 部署方式[self school]
+                "DEP_ENV":JSON.stringify(DEPLOY_MODE)
             }
         }),
         new ConditionCompilePlugin(),

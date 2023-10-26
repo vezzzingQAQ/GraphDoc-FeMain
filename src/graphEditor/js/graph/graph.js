@@ -1645,7 +1645,6 @@ export class Graph {
                 .attr("width", 300)
                 .attr("height", 400)
                 .attr("src", d => {
-                    console.log(`${FUNC1_COMP}?fn=${encodeURI(d.autoGetValue("func1_node", "func", "x"))}`);
                     return `${FUNC1_COMP}?fn=${d.autoGetValue("func1_node", "func", "x")}`
                 })
 
