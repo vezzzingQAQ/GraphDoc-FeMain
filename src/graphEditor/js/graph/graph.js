@@ -1529,7 +1529,8 @@ export class Graph {
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;")
                         .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
+                        .replace(/'/g, "&#039;")
+                        .replace(/ /g, "&nbsp;");
                     let retText = rawText.replace(/\n/g, "<div></div>");
                     return retText;
                 })
