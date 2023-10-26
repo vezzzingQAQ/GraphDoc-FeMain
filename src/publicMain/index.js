@@ -1,7 +1,7 @@
 import { listPublicGraph, listUser } from "../public/js/serverCom";
 import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, LAW_LINK, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
-import mainBg from "./../asset/img/icon/mainBg.png";
+import mainBg from "./../asset/img/icon/mainBg.jpg";
 
 window.addEventListener("load", async () => {
     let graphListResponse = await listPublicGraph();

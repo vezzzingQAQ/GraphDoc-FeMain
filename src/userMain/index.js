@@ -4,7 +4,7 @@ import { getOUtherData, getUserData, updateAvatar } from "../public/js/serverCom
 import { getQueryVariable } from "../public/js/tools";
 import { AVATAR_UPLOAD_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, AVATAR_STORE_PATH } from "./../public/js/urls";
 import "./css/index.less";
-import mainBg from "./../asset/img/icon/mainBg.png";
+import mainBg from "./../asset/img/icon/mainBg.jpg";
 
 window.addEventListener("load", async () => {
     let uid = getQueryVariable("uid");
