@@ -76,6 +76,9 @@ class SubComponent {
         } else {
             console.error(`不是Node也不是Edge的组件`);
         }
+        // 解决节点有时候选不中的bug
+        // isControlDown归位
+        this.owner.owner.owner.isControlDown = false;
     }
 
     /**
