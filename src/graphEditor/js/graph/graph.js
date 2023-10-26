@@ -341,12 +341,11 @@ export class Graph {
 
             // 初始化窗口的键盘事件绑定
             function bindKeyEvent() {
-                // 选中节点后delete删除
                 d3.select("body").on("keydown", function (e) {
                     if (e.target == this) {
-                        // console.log(e.keyCode);
-                        // delete删除选中的元素
-                        if (e.keyCode == 46) {
+                        console.log(e.keyCode);
+                        // delete或backspace删除选中的元素
+                        if (e.keyCode == 46 || e.keyCode == 8) {
                             if (_.selectedElementList.length != 0) {
                                 // 压入撤销列表
                                 _.pushUndo();
