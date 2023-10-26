@@ -390,6 +390,7 @@ export class Graph {
                         // ctrl+z撤销
                         if (e.keyCode == 90 && _.isControlDown) {
                             _.undo();
+                            _.isControlDown = false;
                         }
                         // ctrls保存
                         if (e.keyCode == 83 && _.isControlDown) {
@@ -409,9 +410,9 @@ export class Graph {
                             // }
                         }
 
-                        // Debug输出
+                        // shift+D debug输出
                         if (e.keyCode == 68 && _.isShiftDown) {
-                            console.log("------------------------------------")
+                            console.log("Graph Doc Debug Mode")
                             console.log("nodelist", _.nodeList);
                             console.log("nodes", _.nodes);
                             console.log("edgelist", _.edgeList);
@@ -419,6 +420,9 @@ export class Graph {
                             console.log("selectedElementList", _.selectedElementList);
                             console.log("copiedNodes", _.copiedNodeJsonList);
                             console.log("cpoiedEdges", _.copiedEdgeJsonList);
+                            console.log("isControlDown", _.isControlDown);
+                            console.log("isShiftDown", _.isShiftDown);
+                            console.log("isAltDown", _.isAltDown);
                         }
                     }
                 });
