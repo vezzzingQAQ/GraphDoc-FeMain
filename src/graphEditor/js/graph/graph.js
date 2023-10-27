@@ -44,7 +44,7 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
-import { saveGraph, showMessage } from "../event";
+import { hideLoadingPage, saveGraph, showLoadingPage, showMessage } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 
@@ -2480,7 +2480,7 @@ export class Graph {
             this.renderProperties.simulation.alphaTarget(0.02).restart();
             window.setTimeout(() => {
                 this.renderProperties.simulation.stop();
-                document.querySelector("#loadGraph").style.opacity = 0;
+                hideLoadingPage();
             }, 20);
         }, 300);
         // 清空组件列表
@@ -2492,7 +2492,7 @@ export class Graph {
      * 重新加载图谱
      */
     reload() {
-        document.querySelector("#loadGraph").style.opacity = 1;
+        showLoadingPage();
         window.setTimeout(() => {
             let graphJson = this.toJsonObj();
             this.clear();

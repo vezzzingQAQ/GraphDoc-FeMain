@@ -14,6 +14,7 @@ import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
 import { templateDyaList } from "./templateDyaList";
 import { addNodeList, imgInNode } from "./nodeAddList";
+import { loadingTipList } from "./loadgingTipList";
 
 let currentGraph = null;
 
@@ -89,7 +90,7 @@ export function openGraph(graph) {
             }
             reader.readAsText(elementInput.files[0]);
             reader.addEventListener("load", (readRes) => {
-                document.querySelector("#loadGraph").style.opacity = 1;
+                showLoadingPage();
                 window.setTimeout(() => {
                     userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
                     refreshGraphName();
@@ -331,7 +332,7 @@ export function openCode(graph) {
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
-            document.querySelector("#loadGraph").style.opacity = 1;
+            showLoadingPage();
             let reader;
             if (window.FileReader) {
                 reader = new FileReader();
@@ -363,7 +364,7 @@ export function openCode(graph) {
                     graph.load(data, true);
                     currentGraph = graph;
                 } catch (e) {
-                    document.querySelector("#loadGraph").style.opacity = 0;
+                    hideLoadingPage();
                     showCodeError(e.message);
                 }
             });
@@ -709,7 +710,7 @@ export async function showLoadFromCloud(graph) {
         domGraphTag.appendChild(domGraphTagClose);
 
         domGraphTagName.onclick = async () => {
-            document.querySelector("#loadGraph").style.opacity = 1;
+            showLoadingPage();
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
                 userConfig.currentGraphFileName = currentGraph.name;
@@ -734,7 +735,7 @@ export function showTemplate(graph) {
     for (let template of templateList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
-            document.querySelector("#loadGraph").style.opacity = 1;
+            showLoadingPage();
             userConfig.currentGraphFileName = template.showName;
             refreshGraphName();
             // 请求本地文件
@@ -766,7 +767,7 @@ export function showTemplateDya(graph) {
     for (let template of templateDyaList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
-            document.querySelector("#loadGraph").style.opacity = 1;
+            showLoadingPage();
             userConfig.currentGraphFileName = template.showName;
             refreshGraphName();
             // 请求本地文件
@@ -916,4 +917,19 @@ export function bindFileDropEvent(graph) {
     domDropContainer.ondragover = dragEvent;
     domDropContainer.ondrop = dragEvent;
     domDropContainer.ondragleave = dragEvent;
+}
+
+/**
+ * 弹出LOADGIN页面
+ */
+export function showLoadingPage() {
+    document.querySelector("#loadingTip").innerHTML = loadingTipList[Math.floor(Math.random() * loadingTipList.length)].text;
+    document.querySelector("#loadGraph").style.opacity = 1;
+}
+
+/**
+ * 隐藏LOADING页面
+ */
+export function hideLoadingPage() {
+    document.querySelector("#loadGraph").style.opacity = 0;
 }

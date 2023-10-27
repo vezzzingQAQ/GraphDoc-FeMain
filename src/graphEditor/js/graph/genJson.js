@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { ComponentMap } from "./component";
-import { loadGraphFromCode, showCodeError, showTextEditor } from "../event";
+import { loadGraphFromCode, showCodeError, showLoadingPage, showTextEditor } from "../event";
 
 let jsonValid = true;
 
@@ -72,7 +72,7 @@ export function bindData(key, name, data, info = "", type = "json") {
 
     function genGraph() {
         if (jsonValid) {
-            document.querySelector("#loadGraph").style.opacity = 1;
+            showLoadingPage();
             window.setTimeout(() => {
                 loadGraphFromCode();
             }, 300);
