@@ -2,6 +2,7 @@ function bind() {
     bindData("doc", "VGD文件", "", "打开一个VGD文件来生成", "vgd");
     bindData("filterWords", "过滤关键词", "图片,链接,null,undefined,style,公式,装饰节点,center", "不想要呈现的关键词", "text");
     bindData("bumpRadius", "碰撞半径", "1", "碰撞大小", "number");
+    bindData("textLog", "字体分布系数", "1", "不同字号之间的'差距'有多大", "number");
 }
 
 function main() {
@@ -73,7 +74,7 @@ function main() {
         node.addComponent("text_node");
         node.components["text_node"]["showText"] = currentTag.key;
         node.components["text_node"]["textColor"] = "#222222";
-        node.components["text_node"]["textSize"] = Math.floor((currentTag.num + 12) * currentTag.num * 0.5);
+        node.components["text_node"]["textSize"] = Math.floor(Math.log(currentTag.num + 1) * textLog * (currentTag.num + 12) * currentTag.num * 0.5);
 
         graph.addNode(node);
     }
