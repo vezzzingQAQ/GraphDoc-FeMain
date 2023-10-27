@@ -531,6 +531,12 @@ export class Graph {
             })
             .on("contextmenu", function (e) {
                 e.preventDefault();
+                if (!_.isZooming) {
+                    let edgeObj = d3.select(this).data()[0];
+                    _.initMenu_Edge(e, edgeObj);
+                } else {
+                    _.hideMenu();
+                }
             });
     }
 
@@ -2312,6 +2318,39 @@ export class Graph {
         ]
         this.initMenu(e, menu);
     }
+
+    /**
+     * 关系上右键菜单
+     */
+    initMenu_Edge(e, edgeObj) {
+        let _ = this;
+        let menu = [
+            {
+                name: "反向节点",
+                func: function () {
+                    _.pushUndo();
+                    let selectedEdgeList = _.selectedElementList.filter(ele => ele.type == "edge");
+                    if (selectedEdgeList.length != 0) {
+                        for (let selectedEdgeObj of selectedEdgeList) {
+                            let temp = selectedEdgeObj.source;
+                            selectedEdgeObj.source = selectedEdgeObj.target;
+                            selectedEdgeObj.target = temp;
+                            _.modifyEdgeExterior(selectedEdgeObj);
+                            _.modifyEdgePhysics();
+                        }
+                    } else {
+                        let temp = edgeObj.source;
+                        edgeObj.source = edgeObj.target;
+                        edgeObj.target = temp;
+                        _.modifyEdgeExterior(edgeObj);
+                        _.modifyEdgePhysics();
+                    }
+                }
+            }
+        ]
+        this.initMenu(e, menu);
+    }
+
 
     initMenu(e, menuObj) {
         let _ = this;
