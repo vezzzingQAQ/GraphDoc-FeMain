@@ -284,8 +284,8 @@ export class C_E_Exterior extends Component {
         aniDuration: 0
     }) {
         super(showName, key, false);
-        this.addValue("strokeColor", "描边颜色", new SC_ColorInput(value.strokeColor, false));
-        this.addValue("strokeStyle", "描边样式", new SC_Select(value.strokeStyle || "0", false, [
+        this.addValue("strokeColor", "线条颜色", new SC_ColorInput(value.strokeColor, false));
+        this.addValue("strokeStyle", "线条样式", new SC_Select(value.strokeStyle || "0", false, [
             { value: "0", text: "_______" },
             { value: "3,1", text: "-- -- -- " },
             { value: "2,1", text: "- - - -" },
@@ -295,7 +295,7 @@ export class C_E_Exterior extends Component {
             { value: "1,5", text: ".  .  .  ." },
             { value: "5,1", text: "___ ___ ___" },
         ]));
-        this.addValue("strokeType", "描边类型", new SC_Select(value.strokeType || "line", false, [
+        this.addValue("strokeType", "线条类型", new SC_Select(value.strokeType || "line", false, [
             { value: "line", text: "-------" },
             { value: "bezierH", text: "横向Bezier" },
             { value: "bezierV", text: "纵向Bezier" },
@@ -308,7 +308,7 @@ export class C_E_Exterior extends Component {
             { value: "pointer3", text: "->->->-" },
             { value: "pointer4", text: ">>>>>>>" },
         ]));
-        this.addValue("strokeWidth", "描边宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
+        this.addValue("strokeWidth", "线条宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
         this.addValue("dividerAni", "入场动画", new SC_Divider());
         this.addValue("aniDelayRand", "随机延时", new SC_NumberInput(value.aniDelayRand, false, 0, 1000, 0.1));
         this.addValue("aniDuration", "持续时间", new SC_NumberInput(value.aniDuration, false, 0, 1000, 0.1));
