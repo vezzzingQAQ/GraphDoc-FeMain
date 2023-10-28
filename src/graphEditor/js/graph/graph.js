@@ -577,12 +577,10 @@ export class Graph {
                 // 更新底部元素
                 _.refreshBottomDom("✨已选择节点，可以在右侧的属性面板修改节点的属性，双击节点编辑文字，按下shift创建关系");
                 // 按下shift的同时点击另一个节点，创建关系
-                if (_.isShiftDown && selectedNodeList.length >= 1) {
-                    let fromNode = selectedNodeList[selectedNodeList.length - 1];
-                    // 遍历所有链接判断是不是已经链接过了
+                function createLink(fromNode, toNode) {
                     let isLinked = false;
                     for (let edge of _.edgeList) {
-                        if (edge.source == fromNode && edge.target == nodeObj) {
+                        if (edge.source == fromNode && edge.target == toNode) {
                             isLinked = true;
                             break;
                         }
@@ -594,11 +592,11 @@ export class Graph {
 
                         let addedEdge;
                         if (!_.edgePrevJson) {
-                            addedEdge = CreateBasicEdge(nodeObj, fromNode);
+                            addedEdge = CreateBasicEdge(toNode, fromNode);
                         } else {
                             addedEdge = LoadEdgeFromJson(_.edgePrevJson, _.nodeList, false);
                             addedEdge.source = fromNode;
-                            addedEdge.target = nodeObj;
+                            addedEdge.target = toNode;
                             addedEdge.uuid = null;
                         }
                         addedEdge.autoSetValue("physics_edge", "linkDistance", Math.sqrt((fromNode.x - nodeObj.x) ** 2 + (fromNode.y - nodeObj.y) ** 2));
@@ -614,7 +612,14 @@ export class Graph {
 
                         // 初始化组件
                         _.modifyEdgeExterior(addedEdge);
-                        _.modifyEdgePhysics();
+                        window.setTimeout(() => {
+                            _.modifyEdgePhysics();
+                        }, 200);
+                    }
+                }
+                if (_.isShiftDown && selectedNodeList.length >= 1) {
+                    for (let fromNode of selectedNodeList) {
+                        createLink(fromNode, nodeObj);
                     }
                 }
             })
