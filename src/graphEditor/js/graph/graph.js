@@ -47,6 +47,7 @@ import {
 import { hideLoadingPage, saveGraph, showLoadingPage, showMessage } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
+import { getOS } from "../../../public/js/tools";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -111,6 +112,8 @@ export class Graph {
         this.edgePrevJson = null;
         // 是否显示坐标系
         this.isShowCoord = false;
+        // 判断所处的操作系统
+        this.os = getOS();
     }
 
     /**
@@ -365,10 +368,19 @@ export class Graph {
                             _.refreshBottomDom("🔑已按下shift，点击元素进行连接");
                             _.isShiftDown = true;
                         }
-                        if (e.keyCode == 17) {
-                            // 更新底部栏
-                            _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
-                            _.isControlDown = true;
+                        // 
+                        if (_.os == "Windows") {
+                            if (e.keyCode == 17) {
+                                // 更新底部栏
+                                _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
+                                _.isControlDown = true;
+                            }
+                        } else if (_.os == "Mac") {
+                            if (e.keyCode == 91) {
+                                // 更新底部栏
+                                _.refreshBottomDom("🔑已按下ctrl，点击元素进行加选，或者按下C/V进行复制粘贴");
+                                _.isControlDown = true;
+                            }
                         }
                         // alt
                         if (e.keyCode == 18) {
@@ -429,8 +441,13 @@ export class Graph {
                     if (e.target == this) {
                         if (e.keyCode == 16)
                             _.isShiftDown = false;
-                        if (e.keyCode == 17)
-                            _.isControlDown = false;
+                        if (_.os == "Windows") {
+                            if (e.keyCode == 17)
+                                _.isControlDown = false;
+                        } else if (_.os == "Mac") {
+                            if (e.keyCode == 91)
+                                _.isControlDown = false;
+                        }
                         if (e.keyCode == 18)
                             _.isAltDown = false;
                     }
