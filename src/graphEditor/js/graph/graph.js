@@ -2285,22 +2285,44 @@ export class Graph {
             {
                 name: "自动换行",
                 func: function () {
-                    if (nodeObj.hasComponent("text_node")) {
-                        _.pushUndo();
-                        let text = nodeObj.autoGetValue("text_node", "showText");
-                        let lineList = text.split("\n");
-                        let newText = "";
-                        for (let i = 0; i < lineList.length; i++) {
-                            let currentLine = lineList[i];
-                            let j = 0;
-                            for (j = 0; j < currentLine.length; j += MAX_LINE_LENGTH) {
-                                newText += `${currentLine.slice(j, j + MAX_LINE_LENGTH)}\n`;
+                    let selectedNodeList = _.selectedElementList.filter(ele => ele.type == "node");
+                    _.pushUndo();
+                    if (selectedNodeList.length != 0) {
+                        for (let selectedNodeObj of selectedNodeList) {
+                            if (selectedNodeObj.hasComponent("text_node")) {
+                                let text = selectedNodeObj.autoGetValue("text_node", "showText");
+                                let lineList = text.split("\n");
+                                let newText = "";
+                                for (let i = 0; i < lineList.length; i++) {
+                                    let currentLine = lineList[i];
+                                    let j = 0;
+                                    for (j = 0; j < currentLine.length; j += MAX_LINE_LENGTH) {
+                                        newText += `${currentLine.slice(j, j + MAX_LINE_LENGTH)}\n`;
+                                    }
+                                    newText += `${currentLine.slice(j)}\n`;
+                                }
+                                selectedNodeObj.autoSetValue("text_node", "showText", newText);
+                                _.modifyNodeExterior(selectedNodeObj);
+                                _.modifyNodePhysics();
                             }
-                            newText += `${currentLine.slice(j)}\n`;
                         }
-                        nodeObj.autoSetValue("text_node", "showText", newText);
-                        _.modifyNodeExterior(nodeObj);
-                        _.modifyNodePhysics();
+                    } else {
+                        if (nodeObj.hasComponent("text_node")) {
+                            let text = nodeObj.autoGetValue("text_node", "showText");
+                            let lineList = text.split("\n");
+                            let newText = "";
+                            for (let i = 0; i < lineList.length; i++) {
+                                let currentLine = lineList[i];
+                                let j = 0;
+                                for (j = 0; j < currentLine.length; j += MAX_LINE_LENGTH) {
+                                    newText += `${currentLine.slice(j, j + MAX_LINE_LENGTH)}\n`;
+                                }
+                                newText += `${currentLine.slice(j)}\n`;
+                            }
+                            nodeObj.autoSetValue("text_node", "showText", newText);
+                            _.modifyNodeExterior(nodeObj);
+                            _.modifyNodePhysics();
+                        }
                     }
                 }
             },
