@@ -612,14 +612,14 @@ export class Graph {
 
                         // 初始化组件
                         _.modifyEdgeExterior(addedEdge);
-                        window.setTimeout(() => {
-                            _.modifyEdgePhysics();
-                        }, 200);
                     }
                 }
                 if (_.isShiftDown && selectedNodeList.length >= 1) {
                     for (let fromNode of selectedNodeList) {
                         createLink(fromNode, nodeObj);
+                        window.setTimeout(() => {
+                            _.modifyEdgePhysics();
+                        }, Math.random * 300);
                     }
                 }
             })
