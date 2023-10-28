@@ -39,7 +39,9 @@ import {
     showImgExport,
     showMessage,
     refreshShowCoord,
-    bindFileDropEvent
+    bindFileDropEvent,
+    extractAllNode,
+    refreshGraph
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -222,6 +224,16 @@ export async function bindEvents(graph) {
     // bug反馈窗口
     document.querySelector("#btnBugReport").addEventListener("click", () => {
         showBugReport();
+    })
+
+    // 提取所有节点关键词
+    document.querySelector("#btnExtractAll").addEventListener("click", () => {
+        extractAllNode(graph);
+    })
+
+    // 刷新图谱
+    document.querySelector("#btnRefresh").addEventListener("click", () => {
+        refreshGraph(graph);
     })
 
 

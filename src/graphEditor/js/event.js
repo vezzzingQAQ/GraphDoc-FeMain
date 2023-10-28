@@ -933,3 +933,17 @@ export function showLoadingPage() {
 export function hideLoadingPage() {
     document.querySelector("#loadGraph").style.opacity = 0;
 }
+
+/**
+ * 提取所有节点关键词
+ */
+export function extractAllNode(graph) {
+    graph.extractAllNode();
+}
+
+/**
+ * 刷新图谱
+ */
+export function refreshGraph(graph){
+    graph.reload();
+}

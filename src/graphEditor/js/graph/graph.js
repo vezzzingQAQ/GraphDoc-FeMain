@@ -2164,6 +2164,18 @@ export class Graph {
     }
 
     /**
+     * 提取所有节点TAG
+     */
+    async extractAllNode() {
+        for (let cNodeObj of this.nodeList) {
+            this.extractNode(cNodeObj);
+        }
+        window.setTimeout(() => {
+            showMessage(`关键词提取完成,共${this.nodeList.length}个节点`);
+        }, 700);
+    }
+
+    /**
      * 在空白处点击的菜单
      */
     initMenu_Svg(e) {
@@ -2223,14 +2235,7 @@ export class Graph {
             {
                 name: "提取所有节点关键词",
                 func: async function () {
-                    // let taggedNodeList = _.nodeList.filter(nodeObj => nodeObj.hasComponent("text_node"));
-
-                    for (let cNodeObj of _.nodeList) {
-                        _.extractNode(cNodeObj);
-                    }
-                    window.setTimeout(() => {
-                        showMessage(`关键词提取完成,共${_.nodeList.length}个节点`);
-                    }, 700);
+                    _.extractAllNode();
                 }
             }
         ]
@@ -2536,12 +2541,12 @@ export class Graph {
      * 重新加载图谱
      */
     reload() {
-        showLoadingPage();
-        window.setTimeout(() => {
-            let graphJson = this.toJsonObj();
-            this.clear();
-            this.load(graphJson, false);
-        }, 300);
+        // showLoadingPage();
+        // window.setTimeout(() => {
+        let graphJson = this.toJsonObj();
+        this.clear();
+        this.load(graphJson, false);
+        // }, 300);
         // 清空组件列表
         document.querySelector(".panArea .listPan").innerHTML = "";
         document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
