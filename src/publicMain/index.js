@@ -2,8 +2,10 @@ import { listPublicGraph, listUser } from "../public/js/serverCom";
 import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, LAW_LINK, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.jpg";
+import { setWindowIcon } from "../public/js/iconSetter";
 
 window.addEventListener("load", async () => {
+    setWindowIcon();
     let graphListResponse = await listPublicGraph();
     let userListResponse = await listUser();
     if (graphListResponse.state == 1 && userListResponse.state == 1) {

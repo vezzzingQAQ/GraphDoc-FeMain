@@ -5,8 +5,10 @@ import { getQueryVariable } from "../public/js/tools";
 import { AVATAR_UPLOAD_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, AVATAR_STORE_PATH } from "./../public/js/urls";
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.jpg";
+import { setWindowIcon } from "../public/js/iconSetter";
 
 window.addEventListener("load", async () => {
+    setWindowIcon();
     let uid = getQueryVariable("uid");
     let visitedUserData = await getOUtherData(uid);
     document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${visitedUserData.data.msg.avatar}`;
