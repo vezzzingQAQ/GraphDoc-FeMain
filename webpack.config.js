@@ -13,7 +13,7 @@ const webpack = require("webpack");
 // TYPE
 // · production-生产环境
 // · development-开发环境
-const PACK_MODE = "development";
+const PACK_MODE = "production";
 const DEPLOY_MODE = "self";
 const APP_MODE = "web";
 
