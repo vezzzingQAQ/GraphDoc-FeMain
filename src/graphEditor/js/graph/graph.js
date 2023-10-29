@@ -229,7 +229,7 @@ export class Graph {
                         path.lineTo(50000, 0);
                         return path.toString();
                     })
-                    .style("stroke", "rgba(150,150,150,0.8)");
+                    .style("stroke", "rgba(150,150,150,1)");
                 d3.select("#bottomLayer").append("path")
                     .attr("class", "coordLine")
                     .attr("d", () => {
@@ -238,7 +238,7 @@ export class Graph {
                         path.lineTo(0, 50000);
                         return path.toString();
                     })
-                    .style("stroke", "rgba(150,150,150,0.8)");
+                    .style("stroke", "rgba(150,150,150,1)");
                 d3.select("#bottomLayer").append("path")
                     .attr("class", "coordLine")
                     .attr("d", () => {
@@ -247,7 +247,7 @@ export class Graph {
                         path.lineTo(_.renderProperties.svg.attr("width") / 2, 50000);
                         return path.toString();
                     })
-                    .style("stroke", "rgba(250,150,150,0.8)");
+                    .style("stroke", "rgba(250,150,150,1)");
                 d3.select("#bottomLayer").append("path")
                     .attr("class", "coordLine")
                     .attr("d", () => {
@@ -265,7 +265,7 @@ export class Graph {
                         path.lineTo(_.renderProperties.svg.attr("width"), 50000);
                         return path.toString();
                     })
-                    .style("stroke", "rgba(150,250,150,0.8)");
+                    .style("stroke", "rgba(50,150,150,0.8)");
                 d3.select("#bottomLayer").append("path")
                     .attr("class", "coordLine")
                     .attr("d", () => {
@@ -274,11 +274,11 @@ export class Graph {
                         path.lineTo(50000, _.renderProperties.svg.attr("height"));
                         return path.toString();
                     })
-                    .style("stroke", "rgba(150,250,150,0.8)");
+                    .style("stroke", "rgba(50,150,150,0.8)");
                 d3.selectAll(".coordLine")
                     .style("fill", "none")
                     .style("opacity", _.isShowCoord ? 1 : 0)
-                    .style("stroke-width", 0.5)
+                    .style("stroke-width", 1)
                     .style("transition", "0.3s ease-in-out");
             }
             drawCoord();
