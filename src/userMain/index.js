@@ -48,6 +48,12 @@ window.addEventListener("load", async () => {
                         } else {
                             alert("你的浏览器不支持访问本地文件");
                         }
+                        // 限制头像大小
+                        let maxSize = 5;
+                        if (elementInput.files[0].size > 1024 * 1024 * maxSize) {
+                            alert("请上传小于5M的图作为头像( ´･･)ﾉ(._.`)");
+                            return;
+                        }
                         reader.readAsText(elementInput.files[0]);
                         reader.addEventListener("load", () => {
                             let formData = new FormData();
