@@ -2552,12 +2552,12 @@ export class Graph {
      * 重新加载图谱
      */
     reload() {
-        // showLoadingPage();
-        // window.setTimeout(() => {
-        let graphJson = this.toJsonObj();
-        this.clear();
-        this.load(graphJson, false);
-        // }, 300);
+        showLoadingPage();
+        window.setTimeout(() => {
+            let graphJson = this.toJsonObj();
+            this.clear();
+            this.load(graphJson, false);
+        }, 300);
         // 清空组件列表
         document.querySelector(".panArea .listPan").innerHTML = "";
         document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
