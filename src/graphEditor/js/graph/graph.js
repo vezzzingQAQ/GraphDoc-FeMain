@@ -31,6 +31,7 @@ import "highlight.js/styles/ir-black.css";
 import { marked } from "marked";
 import katex from "katex";
 import QRCode from "qrcode";
+import loadingImg from "./../../../asset/img/loadingImg.jpg";
 
 import { CreateBasicEdge, CreateBasicNode, CreateCodeNode, CreateImgNode, CreateLatexNode, CreateLinkNode, CreateMdNode, CreateTextNode, CreateVideoNode, LoadEdgeFromJson, LoadNodeFromJson } from "./element";
 import { playMusic } from "../../../public/js/musicPlayer";
@@ -1610,8 +1611,10 @@ export class Graph {
                 .attr("class", "nodeImg")
                 // .attr("src", d => d.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .style("display", "block")
+                .attr("alt", "图片加载中")
                 .style("width", d => d.autoGetValue("img_node", "width", "200px"))
                 .attr("class", "nodeImg")
+                .attr("src", loadingImg)
                 .attr("dataSource", nodeObj.autoGetValue("img_node", "path", "#", value => IMG_STORE_PATH + value))
                 .on("load", function () {
                     calSize();
