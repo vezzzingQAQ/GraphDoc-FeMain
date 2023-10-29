@@ -293,14 +293,18 @@ export class Graph {
             .data(_.edgeList, d => d.uuid)
             .enter()
             .append("g")
-        _.initEdges(_.edges);
+            .call(d => {
+                _.initEdges(d);
+            });
 
         // 绘制node
         _.nodes = d3.select("#nodeLayer").selectAll(".forceNode")
             .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
-        _.initNodes(_.nodes);
+            .call(d => {
+                _.initNodes(d);
+            });
 
         function initElements() {
             // 开始的时候先全部更新一遍，装入数据
@@ -625,8 +629,10 @@ export class Graph {
                             .data(_.edgeList, d => d.uuid)
                             .enter()
                             .append("g")
+                            .call(d => {
+                                _.initEdges(d);
+                            })
                             .merge(_.edges);
-                        _.initEdges(_.edges);
 
                         // 初始化组件
                         _.modifyEdgeExterior(addedEdge);
@@ -1419,8 +1425,10 @@ export class Graph {
             .data(_.edgeList, d => d.uuid)
             .enter()
             .append("g")
-            .merge(_.edges);
-        _.initEdges(_.edges);
+            .call(d => {
+                _.initEdges(d);
+            })
+            .merge(_.edges)
 
         // 初始化组件
         _.modifyEdgeExterior(addedEdge);
