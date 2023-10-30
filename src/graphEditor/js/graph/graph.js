@@ -1252,8 +1252,10 @@ export class Graph {
         this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
             .enter()
             .append("g")
+            .call(d => {
+                this.initNodes(d);
+            })
             .merge(this.nodes);
-        this.initNodes(this.nodes);
         for (let pastedNodeObj of pastedNodeObjs) {
             this.modifyNodeExterior(pastedNodeObj);
         }
@@ -1274,8 +1276,10 @@ export class Graph {
             .data(this.edgeList, d => d.uuid)
             .enter()
             .append("g")
+            .call(d => {
+                this.initEdges(d);
+            })
             .merge(this.edges);
-        this.initEdges(this.edges);
         for (let pastedEdgeObj of pastedEdgeObjs) {
             this.modifyEdgeExterior(pastedEdgeObj);
         }
@@ -1350,8 +1354,10 @@ export class Graph {
             .data(_.nodeList, d => d.uuid)
             .enter()
             .append("g")
+            .call(d => {
+                _.initNodes(d);
+            })
             .merge(_.nodes);
-        _.initNodes(_.nodes);
 
         // 初始化组件
         _.modifyNodeExterior(addedNode);
@@ -1393,8 +1399,10 @@ export class Graph {
         this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
             .enter()
             .append("g")
+            .call(d => {
+                this.initNodes(d);
+            })
             .merge(this.nodes);
-        this.initNodes(this.nodes);
         for (let pastedNodeObj of pastedNodeObjs) {
             this.modifyNodeExterior(pastedNodeObj);
         }
