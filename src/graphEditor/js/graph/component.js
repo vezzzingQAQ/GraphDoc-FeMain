@@ -378,7 +378,8 @@ export class C_N_Text extends Component {
         textFont: "'Courier New', Courier, monospace",
         textSize: 12,
         textSpacing: 0,
-        textWeight: 5
+        textWeight: 5,
+        textAlign: "left"
     }) {
         super(showName, key, true);
         this.addValue("showText", "文本内容", new SC_Textarea(value.showText, false));
@@ -400,6 +401,11 @@ export class C_N_Text extends Component {
         this.addValue("textSize", "文字大小", new SC_NumberInput(value.textSize, false, 0, Infinity));
         this.addValue("textSpacing", "字间距", new SC_NumberInput(value.textSpacing, false, 0, Infinity));
         this.addValue("textWeight", "字体粗细", new SC_NumberInput(value.textWeight, false, 0, 10));
+        this.addValue("textAlign", "对齐方向", new SC_Select(value.textAlign, false, [
+            { value: "left", text: "左对齐" },
+            { value: "center", text: "居中" },
+            { value: "right", text: "右对齐" }
+        ]));
     }
 }
 

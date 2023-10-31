@@ -1590,6 +1590,7 @@ export class Graph {
                 }))
                 .style("letter-spacing", d => d.autoGetValue("text_node", `textSpacing`, "0", value => `${value}px`))
                 .style("font-weight", d => d.autoGetValue("text_node", "textWeight", 100, value => value * 100))
+                .style("text-align", d => d.autoGetValue("text_node", "textAlign", "left"))
 
         if (domAddedNodeCode) {
             domAddedNodeCode
