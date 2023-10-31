@@ -562,12 +562,14 @@ export class C_N_Iframe extends Component {
     constructor(showName, key, value = {
         src: "#",
         width: 200,
-        height: 200
+        height: 200,
+        interactive: false
     }) {
         super(showName, key, true);
         this.addValue("src", "地址", new SC_UrlInput(value.src, false));
         this.addValue("width", "宽度", new SC_NumberInput(value.width, false, 0, 20000, 1));
         this.addValue("height", "高度", new SC_NumberInput(value.height, false, 0, 20000, 1));
+        this.addValue("interactive", "可交互", new SC_Check(value.interactive, false, false));
     }
 }
 

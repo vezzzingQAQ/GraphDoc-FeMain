@@ -1680,6 +1680,13 @@ export class Graph {
                 .attr("height", d => d.autoGetValue("iframe_node", "height", 200))
                 .attr("src", d => d.autoGetValue("iframe_node", "src", "#"))
                 .style("margin", "20px")
+                .style("pointer-events", d => {
+                    if (d.autoGetValue("iframe_node", "interactive", false)) {
+                        return "all";
+                    } else {
+                        return "none";
+                    }
+                })
 
         if (domAddedNodeMd)
             domAddedNodeMd
