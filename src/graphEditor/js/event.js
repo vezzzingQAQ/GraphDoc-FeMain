@@ -6,9 +6,9 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH } from "../../public/js/urls";
-import { delCookie, getCookie, getQueryVariable, setCookie } from "../../public/js/tools";
-import { configGraph, deleteGraph, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud } from "../../public/js/serverCom";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH, NODE_UPLOAD_PATH } from "../../public/js/urls";
+import { delCookie, deleteLocalStorage, getCookie, getLocalStorage, getQueryVariable, setCookie, setLocalStorage } from "../../public/js/tools";
+import { configGraph, deleteGraph, getBlobContent, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud, uploadNodeBlob } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
@@ -26,8 +26,7 @@ export let userConfig = {
     username: null,
     uid: null,
     isFullScreen: false,
-    isEditMode: true,
-    addNodeAreaSlideUp: false
+    isEditMode: true
 }
 
 /**
@@ -408,7 +407,7 @@ export function refreshFullScreen(graph, refresh = true) {
         document.querySelector(".topArea").style.top = "5px";
         document.querySelector(".panArea").style.display = "none";
         document.querySelector(".dyaTemplateArea").style.display = "none";
-        document.querySelector(".addNodeArea").style.display = "none";
+        document.querySelector(".leftBarArea").style.display = "none";
         document.querySelector("#fullScreenBtn").innerHTML = `| 全屏模式<i class="fa fa-cube"></i>`;
     } else {
         // 窗口模式
@@ -419,7 +418,7 @@ export function refreshFullScreen(graph, refresh = true) {
         document.querySelector(".mainMenu").style.zIndex = 99;
         document.querySelector(".topArea").style.top = document.querySelector(".mainMenu").offsetHeight + 5 + "px";
         document.querySelector(".panArea").style.display = "block";
-        document.querySelector(".addNodeArea").style.display = "block";
+        document.querySelector(".leftBarArea").style.display = "flex";
         document.querySelector("#fullScreenBtn").innerHTML = `| 窗口模式<i class="fa fa-cube"></i>`;
     }
 }
@@ -472,7 +471,7 @@ function addTpNode(nodeTp, graph) {
  * 加载节点添加列表
  */
 export function initNodeAddWindow(graph) {
-    let domContainer = document.querySelector(".addNodeArea .content ul");
+    let domContainer = document.querySelector("#addNodeArea ul");
     for (let i = 0; i < addNodeList.length; i++) {
         let currentNodeTp = addNodeList[i];
         let nodeContainer = document.createElement("li");
@@ -813,6 +812,60 @@ export function showTemplateDya(graph) {
     showCenterWindow(document.querySelector("#windowTemplateDya"));
 }
 
+/**
+ * 保存自定义节点
+ */
+export function showSaveNodeTemplate(nodeString, nodeDom, nodeObj, graph) {
+    showCenterWindow(document.querySelector("#windowSaveNodeTemplate"));
+    document.querySelector("#nodeNameInput").oninput = function () {
+
+    }
+    document.querySelector("#nodeNameAccept").onclick = async function () {
+        // 生成自定义节点的预览图片
+        let scale = 0.2;
+        // 暂时删除blob
+        let blobTemp = nodeDom.getAttribute("src");
+        let imgDom = nodeDom.querySelector(".nodeImg");
+        if (imgDom)
+            imgDom.setAttribute("src", imgDom.getAttribute("datasource"));
+        let svgData = new XMLSerializer().serializeToString(nodeDom)
+        let svgDataBase64 = btoa(unescape(encodeURIComponent(svgData)))
+        let svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`
+        // 图片上传服务器
+        let response = await uploadNodeBlob(svgDataUrl);
+        if (response.state == 1) {
+            let nodeStorage = getLocalStorage("gd_nodeTemplate");
+            let nodeImgUrl = (await getBlobContent(response.msg.filename)).msg.content;
+            // 更新LocalStorage
+            if (!nodeStorage) {
+                nodeStorage = "[]";
+            }
+            nodeStorage = JSON.parse(nodeStorage);
+            nodeStorage.push(
+                {
+                    showName: document.querySelector("#nodeNameInput").value,
+                    nodeString: JSON.stringify([nodeString]),
+                    imgUrl: nodeImgUrl
+                }
+            )
+            setLocalStorage("gd_nodeTemplate", JSON.stringify(nodeStorage));
+            refreshNodeTemplate(graph);
+            // blob重新更新
+            if (imgDom) {
+                imgDom.setAttribute("src", blobTemp);
+                graph.modifyNodeExterior(nodeObj)
+            }
+            hideCenterWindow(document.querySelector("#windowSaveNodeTemplate"));
+        } else {
+            console.log("文件上传失败");
+            // blob重新更新
+            if (imgDom) {
+                imgDom.setAttribute("src", blobTemp);
+                graph.modifyNodeExterior(nodeObj)
+            }
+        }
+    }
+}
 
 function showCenterWindow(selector) {
     document.querySelectorAll(".hint").forEach(dom => {
@@ -842,25 +895,27 @@ export function hideDyaTemplateArea() {
 }
 
 /**
- * 收起节点面板
+ * 收起或者打开指定的节点面板
  */
-export function refreshAddNodeArea() {
-    if (!userConfig.addNodeAreaSlideUp) {
-        document.querySelector(".addNodeArea .content").style.opacity = 0;
-        document.querySelector(".addNodeArea .content").style.pointerEvents = "none";
-        document.querySelector(".addNodeArea").style.width = "30px";
-        document.querySelector(".addNodeArea .title #slideUpBtn").classList = "fa fa-angle-double-right";
-        document.querySelector(".addNodeArea .title .icon").style.display = "none";
-        document.querySelector(".addNodeArea .title p").style.display = "none";
+export function refreshAddNodeArea(domId) {
+    if (document.querySelector(`#${domId} .title .slideUpBtn`).classList == "slideUpBtn fa fa-angle-double-left") {
+        document.querySelector(`#${domId} .content`).style.opacity = 0;
+        document.querySelector(`#${domId} .content`).style.pointerEvents = "none";
+        document.querySelector(`#${domId}`).style.width = "30px";
+        document.querySelector(`#${domId}`).style.height = "50px";
+        document.querySelector(`#${domId} .title .slideUpBtn`).classList = "slideUpBtn fa fa-angle-double-right";
+        document.querySelector(`#${domId} .title .icon`).style.display = "none";
+        document.querySelector(`#${domId} .title p`).style.display = "none";
     } else {
-        document.querySelector(".addNodeArea .content").style.opacity = 1;
-        document.querySelector(".addNodeArea .content").style.pointerEvents = "all";
-        document.querySelector(".addNodeArea").style.width = "163px";
-        document.querySelector(".addNodeArea .title #slideUpBtn").classList = "fa fa-angle-double-left";
-        document.querySelector(".addNodeArea .title .icon").style.display = "inline";
-        document.querySelector(".addNodeArea .title p").style.display = "inline";
+        document.querySelector(`#${domId} .content`).style.opacity = 1;
+        document.querySelector(`#${domId} .content`).style.pointerEvents = "all";
+        document.querySelector(`#${domId}`).style.width = "163px";
+        document.querySelector(`#${domId}`).style.height = "max-content";
+        document.querySelector(`#${domId} .title .slideUpBtn`).classList = "slideUpBtn fa fa-angle-double-left";
+        document.querySelector(`#${domId} .title .icon`).style.display = "inline";
+        document.querySelector(`#${domId} .title p`).style.display = "inline";
     }
-    userConfig.addNodeAreaSlideUp = !userConfig.addNodeAreaSlideUp;
+    userConfig.leftBarWindowSlideUp = !userConfig.leftBarWindowSlideUp;
 }
 
 /**
@@ -944,6 +999,35 @@ export function extractAllNode(graph) {
 /**
  * 刷新图谱
  */
-export function refreshGraph(graph){
+export function refreshGraph(graph) {
     graph.reload();
+}
+
+/**
+ * 更新自定义节点列表
+ */
+export function refreshNodeTemplate(graph) {
+    let nodeStorage = getLocalStorage("gd_nodeTemplate");
+    console.log(nodeStorage)
+    if (!nodeStorage) {
+        nodeStorage = "[]";
+        console.log(1)
+    }
+    nodeStorage = JSON.parse(nodeStorage);
+    console.log(nodeStorage);
+    let domContainer = document.querySelector("#selfNodeArea ul");
+    domContainer.innerHTML = "";
+    for (let i = 0; i < nodeStorage.length; i++) {
+        let currentNodeTp = nodeStorage[i];
+        console.log(currentNodeTp)
+        let nodeContainer = document.createElement("li");
+        let nodeImg = document.createElement("img");
+        nodeImg.src = `${currentNodeTp.imgUrl}`;
+        nodeContainer.title = currentNodeTp.showName;
+        nodeContainer.appendChild(nodeImg);
+        nodeContainer.onclick = function () {
+            addTpNode(currentNodeTp, graph);
+        }
+        domContainer.appendChild(nodeContainer);
+    }
 }

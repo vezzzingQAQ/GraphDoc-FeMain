@@ -49,14 +49,28 @@ T E C H vezzzing
                 </defs>
             </svg>
         </div>
-        <div class="addNodeArea">
-            <div class="title"><i class="icon fa fa-list-ul"></i>
-                <p> 节点模板</p><i id="slideUpBtn" class="fa fa-angle-double-left"></i>
-            </div>
-            <div class="content">
-                <ul>
+        <div class="leftBarArea">
+            <div class="leftBarWindow" id="addNodeArea">
+                <div class="title"><i class="icon fa fa-list-ul"></i>
+                    <p> 节点模板</p><i class="slideUpBtn fa fa-angle-double-left"></i>
+                </div>
+                <div class="content">
+                    <ul>
 
-                </ul>
+                    </ul>
+                </div>
+            </div>
+            <div class="leftBarWindow" id="selfNodeArea">
+                <div class="title"><i class="icon fa fa-list-ul"></i>
+                    <p> 自定义模板</p><i class="slideUpBtn fa fa-angle-double-left"></i>
+                </div>
+                <div class="content">
+                    <p class="info">还在施工</p>
+                    <p class="info">以后再来探索吧</p>
+                    <ul>
+
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="panArea">
@@ -421,7 +435,7 @@ T E C H vezzzing
             </div>
         </div>
         <!--位图导出-->
-        <div class="centerWindow" id="windowExportImg">
+        <div class="centerWindow normWindow" id="windowExportImg">
             <div class="bg"></div>
             <div class="main">
                 <div class="title">
@@ -432,6 +446,21 @@ T E C H vezzzing
                     <p class="info">PS:导出过大的图片可能导致出不了图...</p>
                     <p class="info">14倍差不多是极限了</p>
                     <button class="btn" id="btnImgExport">导出</button>
+                </div>
+            </div>
+        </div>
+        <!--自定义节点输入框-->
+        <div class="centerWindow normWindow" id="windowSaveNodeTemplate">
+            <div class="bg"></div>
+            <div class="main">
+                <div class="title">
+                    <p><i class="fa fa-cube"></i>自定义节点</p><span class="centerWindowCloseBtn">×</span>
+                </div>
+                <div class="content">
+                    <input id="nodeNameInput" type="text" placeholder="自定义节点名称">
+                    <p class="info">输入自定义节点的名称</p>
+                    <p class="info">鼠标在节点悬停时会显示名称</p>
+                    <button class="btn" id="nodeNameAccept">确定</button>
                 </div>
             </div>
         </div>

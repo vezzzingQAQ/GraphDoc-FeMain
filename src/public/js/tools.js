@@ -60,3 +60,18 @@ export function getOS() {
         return "NUll";
     }
 }
+
+// 设置localStorage内容
+export function setLocalStorage(key, data) {
+    window.localStorage.setItem(key, data);
+}
+
+// 获取localStorage内容
+export function getLocalStorage(key) {
+    return window.localStorage.getItem(key) != "null" ? window.localStorage.getItem(key) : null;
+}
+
+// 删除指定localStorage
+export function deleteLocalStorage(key) {
+    window.localStorage.removeItem(key);
+}

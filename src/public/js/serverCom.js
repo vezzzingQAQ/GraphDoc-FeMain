@@ -2,7 +2,9 @@ import axios from "axios";
 import { getCookie } from "./tools";
 import {
     EXTRACT_TEXT,
+    GET_NODE_STORE,
     LIST_PUBLIC_GRAPH,
+    NODE_UPLOAD_PATH,
     USER_CONFIG_GRAPH,
     USER_DATA,
     USER_DELETE_GRAPH,
@@ -222,6 +224,40 @@ export async function extractText(text, type = "text") {
     formData.append('type', type)
     let response = await axios({
         url: EXTRACT_TEXT,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 上传节点blob
+ */
+export async function uploadNodeBlob(blob) {
+    let formData = new FormData();
+    formData.append("node", blob);
+    let response = await axios({
+        url: NODE_UPLOAD_PATH,
+        method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        data: formData
+    });
+    return response.data;
+}
+
+/**
+ * 获取指定节点blob
+ */
+export async function getBlobContent(filename){
+    let formData = new FormData();
+    formData.append("gdbid", filename);
+    let response = await axios({
+        url: GET_NODE_STORE,
         method: "POST",
         headers: {
             "Content-Type": "multipart/form-data"

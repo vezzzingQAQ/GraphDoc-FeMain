@@ -45,7 +45,7 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
-import { hideLoadingPage, saveGraph, showLoadingPage, showMessage } from "../event";
+import { hideLoadingPage, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
@@ -2381,6 +2381,16 @@ export class Graph {
                     _.extractNode(nodeObj, obj => {
                         obj.initHtml();
                     });
+                }
+            },
+            {
+                divider: true
+            },
+            {
+                name: "添加到模板",
+                func: function () {
+                    let nodeString = nodeObj.toJsonObj();
+                    showSaveNodeTemplate(nodeString, document.querySelector(`#${nodeObj.uuid}`), nodeObj, _);
                 }
             }
         ]

@@ -41,7 +41,8 @@ import {
     refreshShowCoord,
     bindFileDropEvent,
     extractAllNode,
-    refreshGraph
+    refreshGraph,
+    refreshNodeTemplate
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -218,9 +219,9 @@ export async function bindEvents(graph) {
     })
 
     // 展开收起节点添加面板
-    document.querySelector("#slideUpBtn").addEventListener("click", () => {
-        refreshAddNodeArea();
-    })
+    document.querySelectorAll(".slideUpBtn").forEach(ele => ele.addEventListener("click", () => {
+        refreshAddNodeArea(ele.parentElement.parentElement.id);
+    }))
 
     // bug反馈窗口
     document.querySelector("#btnBugReport").addEventListener("click", () => {
@@ -268,6 +269,9 @@ export async function bindEvents(graph) {
 
     // 节点添加窗口
     initNodeAddWindow(graph);
+
+    // 自定义模板窗口
+    refreshNodeTemplate(graph);
 
     // 隐藏动态组件
     hideDyaTemplateArea();

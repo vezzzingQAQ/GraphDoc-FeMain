@@ -77,62 +77,76 @@ body {
             position: relative;
         }
 
-        .addNodeArea {
+        .leftBarArea {
             position: fixed;
             left: 0;
             top: calc(@menu_height + 100px);
             width: 163px;
-            height: calc(100vh - @menu_height * 2 -30px);
+            display: flex;
+            flex-direction: column;
 
-            .title {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                height: @add_pan_title_height;
-                line-height: @add_pan_title_height;
-                font-size: 14px;
-                padding-left: 10px;
-                letter-spacing: 2px;
-                transition: 0.3s ease-in-out;
+            .leftBarWindow {
+                width: 163px;
+                height: calc(100vh - @menu_height * 2 -30px);
+                margin-bottom: 20px;
 
-                p {
-                    margin-left: 4px;
-                }
-
-                #slideUpBtn {
-                    float: right;
-                    text-align: right;
-                    flex-grow: 2;
-                    line-height: @add_pan_title_height;
-                    cursor: pointer;
-                    margin-right: 5px;
-                    border-radius: @normal_border_radius;
-                }
-            }
-
-            .content {
-                ul {
+                .title {
                     display: flex;
-                    flex-wrap: wrap;
-                    padding-top: 5px;
-                    padding-bottom: 5px;
-                    padding-left: 0;
-                    padding-right: 0;
+                    flex-direction: row;
+                    align-items: center;
+                    height: @add_pan_title_height;
+                    line-height: @add_pan_title_height;
+                    font-size: 14px;
+                    padding-left: 10px;
+                    letter-spacing: 2px;
+                    transition: 0.3s ease-in-out;
+                    cursor: default;
 
-                    li {
-                        width: 30px;
-                        height: 30px;
-                        margin: 5px;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        background-size: cover;
+                    p {
+                        margin-left: 4px;
+                    }
+
+                    .slideUpBtn {
+                        float: right;
+                        text-align: right;
+                        flex-grow: 2;
+                        line-height: @add_pan_title_height;
                         cursor: pointer;
-                        list-style: none;
-                        overflow: hidden;
-                        transition: 0.05s ease-in-out;
+                        margin-right: 5px;
+                        border-radius: @normal_border_radius;
+                    }
+                }
 
-                        &:hover {
-                            transform: scale(1.1);
+                .content {
+                    .info {
+                        padding-left: 4px;
+                        padding-top: 4px;
+                        font-size: 12px;
+                    }
+
+                    ul {
+                        display: flex;
+                        flex-wrap: wrap;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        padding-left: 0;
+                        padding-right: 0;
+
+                        li {
+                            width: 30px;
+                            height: 30px;
+                            margin: 5px;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: cover;
+                            cursor: pointer;
+                            list-style: none;
+                            overflow: hidden;
+                            transition: 0.05s ease-in-out;
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
                         }
                     }
                 }
@@ -377,7 +391,7 @@ body {
         background-color: rgb(6, 6, 6);
     }
 
-    .addNodeArea {
+    .leftBarWindow {
         .title {
             background-color: @bg_color_d_title;
             color: @fg_color_d_1;
@@ -390,6 +404,10 @@ body {
                 background-color: rgb(80, 80, 80);
                 border-radius: @small_border_radius;
                 border: 1px solid rgba(255, 255, 255, 0.211);
+            }
+
+            .info {
+                color: @fg_color_d_1;
             }
         }
     }
@@ -495,7 +513,7 @@ body {
 
     }
 
-    .addNodeArea {
+    .leftBarWindow {
         .title {
             background-color: @bg_color_l_title;
             color: @fg_color_l_1;
@@ -508,6 +526,10 @@ body {
                 background-color: rgb(80, 80, 80);
                 border-radius: @small_border_radius;
                 border: 1px solid rgba(255, 255, 255, 0.211);
+            }
+
+            .info {
+                color: @fg_color_l_1;
             }
         }
     }
