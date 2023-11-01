@@ -592,10 +592,14 @@ export class C_N_Markdown extends Component {
  */
 export class C_N_Func1 extends Component {
     constructor(showName, key, value = {
-        func: "x"
+        func: "x",
+        bgColor: "#000000",
+        strokeColor: "#ffffff",
     }) {
         super(showName, key, true);
         this.addValue("func", "函数", new SC_TextInput(value.func, false));
+        this.addValue("bgColor", "背景颜色", new SC_ColorInput(value.bgColor, false));
+        this.addValue("strokeColor", "线条颜色", new SC_ColorInput(value.strokeColor, false));
     }
 }
 

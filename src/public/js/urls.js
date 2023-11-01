@@ -59,8 +59,8 @@ if (process.env.PACK_MODE == "production") {
 } else {
     DOMAIN_RES = "http://127.0.0.1:4999";
     DOMAIN_MAIN = "http://127.0.0.1:4998";
-    DOMAIN_FE = "http://127.0.0.1:5500";
-    DOMAIN_COMPONENT = "http://127.0.0.1:5501";
+    DOMAIN_FE = "http://127.0.0.1:5501";
+    DOMAIN_COMPONENT = "http://127.0.0.1:5502";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 }
 

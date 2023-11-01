@@ -1697,10 +1697,13 @@ export class Graph {
         if (domAddedNodeFunc1)
             domAddedNodeFunc1
                 .attr("class", "nodeIframe nodeFunc1")
-                .attr("width", 300)
-                .attr("height", 400)
+                .attr("width", 200)
+                .attr("height", 200)
+                .style("pointer-events", "none")
+                .style("outline", "none")
+                .style("border", "none")
                 .attr("src", d => {
-                    return `${FUNC1_COMP}?fn=${d.autoGetValue("func1_node", "func", "x")}`
+                    return `${FUNC1_COMP}?fn=${d.autoGetValue("func1_node", "func", "x")}&bg=${d.autoGetValue("func1_node", "bgColor", "000000", str => str.substring(1))}&fg=${d.autoGetValue("func1_node", "strokeColor", "#ffffff", str => str.substring(1))}`;
                 })
 
         if (domAddedNodeLatex)
