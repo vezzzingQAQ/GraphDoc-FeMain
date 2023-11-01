@@ -376,6 +376,7 @@ import {
     C_E_ScaleHover,
     C_N_Audio,
     C_N_Code,
+    C_N_Css,
     C_N_Exterior,
     C_N_Img,
     C_N_Latex,
@@ -434,6 +435,8 @@ export function CreateLinkNode() {
 export function CreateTextNode() {
     let node = CreateBasicNode();
     node.addComponent(new C_N_Text(ComponentMap.text_node.showName, ComponentMap.text_node.key));
+    node.autoSetValue("exterior_node", "shape", "rect");
+    node.autoSetValue("text_node", "showText", "双击编辑文本");
     return node;
 }
 
@@ -445,6 +448,9 @@ export function CreateImgNode() {
     let node = CreateBasicNode();
     node.autoSetValue("exterior_node", "shape", "rect");
     node.addComponent(new C_N_Img(ComponentMap.img_node.showName, ComponentMap.img_node.key));
+    node.addComponent(new C_N_Css(ComponentMap.css_node.showName, ComponentMap.css_node.key));
+    node.autoSetValue("exterior_node", "opacity", "0");
+    node.autoSetValue("css_node", "content", "border-radius:5px");
     return node;
 }
 
