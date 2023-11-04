@@ -49,6 +49,7 @@ import { hideLoadingPage, saveGraph, showLoadingPage, showMessage, showSaveNodeT
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
+import abcjs from "abcjs";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -1520,6 +1521,7 @@ export class Graph {
         let domAddedNodeFunc1 = null;
         let domAddedNodeLatex = null;
         let domAddedNodeQrCode = null;
+        let domAddedNodeNote = null;
 
         // 容器
         let addedSubComponentForeign = null;
@@ -1558,6 +1560,8 @@ export class Graph {
             domAddedNodeLatex = domAddedSubComponentContainer.append("xhtml:div");
         if (nodeObj.hasComponent("qrcode_node"))
             domAddedNodeQrCode = domAddedSubComponentContainer.append("xhtml:img");
+        if (nodeObj.hasComponent("note_node"))
+            domAddedNodeNote = domAddedSubComponentContainer.append("xhtml:div");
 
         // 在这里绑定组件的属性
         if (domAddedNodeText)
@@ -1727,6 +1731,32 @@ export class Graph {
                             console.log(err);
                         })
                 })
+
+        if (domAddedNodeNote) {
+            domAddedNodeNote
+                .attr("class", "nodeNote")
+                .attr("temp", d => {
+                    let visualObj = abcjs.renderAbc(domAddedNodeNote.node(), d.autoGetValue("note_node", "content", ""))[0];
+                    calSize();
+                    let midiBuffer = new abcjs.synth.CreateSynth();
+                    let audioContext = new AudioContext();
+                    if (d.autoGetValue("note_node", "autoPlay", false)) {
+                        // 自动播放
+                        audioContext.resume().then(() => {
+                            midiBuffer.init({
+                                audioContext: audioContext,
+                                visualObj: visualObj
+                            }).then(() => {
+                                return midiBuffer.prime();
+                            }).then(() => {
+                                midiBuffer.start();
+                            });
+                        })
+                    } else {
+                        midiBuffer.stop();
+                    }
+                })
+        }
 
         domAddedSubComponentContainer
             .style("display", "flex")

@@ -684,6 +684,19 @@ export class C_E_Text extends Component {
     }
 }
 
+/**
+ * 五线谱组件
+ */
+export class C_N_Note extends Component {
+    constructor(showName, key, value = {
+        content: "",
+        autoPlay: false
+    }) {
+        super(showName, key, true);
+        this.addValue("content", "AMN表示", new SC_Textarea(value.content, false, false));
+        this.addValue("autoPlay", "自动播放", new SC_Check(value.autoPlay, false));
+    }
+}
 
 /**
  * 寻址映射
@@ -814,6 +827,12 @@ export const ComponentMap = {
         type: "edge",
         showName: "📃文本",
         class: C_E_Text,
+    },
+    "note_node": {
+        key: "note_node",
+        type: "node",
+        showName: "🎹五线谱",
+        class: C_N_Note,
     }
 }
 
