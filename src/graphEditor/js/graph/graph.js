@@ -351,7 +351,7 @@ export class Graph {
             function bindKeyEvent() {
                 d3.select("body").on("keydown", function (e) {
                     if (e.target == this) {
-                        console.log(e.keyCode);
+                        // console.log(e.keyCode);
                         // delete或backspace删除选中的元素
                         if (e.keyCode == 46 || e.keyCode == 8) {
                             if (_.selectedElementList.length != 0) {

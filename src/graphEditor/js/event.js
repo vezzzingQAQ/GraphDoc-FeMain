@@ -6,7 +6,7 @@
 
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH, NODE_UPLOAD_PATH } from "../../public/js/urls";
+import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH, NODE_UPLOAD_PATH, NODE_STORE_PATH } from "../../public/js/urls";
 import { delCookie, deleteLocalStorage, getCookie, getLocalStorage, getQueryVariable, setCookie, setLocalStorage } from "../../public/js/tools";
 import { configGraph, deleteGraph, getBlobContent, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud, uploadNodeBlob } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
@@ -817,25 +817,28 @@ export function showTemplateDya(graph) {
  */
 export function showSaveNodeTemplate(nodeString, nodeDom, nodeObj, graph) {
     showCenterWindow(document.querySelector("#windowSaveNodeTemplate"));
+
+    document.querySelector("#nodeNameInput").value = "";
+    document.querySelector("#nodeImgInput").value = "";
+
     document.querySelector("#nodeNameInput").oninput = function () {
 
     }
     document.querySelector("#nodeNameAccept").onclick = async function () {
-        // 生成自定义节点的预览图片
-        let scale = 0.2;
-        // 暂时删除blob
-        let blobTemp = nodeDom.getAttribute("src");
-        let imgDom = nodeDom.querySelector(".nodeImg");
-        if (imgDom)
-            imgDom.setAttribute("src", imgDom.getAttribute("datasource"));
-        let svgData = new XMLSerializer().serializeToString(nodeDom)
-        let svgDataBase64 = btoa(unescape(encodeURIComponent(svgData)))
-        let svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgDataBase64}`
         // 图片上传服务器
-        let response = await uploadNodeBlob(svgDataUrl);
+        let formData = new FormData();
+        formData.append("node", document.querySelector("#nodeImgInput").files[0]);
+        let response = (await axios({
+            url: NODE_UPLOAD_PATH,
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            data: formData
+        })).data;
         if (response.state == 1) {
             let nodeStorage = getLocalStorage("gd_nodeTemplate");
-            let nodeImgUrl = (await getBlobContent(response.msg.filename)).msg.content;
+            let nodeImgUrl = NODE_STORE_PATH + response.msg.filename;
             // 更新LocalStorage
             if (!nodeStorage) {
                 nodeStorage = "[]";
@@ -850,19 +853,9 @@ export function showSaveNodeTemplate(nodeString, nodeDom, nodeObj, graph) {
             )
             setLocalStorage("gd_nodeTemplate", JSON.stringify(nodeStorage));
             refreshNodeTemplate(graph);
-            // blob重新更新
-            if (imgDom) {
-                imgDom.setAttribute("src", blobTemp);
-                graph.modifyNodeExterior(nodeObj)
-            }
             hideCenterWindow(document.querySelector("#windowSaveNodeTemplate"));
         } else {
             console.log("文件上传失败");
-            // blob重新更新
-            if (imgDom) {
-                imgDom.setAttribute("src", blobTemp);
-                graph.modifyNodeExterior(nodeObj)
-            }
         }
     }
 }
@@ -1008,26 +1001,65 @@ export function refreshGraph(graph) {
  */
 export function refreshNodeTemplate(graph) {
     let nodeStorage = getLocalStorage("gd_nodeTemplate");
-    console.log(nodeStorage)
     if (!nodeStorage) {
         nodeStorage = "[]";
-        console.log(1)
     }
     nodeStorage = JSON.parse(nodeStorage);
-    console.log(nodeStorage);
     let domContainer = document.querySelector("#selfNodeArea ul");
     domContainer.innerHTML = "";
     for (let i = 0; i < nodeStorage.length; i++) {
         let currentNodeTp = nodeStorage[i];
-        console.log(currentNodeTp)
         let nodeContainer = document.createElement("li");
         let nodeImg = document.createElement("img");
         nodeImg.src = `${currentNodeTp.imgUrl}`;
+        let nodeDeleteBtn = document.createElement("div");
+        nodeDeleteBtn.innerHTML = "x";
+        nodeDeleteBtn.classList = "deleteBtn";
         nodeContainer.title = currentNodeTp.showName;
+        nodeContainer.appendChild(nodeDeleteBtn);
         nodeContainer.appendChild(nodeImg);
-        nodeContainer.onclick = function () {
+        nodeImg.onclick = function () {
             addTpNode(currentNodeTp, graph);
         }
+        nodeDeleteBtn.onclick = function () {
+            nodeStorage.splice(i, 1);
+            setLocalStorage("gd_nodeTemplate", JSON.stringify(nodeStorage));
+            refreshNodeTemplate(graph);
+        }
         domContainer.appendChild(nodeContainer);
+    }
+    // 保存到本地
+    document.querySelector(".exportBtn").onclick = function () {
+        let blob = new Blob([JSON.stringify(nodeStorage)]);
+        saveAs(blob, +new Date() + ".vgn");
+    }
+    // 从本地加载
+    document.querySelector(".importBtn").onclick = function () {
+        let elementInput = document.createElement("input");
+        elementInput.type = "file";
+        elementInput.accept = ".vgn";
+        elementInput.click();
+        elementInput.addEventListener("input", () => {
+            try {
+                let reader;
+                let data;
+                if (window.FileReader) {
+                    reader = new FileReader();
+                } else {
+                    alert("你的浏览器不支持访问本地文件");
+                }
+                reader.readAsText(elementInput.files[0]);
+                reader.addEventListener("load", (readRes) => {
+                    data = JSON.parse(readRes.target.result);
+                    setLocalStorage("gd_nodeTemplate", JSON.stringify(data));
+                    refreshNodeTemplate(graph);
+                });
+                reader.addEventListener("error", () => {
+                    alert("打开文件失败");
+                });
+            } catch {
+                console.error("打开文件出错");
+            }
+        });
     }
 }

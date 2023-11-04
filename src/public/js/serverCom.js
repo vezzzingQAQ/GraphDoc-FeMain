@@ -236,33 +236,33 @@ export async function extractText(text, type = "text") {
 /**
  * 上传节点blob
  */
-export async function uploadNodeBlob(blob) {
-    let formData = new FormData();
-    formData.append("node", blob);
-    let response = await axios({
-        url: NODE_UPLOAD_PATH,
-        method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        data: formData
-    });
-    return response.data;
-}
+// export async function uploadNodeBlob(blob) {
+//     let formData = new FormData();
+//     formData.append("node", blob);
+//     let response = await axios({
+//         url: NODE_UPLOAD_PATH,
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "multipart/form-data"
+//         },
+//         data: formData
+//     });
+//     return response.data;
+// }
 
 /**
  * 获取指定节点blob
  */
-export async function getBlobContent(filename){
-    let formData = new FormData();
-    formData.append("gdbid", filename);
-    let response = await axios({
-        url: GET_NODE_STORE,
-        method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        data: formData
-    });
-    return response.data;
-}
+// export async function getBlobContent(filename){
+//     let formData = new FormData();
+//     formData.append("gdbid", filename);
+//     let response = await axios({
+//         url: GET_NODE_STORE,
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "multipart/form-data"
+//         },
+//         data: formData
+//     });
+//     return response.data;
+// }

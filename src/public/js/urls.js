@@ -11,8 +11,7 @@ let GRAPH_PNG_STORE_PATH;
 let AVATAR_UPLOAD_PATH;
 let AVATAR_STORE_PATH;
 let NODE_UPLOAD_PATH;
-let GET_NODE_STORE;
-
+let NODE_STORE_PATH;
 
 let DOMAIN_MAIN;
 
@@ -88,8 +87,9 @@ GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
 GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
 AVATAR_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadAvatar/`;
 AVATAR_STORE_PATH = `${DOMAIN_RES}/media/avatars/`;
-NODE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadNodeBlob/`;
-GET_NODE_STORE = `${DOMAIN_RES}/fileUpload/getNodeBlob`;
+NODE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadNodeImg/`;
+// GET_NODE_STORE = `${DOMAIN_RES}/fileUpload/getNodeBlob`;
+NODE_STORE_PATH=`${DOMAIN_RES}/media/nodeImgs/`;
 
 // DOMAIN_MAIN
 USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
@@ -135,7 +135,7 @@ export {
     AVATAR_UPLOAD_PATH,
     AVATAR_STORE_PATH,
     NODE_UPLOAD_PATH,
-    GET_NODE_STORE,
+    NODE_STORE_PATH,
 
     DOMAIN_MAIN,
 
