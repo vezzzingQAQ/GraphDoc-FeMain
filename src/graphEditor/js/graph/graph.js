@@ -525,7 +525,8 @@ export class Graph {
                 } else {
                     edgeObj.initHtml();
                 }
-
+                // 更新储存的edge样式
+                _.edgePrevJson = edgeObj.toJsonObj();
             })
             .on("mouseenter", function () {
                 // 缩放
