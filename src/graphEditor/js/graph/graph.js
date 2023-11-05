@@ -611,9 +611,6 @@ export class Graph {
                     }
                     // 没连过就连上
                     if (!isLinked) {
-                        // 压入撤销列表
-                        _.pushUndo();
-
                         let addedEdge;
                         if (!_.edgePrevJson) {
                             addedEdge = CreateBasicEdge(toNode, fromNode);
@@ -641,6 +638,8 @@ export class Graph {
                     }
                 }
                 if (_.isShiftDown && selectedNodeList.length >= 1) {
+                    // 压入撤销列表
+                    _.pushUndo();
                     for (let fromNode of selectedNodeList) {
                         createLink(fromNode, nodeObj);
                         window.setTimeout(() => {
