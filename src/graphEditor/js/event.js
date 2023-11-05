@@ -1063,3 +1063,13 @@ export function refreshNodeTemplate(graph) {
         });
     }
 }
+
+/**
+ * json ld导出
+ */
+export function exportJsonLd(graph) {
+    let jsonObj = graph.toJsonObj();
+    jsonObj["@context"] = "http://121.40.159.180:7891/media/files/GdContext_060214.json";
+    let blob = new Blob([JSON.stringify(jsonObj)]);
+    saveAs(blob, +new Date() + ".json");
+}

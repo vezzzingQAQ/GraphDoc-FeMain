@@ -391,7 +391,7 @@ export class C_N_Text extends Component {
             { value: "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif", text: "Lucida Sans" },
             { value: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", text: "Segoe UI" },
             { value: "'Times New Roman', Times, serif", text: "Times New Roman" },
-            { value: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;", text: "Trebuchet MS" },
+            { value: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", text: "Trebuchet MS" },
             { value: "Arial, Helvetica, sans-serif", text: "Arial" },
             { value: "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif", text: "Cambria" },
             { value: "Georgia, 'Times New Roman', Times, serif", text: "Georgia" },

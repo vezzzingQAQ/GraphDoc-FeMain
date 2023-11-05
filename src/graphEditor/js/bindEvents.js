@@ -42,7 +42,8 @@ import {
     bindFileDropEvent,
     extractAllNode,
     refreshGraph,
-    refreshNodeTemplate
+    refreshNodeTemplate,
+    exportJsonLd
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -76,7 +77,7 @@ export async function bindEvents(graph) {
     });
     document.querySelector("#btnLoadFromCode").addEventListener("click", () => {
         openCode(graph);
-    })
+    });
     document.querySelector("#btnExport").addEventListener("click", () => {
         exportSvg(graph);
     });
@@ -86,12 +87,15 @@ export async function bindEvents(graph) {
     document.querySelector("#btnExport3").addEventListener("click", () => {
         showImgExport(graph, "jpg");
     });
+    document.querySelector("#btnJsonLd").addEventListener("click", () => {
+        exportJsonLd(graph);
+    });
     document.querySelector("#btnLogin").addEventListener("click", () => {
         showLogin();
-    })
+    });
     document.querySelector("#btnRegister").addEventListener("click", () => {
         showRegister();
-    })
+    });
     document.querySelector("#btnAuthorList").addEventListener("click", () => {
         showAuthorList();
     });
@@ -185,64 +189,64 @@ export async function bindEvents(graph) {
     // 重启物理模拟
     document.querySelector("#physicsSimBtn").addEventListener("click", () => {
         restartSim(graph);
-    })
+    });
 
     // 设置图谱属性
     document.querySelector("#btnSetGraphProperty").addEventListener("click", () => {
         showGraphProperty();
-    })
+    });
 
     // 全屏浏览
     document.querySelector("#fullScreenBtn").addEventListener("click", () => {
         refreshFullScreen(graph);
-    })
+    });
 
     // 切换编辑/浏览模式
     document.querySelector("#editGraphBtn").addEventListener("click", () => {
         refreshEditMode(graph);
-    })
+    });
 
     // 对齐格点
     document.querySelector("#btnRefreshAlignBlock").addEventListener("click", () => {
         refreshAlignBlock(graph, !document.querySelector("#check_alignBlock").hasAttribute("checked"));
-    })
+    });
 
     // 显示坐标系
     document.querySelector("#btnRefreshShowCoord").addEventListener("click", () => {
         refreshShowCoord(graph, !document.querySelector("#check_showCoord").hasAttribute("checked"));
-    })
+    });
 
 
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {
         showShareLink();
-    })
+    });
 
     // 展开收起节点添加面板
     document.querySelectorAll(".slideUpBtn").forEach(ele => ele.addEventListener("click", () => {
         refreshAddNodeArea(ele.parentElement.parentElement.id);
-    }))
+    }));
 
     // bug反馈窗口
     document.querySelector("#btnBugReport").addEventListener("click", () => {
         showBugReport();
-    })
+    });
 
     // 提取所有节点关键词
     document.querySelector("#btnExtractAll").addEventListener("click", () => {
         extractAllNode(graph);
-    })
+    });
 
     // 刷新图谱
     document.querySelector("#btnRefresh").addEventListener("click", () => {
         refreshGraph(graph);
-    })
+    });
 
 
     // 窗体大小改变时自动缩放画布
     window.addEventListener("resize", () => {
         recalSize(graph)
-    })
+    });
 
     // 上来先获取下用户信息
     let userData = await getUserData();
@@ -296,7 +300,7 @@ export async function bindEvents(graph) {
     window.addEventListener("offline", () => {
         // 掉线
         showMessage("网络断开，请及时保存图谱");
-    })
+    });
 
     // 图片上传
     bindFileDropEvent(graph);
