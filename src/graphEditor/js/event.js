@@ -1062,6 +1062,12 @@ export function refreshNodeTemplate(graph) {
             }
         });
     }
+    // 清空自定义节点
+    document.querySelector(".clearBtn").onclick = function () {
+        nodeStorage = "[]";
+        setLocalStorage("gd_nodeTemplate", nodeStorage);
+        refreshNodeTemplate(graph);
+    }
 }
 
 /**
