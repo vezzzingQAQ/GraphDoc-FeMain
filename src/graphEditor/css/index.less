@@ -356,7 +356,7 @@ body {
         .topArea {
             position: absolute;
             left: 0;
-            width: calc(100vw - @pan_area_width);
+            width: max-content;
             display: flex;
             user-select: none;
             padding-left: 5px;
@@ -384,6 +384,7 @@ body {
             flex-direction: column;
             height: max-content;
             bottom: 0;
+            pointer-events: none;
 
             .subLine {
                 display: flex;
@@ -454,7 +455,7 @@ body {
         .content {
             background-color: rgb(51, 51, 51);
 
-            .btnLeftBar{
+            .btnLeftBar {
                 background-color: rgb(200, 200, 200);
                 color: rgb(46, 46, 46);
             }
