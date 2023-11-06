@@ -14,17 +14,12 @@ body {
 .mainWindow {
     .header {
         width: 100vw;
-        height: 100vh;
+        height: 90vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
-
-        img {
-            width: 15vw;
-            transform: rotate(1.5deg);
-        }
 
         p {
             margin: 0;
@@ -77,6 +72,7 @@ body {
                 height: 30px;
                 line-height: 30px;
                 border: 1px solid rgba(0, 0, 0, 0.4);
+                border-radius: @normal_border_radius;
                 color: grey;
                 margin-right: 10px;
                 margin-left: 10px;
@@ -85,6 +81,11 @@ body {
                 letter-spacing: 2px;
                 cursor: pointer;
                 z-index: 99;
+                transition: 0.1s ease-in-out;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
             }
         }
     }
@@ -105,6 +106,7 @@ body {
                 height: 26vh;
                 cursor: pointer;
                 border: 1px solid rgba(0, 0, 0, 0.4);
+                border-radius: @normal_border_radius;
                 position: relative;
                 overflow: hidden;
                 transition: 0.1s ease-in-out;
@@ -141,6 +143,7 @@ body {
                         height: 50px;
                         margin-right: 10px;
                         border: 1px solid rgb(47, 47, 47);
+                        background-color: white;
                         border-radius: 50%;
                         transition: 0.1s ease-in-out;
 
