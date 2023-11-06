@@ -339,8 +339,8 @@ export class Graph {
                     _.hideMenu();
             })
             .on("mousemove", function (e) {
-                _.mouseX = e.offsetX;
-                _.mouseY = e.offsetY;
+                _.mouseX = e.clientX;
+                _.mouseY = e.clientY;
             })
 
         if (!_.locked) {
