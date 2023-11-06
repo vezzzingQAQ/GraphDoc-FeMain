@@ -4,38 +4,44 @@ import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.jpg";
 import { setWindowIcon } from "../public/js/iconSetter";
 
+let oGraphList = [];
+let graphList = [];
+
+function genGraphList(graphList) {
+    document.querySelector(".graphListBlock ul").innerHTML = "";
+    graphList.forEach(graph => {
+        let domGraphBlock = document.createElement("li");
+        let domGraphBlockImg = document.createElement("div");
+        domGraphBlockImg.style.backgroundImage = `url(${GRAPH_PNG_STORE_PATH}${graph.img})`;
+        let domGraphBlockText = document.createElement("p");
+        let domGraphAuthorImg = document.createElement("img");
+        domGraphAuthorImg.src = AVATAR_STORE_PATH + graph.author.img;
+        domGraphAuthorImg.addEventListener("click", function (e) {
+            window.open(`${USER_PAGE}?uid=${graph.author.id}`);
+        });
+        let domGraphName = document.createElement("span");
+        domGraphName.innerHTML = graph.name.length < 6 ? graph.name : graph.name.slice(0, 5) + "...";
+        domGraphBlockText.appendChild(domGraphAuthorImg);
+        domGraphBlockText.appendChild(domGraphName);
+        domGraphBlock.appendChild(domGraphBlockImg);
+        domGraphBlock.appendChild(domGraphBlockText);
+        domGraphBlockImg.addEventListener("click", async function (e) {
+            window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`);
+        });
+        document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
+    });
+}
+
 window.addEventListener("load", async () => {
     setWindowIcon();
     let graphListResponse = await listPublicGraph();
     let userListResponse = await listUser();
     if (graphListResponse.state == 1 && userListResponse.state == 1) {
 
-        let graphList = graphListResponse.msg;
-        let userList = userListResponse.msg;
+        oGraphList = graphListResponse.msg;
+        graphList = oGraphList;
 
-        let index = 0;
-        graphList.forEach(graph => {
-            index++;
-            let domGraphBlock = document.createElement("li");
-            let domGraphBlockImg = document.createElement("div");
-            domGraphBlockImg.style.backgroundImage = `url(${GRAPH_PNG_STORE_PATH}${graph.img})`;
-            let domGraphBlockText = document.createElement("p");
-            let domGraphAuthorImg = document.createElement("img");
-            domGraphAuthorImg.src = AVATAR_STORE_PATH + graph.author.img;
-            domGraphAuthorImg.addEventListener("click", function (e) {
-                window.open(`${USER_PAGE}?uid=${graph.author.id}`);
-            });
-            let domGraphName = document.createElement("span");
-            domGraphName.innerHTML = graph.name.length < 6 ? graph.name : graph.name.slice(0, 5) + "...";
-            domGraphBlockText.appendChild(domGraphAuthorImg);
-            domGraphBlockText.appendChild(domGraphName);
-            domGraphBlock.appendChild(domGraphBlockImg);
-            domGraphBlock.appendChild(domGraphBlockText);
-            domGraphBlockImg.addEventListener("click", async function (e) {
-                window.open(`${EDITOR_PGAE}?graphName=${encodeURI(graph.name)}&uid=${graph.author.id}`);
-            });
-            document.querySelector(".graphListBlock ul").appendChild(domGraphBlock)
-        });
+        genGraphList(graphList);
     }
 
     // 计算窗口滚动百分比&背景变色
@@ -83,17 +89,17 @@ window.addEventListener("load", async () => {
     }
 
     // 下载APP
-    document.querySelector("#download").addEventListener("click", function () {
-        const downloadElement = document.createElement("a");
-        downloadElement.style.display = "none";
-        downloadElement.href = DOWNLOAD_LINK;
-        downloadElement.target = "_blank";
-        downloadElement.rel = "noopener noreferrer";
-        downloadElement.download = "GraphDoc";
-        document.body.appendChild(downloadElement);
-        downloadElement.click();
-        document.body.removeChild(downloadElement);
-    });
+    // document.querySelector("#download").addEventListener("click", function () {
+    //     const downloadElement = document.createElement("a");
+    //     downloadElement.style.display = "none";
+    //     downloadElement.href = DOWNLOAD_LINK;
+    //     downloadElement.target = "_blank";
+    //     downloadElement.rel = "noopener noreferrer";
+    //     downloadElement.download = "GraphDoc";
+    //     document.body.appendChild(downloadElement);
+    //     downloadElement.click();
+    //     document.body.removeChild(downloadElement);
+    // });
 
     // 下载使用条款
     document.querySelector("#laws").addEventListener("click", function () {
@@ -106,5 +112,19 @@ window.addEventListener("load", async () => {
         document.body.appendChild(downloadElement);
         downloadElement.click();
         document.body.removeChild(downloadElement);
+    });
+
+    // 绑定搜索功能
+    document.querySelector("#btnSearchGraph").addEventListener("click", function () {
+        let searchString = document.querySelector("#inputSearchString").value;
+        graphList = oGraphList.filter(graph => {
+            return graph.name.indexOf(searchString) !== -1;
+        });
+        genGraphList(graphList);
+    });
+    document.querySelector("#inputSearchString").addEventListener("input", function () {
+        if (document.querySelector("#inputSearchString").value == "") {
+            genGraphList(oGraphList);
+        }
     });
 });

@@ -14,7 +14,7 @@ body {
 .mainWindow {
     .header {
         width: 100vw;
-        height: 90vh;
+        height: 80vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -86,6 +86,45 @@ body {
                 &:hover {
                     transform: scale(1.1);
                 }
+            }
+        }
+    }
+
+    .searchArea {
+        display: flex;
+        flex-direction: column;
+        margin-left: calc(10vw + 1.6vw);
+
+        .searchBox {
+            display: flex;
+            flex-direction: row;
+
+            input {
+                width: 200px;
+                height: 26px;
+                line-height: 26px;
+                outline: none;
+                border-radius: @normal_border_radius;
+                background-color: white;
+                border: 1px solid rgba(0, 0, 0, 0.4);
+                padding-left: 5px;
+                padding-right: 5px;
+                margin-right: 9px;
+            }
+
+            .btn {
+                height: 26px;
+                line-height: 26px;
+                text-align: center;
+                padding-left: 5px;
+                padding-right: 5px;
+                background-color: rgb(255, 255, 255);
+                border-radius: @normal_border_radius;
+                border: 1px solid rgba(0, 0, 0, 0.4);
+                letter-spacing: 2px;
+                color: black;
+                font-size: 14px;
+                cursor: pointer;
             }
         }
     }
