@@ -19,7 +19,7 @@ window.addEventListener("load", async () => {
         let edgeList = [];
         nodeList.push({
             "type": "center",
-            "name": "创新·智能",
+            "name": "GraphDoc",
             "id": nodeList.length
         })
         userList.forEach(user => {

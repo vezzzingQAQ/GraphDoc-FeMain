@@ -1,5 +1,5 @@
 import { listPublicGraph, listUser } from "../public/js/serverCom";
-import { AVATAR_STORE_PATH, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, LAW_LINK, USER_PAGE } from "../public/js/urls";
+import { AVATAR_STORE_PATH, DISPLAY_PAGE, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, LAW_LINK, USER_PAGE } from "../public/js/urls";
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.jpg";
 import { setWindowIcon } from "../public/js/iconSetter";
@@ -64,6 +64,11 @@ window.addEventListener("load", async () => {
     document.querySelector("#editor").addEventListener("click", function () {
         window.location = EDITOR_PGAE;
     });
+
+    // 点击按钮进入DocVis
+    document.querySelector("#docVis").addEventListener("click", function () {
+        window.open(DISPLAY_PAGE);
+    })
 
     // 绑定图片
     document.querySelector("#footerImg").src = mainBg;

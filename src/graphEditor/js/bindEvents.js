@@ -149,7 +149,7 @@ export async function bindEvents(graph) {
     // 跳转用户中心
     document.querySelector("#btnUserPage").addEventListener("click", () => {
         toUserPage();
-    })
+    });
 
     // 保存到云
     document.querySelector("#saveToCloud").addEventListener("click", () => {
