@@ -84,6 +84,7 @@ body {
             width: 163px;
             display: flex;
             flex-direction: column;
+            pointer-events: none;
 
             .leftBarWindow {
                 width: 163px;
@@ -114,10 +115,13 @@ body {
                         cursor: pointer;
                         margin-right: 5px;
                         border-radius: @normal_border_radius;
+                        pointer-events: all !important;
                     }
                 }
 
                 .content {
+                    pointer-events: all;
+
                     .info {
                         padding-left: 4px;
                         padding-top: 4px;
