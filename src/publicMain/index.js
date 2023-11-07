@@ -3,6 +3,7 @@ import { AVATAR_STORE_PATH, DISPLAY_PAGE, DOWNLOAD_LINK, EDITOR_PGAE, GRAPH_PNG_
 import "./css/index.less";
 import mainBg from "./../asset/img/icon/mainBg.jpg";
 import { setWindowIcon } from "../public/js/iconSetter";
+import { GD_VERSION } from "../public/js/version";
 
 let oGraphList = [];
 let graphList = [];
@@ -127,4 +128,7 @@ window.addEventListener("load", async () => {
             genGraphList(oGraphList);
         }
     });
+
+    // 获取版本并显示
+    document.querySelector("#gdVersion").innerHTML = `${GD_VERSION}`;
 });

@@ -55,6 +55,7 @@ import { getUserData, loadGraphFromCloud, saveGraphToCloud } from "../../public/
 import { getCookie } from "../../public/js/tools.js";
 import { VGraph, VNode, VEdge, bindData } from "./graph/genJson";
 import { PUBLIC_PAGE } from "../../public/js/urls.js";
+import { GD_VERSION, GD_VERSION_LIT } from "../../public/js/version.js";
 
 /**
  * 
@@ -310,4 +311,7 @@ export async function bindEvents(graph) {
 
     // 图片上传
     bindFileDropEvent(graph);
+
+    // 获取版本并显示
+    document.querySelector("#gdVersion").innerHTML=`GDoc${GD_VERSION_LIT} |`;
 }
