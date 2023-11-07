@@ -459,6 +459,12 @@ export function refreshShowCoord(graph, value) {
     graph.refreshCoord(value);
 }
 
+/**
+ * 刷新是否显示格子点
+ */
+export function refreshShowGrid(graph, value) {
+    graph.refreshGrid(value);
+}
 
 /**
  * 从模板添加节点

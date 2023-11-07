@@ -45,7 +45,7 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
-import { hideLoadingPage, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
+import { hideLoadingPage, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
@@ -114,6 +114,8 @@ export class Graph {
         this.edgePrevJson = null;
         // 是否显示坐标系
         this.isShowCoord = false;
+        // 是否显示格子点
+        this.isShowGrid = false;
         // 判断所处的操作系统
         this.os = getOS();
     }
@@ -283,6 +285,9 @@ export class Graph {
                     .style("transition", "0.3s ease-in-out");
             }
             drawCoord();
+
+            // 显示格子点
+            _.refreshGrid(_.isShowGrid);
         }
         initSvg();
 
@@ -2546,6 +2551,30 @@ export class Graph {
             d3.selectAll(".coordLine").style("opacity", 1);
         } else {
             d3.selectAll(".coordLine").style("opacity", 0);
+        }
+    }
+
+    /**
+     * 显示格子点
+     */
+    refreshGrid(show = true) {
+        this.isShowGrid = show;
+        if (show) {
+            // 绘制格子点
+            for (let i = -2000; i < 3000; i += 50) {
+                for (let j = -2000; j < 3000; j += 50) {
+                    d3.select("#bottomLayer").append("rect")
+                        .attr("class", "gridCircle")
+                        .attr("width", 2)
+                        .attr("height", 2)
+                        .attr("x", i)
+                        .attr("y", j)
+                        .attr("fill", "rgba(150,150,150,0.5)")
+                        .attr("stroke-width", 0);
+                }
+            }
+        } else {
+            d3.selectAll(".gridCircle").remove();
         }
     }
 

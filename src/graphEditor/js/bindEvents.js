@@ -43,7 +43,8 @@ import {
     extractAllNode,
     refreshGraph,
     refreshNodeTemplate,
-    exportJsonLd
+    exportJsonLd,
+    refreshShowGrid
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -215,6 +216,11 @@ export async function bindEvents(graph) {
     document.querySelector("#btnRefreshShowCoord").addEventListener("click", () => {
         refreshShowCoord(graph, !document.querySelector("#check_showCoord").hasAttribute("checked"));
     });
+
+    // 显示格子点
+    document.querySelector("#btnRefreshShowGrid").addEventListener("click", () => {
+        refreshShowGrid(graph, !document.querySelector("#check_showGrid").hasAttribute("checked"));
+    })
 
 
     // 分享图谱
