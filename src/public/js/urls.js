@@ -1,4 +1,5 @@
-let DOMAIN_RES;
+let DOMAIN_RES_UPLOAD;
+let DOMAIN_RES_DOWNLOAD;
 
 let IMG_UPLOAD_PATH;
 let IMG_STORE_PATH;
@@ -50,13 +51,15 @@ let LAW_LINK;
 
 // 生产和测试环境
 if (process.env.PACK_MODE == "production") {
-    DOMAIN_RES = "http://121.40.159.180:7891";
+    DOMAIN_RES_UPLOAD = "http://121.40.159.180:7891";
+    DOMAIN_RES_DOWNLOAD = "http://121.40.159.180:7881";
     DOMAIN_MAIN = "http://121.40.159.180:7892";
     DOMAIN_FE = "http://vezzzing.cn/GraphDoc/Main";
     DOMAIN_COMPONENT = "http://vezzzing.cn/GraphDoc/Component";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 } else {
-    DOMAIN_RES = "http://127.0.0.1:4999";
+    DOMAIN_RES_UPLOAD = "http://127.0.0.1:4999";
+    DOMAIN_RES_DOWNLOAD = "http://127.0.0.1:4999/media";
     DOMAIN_MAIN = "http://127.0.0.1:4998";
     DOMAIN_FE = "http://127.0.0.1:5501";
     DOMAIN_COMPONENT = "http://127.0.0.1:5502";
@@ -69,7 +72,7 @@ if (process.env.RUN_ENV == "app") {
 
 // 适配学校服务器
 if (process.env.DEP_ENV == "school") {
-    DOMAIN_RES = "http://127.0.0.1:3291";
+    DOMAIN_RES_UPLOAD = "http://127.0.0.1:3291";
     DOMAIN_MAIN = "http://127.0.0.1:3292";
     DOMAIN_FE = "http://sdi.havigor.com/gdoc/Main";
     DOMAIN_COMPONENT = "http://sdi.havigor.com/gdoc/Component";
@@ -77,25 +80,25 @@ if (process.env.DEP_ENV == "school") {
 }
 
 // DOMAIN RES
-IMG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadImg/`;
-IMG_STORE_PATH = `${DOMAIN_RES}/media/images/`;
-FILE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadFile/`;
-FILE_STORE_PATH = `${DOMAIN_RES}/media/files/`;
-VIDEO_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadVideo/`;
-VIDEO_STORE_PATH = `${DOMAIN_RES}/media/videos/`;
-GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadGraphSvg/`;
-GRAPH_PNG_STORE_PATH = `${DOMAIN_RES}/media/graphImgs/png/`;
-AVATAR_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadAvatar/`;
-AVATAR_STORE_PATH = `${DOMAIN_RES}/media/avatars/`;
-NODE_UPLOAD_PATH = `${DOMAIN_RES}/fileUpload/uploadNodeImg/`;
-// GET_NODE_STORE = `${DOMAIN_RES}/fileUpload/getNodeBlob`;
-NODE_STORE_PATH=`${DOMAIN_RES}/media/nodeImgs/`;
+IMG_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadImg/`;
+IMG_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/images/`;
+FILE_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadFile/`;
+FILE_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/files/`;
+VIDEO_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadVideo/`;
+VIDEO_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/videos/`;
+GRAPH_SVG_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadGraphSvg/`;
+GRAPH_PNG_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/graphImgs/png/`;
+AVATAR_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadAvatar/`;
+AVATAR_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/avatars/`;
+NODE_UPLOAD_PATH = `${DOMAIN_RES_UPLOAD}/fileUpload/uploadNodeImg/`;
+// GET_NODE_STORE = `${DOMAIN_RES_UPLOAD}/fileUpload/getNodeBlob`;
+NODE_STORE_PATH = `${DOMAIN_RES_DOWNLOAD}/nodeImgs/`;
 
 // DOMAIN_MAIN
 USER_REGISTER = `${DOMAIN_MAIN}/user/register`;
 USER_LOGIN = `${DOMAIN_MAIN}/user/login`;
 USER_DATA = `${DOMAIN_MAIN}/user/data`;
-USER_AVATAR_ROOT = `${DOMAIN_MAIN}/media/avatars/`;
+USER_AVATAR_ROOT = `${DOMAIN_MAIN}/avatars/`;
 USER_LIST_GRAPH_PATH = `${DOMAIN_MAIN}/graph/listGraph`;
 USER_SAVE_GRAPH_TO_CLOUD = `${DOMAIN_MAIN}/graph/saveGraph`;
 USER_LOAD_FROM_CLOUD = `${DOMAIN_MAIN}/graph/loadGraph`;
@@ -122,7 +125,8 @@ DOWNLOAD_LINK = `${DOMAIN_DOWNLOAD}/GraphDoc-win32-x64.zip`;
 LAW_LINK = `${DOMAIN_DOWNLOAD}/readme.md`;
 
 export {
-    DOMAIN_RES,
+    DOMAIN_RES_UPLOAD,
+    DOMAIN_RES_DOWNLOAD,
 
     IMG_UPLOAD_PATH,
     IMG_STORE_PATH,
