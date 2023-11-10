@@ -21,7 +21,7 @@ function genGraphList(graphList) {
             window.open(`${USER_PAGE}?uid=${graph.author.id}`);
         });
         let domGraphName = document.createElement("span");
-        domGraphName.innerHTML = graph.name.length < 6 ? graph.name : graph.name.slice(0, 5) + "...";
+        domGraphName.innerHTML = graph.name.length < 6 ? graph.name + `... <i class="fa fa-eye"></i><span>${graph.view}</span>` : graph.name.slice(0, 5) + `... <i class="fa fa-eye"></i><span>${graph.view}</span>`;
         domGraphBlockText.appendChild(domGraphAuthorImg);
         domGraphBlockText.appendChild(domGraphName);
         domGraphBlock.appendChild(domGraphBlockImg);
@@ -53,14 +53,14 @@ window.addEventListener("load", async () => {
         let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
         let result = scrollH / validH;
         document.querySelector(".mainWindow").style.backgroundColor = `rgb(
-            ${255 - result * 255},
-            ${255 - result * 255},
-            ${255 - result * 255}
-        )`;
+    ${255 - result * 255},
+    ${255 - result * 255},
+    ${255 - result * 255}
+)`;
         // 改变图片位置
-        document.querySelector("#mainBg").style.marginTop = `${result * document.querySelector("body").offsetHeight / 10}px`;
+        document.querySelector("#mainBg").style.marginTop = `${result * document.querySelector("body").offsetHeight / 10} px`;
         document.querySelector("#mainBg").style.opacity = (1 - result * 3);
-        this.document.querySelector(".menuBlock").style.marginBottom = `${30 + result * document.querySelector("body").offsetHeight / 10}px`;
+        this.document.querySelector(".menuBlock").style.marginBottom = `${30 + result * document.querySelector("body").offsetHeight / 10} px`;
         document.querySelector(".menuBlock").style.opacity = (1 - result * 3);
         document.querySelectorAll(".sub").forEach(dom => {
             dom.style.opacity = (1 - result * 3);
@@ -130,5 +130,5 @@ window.addEventListener("load", async () => {
     });
 
     // 获取版本并显示
-    document.querySelector("#gdVersion").innerHTML = `${GD_VERSION}`;
+    document.querySelector("#gdVersion").innerHTML = `${GD_VERSION} `;
 });
