@@ -53,13 +53,11 @@ window.addEventListener("load", async () => {
         let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
         let result = scrollH / validH;
         document.querySelector(".mainWindow").style.backgroundColor = `rgb(
-    ${255 - result * 255},
-    ${255 - result * 255},
-    ${255 - result * 255}
-)`;
+            ${255 - result * 255},
+            ${255 - result * 255},
+            ${255 - result * 255}
+        )`;
         // 改变图片位置
-        document.querySelector("#mainBg").style.marginTop = `${result * document.querySelector("body").offsetHeight / 10} px`;
-        document.querySelector("#mainBg").style.opacity = (1 - result * 3);
         this.document.querySelector(".menuBlock").style.marginBottom = `${30 + result * document.querySelector("body").offsetHeight / 10} px`;
         document.querySelector(".menuBlock").style.opacity = (1 - result * 3);
         document.querySelectorAll(".sub").forEach(dom => {

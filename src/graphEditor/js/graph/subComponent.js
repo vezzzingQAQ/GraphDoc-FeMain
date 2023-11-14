@@ -28,10 +28,9 @@
  * z z z studio
  */
 
-import axios from "axios";
-
 import { Node, Edge } from "./element";
 import { showTextEditor } from "../event";
+import { uploadStaticFile } from "../../../public/js/serverCom";
 
 class SubComponent {
     /**
@@ -431,24 +430,14 @@ export class SC_FileInput extends SubComponent {
             this.dom.readOnly = "true";
         }
         // 读取本地图片文件上传服务器，返回URL生成IMG标签
-        this.dom.addEventListener("input", () => {
-            let formData = new FormData();
-            formData.append(this.catg, this.dom.files[0]);
-            axios({
-                url: this.urlUpload,
-                method: "POST",
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                },
-                data: formData
-            }).then(d => {
-                if (d.data.state == 1) {
-                    this.setValue(d.data.msg.filename);
-                    this.updateGraph();
-                } else {
-                    console.log("文件上传失败")
-                }
-            });
+        this.dom.addEventListener("input", async () => {
+            let data = await uploadStaticFile(this.urlUpload, this.catg, this.dom.files[0]);
+            if (data.state == 1) {
+                this.setValue(data.msg.filename);
+                this.updateGraph();
+            } else {
+                console.log("文件上传失败");
+            }
         });
         return this.dom;
     }

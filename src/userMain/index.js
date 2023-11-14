@@ -1,6 +1,5 @@
-import axios from "axios";
 import { userConfig } from "../graphEditor/js/event";
-import { getOUtherData, getUserData, updateAvatar } from "../public/js/serverCom";
+import { getOUtherData, getUserData, updateAvatar, uploadStaticFile } from "../public/js/serverCom";
 import { getQueryVariable } from "../public/js/tools";
 import { AVATAR_UPLOAD_PATH, EDITOR_PGAE, GRAPH_PNG_STORE_PATH, AVATAR_STORE_PATH } from "./../public/js/urls";
 import "./css/index.less";
@@ -11,9 +10,9 @@ window.addEventListener("load", async () => {
     setWindowIcon();
     let uid = getQueryVariable("uid");
     let visitedUserData = await getOUtherData(uid);
-    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${visitedUserData.data.msg.avatar}`;
-    document.querySelector("#username").innerHTML = visitedUserData.data.msg.username;
-    let graphList = visitedUserData.data.msg.graphs;
+    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${visitedUserData.msg.avatar}`;
+    document.querySelector("#username").innerHTML = visitedUserData.msg.username;
+    let graphList = visitedUserData.msg.graphs;
     graphList.forEach(graph => {
         let domGraphBlock = document.createElement("li");
         let domGraphBlockImg = document.createElement("div");
@@ -31,8 +30,8 @@ window.addEventListener("load", async () => {
 
     // 点击头像进行更换
     let loginUserData = await getUserData();
-    if (loginUserData.data.state == 1) {
-        let loginId = loginUserData.data.msg.data.id;
+    if (loginUserData.state == 1) {
+        let loginId = loginUserData.msg.data.id;
         if (loginId == uid) {
             document.querySelector("#UserAvatar").addEventListener("click", () => {
                 let elementInput = document.createElement("input");
@@ -42,7 +41,6 @@ window.addEventListener("load", async () => {
                 elementInput.addEventListener("input", () => {
                     try {
                         let reader;
-                        let data;
                         if (window.FileReader) {
                             reader = new FileReader();
                         } else {
@@ -55,23 +53,13 @@ window.addEventListener("load", async () => {
                             return;
                         }
                         reader.readAsText(elementInput.files[0]);
-                        reader.addEventListener("load", () => {
-                            let formData = new FormData();
-                            formData.append('pic', elementInput.files[0]);
-                            axios({
-                                url: AVATAR_UPLOAD_PATH,
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "multipart/form-data"
-                                },
-                                data: formData
-                            }).then(async d => {
-                                let filename = d.data.msg.filename;
-                                let response = await updateAvatar(filename);
-                                if (response.state == 1) {
-                                    document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
-                                }
-                            });
+                        reader.addEventListener("load", async () => {
+                            let avatarUploadData = await uploadStaticFile(AVATAR_UPLOAD_PATH, "pic", elementInput.files[0]);
+                            let filename = avatarUploadData.msg.filename;
+                            let avatarUpdateData = await updateAvatar(filename);
+                            if (avatarUpdateData.state == 1) {
+                                document.querySelector("#userAvatar").src = `${AVATAR_STORE_PATH}${filename}`;
+                            }
                         });
                         reader.addEventListener("error", () => {
                             alert("打开文件失败");

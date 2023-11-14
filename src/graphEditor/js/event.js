@@ -8,7 +8,7 @@ import axios from "axios";
 import { saveAs } from 'file-saver';
 import { EDITOR_PGAE, GRAPH_SVG_UPLOAD_PATH, USER_AVATAR_ROOT, USER_DATA, USER_LOGIN, USER_REGISTER, GRAPH_PNG_STORE_PATH, USER_PAGE, AVATAR_STORE_PATH, DOMAIN_FE, IMG_UPLOAD_PATH, NODE_UPLOAD_PATH, NODE_STORE_PATH } from "../../public/js/urls";
 import { delCookie, deleteLocalStorage, getCookie, getLocalStorage, getQueryVariable, setCookie, setLocalStorage } from "../../public/js/tools";
-import { configGraph, deleteGraph, getBlobContent, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, saveGraphToCloud, uploadNodeBlob } from "../../public/js/serverCom";
+import { configGraph, deleteGraph, getBlobContent, getUserData, listUserGraph, loadGraphConfig, loadGraphFromCloud, loginUser, registerUser, saveGraphSvgToCloud, saveGraphToCloud, uploadNodeBlob, uploadStaticFile } from "../../public/js/serverCom";
 import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
@@ -129,7 +129,7 @@ export function setGraphBackgroundColor(graph) {
 /**
  * 用户注册
  */
-export function userRegister() {
+export async function userRegister() {
     let username = document.querySelector("#register_username").value;
     let password1 = document.querySelector("#register_password1").value;
     let password2 = document.querySelector("#register_password2").value;
@@ -138,60 +138,37 @@ export function userRegister() {
         document.querySelector("#password_conflict").classList = "hint show";
         return;
     }
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password1);
-    formData.append("email", email);
-    axios({
-        url: USER_REGISTER,
-        method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        data: formData
-    }).then(d => {
-        if (d.data.state == 1) {
-            // 跳转登录
-            hideCenterWindow(document.querySelector("#windowRegister"));
-            showLogin();
-        } else if (d.data.state == 0) {
-            document.querySelector("#user_name_exist").classList = "hint show";
-        }
-    })
+    let registerData = await registerUser(username, password1, email);
+    if (registerData.state == 1) {
+        // 跳转登录
+        hideCenterWindow(document.querySelector("#windowRegister"));
+        showLogin();
+    } else if (registerData.state == 0) {
+        document.querySelector("#user_name_exist").classList = "hint show";
+    }
 }
 
 /**
  * 用户登录
  */
-export function userLogin() {
+export async function userLogin() {
     let username = document.querySelector("#login_username").value;
     let password = document.querySelector("#login_password").value;
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    axios({
-        url: USER_LOGIN,
-        method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
-        data: formData
-    }).then(async d => {
-        if (d.data.state == 1) {
-            setCookie('jwt', d.data.jwt, 1000 * 60 * 60 * 1000);
-            // 获取用户信息进行显示
-            let userData = await getUserData();
-            refreshUserData(userData);
-            hideCenterWindow(document.querySelector("#windowLogin"));
-        } else if (d.data.state == 2) {
-            document.querySelector("#login_password").value = "";
-            document.querySelector("#hint_password_incorrect").classList = "hint show";
-        } else if (d.data.state == 3) {
-            document.querySelector("#login_username").value = "";
-            document.querySelector("#login_password").value = "";
-            document.querySelector("#hint_user_not_exist").classList = "hint show";
-        }
-    })
+    let loginData = await loginUser(username, password);
+    if (loginData.state == 1) {
+        setCookie('jwt', loginData.jwt, 1000 * 60 * 60 * 1000);
+        // 获取用户信息进行显示
+        let userData = await getUserData();
+        refreshUserData(userData);
+        hideCenterWindow(document.querySelector("#windowLogin"));
+    } else if (loginData.state == 2) {
+        document.querySelector("#login_password").value = "";
+        document.querySelector("#hint_password_incorrect").classList = "hint show";
+    } else if (loginData.state == 3) {
+        document.querySelector("#login_username").value = "";
+        document.querySelector("#login_password").value = "";
+        document.querySelector("#hint_user_not_exist").classList = "hint show";
+    }
 }
 
 /**
@@ -209,40 +186,31 @@ export async function userLogout() {
 export function saveToCloud(graph) {
     let name = document.querySelector("#stc_path").value;
     let svg = graph.genSvg();
+
     // 先上传图片
     let domFileInput = document.createElement("input");
     domFileInput.type = "file";
-
-    let formData = new FormData();
-    formData.append('svg', svg);
 
     document.querySelector("#saveToCloud").innerHTML = "保存中...";
 
     // 多次保存
     let repeatNum = 0;
-    let saveInterval = window.setInterval(() => {
-        if (repeatNum < 5)
-            axios({
-                url: GRAPH_SVG_UPLOAD_PATH,
-                method: "POST",
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                },
-                data: formData
-            }).then(async d => {
-                if (name) {
-                    // 保存到云
-                    let data = graph.toJson();
-                    let response = await saveGraphToCloud(data, name, d.data.msg.filename);
-                    if (response.state == 11 || response.state == 10) {
-                        userConfig.currentGraphFileName = name;
-                        refreshGraphName();
-                        hideCenterWindow(document.querySelector("#windowSaveToCloud"))
-                    }
+    let saveInterval = window.setInterval(async () => {
+        if (repeatNum < 5) {
+            let svgData = await saveGraphSvgToCloud(svg);
+            if (name) {
+                // 保存到云
+                let data = graph.toJson();
+                let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
+                if (saveFileData.state == 11 || saveFileData.state == 10) {
+                    userConfig.currentGraphFileName = name;
+                    refreshGraphName();
+                    hideCenterWindow(document.querySelector("#windowSaveToCloud"))
                 }
-            });
-        else
+            }
+        } else {
             window.clearInterval(saveInterval);
+        }
         repeatNum++;
 
     }, 300);
@@ -285,13 +253,13 @@ export function refreshGraphName() {
 /**
  * 更新用户信息
  */
-export function refreshUserData(d) {
-    if (d.data.state == 1) {
-        document.querySelector("#showUsername").innerHTML = d.data.msg.data.username;
-        document.querySelector("#showUserAvatar").src = `${AVATAR_STORE_PATH}${d.data.msg.data.avatar}`;
+export function refreshUserData(data) {
+    if (data.state == 1) {
+        document.querySelector("#showUsername").innerHTML = data.msg.data.username;
+        document.querySelector("#showUserAvatar").src = `${AVATAR_STORE_PATH}${data.msg.data.avatar}`;
         userConfig.isLogin = true;
-        userConfig.username = d.data.msg.data.username;
-        userConfig.uid = d.data.msg.data.id;
+        userConfig.username = data.msg.data.username;
+        userConfig.uid = data.msg.data.id;
         refreshMenu();
     } else {
         document.querySelector("#showUsername").innerHTML = "未登录";
@@ -610,7 +578,7 @@ export function showTextEditor(toDom, fnChange = () => { }, fnDone = () => { }) 
 export async function showSaveToCloud() {
     document.querySelector("#saveToCloud").innerHTML = "保存";
     document.querySelector("#windowSaveToCloud ul").innerHTML = "";
-    let graphList = await listUserGraph();
+    let graphList = (await listUserGraph()).msg;
     for (let i = 0; i < graphList.length; i++) {
         let currentGraph = graphList[i];
 
@@ -674,7 +642,7 @@ export async function showSaveToCloud() {
  */
 export async function showLoadFromCloud(graph) {
     document.querySelector("#windowLoadFromCloud ul").innerHTML = "";
-    let graphList = await listUserGraph();
+    let graphList = (await listUserGraph()).msg;
     for (let i = 0; i < graphList.length; i++) {
         let currentGraph = graphList[i];
 
@@ -832,19 +800,11 @@ export function showSaveNodeTemplate(nodeString, nodeDom, nodeObj, graph) {
     }
     document.querySelector("#nodeNameAccept").onclick = async function () {
         // 图片上传服务器
-        let formData = new FormData();
-        formData.append("node", document.querySelector("#nodeImgInput").files[0]);
-        let response = (await axios({
-            url: NODE_UPLOAD_PATH,
-            method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            data: formData
-        })).data;
-        if (response.state == 1) {
+        let nodeUploadData = await uploadStaticFile(NODE_UPLOAD_PATH, "node", document.querySelector("#nodeImgInput").files[0]);
+        console.log(nodeUploadData)
+        if (nodeUploadData.state == 1) {
             let nodeStorage = getLocalStorage("gd_nodeTemplate");
-            let nodeImgUrl = NODE_STORE_PATH + response.msg.filename;
+            let nodeImgUrl = NODE_STORE_PATH + nodeUploadData.msg.filename;
             // 更新LocalStorage
             if (!nodeStorage) {
                 nodeStorage = "[]";
@@ -931,7 +891,7 @@ export function recalSize(graph) {
  */
 export function bindFileDropEvent(graph) {
     let domDropContainer = document.querySelector("svg");
-    function dragEvent(e) {
+    async function dragEvent(e) {
         e.stopPropagation();
         e.preventDefault();
         if (e.type == "drop") {
@@ -942,23 +902,13 @@ export function bindFileDropEvent(graph) {
                 // 判断文件类型
                 let imgAcceptList = ["png", "jpg", "PNG", "JPG", "webp", "WEBP", "gif", "GIF", "jpeg", "JPEG"];
                 if (imgAcceptList.includes(file.name.split(".")[file.name.split(".").length - 1])) {
-                    let formData = new FormData();
-                    formData.append("pic", file);
-                    axios({
-                        url: IMG_UPLOAD_PATH,
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        },
-                        data: formData
-                    }).then(d => {
-                        if (d.data.state == 1) {
-                            let returnImgName = d.data.msg.filename;
-                            graph.addNodeFromString(imgInNode(returnImgName), false);
-                        } else {
-                            console.log("文件上传失败")
-                        }
-                    });
+                    let imgUploadData = await uploadStaticFile(IMG_UPLOAD_PATH, "pic", file);
+                    if (imgUploadData.state == 1) {
+                        let returnImgName = imgUploadData.msg.filename;
+                        graph.addNodeFromString(imgInNode(returnImgName), false);
+                    } else {
+                        console.log("文件上传失败")
+                    }
                 }
             }
         } else if (e.type == "dragleave") {
