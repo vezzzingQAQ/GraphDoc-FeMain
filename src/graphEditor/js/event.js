@@ -692,6 +692,12 @@ export async function showLoadFromCloud(graph) {
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json), true);
+                // 发起ws
+                let udata = await getUserData()
+                if (udata.state == 1) {
+                    let uid = udata.msg.data.id;
+                    graph.startSocket(currentGraph.id + "_" + uid);
+                }
                 hideDyaTemplateArea();
                 hideCenterWindow(document.querySelector("#windowLoadFromCloud"));
             }

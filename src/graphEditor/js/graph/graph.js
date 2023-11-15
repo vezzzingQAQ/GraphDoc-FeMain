@@ -43,7 +43,8 @@ import {
     FILE_STORE_PATH,
     VIDEO_UPLOAD_PATH,
     VIDEO_STORE_PATH,
-    FUNC1_COMP
+    FUNC1_COMP,
+    SOCKET_CONN
 } from "../../../public/js/urls"
 import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText } from "../../../public/js/serverCom";
@@ -51,7 +52,7 @@ import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
 import abcjs from "abcjs";
 import { RIGHT_MENU_ADD_NODE_LIST } from "../nodeAddList";
-import { CMD_LIST, fillCmd } from "./cmdList";
+import { CMD_LIST, doCmd, fillCmd } from "./cmdList";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -122,6 +123,10 @@ export class Graph {
         this.os = getOS();
         // 是否广播命令
         this.sendCmd = true;
+        // ws连接
+        this.socket = null;
+        this.socketKey = null;
+        this.socketName = null;
     }
 
     /**
@@ -137,7 +142,7 @@ export class Graph {
             this.nodeList.push(nodeObj);
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.addNode.in(JSON.stringify(nodeObj.toJsonObj())));
+                fillCmd(this, CMD_LIST.addNode.in(JSON.stringify(nodeObj.toJsonObj())));
         } else {
             console.error(`要添加的节点已存在:${nodeObj}`);
         }
@@ -150,7 +155,7 @@ export class Graph {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.removeNode.in(nodeObj.uuid));
+                fillCmd(this, CMD_LIST.removeNode.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
         } else {
             console.error(`要删除的节点不存在:${nodeObj.uuid}`);
@@ -170,7 +175,7 @@ export class Graph {
             this.edgeList.push(edgeObj);
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.addEdge.in(JSON.stringify(edgeObj.toJsonObj())));
+                fillCmd(this, CMD_LIST.addEdge.in(JSON.stringify(edgeObj.toJsonObj())));
         } else {
             console.error(`关系已存在:${node}`);
         }
@@ -183,7 +188,7 @@ export class Graph {
         if (this.edgeList.includes(edgeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.removeEdge.in(edgeObj.uuid));
+                fillCmd(this, CMD_LIST.removeEdge.in(edgeObj.uuid));
             this.edgeList.splice(this.edgeList.indexOf(edgeObj), 1);
         } else {
             console.error(`要删除的关系不存在${edgeObj.uuid}`)
@@ -197,7 +202,7 @@ export class Graph {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.moveNodeToTop.in(nodeObj.uuid));
+                fillCmd(this, CMD_LIST.moveNodeToTop.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
             this.nodeList.push(nodeObj);
         } else {
@@ -212,7 +217,7 @@ export class Graph {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.moveNodeToBottom.in(nodeObj.uuid));
+                fillCmd(this, CMD_LIST.moveNodeToBottom.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
             this.nodeList.unshift(nodeObj);
         } else {
@@ -227,7 +232,7 @@ export class Graph {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.modifyNode.in(nodeObj.uuid, JSON.stringify(nodeObj.toJsonObj())));
+                fillCmd(this, CMD_LIST.modifyNode.in(nodeObj.uuid, JSON.stringify(nodeObj.toJsonObj())));
         }
     }
 
@@ -238,7 +243,7 @@ export class Graph {
         if (this.edgeList.includes(edgeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.modifyEdge.in(edgeObj.uuid, JSON.stringify(edgeObj.toJsonObj())));
+                fillCmd(this, CMD_LIST.modifyEdge.in(edgeObj.uuid, JSON.stringify(edgeObj.toJsonObj())));
         }
     }
 
@@ -248,7 +253,7 @@ export class Graph {
     modifyBgColor(bgColor, cmd = true) {
         // 命令输出
         if (cmd && this.sendCmd)
-            fillCmd(CMD_LIST.setBgColor.in(bgColor));
+            fillCmd(this, CMD_LIST.setBgColor.in(bgColor));
     }
 
     // ↑以上部分为socket命令广播函数
@@ -329,6 +334,11 @@ export class Graph {
         }
         if (finded) {
             this.nodeList[nodeIndex].componentMap = nodeObjNew.componentMap;
+            // owner赋值
+            for (let componentKey in nodeObjNew.componentMap) {
+                nodeObjNew.componentMap[componentKey].owner = this.nodeList[nodeIndex];
+            }
+            this.nodeList[nodeIndex].owner = this;
             this.nodeList[nodeIndex].x = nodeObjNew.x;
             this.nodeList[nodeIndex].y = nodeObjNew.y;
             this.nodeList[nodeIndex].cx = nodeObjNew.cx;
@@ -337,13 +347,11 @@ export class Graph {
 
             this.modifyNodePhysics();
             let nodeNew = d3.select(`#${nodeUuid}`);
-            nodeNew.attr("opacity", 0);
             window.setTimeout(() => {
                 this.renderProperties.simulation.alphaTarget(0.02).restart();
                 window.setTimeout(() => {
                     this.renderProperties.simulation.stop();
                 }, 20);
-                nodeNew.attr("opacity", 1);
             }, 300);
         } else {
             console.error(`未找到需要修改样式的节点`);
@@ -366,6 +374,11 @@ export class Graph {
         }
         if (finded) {
             this.edgeList[edgeIndex].componentMap = edgeObjNew.componentMap;
+            // owner赋值
+            for (let componentKey in edgeObjNew.componentMap) {
+                edgeObjNew.componentMap[componentKey].owner = this.edgeList[edgeIndex];
+            }
+            this.edgeList[edgeIndex].owner = this;
             this.modifyEdgeExterior(this.edgeList[edgeIndex], false);
 
             this.modifyEdgePhysics();
@@ -2867,6 +2880,31 @@ export class Graph {
         // 清空组件列表
         document.querySelector(".panArea .listPan").innerHTML = "";
         document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+    }
+
+    /**
+     * 🟩
+     * 发起SOCKET
+     */
+    startSocket(gid) {
+        this.socketKey = `gdoc${gid}`;
+        this.socketName = `gname${new Date().getTime()}`
+        this.socket = new WebSocket(`${SOCKET_CONN}/r${this.socketKey}/${this.socketName}/`);
+        this.socket.onmessage = (e) => {
+            console.log(e.data);
+            doCmd(this, e.data);
+        }
+    }
+
+    /**
+     * 🟩
+     * 发送SOCKET
+     */
+    sendSocket(jsonObj) {
+        this.socket.send(JSON.stringify({
+            from: this.socketName,
+            content: jsonObj
+        }));
     }
 
     /**
