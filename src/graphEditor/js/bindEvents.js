@@ -33,7 +33,7 @@ import {
     exportJpg,
     initNodeAddWindow,
     showShareLink,
-    refreshAddNodeArea,
+    refreshLeftWindow,
     showBugReport,
     recalSize,
     showImgExport,
@@ -231,7 +231,7 @@ export async function bindEvents(graph) {
 
     // 展开收起节点添加面板
     document.querySelectorAll(".slideUpBtn").forEach(ele => ele.addEventListener("click", () => {
-        refreshAddNodeArea(ele.parentElement.parentElement.id);
+        refreshLeftWindow(ele.parentElement.parentElement.id);
     }));
 
     // bug反馈窗口
@@ -313,5 +313,9 @@ export async function bindEvents(graph) {
     bindFileDropEvent(graph);
 
     // 获取版本并显示
-    document.querySelector("#gdVersion").innerHTML=`GDoc${GD_VERSION_LIT} |`;
+    document.querySelector("#gdVersion").innerHTML = `GDoc${GD_VERSION_LIT} |`;
+
+    // 先收起左侧面板
+    refreshLeftWindow("selfNodeArea");
+    refreshLeftWindow("cmdLineArea");
 }

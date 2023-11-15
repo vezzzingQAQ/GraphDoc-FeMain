@@ -16,6 +16,8 @@ import "./css/index.less";
 import "./css/component.less";
 import "./css/graph.less";
 import "./css/centerWindow.less";
+import "./css/panArea.less";
+import "./css/leftWindow.less";
 import "./css/loadGraph.less";
 import "./css/menu.less";
 import { bindEvents } from "./js/bindEvents";

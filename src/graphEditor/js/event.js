@@ -856,12 +856,12 @@ export function hideDyaTemplateArea() {
 /**
  * 收起或者打开指定的节点面板
  */
-export function refreshAddNodeArea(domId) {
+export function refreshLeftWindow(domId) {
     if (document.querySelector(`#${domId} .title .slideUpBtn`).classList == "slideUpBtn fa fa-angle-double-left") {
         document.querySelector(`#${domId} .content`).style.opacity = 0;
         document.querySelector(`#${domId} .content`).style.pointerEvents = "none";
         document.querySelector(`#${domId}`).style.width = "30px";
-        document.querySelector(`#${domId}`).style.height = "50px";
+        document.querySelector(`#${domId}`).style.height = "40px";
         document.querySelector(`#${domId} .title .slideUpBtn`).classList = "slideUpBtn fa fa-angle-double-right";
         document.querySelector(`#${domId} .title .icon`).style.display = "none";
         document.querySelector(`#${domId} .title p`).style.display = "none";
@@ -874,7 +874,6 @@ export function refreshAddNodeArea(domId) {
         document.querySelector(`#${domId} .title .icon`).style.display = "inline";
         document.querySelector(`#${domId} .title p`).style.display = "inline";
     }
-    userConfig.leftBarWindowSlideUp = !userConfig.leftBarWindowSlideUp;
 }
 
 /**

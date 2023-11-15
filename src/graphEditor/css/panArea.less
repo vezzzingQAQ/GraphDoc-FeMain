@@ -1,0 +1,124 @@
+@import url(./../../public/css/vairbles.less);
+
+.panArea {
+    display: block;
+    width: @pan_area_width;
+    height: calc(100vh - @menu_height);
+    margin-top: @menu_height;
+    overflow-y: scroll;
+    transition: 0.3s ease-in-out;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .title {
+        position: sticky;
+        top: 0;
+        height: @add_pan_title_height;
+        line-height: @add_pan_title_height;
+        font-size: 14px;
+        padding-left: 10px;
+        letter-spacing: 2px;
+        transition: 0.3s ease-in-out;
+        z-index: 100;
+    }
+
+    .topPan {
+        z-index: 100;
+
+        .window {
+            overflow: hidden;
+
+            .content {
+                transition: 0.3s ease-in-out;
+
+                .container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    padding: 5px;
+                    transition: 0.3s ease-in-out;
+                }
+            }
+
+            .componentAddContainer .componentAddBtn {
+                display: block;
+                width: max-content;
+                height: @component_add_btn_height;
+                line-height: calc(@component_add_btn_height - 8px);
+                padding: 4px;
+                padding-left: 6px;
+                padding-right: 6px;
+                font-size: 13px;
+                text-align: center;
+                margin: 5px;
+                border-radius: @normal_border_radius;
+                cursor: pointer;
+                transition: 0.1s ease-in-out;
+            }
+        }
+    }
+}
+
+
+.darkMode {
+    .panArea {
+        background-color: rgb(35, 35, 35);
+
+        .title {
+            background-color: @bg_color_d_title;
+            color: @fg_color_d_1;
+        }
+
+        .topPan {
+            .window {
+
+                .content {
+                    .container {
+                        color: @fg_color_d_1;
+                        background-color: @bg_color_d_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_d_input;
+
+                    &:hover {
+                        background-color: @bg_color_d_title;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.lightMode {
+    .panArea {
+        background-color: rgb(246, 246, 246);
+
+        .title {
+            background-color: @bg_color_l_title;
+            color: @fg_color_l_1;
+        }
+
+        .topPan {
+            .window {
+
+                .content {
+                    .container {
+                        color: @fg_color_l_1;
+                        background-color: @bg_color_l_pan;
+                    }
+                }
+
+                .componentAddContainer .componentAddBtn {
+                    background-color: @bg_color_l_input;
+
+                    &:hover {
+                        background-color: @bg_color_l_title;
+                    }
+                }
+            }
+        }
+    }
+}
