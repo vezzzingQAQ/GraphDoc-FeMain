@@ -15,6 +15,7 @@ import { templateList } from "./templateList";
 import { templateDyaList } from "./templateDyaList";
 import { LEFT_PAN_ADD_NODE_LIST, imgInNode } from "./nodeAddList";
 import { loadingTipList } from "./loadgingTipList";
+import { doCmd } from "./graph/cmdList";
 
 let currentGraph = null;
 
@@ -904,7 +905,7 @@ export function bindFileDropEvent(graph) {
                     let imgUploadData = await uploadStaticFile(IMG_UPLOAD_PATH, "pic", file);
                     if (imgUploadData.state == 1) {
                         let returnImgName = imgUploadData.msg.filename;
-                        graph.addNodeFromString(imgInNode(returnImgName), false);
+                        graph.addNodeFromString(imgInNode(returnImgName), true);
                     } else {
                         console.log("文件上传失败")
                     }
@@ -1051,4 +1052,12 @@ export function exportJsonLd(graph) {
     jsonObj["@context"] = "http://121.40.159.180:7891/media/files/GdContext_060214.json";
     let blob = new Blob([JSON.stringify(jsonObj)]);
     saveAs(blob, +new Date() + ".json");
+}
+
+/**
+ * 执行GDoc命令
+ */
+export function activateCmd(graph) {
+    let cmdString = document.querySelector("#cmdInput").value;
+    doCmd(graph, cmdString);
 }

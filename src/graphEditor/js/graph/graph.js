@@ -127,50 +127,50 @@ export class Graph {
     /**
      * 向图谱中添加节点
      */
-    pushNode(node, cmd = true) {
-        if (!this.nodeList.includes(node)) {
-            if (!node.uuid) {
+    pushNode(nodeObj, cmd = true) {
+        if (!this.nodeList.includes(nodeObj)) {
+            if (!nodeObj.uuid) {
                 let id = `zznode${uuidv4().split("-").join("")}`;
-                node.uuid = id;
+                nodeObj.uuid = id;
             }
-            node.owner = this;
-            this.nodeList.push(node);
+            nodeObj.owner = this;
+            this.nodeList.push(nodeObj);
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.addNode.in(JSON.stringify(node.toJsonObj())));
+                fillCmd(CMD_LIST.addNode.in(JSON.stringify(nodeObj.toJsonObj())));
         } else {
-            console.error(`要添加的节点已存在:${node}`);
+            console.error(`要添加的节点已存在:${nodeObj}`);
         }
     }
 
     /**
      * 从图谱中删除节点
      */
-    removeNode(node, cmd = true) {
-        if (this.nodeList.includes(node)) {
+    removeNode(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.removeNode.in(node.uuid));
-            this.nodeList.splice(this.nodeList.indexOf(node), 1);
+                fillCmd(CMD_LIST.removeNode.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
         } else {
-            console.error(`要删除的节点不存在:${node.uuid}`);
+            console.error(`要删除的节点不存在:${nodeObj.uuid}`);
         }
     }
 
     /**
      * 向图谱中添加关系
      */
-    pushEdge(edge, cmd = true) {
-        if (!this.edgeList.includes(edge)) {
-            if (!edge.uuid) {
+    pushEdge(edgeObj, cmd = true) {
+        if (!this.edgeList.includes(edgeObj)) {
+            if (!edgeObj.uuid) {
                 let id = `zzedge${uuidv4().split("-").join("")}`;
-                edge.uuid = id;
+                edgeObj.uuid = id;
             }
-            edge.owner = this;
-            this.edgeList.push(edge);
+            edgeObj.owner = this;
+            this.edgeList.push(edgeObj);
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.addEdge.in(JSON.stringify(edge.toJsonObj())));
+                fillCmd(CMD_LIST.addEdge.in(JSON.stringify(edgeObj.toJsonObj())));
         } else {
             console.error(`关系已存在:${node}`);
         }
@@ -179,66 +179,66 @@ export class Graph {
     /**
      * 从图谱中删除关系
      */
-    removeEdge(edge, cmd = true) {
-        if (this.edgeList.includes(edge)) {
+    removeEdge(edgeObj, cmd = true) {
+        if (this.edgeList.includes(edgeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.removeEdge.in(edge.uuid));
-            this.edgeList.splice(this.edgeList.indexOf(edge), 1);
+                fillCmd(CMD_LIST.removeEdge.in(edgeObj.uuid));
+            this.edgeList.splice(this.edgeList.indexOf(edgeObj), 1);
         } else {
-            console.error(`要删除的关系不存在${edge.uuid}`)
+            console.error(`要删除的关系不存在${edgeObj.uuid}`)
         }
     }
 
     /**
      * 将节点移动到顶层
      */
-    moveNodeToTop(node, cmd = true) {
-        if (this.nodeList.includes(node)) {
+    moveNodeToTop(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.moveNodeToTop.in(node.uuid));
-            this.nodeList.splice(this.nodeList.indexOf(node), 1);
-            this.nodeList.push(node);
+                fillCmd(CMD_LIST.moveNodeToTop.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
+            this.nodeList.push(nodeObj);
         } else {
-            console.error(`要移动顺序的节点不存在${node.uuid}`);
+            console.error(`要移动顺序的节点不存在${nodeObj.uuid}`);
         }
     }
 
     /**
      * 将节点移动到底部
      */
-    moveNodeToBottom(node, cmd = true) {
-        if (this.nodeList.includes(node)) {
+    moveNodeToBottom(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.moveNodeToBottom.in(node.uuid));
-            this.nodeList.splice(this.nodeList.indexOf(node), 1);
-            this.nodeList.unshift(node);
+                fillCmd(CMD_LIST.moveNodeToBottom.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
+            this.nodeList.unshift(nodeObj);
         } else {
-            console.error(`要移动顺序的节点不存在${node.uuid}`);
+            console.error(`要移动顺序的节点不存在${nodeObj.uuid}`);
         }
     }
 
     /**
      * 修改节点[包括移动节点,修改样式等等]
      */
-    modifyNode(node, cmd = true) {
-        if (this.nodeList.includes(node)) {
+    modifyNode(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.modifyNode.in(node.uuid, JSON.stringify(node.toJsonObj())));
+                fillCmd(CMD_LIST.modifyNode.in(nodeObj.uuid, JSON.stringify(nodeObj.toJsonObj())));
         }
     }
 
     /**
      * 修改关系
      */
-    modifyEdge(edge, cmd = true) {
-        if (this.edgeList.includes(edge)) {
+    modifyEdge(edgeObj, cmd = true) {
+        if (this.edgeList.includes(edgeObj)) {
             // 命令输出
             if (cmd && this.sendCmd)
-                fillCmd(CMD_LIST.modifyEdge.in(edge.uuid, JSON.stringify(edge.toJsonObj())));
+                fillCmd(CMD_LIST.modifyEdge.in(edgeObj.uuid, JSON.stringify(edgeObj.toJsonObj())));
         }
     }
 
@@ -252,6 +252,136 @@ export class Graph {
     }
 
     // ↑以上部分为socket命令广播函数
+
+    /**
+     * 🟦
+     * 添加节点
+     */
+    cb_addNode(nodeStr) {
+        this.addNodeFromString("[" + nodeStr + "]", false, false, true, false);
+    }
+
+    /**
+     * 🟦
+     * 添加关系
+     */
+    cb_addEdge(edgeStr) {
+        this.addEdgeFromString("[" + edgeStr + "]", true, false);
+    }
+
+    /**
+     * 🟦
+     * 单单删除节点
+     */
+    cb_removeNode(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        this.removeNode(nodeObj, false);
+        d3.select(`#${nodeUuid}`).remove();
+        this.nodes = this.nodes.filter(node => { return node.uuid != nodeUuid });
+    }
+
+    /**
+     * 🟦
+     * 单单删除关系
+     */
+    cb_removeEdge(edgeUuid) {
+        let edgeObj = d3.select(`#${edgeUuid}`).data()[0];
+        this.removeEdge(edgeObj, false);
+        d3.select(`#${edgeUuid}`).remove();
+        this.edges = this.edges.filter(edge => { return edge.uuid != edgeUuid });
+    }
+
+    /**
+     * 🟦
+     * 将节点移到顶部
+     */
+    cb_moveNodeToTop(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        let node = document.querySelector(`#${nodeUuid}`);
+        document.querySelector("#nodeLayer").appendChild(node);
+        this.moveNodeToTop(nodeObj, false);
+    }
+
+    /**
+     * 🟦
+     * 将节点移到底部
+     */
+    cb_moveNodeToBottom(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        let node = document.querySelector(`#${nodeUuid}`);
+        document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
+        this.moveNodeToBottom(nodeObj, false);
+    }
+
+    /**
+     * 🟦
+     * 修改节点样式
+     */
+    cb_modifyNode(nodeUuid, toNodeStr) {
+        let nodeObjNew = LoadNodeFromJson(JSON.parse(toNodeStr));
+        let finded = false;
+        let nodeIndex = 0;
+        for (nodeIndex = 0; nodeIndex < this.nodeList.length; nodeIndex++) {
+            if (this.nodeList[nodeIndex].uuid == nodeUuid) {
+                finded = true;
+                break;
+            }
+        }
+        if (finded) {
+            this.nodeList[nodeIndex].componentMap = nodeObjNew.componentMap;
+            this.nodeList[nodeIndex].x = nodeObjNew.x;
+            this.nodeList[nodeIndex].y = nodeObjNew.y;
+            this.nodeList[nodeIndex].cx = nodeObjNew.cx;
+            this.nodeList[nodeIndex].cy = nodeObjNew.cy;
+            this.modifyNodeExterior(this.nodeList[nodeIndex], false);
+
+            this.modifyNodePhysics();
+            let nodeNew = d3.select(`#${nodeUuid}`);
+            nodeNew.attr("opacity", 0);
+            window.setTimeout(() => {
+                this.renderProperties.simulation.alphaTarget(0.02).restart();
+                window.setTimeout(() => {
+                    this.renderProperties.simulation.stop();
+                }, 20);
+                nodeNew.attr("opacity", 1);
+            }, 300);
+        } else {
+            console.error(`未找到需要修改样式的节点`);
+        }
+    }
+
+    /**
+     * 🟦
+     * 修改关系样式
+     */
+    cb_modifyEdge(edgeUuid, toEdgeStr) {
+        let edgeObjNew = LoadEdgeFromJson(JSON.parse(toEdgeStr), this.nodeList);
+        let finded = false;
+        let edgeIndex = 0;
+        for (edgeIndex = 0; edgeIndex < this.edgeList.length; edgeIndex++) {
+            if (this.edgeList[edgeIndex].uuid == edgeUuid) {
+                finded = true;
+                break;
+            }
+        }
+        if (finded) {
+            this.edgeList[edgeIndex].componentMap = edgeObjNew.componentMap;
+            this.modifyEdgeExterior(this.edgeList[edgeIndex], false);
+
+            this.modifyEdgePhysics();
+        } else {
+            console.error(`未找到需要修改样式的关系`);
+        }
+    }
+
+    /**
+     * 修改背景颜色
+     */
+    cb_setBgColor(bgColor) {
+        this.setBgColor(bgColor, false);
+    }
+
+    // ↑以上部分为socket命令回调函数
 
     /**
      * 渲染图谱
@@ -1440,7 +1570,7 @@ export class Graph {
     /**
      * 从节点字符串添加节点
      */
-    addNodeFromString(nodeString, addOffset = true, fromMouse = true, hasUuid = false) {
+    addNodeFromString(nodeString, addOffset = true, fromMouse = true, hasUuid = false, cmd = true) {
         nodeString = JSON.parse(nodeString);
         // 记录所有要添加的元素
         let addedNodeObjs = [];
@@ -1459,7 +1589,7 @@ export class Graph {
                 nodeStore.cy = nodeStore.y + Math.random() * 10;
             }
             let loadedNode = LoadNodeFromJson(nodeStore);
-            this.pushNode(loadedNode);
+            this.pushNode(loadedNode, cmd);
             addedNodeObjs.push(loadedNode);
         }
         this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
@@ -1515,7 +1645,7 @@ export class Graph {
     /**
      * 从关系字符串添加关系
      */
-    addEdgeFromString(edgeString, hasUuid = false) {
+    addEdgeFromString(edgeString, hasUuid = false, cmd = true) {
         edgeString = JSON.parse(edgeString);
         // 记录所有要添加的edge
         let addedEdgeObjs = [];
@@ -1524,8 +1654,8 @@ export class Graph {
             let edgeStore = edgeString[i];
             if (!hasUuid)
                 edgeStore.uuid = null;
-            let loadedEdge = LoadEdgeFromJson(edgeStore);
-            this.pushEdge(loadedEdge);
+            let loadedEdge = LoadEdgeFromJson(edgeStore, this.nodeList);
+            this.pushEdge(loadedEdge, cmd);
             addedEdgeObjs.push(loadedEdge);
         }
         this.edges = this.edges.data(this.edgeList, d => d.uuid)
@@ -1550,7 +1680,7 @@ export class Graph {
     }
 
     /**
-     * 从图谱中删除节点
+     * 从图谱中删除节点,自动删除节点关联的关系
      */
     deleteElement(elementObj) {
         if (elementObj.type == "node") {

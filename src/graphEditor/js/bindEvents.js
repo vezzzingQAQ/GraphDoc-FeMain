@@ -44,7 +44,8 @@ import {
     refreshGraph,
     refreshNodeTemplate,
     exportJsonLd,
-    refreshShowGrid
+    refreshShowGrid,
+    activateCmd
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -252,6 +253,12 @@ export async function bindEvents(graph) {
         refreshGraph(graph);
     });
 
+    // 回车执行GDoc命令
+    document.querySelector("#cmdInput").addEventListener("keydown", (e) => {
+        if (e.keyCode == 13) {
+            activateCmd(graph);
+        }
+    })
 
     // 窗体大小改变时自动缩放画布
     window.addEventListener("resize", () => {
