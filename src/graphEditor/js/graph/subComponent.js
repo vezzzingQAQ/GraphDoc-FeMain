@@ -62,15 +62,15 @@ class SubComponent {
     /**
      * 跟新graph
      */
-    updateGraph() {
+    updateGraph(cmd = false) {
         // this.owner.owner.owner.pushUndo();
         if (this.owner.owner instanceof Node) {
             // 节点
-            this.owner.owner.owner.modifyNodeExterior(this.owner.owner);
+            this.owner.owner.owner.modifyNodeExterior(this.owner.owner, cmd);
             this.owner.owner.owner.modifyNodePhysics();
         } else if (this.owner.owner instanceof Edge) {
             // 关系
-            this.owner.owner.owner.modifyEdgeExterior(this.owner.owner);
+            this.owner.owner.owner.modifyEdgeExterior(this.owner.owner, cmd);
             this.owner.owner.owner.modifyEdgePhysics();
         } else {
             console.error(`不是Node也不是Edge的组件`);
@@ -83,16 +83,16 @@ class SubComponent {
     /**
      * 更新所有选中的同类型的值
      */
-    updateSelectedValue(value) {
+    updateSelectedValue(value, cmd = false) {
         this.owner.owner.owner.pushUndo();
         let selectedElementList = this.owner.owner.owner.selectedElementList
         if (selectedElementList.length > 1) {
             for (let ele of selectedElementList) {
                 ele.autoSetValue(this.owner.key, this.key, value);
                 if (ele.type == "node") {
-                    this.owner.owner.owner.modifyNodeExterior(ele);
+                    this.owner.owner.owner.modifyNodeExterior(ele, cmd);
                 } else if (ele.type == "edge") {
-                    this.owner.owner.owner.modifyEdgeExterior(ele);
+                    this.owner.owner.owner.modifyEdgeExterior(ele, cmd);
                 } else {
                     console.error(`不是Node也不是Edge的组件`);
                 }
@@ -153,9 +153,6 @@ export class SC_NumberInput extends SubComponent {
             this.dom.readOnly = "true";
         }
         this.dom.value = this.value;
-        // this.dom.min = this.minValue;
-        // this.dom.max = this.maxValue;
-        // this.dom.step = this.step;
         this.dom.addEventListener("input", () => {
             if (this.dom.value < this.minValue) {
                 this.dom.value = this.minValue;
@@ -165,6 +162,10 @@ export class SC_NumberInput extends SubComponent {
             this.setValue(this.dom.value);
             this.updateSelectedValue(this.value);
             this.updateGraph();
+        });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         });
         return this.dom;
     }
@@ -194,6 +195,10 @@ export class SC_ColorInput extends SubComponent {
             this.updateSelectedValue(this.value);
             this.updateGraph();
         });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
         return this.dom;
     }
     updateHtml() {
@@ -222,6 +227,10 @@ export class SC_TextInput extends SubComponent {
             this.updateSelectedValue(this.value);
             this.updateGraph();
         });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
         return this.dom;
     }
     updateHtml() {
@@ -249,6 +258,10 @@ export class SC_UrlInput extends SubComponent {
             this.setValue(this.dom.value);
             this.updateSelectedValue(this.value);
             this.updateGraph();
+        });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         });
         return this.dom;
     }
@@ -283,6 +296,10 @@ export class SC_Select extends SubComponent {
             this.setValue(this.dom.options[this.dom.selectedIndex].value);
             this.updateSelectedValue(this.dom.value);
             this.updateGraph();
+        });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         });
         return this.dom;
     }
@@ -319,6 +336,10 @@ export class SC_Vector2 extends SubComponent {
             this.updateSelectedValue(this.value);
             this.updateGraph();
         });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
         return this.dom;
     }
     updateHtml() {
@@ -349,6 +370,10 @@ export class SC_Check extends SubComponent {
             this.updateSelectedValue(this.value);
             this.updateGraph();
         })
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
         return this.dom;
     }
     updateHtml() {
@@ -401,7 +426,11 @@ export class SC_Textarea extends SubComponent {
             this.value = this.dom.value;
             this.updateSelectedValue(this.value);
             this.updateGraph();
-        })
+        });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
         return this.dom;
     }
     updateHtml() {
@@ -438,6 +467,10 @@ export class SC_FileInput extends SubComponent {
             } else {
                 console.log("文件上传失败");
             }
+        });
+        this.dom.addEventListener("blur", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         });
         return this.dom;
     }
@@ -490,6 +523,10 @@ export class SC_Tag extends SubComponent {
             }
             spanTempDom.remove();
         });
+        tagDom.addEventListener("blur",()=>{
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        })
         tagDeleteBtn.addEventListener("click", () => {
             tagDom.remove();
             tagDeleteBtn.remove();
@@ -501,6 +538,10 @@ export class SC_Tag extends SubComponent {
                 this.value[i] = currentTagDom.value;
             }
         });
+        tagDeleteBtn.addEventListener("blur",()=>{
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        })
 
         tagContainer.appendChild(tagDom);
         tagContainer.appendChild(tagDeleteBtn);
@@ -530,6 +571,8 @@ export class SC_Tag extends SubComponent {
     addTag(value) {
         if (!this.value.includes(value)) {
             this.value.push(value);
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         }
     }
 

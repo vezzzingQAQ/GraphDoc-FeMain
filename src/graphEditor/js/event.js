@@ -13,7 +13,7 @@ import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
 import { templateDyaList } from "./templateDyaList";
-import { addNodeList, imgInNode } from "./nodeAddList";
+import { LEFT_PAN_ADD_NODE_LIST, imgInNode } from "./nodeAddList";
 import { loadingTipList } from "./loadgingTipList";
 
 let currentGraph = null;
@@ -122,8 +122,8 @@ export function newGraph(graph) {
 /**
  * 设置导图背景颜色
  */
-export function setGraphBackgroundColor(graph) {
-    graph.setBgColor(document.querySelector("#bgColorInput").value);
+export function setGraphBackgroundColor(graph, cmd) {
+    graph.setBgColor(document.querySelector("#bgColorInput").value, cmd);
 }
 
 /**
@@ -446,8 +446,8 @@ function addTpNode(nodeTp, graph) {
  */
 export function initNodeAddWindow(graph) {
     let domContainer = document.querySelector("#addNodeArea ul");
-    for (let i = 0; i < addNodeList.length; i++) {
-        let currentNodeTp = addNodeList[i];
+    for (let i = 0; i < LEFT_PAN_ADD_NODE_LIST.length; i++) {
+        let currentNodeTp = LEFT_PAN_ADD_NODE_LIST[i];
         let nodeContainer = document.createElement("li");
         nodeContainer.style.backgroundImage = `url(./nodeTp/${currentNodeTp.name}.png)`;
         nodeContainer.title = currentNodeTp.showName;

@@ -113,6 +113,9 @@ export async function bindEvents(graph) {
     document.querySelector("#bgColorInput").addEventListener("input", () => {
         setGraphBackgroundColor(graph);
     });
+    document.querySelector("#bgColorInput").addEventListener("blur", () => {
+        setGraphBackgroundColor(graph, true);
+    });
 
     // 登录注册窗体互相跳转
     document.querySelector("#toRegister").addEventListener("click", () => {
