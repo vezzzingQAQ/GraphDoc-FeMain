@@ -45,7 +45,7 @@ import {
     VIDEO_STORE_PATH,
     FUNC1_COMP
 } from "../../../public/js/urls"
-import { hideLoadingPage, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
+import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
@@ -407,7 +407,7 @@ export class Graph {
                         }
                         // ctrl+v粘贴元素
                         if (e.keyCode == 86 && _.isControlDown) {
-                            _.pasteElements();
+                            _.pasteElementsAndImg();
                         }
                         // ctrl+z撤销
                         if (e.keyCode == 90 && _.isControlDown) {
@@ -1147,10 +1147,14 @@ export class Graph {
                 edgeList: this.copiedEdgeJsonList
             }
         });
-        // let clipboardObj = navigator.clipboard;
-        // clipboardObj.writeText(storeText);
-        // 将元素复制到sessionStorage
-        window.localStorage.setItem("gdClipBoard", storeText);
+        if (process.env.RUN_ENV == "app") {
+            // 复制到剪贴板
+            let clipboardObj = navigator.clipboard;
+            clipboardObj.writeText(storeText);
+        } else {
+            // 将元素复制到sessionStorage
+            window.localStorage.setItem("gdClipBoard", storeText);
+        }
 
         // 更新底部栏
         this.refreshBottomDom(`🏷️已复制${this.copiedNodeJsonList.length}个节点，${this.copiedEdgeJsonList.length}个关系，按下ctrl+V在鼠标位置粘贴`);
@@ -1178,10 +1182,14 @@ export class Graph {
                 edgeList: this.copiedEdgeJsonList
             }
         });
-        // let clipboardObj = navigator.clipboard;
-        // clipboardObj.writeText(storeText);
-        // 将元素复制到sessionStorage
-        window.localStorage.setItem("gdClipBoard", storeText);
+        if (process.env.RUN_ENV == "app") {
+            // 复制到剪贴板
+            let clipboardObj = navigator.clipboard;
+            clipboardObj.writeText(storeText);
+        } else {
+            // 将元素复制到sessionStorage
+            window.localStorage.setItem("gdClipBoard", storeText);
+        }
 
         // 删除原来的元素
         for (let i = 0; i < this.selectedElementList.length; i++) {
@@ -1194,38 +1202,42 @@ export class Graph {
     }
 
     /**
-     * 粘贴元素
+     * 粘贴元素和图片[仅APP端]
      */
-    pasteElements() {
+    async pasteElementsAndImg() {
         // 压入撤销列表
         this.pushUndo();
 
-        // 如果剪贴板内的内容合法，就粘贴剪贴板的内容
-        // try {
-        //     let clipboardObj = navigator.clipboard;
-        //     let pasteData = await clipboardObj.readText();
-        //     let pasteDataDecoded = JSON.parse(pasteData);
-        //     if (pasteDataDecoded.from != "vgd") throw new Error("不合法的剪贴板");
-        //     if (!pasteDataDecoded.content.nodeList) throw new Error("不合法的剪贴板");
-        //     if (!pasteDataDecoded.content.edgeList) throw new Error("不合法的剪贴板");
-        //     this.copiedNodeJsonList = pasteDataDecoded.content.nodeList;
-        //     this.copiedEdgeJsonList = pasteDataDecoded.content.edgeList;
-        // } catch (e) {
-        //     console.log(e.message);
-        //     console.log("剪贴板出错，切换到本地粘贴");
-        // }
-
-        // 从sessionStorage粘贴
-        try {
-            let pasteData = window.localStorage.getItem("gdClipBoard");
-            let pasteDataDecoded = JSON.parse(pasteData);
-            if (pasteDataDecoded.from != "vgd") throw new Error("不合法的剪贴板");
-            if (!pasteDataDecoded.content.nodeList) throw new Error("不合法的剪贴板");
-            if (!pasteDataDecoded.content.edgeList) throw new Error("不合法的剪贴板");
-            this.copiedNodeJsonList = pasteDataDecoded.content.nodeList;
-            this.copiedEdgeJsonList = pasteDataDecoded.content.edgeList;
-        } catch {
-            console.log("session读取出错，切换到本地粘贴")
+        if (process.env.RUN_ENV == "app") {
+            // 如果剪贴板内的内容合法，就粘贴剪贴板的内容
+            try {
+                let clipboardObj = navigator.clipboard;
+                let pasteData = await clipboardObj.readText();
+                let pasteDataDecoded = JSON.parse(pasteData);
+                if (pasteDataDecoded.from != "vgd") throw new Error("不合法的剪贴板");
+                if (!pasteDataDecoded.content.nodeList) throw new Error("不合法的剪贴板");
+                if (!pasteDataDecoded.content.edgeList) throw new Error("不合法的剪贴板");
+                this.copiedNodeJsonList = pasteDataDecoded.content.nodeList;
+                this.copiedEdgeJsonList = pasteDataDecoded.content.edgeList;
+            } catch (e) {
+                console.log(e.message);
+                // 粘贴图片
+                let pasteContents = await navigator.clipboard.read();
+                pasteImgFromClipboard(pasteContents, this);
+            }
+        } else {
+            // 从sessionStorage粘贴
+            try {
+                let pasteData = window.localStorage.getItem("gdClipBoard");
+                let pasteDataDecoded = JSON.parse(pasteData);
+                if (pasteDataDecoded.from != "vgd") throw new Error("不合法的剪贴板");
+                if (!pasteDataDecoded.content.nodeList) throw new Error("不合法的剪贴板");
+                if (!pasteDataDecoded.content.edgeList) throw new Error("不合法的剪贴板");
+                this.copiedNodeJsonList = pasteDataDecoded.content.nodeList;
+                this.copiedEdgeJsonList = pasteDataDecoded.content.edgeList;
+            } catch {
+                console.log("session读取出错，切换到本地粘贴")
+            }
         }
 
         // 记录新旧键值对

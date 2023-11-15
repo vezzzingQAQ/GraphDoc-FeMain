@@ -924,6 +924,24 @@ export function bindFileDropEvent(graph) {
 }
 
 /**
+ * 从剪贴板读取图片并粘贴
+ */
+export async function pasteImgFromClipboard(pasteContents, graph) {
+    for (let item of pasteContents) {
+        if (item.types.includes("image/png")) {
+            let blob = await item.getType("image/png");
+            let imgUploadData = await uploadStaticFile(IMG_UPLOAD_PATH, "pic", blob);
+            if (imgUploadData.state == 1) {
+                let returnImgName = imgUploadData.msg.filename;
+                graph.addNodeFromString(imgInNode(returnImgName), false);
+            } else {
+                console.log("文件上传失败")
+            }
+        }
+    }
+}
+
+/**
  * 弹出LOADGIN页面
  */
 export function showLoadingPage() {
