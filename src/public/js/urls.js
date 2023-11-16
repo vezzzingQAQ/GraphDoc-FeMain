@@ -56,7 +56,7 @@ if (process.env.PACK_MODE == "production") {
     DOMAIN_RES_UPLOAD = "http://121.40.159.180:7891";
     DOMAIN_RES_DOWNLOAD = "http://121.40.159.180:7881";
     DOMAIN_MAIN = "http://121.40.159.180:7892";
-    SOCKET_CONN = "ws://121.40.159.180:7892";
+    SOCKET_CONN = "ws://121.40.159.180:7893";
     DOMAIN_FE = "http://vezzzing.cn/GraphDoc/Main";
     DOMAIN_COMPONENT = "http://vezzzing.cn/GraphDoc/Component";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
@@ -64,7 +64,7 @@ if (process.env.PACK_MODE == "production") {
     DOMAIN_RES_UPLOAD = "http://127.0.0.1:4999";
     DOMAIN_RES_DOWNLOAD = "http://127.0.0.1:4999/media";
     DOMAIN_MAIN = "http://127.0.0.1:4998";
-    SOCKET_CONN = "ws://127.0.0.1:4998";
+    SOCKET_CONN = "ws://127.0.0.1:4997";
     DOMAIN_FE = "http://127.0.0.1:5501";
     DOMAIN_COMPONENT = "http://127.0.0.1:5502";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
