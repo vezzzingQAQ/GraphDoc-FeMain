@@ -150,7 +150,7 @@ export async function bindEvents(graph) {
 
     // 退出登录
     document.querySelector("#btnLogout").addEventListener("click", () => {
-        userLogout();
+        userLogout(graph);
     });
 
     // 跳转用户中心

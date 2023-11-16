@@ -185,7 +185,7 @@ export async function userLogin() {
 /**
  * 用户退出
  */
-export async function userLogout() {
+export async function userLogout(graph) {
     // 断开socket连接
     if (graph.socketOn) {
         document.querySelector("#check_openSocket").removeAttribute("checked");
