@@ -55,7 +55,7 @@ T E C H vezzzing
                     <p> 节点模板</p><i class="slideUpBtn fa fa-angle-double-left"></i>
                 </div>
                 <div class="content">
-                    <ul>
+                    <ul class="liBtnUl">
 
                     </ul>
                 </div>
@@ -72,7 +72,18 @@ T E C H vezzzing
                         <div class="btnLeftBar exportBtn">导出</div>
                         <div class="btnLeftBar importBtn">导入</div>
                     </div>
-                    <ul>
+                    <ul class="liBtnUl">
+
+                    </ul>
+                </div>
+            </div>
+            <div class="leftBarWindow" id="cmdLineArea">
+                <div class="title"><i class="icon fa fa-code"></i>
+                    <p> GDoc命令行</p><i class="slideUpBtn fa fa-angle-double-left"></i>
+                </div>
+                <div class="content">
+                    <input type="text" id="cmdInput" spellcheck="false">
+                    <ul id="cmdList">
 
                     </ul>
                 </div>
@@ -157,6 +168,8 @@ T E C H vezzzing
                                 class="menuCheck" id="check_showCoord" type="checkbox"> 显示坐标系</li>
                         <li class="checkBoxContainer show" id="btnRefreshShowGrid"><i class="fa fa-wrench"></i><input
                                 class="menuCheck" id="check_showGrid" type="checkbox"> 显示格子点</li>
+                        <li class="checkBoxContainer show" id="btnRefreshOpenSocket"><i class="fa fa-paper-plane"></i><input
+                                class="menuCheck" id="check_openSocket" type="checkbox"> 开启协作</li>
                     </ul>
                 </div>
                 <div class="col menuBlock" id="userOptionsBlock">

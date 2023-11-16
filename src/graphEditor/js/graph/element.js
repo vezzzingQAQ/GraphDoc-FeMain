@@ -227,10 +227,10 @@ class Element {
                 document.querySelector(".panArea .listPan").insertAdjacentElement("afterbegin", addedComponent.initHtml());
                 // 更新图表
                 if (this.type == "node") {
-                    this.owner.modifyNodeExterior(this);
+                    this.owner.modifyNodeExterior(this, true);
                     this.owner.modifyNodePhysics();
                 } else {
-                    this.owner.modifyEdgeExterior(this);
+                    this.owner.modifyEdgeExterior(this, true);
                     this.owner.modifyEdgePhysics(this);
                 }
             });
@@ -285,7 +285,7 @@ export class Node extends Element {
         component.dom.remove();
         delete this.componentMap[component.key];
         this.initComponentAddDom();
-        this.owner.modifyNodeExterior(this);
+        this.owner.modifyNodeExterior(this, true);
         this.owner.modifyNodePhysics();
     }
 
@@ -364,7 +364,7 @@ export class Edge extends Element {
         component.dom.remove();
         delete this.componentMap[component.key];
         this.initComponentAddDom();
-        this.owner.modifyEdgeExterior(this);
+        this.owner.modifyEdgeExterior(this, true);
         this.owner.modifyEdgePhysics(this);
     }
 

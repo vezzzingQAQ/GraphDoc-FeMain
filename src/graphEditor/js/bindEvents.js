@@ -33,7 +33,7 @@ import {
     exportJpg,
     initNodeAddWindow,
     showShareLink,
-    refreshAddNodeArea,
+    refreshLeftWindow,
     showBugReport,
     recalSize,
     showImgExport,
@@ -44,7 +44,9 @@ import {
     refreshGraph,
     refreshNodeTemplate,
     exportJsonLd,
-    refreshShowGrid
+    refreshShowGrid,
+    activateCmd,
+    refreshSocket
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -112,6 +114,9 @@ export async function bindEvents(graph) {
     })
     document.querySelector("#bgColorInput").addEventListener("input", () => {
         setGraphBackgroundColor(graph);
+    });
+    document.querySelector("#bgColorInput").addEventListener("blur", () => {
+        setGraphBackgroundColor(graph, true);
     });
 
     // 登录注册窗体互相跳转
@@ -195,7 +200,7 @@ export async function bindEvents(graph) {
 
     // 设置图谱属性
     document.querySelector("#btnSetGraphProperty").addEventListener("click", () => {
-        showGraphProperty();
+        showGraphProperty(graph);
     });
 
     // 全屏浏览
@@ -223,15 +228,19 @@ export async function bindEvents(graph) {
         refreshShowGrid(graph, !document.querySelector("#check_showGrid").hasAttribute("checked"));
     })
 
+    // 开启协作
+    document.querySelector("#btnRefreshOpenSocket").addEventListener("click", () => {
+        refreshSocket(graph, !document.querySelector("#check_openSocket").hasAttribute("checked"));
+    })
 
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {
-        showShareLink();
+        showShareLink(graph);
     });
 
     // 展开收起节点添加面板
     document.querySelectorAll(".slideUpBtn").forEach(ele => ele.addEventListener("click", () => {
-        refreshAddNodeArea(ele.parentElement.parentElement.id);
+        refreshLeftWindow(ele.parentElement.parentElement.id);
     }));
 
     // bug反馈窗口
@@ -249,6 +258,12 @@ export async function bindEvents(graph) {
         refreshGraph(graph);
     });
 
+    // 回车执行GDoc命令
+    document.querySelector("#cmdInput").addEventListener("keydown", (e) => {
+        if (e.keyCode == 13) {
+            activateCmd(graph);
+        }
+    })
 
     // 窗体大小改变时自动缩放画布
     window.addEventListener("resize", () => {
@@ -313,5 +328,9 @@ export async function bindEvents(graph) {
     bindFileDropEvent(graph);
 
     // 获取版本并显示
-    document.querySelector("#gdVersion").innerHTML=`GDoc${GD_VERSION_LIT} |`;
+    document.querySelector("#gdVersion").innerHTML = `GDoc${GD_VERSION_LIT} |`;
+
+    // 先收起左侧面板
+    refreshLeftWindow("selfNodeArea");
+    refreshLeftWindow("cmdLineArea");
 }

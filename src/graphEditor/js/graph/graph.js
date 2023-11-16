@@ -43,13 +43,16 @@ import {
     FILE_STORE_PATH,
     VIDEO_UPLOAD_PATH,
     VIDEO_STORE_PATH,
-    FUNC1_COMP
+    FUNC1_COMP,
+    SOCKET_CONN
 } from "../../../public/js/urls"
 import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
 import abcjs from "abcjs";
+import { RIGHT_MENU_ADD_NODE_LIST } from "../nodeAddList";
+import { CMD_LIST, doCmd, fillCmd } from "./cmdList";
 
 // 撤销步数
 const UNDO_STEP = 50;
@@ -118,45 +121,282 @@ export class Graph {
         this.isShowGrid = false;
         // 判断所处的操作系统
         this.os = getOS();
+        // 是否广播命令
+        this.socketOn = false;
+        // ws连接
+        this.socket = null;
+        this.socketKey = null;
+        this.socketName = null;
+        // 文件名
+        this.currentGraphFileName = null;
     }
 
     /**
      * 向图谱中添加节点
-     * @param {Node} node 要添加的节点
      */
-    pushNode(node) {
-        if (node) {
-            if (!this.nodeList.includes(node)) {
-                if (!node.uuid) {
-                    let id = `zznode${uuidv4().split("-").join("")}`;
-                    node.uuid = id;
-                }
-                node.owner = this;
-                this.nodeList.push(node);
-            } else {
-                console.error(`节点已存在:${node}`);
+    pushNode(nodeObj, cmd = true) {
+        if (!this.nodeList.includes(nodeObj)) {
+            if (!nodeObj.uuid) {
+                let id = `zznode${uuidv4().split("-").join("")}`;
+                nodeObj.uuid = id;
             }
+            nodeObj.owner = this;
+            this.nodeList.push(nodeObj);
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.addNode.in(JSON.stringify(nodeObj.toJsonObj())));
+        } else {
+            console.error(`要添加的节点已存在:${nodeObj}`);
+        }
+    }
+
+    /**
+     * 从图谱中删除节点
+     */
+    removeNode(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.removeNode.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
+        } else {
+            console.error(`要删除的节点不存在:${nodeObj.uuid}`);
         }
     }
 
     /**
      * 向图谱中添加关系
-     * @param {edge} edge 要添加的关系
      */
-    pushEdge(edge) {
-        if (edge) {
-            if (!this.edgeList.includes(edge)) {
-                if (!edge.uuid) {
-                    let id = `zzedge${uuidv4().split("-").join("")}`;
-                    edge.uuid = id;
-                }
-                edge.owner = this;
-                this.edgeList.push(edge);
-            } else {
-                console.error(`关系已存在:${node}`);
+    pushEdge(edgeObj, cmd = true) {
+        if (!this.edgeList.includes(edgeObj)) {
+            if (!edgeObj.uuid) {
+                let id = `zzedge${uuidv4().split("-").join("")}`;
+                edgeObj.uuid = id;
             }
+            edgeObj.owner = this;
+            this.edgeList.push(edgeObj);
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.addEdge.in(JSON.stringify(edgeObj.toJsonObj())));
+        } else {
+            console.error(`关系已存在:${node}`);
         }
     }
+
+    /**
+     * 从图谱中删除关系
+     */
+    removeEdge(edgeObj, cmd = true) {
+        if (this.edgeList.includes(edgeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.removeEdge.in(edgeObj.uuid));
+            this.edgeList.splice(this.edgeList.indexOf(edgeObj), 1);
+        } else {
+            console.error(`要删除的关系不存在${edgeObj.uuid}`)
+        }
+    }
+
+    /**
+     * 将节点移动到顶层
+     */
+    moveNodeToTop(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.moveNodeToTop.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
+            this.nodeList.push(nodeObj);
+        } else {
+            console.error(`要移动顺序的节点不存在${nodeObj.uuid}`);
+        }
+    }
+
+    /**
+     * 将节点移动到底部
+     */
+    moveNodeToBottom(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.moveNodeToBottom.in(nodeObj.uuid));
+            this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
+            this.nodeList.unshift(nodeObj);
+        } else {
+            console.error(`要移动顺序的节点不存在${nodeObj.uuid}`);
+        }
+    }
+
+    /**
+     * 修改节点[包括移动节点,修改样式等等]
+     */
+    modifyNode(nodeObj, cmd = true) {
+        if (this.nodeList.includes(nodeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.modifyNode.in(nodeObj.uuid, JSON.stringify(nodeObj.toJsonObj())));
+        }
+    }
+
+    /**
+     * 修改关系
+     */
+    modifyEdge(edgeObj, cmd = true) {
+        if (this.edgeList.includes(edgeObj)) {
+            // 命令输出
+            if (cmd && this.socketOn)
+                fillCmd(this, CMD_LIST.modifyEdge.in(edgeObj.uuid, JSON.stringify(edgeObj.toJsonObj())));
+        }
+    }
+
+    /**
+     * 修改背景颜色
+     */
+    modifyBgColor(bgColor, cmd = true) {
+        // 命令输出
+        if (cmd && this.socketOn)
+            fillCmd(this, CMD_LIST.setBgColor.in(bgColor));
+    }
+
+    // ↑以上部分为socket命令广播函数
+
+    /**
+     * 🟦
+     * 添加节点
+     */
+    cb_addNode(nodeStr) {
+        this.addNodeFromString("[" + nodeStr + "]", false, false, true, false);
+    }
+
+    /**
+     * 🟦
+     * 添加关系
+     */
+    cb_addEdge(edgeStr) {
+        this.addEdgeFromString("[" + edgeStr + "]", true, false);
+    }
+
+    /**
+     * 🟦
+     * 单单删除节点
+     */
+    cb_removeNode(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        this.removeNode(nodeObj, false);
+        d3.select(`#${nodeUuid}`).remove();
+        this.nodes = this.nodes.filter(node => { return node.uuid != nodeUuid });
+    }
+
+    /**
+     * 🟦
+     * 单单删除关系
+     */
+    cb_removeEdge(edgeUuid) {
+        let edgeObj = d3.select(`#${edgeUuid}`).data()[0];
+        this.removeEdge(edgeObj, false);
+        d3.select(`#${edgeUuid}`).remove();
+        this.edges = this.edges.filter(edge => { return edge.uuid != edgeUuid });
+    }
+
+    /**
+     * 🟦
+     * 将节点移到顶部
+     */
+    cb_moveNodeToTop(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        let node = document.querySelector(`#${nodeUuid}`);
+        document.querySelector("#nodeLayer").appendChild(node);
+        this.moveNodeToTop(nodeObj, false);
+    }
+
+    /**
+     * 🟦
+     * 将节点移到底部
+     */
+    cb_moveNodeToBottom(nodeUuid) {
+        let nodeObj = d3.select(`#${nodeUuid}`).data()[0];
+        let node = document.querySelector(`#${nodeUuid}`);
+        document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
+        this.moveNodeToBottom(nodeObj, false);
+    }
+
+    /**
+     * 🟦
+     * 修改节点样式
+     */
+    cb_modifyNode(nodeUuid, toNodeStr) {
+        let nodeObjNew = LoadNodeFromJson(JSON.parse(toNodeStr));
+        let finded = false;
+        let nodeIndex = 0;
+        for (nodeIndex = 0; nodeIndex < this.nodeList.length; nodeIndex++) {
+            if (this.nodeList[nodeIndex].uuid == nodeUuid) {
+                finded = true;
+                break;
+            }
+        }
+        if (finded) {
+            this.nodeList[nodeIndex].componentMap = nodeObjNew.componentMap;
+            // owner赋值
+            for (let componentKey in nodeObjNew.componentMap) {
+                nodeObjNew.componentMap[componentKey].owner = this.nodeList[nodeIndex];
+            }
+            this.nodeList[nodeIndex].owner = this;
+            this.nodeList[nodeIndex].x = nodeObjNew.x;
+            this.nodeList[nodeIndex].y = nodeObjNew.y;
+            this.nodeList[nodeIndex].cx = nodeObjNew.cx;
+            this.nodeList[nodeIndex].cy = nodeObjNew.cy;
+            this.modifyNodeExterior(this.nodeList[nodeIndex], false);
+
+            this.modifyNodePhysics();
+            let nodeNew = d3.select(`#${nodeUuid}`);
+            window.setTimeout(() => {
+                this.renderProperties.simulation.alphaTarget(0.02).restart();
+                window.setTimeout(() => {
+                    this.renderProperties.simulation.stop();
+                }, 20);
+            }, 300);
+        } else {
+            console.error(`未找到需要修改样式的节点`);
+        }
+    }
+
+    /**
+     * 🟦
+     * 修改关系样式
+     */
+    cb_modifyEdge(edgeUuid, toEdgeStr) {
+        let edgeObjNew = LoadEdgeFromJson(JSON.parse(toEdgeStr), this.nodeList);
+        let finded = false;
+        let edgeIndex = 0;
+        for (edgeIndex = 0; edgeIndex < this.edgeList.length; edgeIndex++) {
+            if (this.edgeList[edgeIndex].uuid == edgeUuid) {
+                finded = true;
+                break;
+            }
+        }
+        if (finded) {
+            this.edgeList[edgeIndex].componentMap = edgeObjNew.componentMap;
+            // owner赋值
+            for (let componentKey in edgeObjNew.componentMap) {
+                edgeObjNew.componentMap[componentKey].owner = this.edgeList[edgeIndex];
+            }
+            this.edgeList[edgeIndex].owner = this;
+            this.modifyEdgeExterior(this.edgeList[edgeIndex], false);
+
+            this.modifyEdgePhysics();
+        } else {
+            console.error(`未找到需要修改样式的关系`);
+        }
+    }
+
+    /**
+     * 修改背景颜色
+     */
+    cb_setBgColor(bgColor) {
+        this.setBgColor(bgColor, false);
+    }
+
+    // ↑以上部分为socket命令回调函数
 
     /**
      * 渲染图谱
@@ -784,6 +1024,12 @@ export class Graph {
                 _.calPublicProperties();
             }
 
+            // 广播命令
+            for (let moveNode of moveList) {
+                _.modifyNode(moveNode, true);
+            }
+            _.modifyNode(d, true);
+
             let times = (new Date()).getTime() - clickTime;
             if (times < 100) {
                 // 时间过小就不要放到撤销列表里了
@@ -1328,91 +1574,38 @@ export class Graph {
     /**
      * 向图谱中添加节点
      */
-    addNode(e, type) {
+    addNode(type) {
         let _ = this;
 
-        // 添加节点
-        let addedNode;
-        switch (type) {
-            case "basic":
-                addedNode = CreateBasicNode();
-                break;
-            case "text":
-                addedNode = CreateTextNode();
-                break;
-            case "link":
-                addedNode = CreateLinkNode();
-                break;
-            case "img":
-                addedNode = CreateImgNode();
-                break;
-            case "video":
-                addedNode = CreateVideoNode();
-                break;
-            case "code":
-                addedNode = CreateCodeNode();
-                break;
-            case "md":
-                addedNode = CreateMdNode();
-                break;
-            case "latex":
-                addedNode = CreateLatexNode();
-                break;
-            default:
-                addedNode = CreateBasicNode();
+        if (RIGHT_MENU_ADD_NODE_LIST[type]) {
+            _.addNodeFromString(RIGHT_MENU_ADD_NODE_LIST[type], false);
         }
-        // 计算鼠标在svg中的相对位置
-        let transform = d3.zoomTransform(_.renderProperties.viewArea.node());
-        let pt = transform.invert([e.x, e.y]);
-        addedNode.x = pt[0];
-        addedNode.y = pt[1];
-        _.pushNode(addedNode);
-
-        _.nodes = _.nodes
-            .data(_.nodeList, d => d.uuid)
-            .enter()
-            .append("g")
-            .call(d => {
-                _.initNodes(d);
-            })
-            .merge(_.nodes);
-
-        // 初始化组件
-        _.modifyNodeExterior(addedNode);
-        _.modifyNodePhysics();
-
-        _.deselectAll();
-        // 选中新添加的节点
-        _.selectElement(addedNode);
-
-        _.initDragEvents(_.nodes);
-
-        // 更新属性栏
-        addedNode.initHtml();
-        return addedNode;
     }
 
     /**
      * 从节点字符串添加节点
      */
-    addNodeFromString(nodeString, addOffset = true) {
+    addNodeFromString(nodeString, addOffset = true, fromMouse = true, hasUuid = false, cmd = true) {
         nodeString = JSON.parse(nodeString);
-        // 记录所有粘贴的元素
-        let pastedNodeObjs = [];
-        // 粘贴node
+        // 记录所有要添加的元素
+        let addedNodeObjs = [];
+        // 添加node
         for (let i = 0; i < nodeString.length; i++) {
             let nodeStore = nodeString[i];
-            nodeStore.uuid = null;
+            if (!hasUuid)
+                nodeStore.uuid = null;
             // 计算鼠标在svg中的相对位置
-            let transform = d3.zoomTransform(this.renderProperties.viewArea.node());
-            let pt = transform.invert([addOffset ? this.mouseX + 350 : this.mouseX, this.mouseY]);
-            nodeStore.x = pt[0] + Math.random() * 10;
-            nodeStore.y = pt[1] + Math.random() * 10;
-            nodeStore.cx = nodeStore.x + Math.random() * 10;
-            nodeStore.cy = nodeStore.y + Math.random() * 10;
+            if (fromMouse) {
+                let transform = d3.zoomTransform(this.renderProperties.viewArea.node());
+                let pt = transform.invert([addOffset ? this.mouseX + 350 : this.mouseX, this.mouseY]);
+                nodeStore.x = pt[0] + Math.random() * 10;
+                nodeStore.y = pt[1] + Math.random() * 10;
+                nodeStore.cx = nodeStore.x + Math.random() * 10;
+                nodeStore.cy = nodeStore.y + Math.random() * 10;
+            }
             let loadedNode = LoadNodeFromJson(nodeStore);
-            this.pushNode(loadedNode);
-            pastedNodeObjs.push(loadedNode);
+            this.pushNode(loadedNode, cmd);
+            addedNodeObjs.push(loadedNode);
         }
         this.nodes = this.nodes.data(this.nodeList, d => d.uuid)
             .enter()
@@ -1421,8 +1614,8 @@ export class Graph {
                 this.initNodes(d);
             })
             .merge(this.nodes);
-        for (let pastedNodeObj of pastedNodeObjs) {
-            this.modifyNodeExterior(pastedNodeObj);
+        for (let addedNodeObj of addedNodeObjs) {
+            this.modifyNodeExterior(addedNodeObj);
         }
 
         this.modifyNodePhysics();
@@ -1465,7 +1658,44 @@ export class Graph {
     }
 
     /**
-     * 从图谱中删除节点
+     * 从关系字符串添加关系
+     */
+    addEdgeFromString(edgeString, hasUuid = false, cmd = true) {
+        edgeString = JSON.parse(edgeString);
+        // 记录所有要添加的edge
+        let addedEdgeObjs = [];
+        // 添加edge
+        for (let i = 0; i < edgeString.length; i++) {
+            let edgeStore = edgeString[i];
+            if (!hasUuid)
+                edgeStore.uuid = null;
+            let loadedEdge = LoadEdgeFromJson(edgeStore, this.nodeList);
+            this.pushEdge(loadedEdge, cmd);
+            addedEdgeObjs.push(loadedEdge);
+        }
+        this.edges = this.edges.data(this.edgeList, d => d.uuid)
+            .enter()
+            .append("g")
+            .call(d => {
+                this.initEdges(d);
+            })
+            .merge(this.edges);
+        for (let addedEdgeObj of addedEdgeObjs) {
+            this.modifyEdgeExterior(addedEdgeObj);
+        }
+
+        this.modifyEdgePhysics();
+
+        window.setTimeout(() => {
+            this.renderProperties.simulation.alphaTarget(0.02).restart();
+            window.setTimeout(() => {
+                this.renderProperties.simulation.stop();
+            }, 20);
+        }, 300);
+    }
+
+    /**
+     * 从图谱中删除节点,自动删除节点关联的关系
      */
     deleteElement(elementObj) {
         if (elementObj.type == "node") {
@@ -1474,21 +1704,21 @@ export class Graph {
             for (let i = 0; i < removeEdgeList.length; i++) {
                 let currentRemoveEdge = removeEdgeList[i];
                 if (this.edgeList.indexOf(currentRemoveEdge) != -1) {
-                    this.edgeList.splice(this.edgeList.indexOf(currentRemoveEdge), 1);
+                    this.removeEdge(currentRemoveEdge);
                     d3.select(`#${currentRemoveEdge.uuid}`).remove();
                     this.edges = this.edges.filter(edge => { return edge.uuid != currentRemoveEdge.uuid });
                 }
             }
             // 移除节点
             if (this.nodeList.indexOf(elementObj) != -1) {
-                this.nodeList.splice(this.nodeList.indexOf(elementObj), 1);
+                this.removeNode(elementObj);
                 d3.select(`#${elementObj.uuid}`).remove();
                 this.nodes = this.nodes.filter(node => { return node.uuid != elementObj.uuid });
             }
         } else if (elementObj.type == "edge") {
             // 移除关系
             if (this.edgeList.indexOf(elementObj) != -1) {
-                this.edgeList.splice(this.edgeList.indexOf(elementObj), 1);
+                this.removeEdge(elementObj);
                 d3.select(`#${elementObj.uuid}`).remove();
                 this.edges = this.edges.filter(edge => { return edge.uuid != elementObj.uuid });
             }
@@ -1498,7 +1728,7 @@ export class Graph {
     /**
      * 修改单个节点
      */
-    modifyNodeExterior(nodeObj) {
+    modifyNodeExterior(nodeObj, cmd = false) {
         // 图片转为base64
         function convertImgToBase64(url, callback) {
             var canvas = document.createElement("CANVAS"),
@@ -1873,6 +2103,10 @@ export class Graph {
             domAddedSubComponentContainer.node().style.cssText += nodeObj.autoGetValue("css_node", "content", "");
             calSize();
         }
+
+        // 发送修改命令
+        if (cmd)
+            this.modifyNode(nodeObj, true)
     }
 
     /**
@@ -1905,7 +2139,7 @@ export class Graph {
     /**
      * 修改单个关系
      */
-    modifyEdgeExterior(edgeObj) {
+    modifyEdgeExterior(edgeObj, cmd = false) {
         let findedEdgeGroup = this.renderProperties.viewArea.select(`#${edgeObj.uuid}`);
         let findedEdge = findedEdgeGroup.select("path");
 
@@ -2029,6 +2263,10 @@ export class Graph {
             this.edgePrevJson = edgeObj.toJsonObj();
         }
         calSize();
+
+        // 发送修改命令
+        if (cmd)
+            this.modifyEdge(edgeObj, true);
     }
 
     /**
@@ -2261,49 +2499,49 @@ export class Graph {
             {
                 name: "添加空白节点",
                 func: function () {
-                    _.addNode(e, "basic");
+                    _.addNode("basic");
                 }
             },
             {
                 name: "添加文本节点",
                 func: function () {
-                    _.addNode(e, "text");
+                    _.addNode("text");
                 }
             },
             {
                 name: "添加链接节点",
                 func: function () {
-                    _.addNode(e, "link");
+                    _.addNode("link");
                 }
             },
             {
                 name: "添加图片节点",
                 func: function () {
-                    _.addNode(e, "img");
+                    _.addNode("img");
                 }
             },
             {
                 name: "添加视频节点",
                 func: function () {
-                    _.addNode(e, "video");
+                    _.addNode("video");
                 }
             },
             {
                 name: "添加代码节点",
                 func: function () {
-                    _.addNode(e, "code");
+                    _.addNode("code");
                 }
             },
             {
                 name: "添加MD节点",
                 func: function () {
-                    _.addNode(e, "md");
+                    _.addNode("md");
                 }
             },
             {
                 name: "添加公式节点",
                 func: function () {
-                    _.addNode(e, "latex");
+                    _.addNode("latex");
                 }
             },
             {
@@ -2334,14 +2572,12 @@ export class Graph {
                         for (let selectedNodeObj of selectedNodeList) {
                             let node = document.querySelector(`#${selectedNodeObj.uuid}`);
                             document.querySelector("#nodeLayer").appendChild(node);
-                            _.nodeList.splice(_.nodeList.indexOf(selectedNodeObj), 1);
-                            _.nodeList.push(selectedNodeObj);
+                            _.moveNodeToTop(selectedNodeObj);
                         }
                     } else {
                         let node = document.querySelector(`#${nodeObj.uuid}`);
                         document.querySelector("#nodeLayer").appendChild(node);
-                        _.nodeList.splice(_.nodeList.indexOf(nodeObj), 1);
-                        _.nodeList.push(nodeObj);
+                        _.moveNodeToTop(nodeObj);
                     }
                 }
             },
@@ -2354,14 +2590,12 @@ export class Graph {
                         for (let selectedNodeObj of selectedNodeList) {
                             let node = document.querySelector(`#${selectedNodeObj.uuid}`);
                             document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
-                            _.nodeList.splice(_.nodeList.indexOf(selectedNodeObj), 1);
-                            _.nodeList.unshift(selectedNodeObj);
+                            _.moveNodeToBottom(selectedNodeObj);
                         }
                     } else {
                         let node = document.querySelector(`#${nodeObj.uuid}`);
                         document.querySelector("#nodeLayer").insertBefore(node, document.querySelector("#nodeLayer").firstElementChild);
-                        _.nodeList.splice(_.nodeList.indexOf(nodeObj), 1);
-                        _.nodeList.unshift(nodeObj);
+                        _.moveNodeToBottom(nodeObj);
                     }
                 }
             },
@@ -2526,9 +2760,11 @@ export class Graph {
     /**
      * 设置背景颜色
      */
-    setBgColor(color) {
+    setBgColor(color, cmd = false) {
         this.bgColor = color;
         this.renderProperties.svg.style("background-color", color);
+        if (cmd)
+            this.modifyBgColor(color);
     }
 
     /**
@@ -2628,11 +2864,11 @@ export class Graph {
         let edgeJsonList = jsonObj.edgeList;
         for (let nodeJson of nodeJsonList) {
             let node = LoadNodeFromJson(nodeJson);
-            this.pushNode(node);
+            this.pushNode(node, false);
         }
         for (let edgeJson of edgeJsonList) {
             let edge = LoadEdgeFromJson(edgeJson, this.nodeList);
-            this.pushEdge(edge);
+            this.pushEdge(edge, false);
         }
         this.bgColor = jsonObj.bgColor;
         this.render(refreshViewArea);
@@ -2646,6 +2882,56 @@ export class Graph {
         // 清空组件列表
         document.querySelector(".panArea .listPan").innerHTML = "";
         document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+    }
+
+    /**
+     * 🟩
+     * 发起SOCKET
+     */
+    startSocket(gid) {
+        this.socketKey = `gdoc${gid}`;
+        this.socketName = `gname${new Date().getTime()}`
+        this.socket = new WebSocket(`${SOCKET_CONN}/r${this.socketKey}/${this.socketName}/`);
+        // 开启广播
+        this.socketOn = true;
+        /**
+         * 🟩
+         * socket收到消息
+         */
+        this.socket.onmessage = (e) => {
+            console.log(e.data);
+            let dataObj = JSON.parse(e.data);
+            // 有人加入协作
+            if (dataObj.type == "msg")
+                showMessage(dataObj.content, () => {
+
+                });
+            // 执行命令
+            if (dataObj.type == "cmd")
+                doCmd(this, dataObj.content);
+        }
+    }
+
+    /**
+     * 🟩
+     * 发送SOCKET
+     */
+    sendSocket(jsonObj) {
+        this.socket.send(JSON.stringify({
+            from: this.socketName,
+            content: jsonObj
+        }));
+    }
+
+    /**
+     * 🟩
+     * 结束SOCKET
+     */
+    stopSocket() {
+        this.socket.close();
+        this.socketOn = false;
+        document.querySelector("#cmdList").innerHTML = "";
+        document.querySelector("#cmdInput").value = "";
     }
 
     /**

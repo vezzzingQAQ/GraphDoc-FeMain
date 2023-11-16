@@ -7,7 +7,7 @@
 import { loadGraphFromCloud } from "../../public/js/serverCom";
 import { getQueryVariable } from "../../public/js/tools";
 import { CreateBasicEdge, CreateBasicNode, CreateLinkNode } from "./graph/element";
-import { userConfig, refreshGraphName, refreshFullScreen, refreshEditMode } from "./event";
+import { refreshGraphName, refreshFullScreen, refreshEditMode } from "./event";
 import { LoadGraphFromJson, Graph } from "./graph/graph";
 
 import defaultGraph from "./../../asset/graph/main.json";
@@ -27,8 +27,8 @@ export async function initGraph(graphObj) {
         if (!uid) {
             let response = await loadGraphFromCloud(graphName)
             if (response.state == 1) {
-                userConfig.currentGraphFileName = graphName;
-                refreshGraphName();
+                graph.currentGraphFileName = graphName;
+                refreshGraphName(graph);
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));
@@ -36,8 +36,8 @@ export async function initGraph(graphObj) {
         } else {
             let response = await loadGraphFromCloud(graphName, uid);
             if (response.state == 1) {
-                userConfig.currentGraphFileName = graphName;
-                refreshGraphName();
+                graph.currentGraphFileName = graphName;
+                refreshGraphName(graph);
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));

@@ -13,8 +13,9 @@ import defaultAvatarPng from "./../../asset/img/defaultAvatar.png";
 import newGraphJson from "./../../asset/graph/new.json";
 import { templateList } from "./templateList";
 import { templateDyaList } from "./templateDyaList";
-import { addNodeList, imgInNode } from "./nodeAddList";
+import { LEFT_PAN_ADD_NODE_LIST, imgInNode } from "./nodeAddList";
 import { loadingTipList } from "./loadgingTipList";
+import { doCmd } from "./graph/cmdList";
 
 let currentGraph = null;
 
@@ -80,6 +81,11 @@ export function openGraph(graph) {
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
+            // 断开socket连接
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
             let reader;
             let data;
             if (window.FileReader) {
@@ -91,8 +97,8 @@ export function openGraph(graph) {
             reader.addEventListener("load", (readRes) => {
                 showLoadingPage();
                 window.setTimeout(() => {
-                    userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
-                    refreshGraphName();
+                    graph.currentGraphFileName = elementInput.files[0].name.split(".")[0];
+                    refreshGraphName(graph);
                     graph.clear();
                     data = JSON.parse(readRes.target.result);
                     graph.load(data, true);
@@ -112,8 +118,13 @@ export function openGraph(graph) {
  * 新建导图
  */
 export function newGraph(graph) {
-    userConfig.currentGraphFileName = "未命名图谱";
-    refreshGraphName();
+    // 断开socket连接
+    if (graph.socketOn) {
+        document.querySelector("#check_openSocket").removeAttribute("checked");
+        graph.stopSocket();
+    } v
+    graph.currentGraphFileName = "未命名图谱";
+    refreshGraphName(graph);
     graph.clear();
     graph.load(newGraphJson, true);
     hideDyaTemplateArea();
@@ -122,8 +133,8 @@ export function newGraph(graph) {
 /**
  * 设置导图背景颜色
  */
-export function setGraphBackgroundColor(graph) {
-    graph.setBgColor(document.querySelector("#bgColorInput").value);
+export function setGraphBackgroundColor(graph, cmd) {
+    graph.setBgColor(document.querySelector("#bgColorInput").value, cmd);
 }
 
 /**
@@ -175,6 +186,11 @@ export async function userLogin() {
  * 用户退出
  */
 export async function userLogout() {
+    // 断开socket连接
+    if (graph.socketOn) {
+        document.querySelector("#check_openSocket").removeAttribute("checked");
+        graph.stopSocket();
+    }
     delCookie("jwt");
     let userData = await getUserData();
     refreshUserData(userData);
@@ -203,8 +219,8 @@ export function saveToCloud(graph) {
                 let data = graph.toJson();
                 let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
                 if (saveFileData.state == 11 || saveFileData.state == 10) {
-                    userConfig.currentGraphFileName = name;
-                    refreshGraphName();
+                    graph.currentGraphFileName = name;
+                    refreshGraphName(graph);
                     hideCenterWindow(document.querySelector("#windowSaveToCloud"))
                 }
             }
@@ -243,9 +259,9 @@ export function refreshMenu() {
 /**
  * 更新导图名称
  */
-export function refreshGraphName() {
-    if (userConfig.currentGraphFileName) {
-        document.querySelector("#graphName").innerHTML = userConfig.currentGraphFileName;
+export function refreshGraphName(graph) {
+    if (graph.currentGraphFileName) {
+        document.querySelector("#graphName").innerHTML = graph.currentGraphFileName;
         window.history.replaceState("", "", `${EDITOR_PGAE}`);
     }
 }
@@ -299,6 +315,11 @@ export function openCode(graph) {
     elementInput.click();
     elementInput.addEventListener("input", () => {
         try {
+            // 断开socket连接
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
             showLoadingPage();
             let reader;
             if (window.FileReader) {
@@ -308,8 +329,8 @@ export function openCode(graph) {
             }
             reader.readAsText(elementInput.files[0]);
             reader.addEventListener("load", (readRes) => {
-                userConfig.currentGraphFileName = elementInput.files[0].name.split(".")[0];
-                refreshGraphName();
+                graph.currentGraphFileName = elementInput.files[0].name.split(".")[0];
+                refreshGraphName(graph);
                 window.graphData = "";
                 try {
                     // 执行代码
@@ -350,6 +371,11 @@ export function openCode(graph) {
 export function loadGraphFromCode() {
     // 数据绑定的部分不需要重新执行
     try {
+        // 断开socket连接
+        if (graph.socketOn) {
+            document.querySelector("#check_openSocket").removeAttribute("checked");
+            graph.stopSocket();
+        }
         eval("window.graphData=window.main();");
         currentGraph.clear();
         let data = JSON.parse(window.graphData.toJson());
@@ -446,8 +472,8 @@ function addTpNode(nodeTp, graph) {
  */
 export function initNodeAddWindow(graph) {
     let domContainer = document.querySelector("#addNodeArea ul");
-    for (let i = 0; i < addNodeList.length; i++) {
-        let currentNodeTp = addNodeList[i];
+    for (let i = 0; i < LEFT_PAN_ADD_NODE_LIST.length; i++) {
+        let currentNodeTp = LEFT_PAN_ADD_NODE_LIST[i];
         let nodeContainer = document.createElement("li");
         nodeContainer.style.backgroundImage = `url(./nodeTp/${currentNodeTp.name}.png)`;
         nodeContainer.title = currentNodeTp.showName;
@@ -508,10 +534,10 @@ export function showImgExport(graph, type) {
         }, 500);
     }
 }
-export async function showShareLink() {
+export async function showShareLink(graph) {
     showCenterWindow(document.querySelector("#windowShareLink"));
     // 获取数据填入窗体
-    let response = await loadGraphConfig(userConfig.currentGraphFileName);
+    let response = await loadGraphConfig(graph.currentGraphFileName);
     if (response.state == 1) {
         let graphName = response.msg.name;
         let uid = response.msg.author.id;
@@ -523,10 +549,10 @@ export async function showShareLink() {
         showMessage("请先保存到云再分享");
     }
 }
-export async function showGraphProperty() {
+export async function showGraphProperty(graph) {
     showCenterWindow(document.querySelector("#windowGraphProperty"));
     // 获取数据填入窗体
-    let response = await loadGraphConfig(userConfig.currentGraphFileName);
+    let response = await loadGraphConfig(graph.currentGraphFileName);
     if (response.state == 1) {
         if (response.msg.isPublic) {
             document.querySelector("#radioPublic").checked = true;
@@ -540,7 +566,7 @@ export async function showGraphProperty() {
         if (document.querySelector("#radioPublic").checked) isPublic = 1;
         let info = document.querySelector("#graphInfoInput").value;
         // 发送请求
-        response = await configGraph(userConfig.currentGraphFileName, isPublic, info);
+        response = await configGraph(graph.currentGraphFileName, isPublic, info);
         if (response.state == 1) {
             hideCenterWindow(document.querySelector("#windowGraphProperty"));
         } else {
@@ -683,11 +709,16 @@ export async function showLoadFromCloud(graph) {
         domGraphTag.appendChild(domGraphTagClose);
 
         domGraphTagName.onclick = async () => {
+            // 断开socket连接
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
             showLoadingPage();
             let response = await loadGraphFromCloud(currentGraph.name);
             if (response.state == 1) {
-                userConfig.currentGraphFileName = currentGraph.name;
-                refreshGraphName();
+                graph.currentGraphFileName = currentGraph.name;
+                refreshGraphName(graph);
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json), true);
@@ -708,9 +739,14 @@ export function showTemplate(graph) {
     for (let template of templateList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
+            // 断开socket连接
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
             showLoadingPage();
-            userConfig.currentGraphFileName = template.showName;
-            refreshGraphName();
+            graph.currentGraphFileName = template.showName;
+            refreshGraphName(graph);
             // 请求本地文件
             axios.get(`./graphTemplate/${template.name}.vgd`).then(res => {
                 graph.clear();
@@ -740,13 +776,18 @@ export function showTemplateDya(graph) {
     for (let template of templateDyaList) {
         let domAddedLi = document.createElement("li");
         domAddedLi.onclick = () => {
+            // 断开socket连接
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
             showLoadingPage();
-            userConfig.currentGraphFileName = template.showName;
-            refreshGraphName();
+            graph.currentGraphFileName = template.showName;
+            refreshGraphName(graph);
             // 请求本地文件
             axios.get(`./graphTemplate/${template.name}.js`).then(res => {
-                userConfig.currentGraphFileName = template.showName;
-                refreshGraphName();
+                graph.currentGraphFileName = template.showName;
+                refreshGraphName(graph);
                 window.graphData = "";
                 try {
                     // 执行代码
@@ -856,12 +897,12 @@ export function hideDyaTemplateArea() {
 /**
  * 收起或者打开指定的节点面板
  */
-export function refreshAddNodeArea(domId) {
+export function refreshLeftWindow(domId) {
     if (document.querySelector(`#${domId} .title .slideUpBtn`).classList == "slideUpBtn fa fa-angle-double-left") {
         document.querySelector(`#${domId} .content`).style.opacity = 0;
         document.querySelector(`#${domId} .content`).style.pointerEvents = "none";
         document.querySelector(`#${domId}`).style.width = "30px";
-        document.querySelector(`#${domId}`).style.height = "50px";
+        document.querySelector(`#${domId}`).style.height = "40px";
         document.querySelector(`#${domId} .title .slideUpBtn`).classList = "slideUpBtn fa fa-angle-double-right";
         document.querySelector(`#${domId} .title .icon`).style.display = "none";
         document.querySelector(`#${domId} .title p`).style.display = "none";
@@ -874,7 +915,6 @@ export function refreshAddNodeArea(domId) {
         document.querySelector(`#${domId} .title .icon`).style.display = "inline";
         document.querySelector(`#${domId} .title p`).style.display = "inline";
     }
-    userConfig.leftBarWindowSlideUp = !userConfig.leftBarWindowSlideUp;
 }
 
 /**
@@ -1052,4 +1092,39 @@ export function exportJsonLd(graph) {
     jsonObj["@context"] = "http://121.40.159.180:7891/media/files/GdContext_060214.json";
     let blob = new Blob([JSON.stringify(jsonObj)]);
     saveAs(blob, +new Date() + ".json");
+}
+
+/**
+ * 执行GDoc命令
+ */
+export function activateCmd(graph) {
+    let cmdString = document.querySelector("#cmdInput").value;
+    doCmd(graph, cmdString);
+}
+
+/**
+ * 开启多人协作
+ */
+export async function refreshSocket(graph, open) {
+    // 获取数据填入窗体
+    if (open) {
+        let response = await loadGraphConfig(graph.currentGraphFileName);
+        if (response.state == 1) {
+            let graphName = response.msg.name;
+            let uid = response.msg.author.id;
+            let gid = response.msg.id;
+            showMessage("已开启协作\n登录同一账号即可共同创作!", () => {
+                // 发起ws
+                graph.startSocket(gid + "_" + uid);
+            });
+        } else {
+            showMessage("保存到云才能开启协作", () => {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+            });
+        }
+    } else {
+        // 关闭ws
+        graph.stopSocket();
+        showMessage("已关闭多人协作");
+    }
 }
