@@ -28,7 +28,7 @@ export async function initGraph(graphObj) {
             let response = await loadGraphFromCloud(graphName)
             if (response.state == 1) {
                 userConfig.currentGraphFileName = graphName;
-                refreshGraphName();
+                refreshGraphName(graph);
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));
@@ -37,7 +37,7 @@ export async function initGraph(graphObj) {
             let response = await loadGraphFromCloud(graphName, uid);
             if (response.state == 1) {
                 userConfig.currentGraphFileName = graphName;
-                refreshGraphName();
+                refreshGraphName(graph);
                 let json = response.msg;
                 graph.clear();
                 graph.load(JSON.parse(json));

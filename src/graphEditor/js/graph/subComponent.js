@@ -160,10 +160,6 @@ export class SC_NumberInput extends SubComponent {
                 this.dom.value = this.maxValue;
             }
             this.setValue(this.dom.value);
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
-        });
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -192,10 +188,14 @@ export class SC_ColorInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
         });
-        this.dom.addEventListener("blur", () => {
+        this.dom.addEventListener("mouseup", () => {
+            this.updateSelectedValue(this.value, true);
+            this.updateGraph(true);
+        });
+        this.dom.addEventListener("mousedown", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -224,10 +224,6 @@ export class SC_TextInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
-        });
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -256,10 +252,6 @@ export class SC_UrlInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
-        });
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -294,10 +286,6 @@ export class SC_Select extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("change", () => {
             this.setValue(this.dom.options[this.dom.selectedIndex].value);
-            this.updateSelectedValue(this.dom.value);
-            this.updateGraph();
-        });
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -367,10 +355,6 @@ export class SC_Check extends SubComponent {
         this.dom.checked = this.value;
         this.dom.addEventListener("click", () => {
             this.value = this.dom.checked;
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
-        })
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });
@@ -424,10 +408,6 @@ export class SC_Textarea extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.value = this.dom.value;
-            this.updateSelectedValue(this.value);
-            this.updateGraph();
-        });
-        this.dom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         });

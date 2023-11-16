@@ -45,7 +45,8 @@ import {
     refreshNodeTemplate,
     exportJsonLd,
     refreshShowGrid,
-    activateCmd
+    activateCmd,
+    refreshSocket
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -199,7 +200,7 @@ export async function bindEvents(graph) {
 
     // 设置图谱属性
     document.querySelector("#btnSetGraphProperty").addEventListener("click", () => {
-        showGraphProperty();
+        showGraphProperty(graph);
     });
 
     // 全屏浏览
@@ -227,10 +228,14 @@ export async function bindEvents(graph) {
         refreshShowGrid(graph, !document.querySelector("#check_showGrid").hasAttribute("checked"));
     })
 
+    // 开启协作
+    document.querySelector("#btnRefreshOpenSocket").addEventListener("click", () => {
+        refreshSocket(graph, !document.querySelector("#check_openSocket").hasAttribute("checked"));
+    })
 
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {
-        showShareLink();
+        showShareLink(graph);
     });
 
     // 展开收起节点添加面板

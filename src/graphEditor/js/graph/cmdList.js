@@ -80,7 +80,7 @@ export const CMD_LIST = {
 export function fillCmd(graph, cmdStr) {
     let cmdPre = cmdStr.split("--")[0];
     let cmdEnd = cmdStr.split("--")[cmdStr.split("--").length - 1];
-    document.querySelector("#cmdList").innerHTML = `<li><span style="color:rgb(200,200,0)">${cmdPre}</span>--${cmdEnd}</li>` + document.querySelector("#cmdList").innerHTML;
+    document.querySelector("#cmdList").innerHTML = `<li><span style="color:rgb(200,200,0)">${cmdPre}</span>--${cmdEnd}</li>`;
     document.querySelector("#cmdInput").value = cmdStr;
     // 发送socket请求
     graph.sendSocket({

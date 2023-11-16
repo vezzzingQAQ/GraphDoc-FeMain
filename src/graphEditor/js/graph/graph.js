@@ -122,11 +122,13 @@ export class Graph {
         // 判断所处的操作系统
         this.os = getOS();
         // 是否广播命令
-        this.sendCmd = true;
+        this.socketOn = false;
         // ws连接
         this.socket = null;
         this.socketKey = null;
         this.socketName = null;
+        // 文件名
+        this.currentGraphFileName = null;
     }
 
     /**
@@ -141,7 +143,7 @@ export class Graph {
             nodeObj.owner = this;
             this.nodeList.push(nodeObj);
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.addNode.in(JSON.stringify(nodeObj.toJsonObj())));
         } else {
             console.error(`要添加的节点已存在:${nodeObj}`);
@@ -154,7 +156,7 @@ export class Graph {
     removeNode(nodeObj, cmd = true) {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.removeNode.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
         } else {
@@ -174,7 +176,7 @@ export class Graph {
             edgeObj.owner = this;
             this.edgeList.push(edgeObj);
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.addEdge.in(JSON.stringify(edgeObj.toJsonObj())));
         } else {
             console.error(`关系已存在:${node}`);
@@ -187,7 +189,7 @@ export class Graph {
     removeEdge(edgeObj, cmd = true) {
         if (this.edgeList.includes(edgeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.removeEdge.in(edgeObj.uuid));
             this.edgeList.splice(this.edgeList.indexOf(edgeObj), 1);
         } else {
@@ -201,7 +203,7 @@ export class Graph {
     moveNodeToTop(nodeObj, cmd = true) {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.moveNodeToTop.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
             this.nodeList.push(nodeObj);
@@ -216,7 +218,7 @@ export class Graph {
     moveNodeToBottom(nodeObj, cmd = true) {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.moveNodeToBottom.in(nodeObj.uuid));
             this.nodeList.splice(this.nodeList.indexOf(nodeObj), 1);
             this.nodeList.unshift(nodeObj);
@@ -231,7 +233,7 @@ export class Graph {
     modifyNode(nodeObj, cmd = true) {
         if (this.nodeList.includes(nodeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.modifyNode.in(nodeObj.uuid, JSON.stringify(nodeObj.toJsonObj())));
         }
     }
@@ -242,7 +244,7 @@ export class Graph {
     modifyEdge(edgeObj, cmd = true) {
         if (this.edgeList.includes(edgeObj)) {
             // 命令输出
-            if (cmd && this.sendCmd)
+            if (cmd && this.socketOn)
                 fillCmd(this, CMD_LIST.modifyEdge.in(edgeObj.uuid, JSON.stringify(edgeObj.toJsonObj())));
         }
     }
@@ -252,7 +254,7 @@ export class Graph {
      */
     modifyBgColor(bgColor, cmd = true) {
         // 命令输出
-        if (cmd && this.sendCmd)
+        if (cmd && this.socketOn)
             fillCmd(this, CMD_LIST.setBgColor.in(bgColor));
     }
 
@@ -2890,9 +2892,23 @@ export class Graph {
         this.socketKey = `gdoc${gid}`;
         this.socketName = `gname${new Date().getTime()}`
         this.socket = new WebSocket(`${SOCKET_CONN}/r${this.socketKey}/${this.socketName}/`);
+        // 开启广播
+        this.socketOn = true;
+        /**
+         * 🟩
+         * socket收到消息
+         */
         this.socket.onmessage = (e) => {
             console.log(e.data);
-            doCmd(this, e.data);
+            let dataObj = JSON.parse(e.data);
+            // 有人加入协作
+            if (dataObj.type == "msg")
+                showMessage(dataObj.content, () => {
+
+                });
+            // 执行命令
+            if (dataObj.type == "cmd")
+                doCmd(this, dataObj.content);
         }
     }
 
@@ -2905,6 +2921,17 @@ export class Graph {
             from: this.socketName,
             content: jsonObj
         }));
+    }
+
+    /**
+     * 🟩
+     * 结束SOCKET
+     */
+    stopSocket() {
+        this.socket.close();
+        this.socketOn = false;
+        document.querySelector("#cmdList").innerHTML = "";
+        document.querySelector("#cmdInput").value = "";
     }
 
     /**
