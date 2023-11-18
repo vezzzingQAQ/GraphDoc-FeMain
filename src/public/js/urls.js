@@ -64,9 +64,9 @@ if (process.env.PACK_MODE == "production") {
     DOMAIN_RES_UPLOAD = "http://127.0.0.1:4999";
     DOMAIN_RES_DOWNLOAD = "http://127.0.0.1:4999/media";
     DOMAIN_MAIN = "http://127.0.0.1:4998";
-    SOCKET_CONN = "ws://127.0.0.1:4997";
-    DOMAIN_FE = "http://127.0.0.1:5501";
-    DOMAIN_COMPONENT = "http://127.0.0.1:5502";
+    SOCKET_CONN = "ws://127.0.0.1:7893";
+    DOMAIN_FE = "http://127.0.0.1:5500";
+    DOMAIN_COMPONENT = "http://127.0.0.1:5501";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 }
 

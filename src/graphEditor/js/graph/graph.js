@@ -376,6 +376,8 @@ export class Graph {
         }
         if (finded) {
             this.edgeList[edgeIndex].componentMap = edgeObjNew.componentMap;
+            this.edgeList[edgeIndex].source = edgeObjNew.source;
+            this.edgeList[edgeIndex].target = edgeObjNew.target;
             // owner赋值
             for (let componentKey in edgeObjNew.componentMap) {
                 edgeObjNew.componentMap[componentKey].owner = this.edgeList[edgeIndex];
@@ -2705,14 +2707,14 @@ export class Graph {
                             let temp = selectedEdgeObj.source;
                             selectedEdgeObj.source = selectedEdgeObj.target;
                             selectedEdgeObj.target = temp;
-                            _.modifyEdgeExterior(selectedEdgeObj);
+                            _.modifyEdgeExterior(selectedEdgeObj, true);
                             _.modifyEdgePhysics();
                         }
                     } else {
                         let temp = edgeObj.source;
                         edgeObj.source = edgeObj.target;
                         edgeObj.target = temp;
-                        _.modifyEdgeExterior(edgeObj);
+                        _.modifyEdgeExterior(edgeObj, true);
                         _.modifyEdgePhysics();
                     }
                 }
