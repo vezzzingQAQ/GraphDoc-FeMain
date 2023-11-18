@@ -21,7 +21,7 @@ function genGraphList(graphList) {
             window.open(`${USER_PAGE}?uid=${graph.author.id}`);
         });
         let domGraphName = document.createElement("span");
-        domGraphName.innerHTML = graph.name.length < 6 ? graph.name + `... <i class="fa fa-eye"></i><span>${graph.view}</span>` : graph.name.slice(0, 5) + `... <i class="fa fa-eye"></i><span>${graph.view}</span>`;
+        domGraphName.innerHTML = graph.name.length < 6 ? graph.name + `<i class="fa fa-eye"></i><span>${graph.view}</span>` : graph.name.slice(0, 5) + `... <i class="fa fa-eye"></i><span>${graph.view}</span>`;
         domGraphBlockText.appendChild(domGraphAuthorImg);
         domGraphBlockText.appendChild(domGraphName);
         domGraphBlock.appendChild(domGraphBlockImg);
