@@ -122,7 +122,7 @@ export function newGraph(graph) {
     if (graph.socketOn) {
         document.querySelector("#check_openSocket").removeAttribute("checked");
         graph.stopSocket();
-    } v
+    }
     graph.currentGraphFileName = "未命名图谱";
     refreshGraphName(graph);
     graph.clear();
