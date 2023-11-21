@@ -170,6 +170,12 @@ body {
             user-select: none;
             padding-left: 5px;
 
+            .subLine {
+                display: flex;
+                flex-direction: row;
+                margin: 0;
+            }
+
             .sub {
                 line-height: @bottom_height;
                 font-size: 11px;
@@ -195,17 +201,12 @@ body {
             bottom: 0;
             pointer-events: none;
 
-            .subLine {
-                display: flex;
-                flex-direction: row;
-                margin: 0;
-            }
         }
 
         .topArea {
             top: calc(@menu_height + 5px);
             height: @bottom_height;
-            flex-direction: row;
+            flex-direction: column;
         }
 
         .rightMenu {

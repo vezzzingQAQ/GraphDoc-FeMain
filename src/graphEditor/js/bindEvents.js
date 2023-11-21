@@ -46,7 +46,8 @@ import {
     exportJsonLd,
     refreshShowGrid,
     activateCmd,
-    refreshSocket
+    refreshSocket,
+    showSaveState
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -333,4 +334,7 @@ export async function bindEvents(graph) {
     // 先收起左侧面板
     refreshLeftWindow("selfNodeArea");
     refreshLeftWindow("cmdLineArea");
+
+    // 刷新保存显示
+    showSaveState("unsaved");
 }

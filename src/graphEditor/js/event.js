@@ -221,7 +221,8 @@ export function saveToCloud(graph) {
                 if (saveFileData.state == 11 || saveFileData.state == 10) {
                     graph.currentGraphFileName = name;
                     refreshGraphName(graph);
-                    hideCenterWindow(document.querySelector("#windowSaveToCloud"))
+                    hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+                    showSaveState("saved");
                 }
             }
         } else {
@@ -1126,5 +1127,30 @@ export async function refreshSocket(graph, open) {
         // 关闭ws
         graph.stopSocket();
         showMessage("已关闭多人协作");
+    }
+}
+
+/**
+ * 图谱保存状态显示
+ * state:
+ * {
+ * unsaved  未保存
+ * saved    已保存
+ * insaving 保存中
+ * }
+ */
+export function showSaveState(state = "unsaved") {
+    switch (state) {
+        case "unsaved":
+            document.querySelector("#saveState").innerHTML = "未保存";
+            break;
+        case "saved": {
+            let dateClass = new Date();
+            document.querySelector("#saveState").innerHTML = `于${dateClass.getHours()}:${dateClass.getMinutes()}保存过`;
+            break;
+        }
+        case "insaving":
+            document.querySelector("#saveState").innerHTML = "保存中...";
+            break;
     }
 }

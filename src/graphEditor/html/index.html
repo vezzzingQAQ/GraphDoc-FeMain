@@ -171,9 +171,8 @@ T E C H vezzzing
                         <li class="checkBoxContainer show" id="btnRefreshOpenSocket"><i
                                 class="fa fa-paper-plane"></i><input class="menuCheck" id="check_openSocket"
                                 type="checkbox"> 开启协作</li>
-                        <li class="checkBoxContainer show" id="btnRefreshAutoSave"><i
-                                class="fa fa-save"></i><input class="menuCheck" id="check_autoSave"
-                                type="checkbox"> 自动保存</li>
+                        <li class="checkBoxContainer show" id="btnRefreshAutoSave"><i class="fa fa-save"></i><input
+                                class="menuCheck" id="check_autoSave" type="checkbox"> 自动保存</li>
                     </ul>
                 </div>
                 <div class="col menuBlock" id="userOptionsBlock">
@@ -220,10 +219,15 @@ T E C H vezzzing
             </div>
         </div>
         <div class="topArea">
-            <div class="sub" id="graphName">未命名图谱</div>
-            <div class="sub" id="physicsSimBtn"> | 物理模拟<i class="fa fa-play"></i></div>
-            <div class="sub" id="fullScreenBtn"> | 窗口模式<i class="fa fa-cube"></i></div>
-            <div class="sub" id="editGraphBtn"> | 编辑模式<i class="fa fa-edit"></i></div>
+            <div class="subLine">
+                <div class="sub" id="graphName">未命名图谱</div>
+                <div class="sub" id="physicsSimBtn"> | 物理模拟<i class="fa fa-play"></i></div>
+                <div class="sub" id="fullScreenBtn"> | 窗口模式<i class="fa fa-cube"></i></div>
+                <div class="sub" id="editGraphBtn"> | 编辑模式<i class="fa fa-edit"></i></div>
+            </div>
+            <div class="subLine" style="pointer-events: none;">
+                <div class="sub" id="saveState">未保存的图谱</div>
+            </div>
         </div>
         <div class="centerWindow" id="windowAuthorList">
             <div class="bg"></div>
