@@ -2869,28 +2869,39 @@ export class Graph {
      * 加载数据
      */
     load(jsonObj, refreshViewArea = false) {
-        let nodeJsonList = jsonObj.nodeList;
-        let edgeJsonList = jsonObj.edgeList;
-        for (let nodeJson of nodeJsonList) {
-            let node = LoadNodeFromJson(nodeJson);
-            this.pushNode(node, false);
-        }
-        for (let edgeJson of edgeJsonList) {
-            let edge = LoadEdgeFromJson(edgeJson, this.nodeList);
-            this.pushEdge(edge, false);
-        }
-        this.bgColor = jsonObj.bgColor;
-        this.render(refreshViewArea);
-        window.setTimeout(() => {
-            this.renderProperties.simulation.alphaTarget(0.02).restart();
+        try {
+            let nodeJsonList = jsonObj.nodeList;
+            let edgeJsonList = jsonObj.edgeList;
+            for (let nodeJson of nodeJsonList) {
+                if (nodeJson) {
+                    let node = LoadNodeFromJson(nodeJson);
+                    if (node)
+                        this.pushNode(node, false);
+                }
+            }
+            for (let edgeJson of edgeJsonList) {
+                if (edgeJson) {
+                    let edge = LoadEdgeFromJson(edgeJson, this.nodeList);
+                    if (edge)
+                        this.pushEdge(edge, false);
+                }
+            }
+            this.bgColor = jsonObj.bgColor;
+            this.render(refreshViewArea);
             window.setTimeout(() => {
-                this.renderProperties.simulation.stop();
-                hideLoadingPage();
-            }, 20);
-        }, 300);
-        // 清空组件列表
-        document.querySelector(".panArea .listPan").innerHTML = "";
-        document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+                this.renderProperties.simulation.alphaTarget(0.02).restart();
+                window.setTimeout(() => {
+                    this.renderProperties.simulation.stop();
+                    hideLoadingPage();
+                }, 20);
+            }, 300);
+            // 清空组件列表
+            document.querySelector(".panArea .listPan").innerHTML = "";
+            document.querySelector(".panArea .topPan .addComponent .content").innerHTML = "";
+        } catch (e) {
+            console.log("文件有损坏");
+            console.error(e.message);
+        }
     }
 
     /**
