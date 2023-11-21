@@ -199,7 +199,7 @@ export async function userLogout(graph) {
 /**
  * 另存到云
  */
-export function saveToCloud(graph, mult = true) {
+export async function saveToCloud(graph, mult = true) {
     let name = graph.currentGraphFileName;
     let svg = graph.genSvg();
 
@@ -212,33 +212,42 @@ export function saveToCloud(graph, mult = true) {
 
     // 多次保存
     let repeatNum = 0;
-    let repeatNumMax;
     if (mult) {
-        repeatNumMax = 5
-    } else {
-        repeatNumMax = 1;
-    }
-    let saveInterval = window.setInterval(async () => {
-        if (repeatNum < repeatNumMax) {
-            let svgData = await saveGraphSvgToCloud(svg);
-            if (name) {
-                // 保存到云
-                showSaveState("insaving");
-                let data = graph.toJson();
-                let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
-                if (saveFileData.state == 11 || saveFileData.state == 10) {
-                    graph.currentGraphFileName = name;
-                    refreshGraphName(graph);
-                    hideCenterWindow(document.querySelector("#windowSaveToCloud"));
-                    showSaveState("saved");
+        let saveInterval = window.setInterval(async () => {
+            if (repeatNum < 5) {
+                let svgData = await saveGraphSvgToCloud(svg);
+                if (name) {
+                    // 保存到云
+                    showSaveState("insaving");
+                    let data = graph.toJson();
+                    let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
+                    if (saveFileData.state == 11 || saveFileData.state == 10) {
+                        graph.currentGraphFileName = name;
+                        refreshGraphName(graph);
+                        hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+                        showSaveState("saved");
+                    }
                 }
+            } else {
+                window.clearInterval(saveInterval);
             }
-        } else {
-            window.clearInterval(saveInterval);
+            repeatNum++;
+        }, 300);
+    } else {
+        let svgData = await saveGraphSvgToCloud(svg);
+        if (name) {
+            // 保存到云
+            showSaveState("insaving");
+            let data = graph.toJson();
+            let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
+            if (saveFileData.state == 11 || saveFileData.state == 10) {
+                graph.currentGraphFileName = name;
+                refreshGraphName(graph);
+                hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+                showSaveState("saved");
+            }
         }
-        repeatNum++;
-
-    }, 300);
+    }
 }
 
 /**
@@ -1173,6 +1182,8 @@ export async function refreshAutoSave(graph, isAutoSave) {
             showMessage("保存到云才能开启自动保存", () => {
                 document.querySelector("#check_autoSave").removeAttribute("checked");
             });
+        } else {
+            saveToCloud(graph, false);
         }
     }
     graph.isAutoSave = isAutoSave;

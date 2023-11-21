@@ -131,6 +131,11 @@ export class Graph {
         this.currentGraphFileName = null;
         // 自动保存
         this.isAutoSave = false;
+        this.autoSaveTimer = setInterval(() => {
+            // 自动保存
+            if (this.isAutoSave)
+                saveToCloud(this, false);
+        }, 1000 * 10);
     }
 
     /**
@@ -2779,9 +2784,6 @@ export class Graph {
         if (this.undoMirror.length > UNDO_STEP) {
             this.undoMirror.pop();
         }
-        // 自动保存
-        if (this.isAutoSave)
-            saveToCloud(this, false);
     }
 
     /**
