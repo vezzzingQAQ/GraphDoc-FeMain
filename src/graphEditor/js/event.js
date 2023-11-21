@@ -415,7 +415,7 @@ export function refreshFullScreen(graph, refresh = true) {
         document.querySelector(".mainMenu").style.zIndex = 99;
         document.querySelector(".topArea").style.top = document.querySelector(".mainMenu").offsetHeight + 5 + "px";
         document.querySelector(".panArea").style.display = "block";
-        document.querySelector(".leftBarArea").style.display = "flex";
+        document.querySelector(".leftBarArea").style.display = "block";
         document.querySelector("#fullScreenBtn").innerHTML = `| 窗口模式<i class="fa fa-cube"></i>`;
     }
 }
