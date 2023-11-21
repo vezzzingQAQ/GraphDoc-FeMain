@@ -200,13 +200,14 @@ export async function userLogout(graph) {
  * 另存到云
  */
 export function saveToCloud(graph) {
-    let name = document.querySelector("#stc_path").value;
+    let name = graph.currentGraphFileName;
     let svg = graph.genSvg();
 
     // 先上传图片
     let domFileInput = document.createElement("input");
     domFileInput.type = "file";
 
+    if (document.querySelector("#saveToClud"));
     document.querySelector("#saveToCloud").innerHTML = "保存中...";
 
     // 多次保存
@@ -216,6 +217,7 @@ export function saveToCloud(graph) {
             let svgData = await saveGraphSvgToCloud(svg);
             if (name) {
                 // 保存到云
+                showSaveState("insaving");
                 let data = graph.toJson();
                 let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
                 if (saveFileData.state == 11 || saveFileData.state == 10) {
@@ -1146,11 +1148,27 @@ export function showSaveState(state = "unsaved") {
             break;
         case "saved": {
             let dateClass = new Date();
-            document.querySelector("#saveState").innerHTML = `于${dateClass.getHours()}:${dateClass.getMinutes()}保存过`;
+            document.querySelector("#saveState").innerHTML = `于${dateClass.getHours()}:${dateClass.getMinutes()}:${dateClass.getSeconds()}保存过`;
             break;
         }
         case "insaving":
             document.querySelector("#saveState").innerHTML = "保存中...";
             break;
     }
+}
+
+/**
+ * 切换自动保存
+ */
+export async function refreshAutoSave(graph, isAutoSave) {
+    if (isAutoSave) {
+        let response = await loadGraphConfig(graph.currentGraphFileName);
+        if (response.state != 1) {
+            showMessage("保存到云才能开启自动保存", () => {
+                document.querySelector("#check_autoSave").removeAttribute("checked");
+            });
+        }
+    }
+    graph.isAutoSave = isAutoSave;
+    console.log(isAutoSave)
 }
