@@ -2781,7 +2781,7 @@ export class Graph {
         }
         // 自动保存
         if (this.isAutoSave)
-            saveToCloud(this);
+            saveToCloud(this, false);
     }
 
     /**

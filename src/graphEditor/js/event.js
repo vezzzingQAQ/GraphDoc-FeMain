@@ -199,7 +199,7 @@ export async function userLogout(graph) {
 /**
  * 另存到云
  */
-export function saveToCloud(graph) {
+export function saveToCloud(graph, mult = true) {
     let name = graph.currentGraphFileName;
     let svg = graph.genSvg();
 
@@ -212,8 +212,14 @@ export function saveToCloud(graph) {
 
     // 多次保存
     let repeatNum = 0;
+    let repeatNumMax;
+    if (mult) {
+        repeatNumMax = 5
+    } else {
+        repeatNumMax = 1;
+    }
     let saveInterval = window.setInterval(async () => {
-        if (repeatNum < 5) {
+        if (repeatNum < repeatNumMax) {
             let svgData = await saveGraphSvgToCloud(svg);
             if (name) {
                 // 保存到云
