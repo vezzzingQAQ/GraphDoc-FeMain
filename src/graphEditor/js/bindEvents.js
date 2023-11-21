@@ -46,7 +46,9 @@ import {
     exportJsonLd,
     refreshShowGrid,
     activateCmd,
-    refreshSocket
+    refreshSocket,
+    showSaveState,
+    refreshAutoSave
 } from "./event.js";
 
 import mainAboutPng from "./../../asset/img/mainAbout.png";
@@ -233,6 +235,11 @@ export async function bindEvents(graph) {
         refreshSocket(graph, !document.querySelector("#check_openSocket").hasAttribute("checked"));
     })
 
+    // 自动保存
+    document.querySelector("#btnRefreshAutoSave").addEventListener("click", () => {
+        refreshAutoSave(graph, !document.querySelector("#check_autoSave").hasAttribute("checked"));
+    })
+
     // 分享图谱
     document.querySelector("#btnShare").addEventListener("click", () => {
         showShareLink(graph);
@@ -333,4 +340,7 @@ export async function bindEvents(graph) {
     // 先收起左侧面板
     refreshLeftWindow("selfNodeArea");
     refreshLeftWindow("cmdLineArea");
+
+    // 刷新保存显示
+    showSaveState("unsaved");
 }

@@ -46,8 +46,8 @@ import {
     FUNC1_COMP,
     SOCKET_CONN
 } from "../../../public/js/urls"
-import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
-import { extractText } from "../../../public/js/serverCom";
+import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, saveToCloud, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
+import { extractText, saveGraphToCloud } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
 import { getOS } from "../../../public/js/tools";
 import abcjs from "abcjs";
@@ -129,6 +129,8 @@ export class Graph {
         this.socketName = null;
         // 文件名
         this.currentGraphFileName = null;
+        // 自动保存
+        this.isAutoSave = false;
     }
 
     /**
@@ -2777,6 +2779,9 @@ export class Graph {
         if (this.undoMirror.length > UNDO_STEP) {
             this.undoMirror.pop();
         }
+        // 自动保存
+        if (this.isAutoSave)
+            saveToCloud(this);
     }
 
     /**

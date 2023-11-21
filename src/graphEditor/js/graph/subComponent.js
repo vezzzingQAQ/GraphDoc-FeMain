@@ -83,8 +83,9 @@ class SubComponent {
     /**
      * 更新所有选中的同类型的值
      */
-    updateSelectedValue(value, cmd = false) {
-        this.owner.owner.owner.pushUndo();
+    updateSelectedValue(value, cmd = false, pushUndo = true) {
+        if (pushUndo)
+            this.owner.owner.owner.pushUndo();
         let selectedElementList = this.owner.owner.owner.selectedElementList
         if (selectedElementList.length > 1) {
             for (let ele of selectedElementList) {
@@ -188,15 +189,7 @@ export class SC_ColorInput extends SubComponent {
         this.dom.value = this.value;
         this.dom.addEventListener("input", () => {
             this.setValue(this.dom.value);
-            this.updateSelectedValue(this.value, true);
-            this.updateGraph(true);
-        });
-        this.dom.addEventListener("mouseup", () => {
-            this.updateSelectedValue(this.value, true);
-            this.updateGraph(true);
-        });
-        this.dom.addEventListener("mousedown", () => {
-            this.updateSelectedValue(this.value, true);
+            this.updateSelectedValue(this.value, true, false);
             this.updateGraph(true);
         });
         return this.dom;
@@ -503,7 +496,7 @@ export class SC_Tag extends SubComponent {
             }
             spanTempDom.remove();
         });
-        tagDom.addEventListener("blur",()=>{
+        tagDom.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         })
@@ -518,7 +511,7 @@ export class SC_Tag extends SubComponent {
                 this.value[i] = currentTagDom.value;
             }
         });
-        tagDeleteBtn.addEventListener("blur",()=>{
+        tagDeleteBtn.addEventListener("blur", () => {
             this.updateSelectedValue(this.value, true);
             this.updateGraph(true);
         })
