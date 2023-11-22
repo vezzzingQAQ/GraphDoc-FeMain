@@ -214,7 +214,7 @@ export async function saveToCloud(graph, mult = true) {
     let repeatNum = 0;
     if (mult) {
         let saveInterval = window.setInterval(async () => {
-            if (repeatNum < 5) {
+            if (repeatNum < 2) {
                 let svgData = await saveGraphSvgToCloud(svg);
                 if (name) {
                     // 保存到云
