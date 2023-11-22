@@ -390,9 +390,13 @@ export function loadGraphFromCode() {
     // 数据绑定的部分不需要重新执行
     try {
         // 断开socket连接
-        if (graph.socketOn) {
-            document.querySelector("#check_openSocket").removeAttribute("checked");
-            graph.stopSocket();
+        try {
+            if (graph.socketOn) {
+                document.querySelector("#check_openSocket").removeAttribute("checked");
+                graph.stopSocket();
+            }
+        } catch {
+            console.log("socket关闭出错");
         }
         eval("window.graphData=window.main();");
         currentGraph.clear();
