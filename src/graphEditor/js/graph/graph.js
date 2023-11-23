@@ -49,7 +49,7 @@ import {
 import { hideLoadingPage, pasteImgFromClipboard, refreshShowGrid, saveGraph, saveToCloud, showLoadingPage, showMessage, showSaveNodeTemplate } from "../event";
 import { extractText, saveGraphToCloud } from "../../../public/js/serverCom";
 import { setMarkerColors } from "./marker";
-import { getOS } from "../../../public/js/tools";
+import { getOS, numircMap } from "../../../public/js/tools";
 import abcjs from "abcjs";
 import { RIGHT_MENU_ADD_NODE_LIST } from "../nodeAddList";
 import { CMD_LIST, doCmd, fillCmd } from "./cmdList";
@@ -1180,6 +1180,16 @@ export class Graph {
                             path.lineTo(d.target.x, d.target.y);
                             break;
                         }
+                        case "pointerAuto1": {
+                            let radius = d3.select(`#${d.target.uuid}`).node().getBBox().width - 5;
+                            let lineLength = Math.sqrt((d.target.x - d.source.x) ** 2 + (d.target.y - d.source.y) ** 2);
+                            path.lineTo(
+                                d.target.x - numircMap(radius, 0, lineLength, 0, d.target.x - d.source.x),
+                                d.target.y - numircMap(radius, 0, lineLength, 0, d.target.y - d.source.y)
+                            );
+                            path.lineTo(d.target.x, d.target.y);
+                            break;
+                        }
                     }
                     return path.toString();
                 });
@@ -2256,6 +2266,7 @@ export class Graph {
             case "pointer1": { }
             case "pointer2": { }
             case "pointer3": { }
+            case "pointerAuto1": { }
             case "pointer4": {
                 findedEdge.style("marker-mid", "url(#marker_triangle)");
                 setMarkerColors([findedEdge.node()], document.querySelector("#marker_triangle"));

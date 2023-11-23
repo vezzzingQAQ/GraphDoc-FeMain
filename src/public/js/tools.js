@@ -75,3 +75,8 @@ export function getLocalStorage(key) {
 export function deleteLocalStorage(key) {
     window.localStorage.removeItem(key);
 }
+
+// map数值
+export function numircMap(i, from, to, mapFrom, mapTo) {
+    return (i - from) * (mapTo - mapFrom) / (to - from) + mapFrom;
+}

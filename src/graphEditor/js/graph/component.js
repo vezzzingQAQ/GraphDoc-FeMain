@@ -306,7 +306,8 @@ export class C_E_Exterior extends Component {
             { value: "pointer1", text: "--->---" },
             { value: "pointer2", text: "->--->-" },
             { value: "pointer3", text: "->->->-" },
-            { value: "pointer4", text: ">>>>>>>" }
+            { value: "pointer4", text: ">>>>>>>" },
+            { value: "pointerAuto1", text: "自适应箭头" }
         ]));
         this.addValue("strokeWidth", "线条宽度", new SC_NumberInput(value.strokeWidth, false, 0, 100));
         this.addValue("dividerAni", "入场动画", new SC_Divider());
