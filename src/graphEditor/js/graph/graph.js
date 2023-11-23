@@ -1861,7 +1861,7 @@ export class Graph {
                 .style("dominant-baseline", "middle")
                 .style("padding", "10px")
                 .html(d => `<code>${d.autoGetValue("code_node", "content", "", value => value.replace(/</g, "&lt;").replace(/>/g, "&gt;"))}</code>`)
-            hljs.highlightAll();
+            hljs.highlightElement(domAddedNodeCode.select("code").node());
         }
 
         if (domAddedNodeLink)
