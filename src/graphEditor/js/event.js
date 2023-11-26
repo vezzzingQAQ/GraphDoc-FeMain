@@ -199,8 +199,7 @@ export async function userLogout(graph) {
 /**
  * 另存到云
  */
-export async function saveToCloud(graph, mult = true) {
-    let name = graph.currentGraphFileName;
+export async function saveToCloud(graph, norSave = true) {
     let svg = graph.genSvg();
 
     // 先上传图片
@@ -212,7 +211,8 @@ export async function saveToCloud(graph, mult = true) {
 
     // 多次保存
     let repeatNum = 0;
-    if (mult) {
+    if (norSave) {
+        let name = document.querySelector("#stc_path").value;
         let saveInterval = window.setInterval(async () => {
             if (repeatNum < 2) {
                 let svgData = await saveGraphSvgToCloud(svg);
@@ -234,6 +234,7 @@ export async function saveToCloud(graph, mult = true) {
             repeatNum++;
         }, 300);
     } else {
+        let name = graph.currentGraphFileName;
         let svgData = await saveGraphSvgToCloud(svg);
         if (name) {
             // 保存到云
