@@ -14,7 +14,7 @@ const webpack = require("webpack");
 // · production-生产环境
 // · development-开发环境
 const PACK_MODE = "production";
-const DEPLOY_MODE = "self";
+const DEPLOY_MODE = "school";
 const APP_MODE = "web";
 
 const VERSION = new Date().getTime();
@@ -129,7 +129,7 @@ module.exports = {
                 // 运行环境[app web]
                 "RUN_ENV": JSON.stringify(APP_MODE),
                 // 部署方式[self school]
-                "DEP_ENV":JSON.stringify(DEPLOY_MODE)
+                "DEP_ENV": JSON.stringify(DEPLOY_MODE)
             }
         }),
         new ConditionCompilePlugin(),

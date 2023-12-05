@@ -281,7 +281,6 @@ export function refreshMenu() {
 export function refreshGraphName(graph) {
     if (graph.currentGraphFileName) {
         document.querySelector("#graphName").innerHTML = graph.currentGraphFileName;
-        window.history.replaceState("", "", `${EDITOR_PGAE}`);
     }
 }
 

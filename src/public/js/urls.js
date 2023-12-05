@@ -51,6 +51,8 @@ let LAW_LINK;
 
 let SOCKET_CONN;
 
+let CONVERTER_URL;
+
 // 生产和测试环境
 if (process.env.PACK_MODE == "production") {
     DOMAIN_RES_UPLOAD = "http://121.40.159.180:7891";
@@ -76,11 +78,13 @@ if (process.env.RUN_ENV == "app") {
 
 // 适配学校服务器
 if (process.env.DEP_ENV == "school") {
-    DOMAIN_RES_UPLOAD = "http://127.0.0.1:3291";
-    DOMAIN_MAIN = "http://127.0.0.1:3292";
-    DOMAIN_FE = "http://sdi.havigor.com/gdoc/Main";
-    DOMAIN_COMPONENT = "http://sdi.havigor.com/gdoc/Component";
-    DOMAIN_DOWNLOAD = "http://sdi.havigor.com/gdoc/Download";
+    DOMAIN_RES_UPLOAD = "http://121.40.159.180:7891";
+    DOMAIN_RES_DOWNLOAD = "http://121.40.159.180:7881";
+    DOMAIN_MAIN = "http://121.40.159.180:7892";
+    SOCKET_CONN = "ws://121.40.159.180:7893";
+    DOMAIN_FE = "http://airt.havigor.com/gdoc/Main";
+    DOMAIN_COMPONENT = "http://airt.havigor.com/gdoc/Component";
+    DOMAIN_DOWNLOAD = "http://airt.havigor.com/gdoc/Download";
 }
 
 // DOMAIN RES
@@ -127,6 +131,9 @@ FUNC1_COMP = `${DOMAIN_COMPONENT}/dist/function1Plot.html`;
 // DOMAIN_DOWNLOAD
 DOWNLOAD_LINK = `${DOMAIN_DOWNLOAD}/GraphDoc-win32-x64.zip`;
 LAW_LINK = `${DOMAIN_DOWNLOAD}/readme.md`;
+
+// CONVERTER
+CONVERTER_URL = "http://vezzzing.cn/GraphDoc/Converter/dist/main.html";
 
 export {
     DOMAIN_RES_UPLOAD,
@@ -178,5 +185,7 @@ export {
     DOWNLOAD_LINK,
     LAW_LINK,
 
-    SOCKET_CONN
+    SOCKET_CONN,
+
+    CONVERTER_URL
 }
