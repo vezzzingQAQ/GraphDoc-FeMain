@@ -78,13 +78,13 @@ if (process.env.RUN_ENV == "app") {
 
 // 适配学校服务器
 if (process.env.DEP_ENV == "school") {
-    DOMAIN_RES_UPLOAD = "http://121.40.159.180:7891";
-    DOMAIN_RES_DOWNLOAD = "http://121.40.159.180:7881";
-    DOMAIN_MAIN = "http://121.40.159.180:7892";
+    DOMAIN_RES_UPLOAD = "https://airt.havigor.com/gdoc/api/resStore";
+    DOMAIN_RES_DOWNLOAD = "https://airt.havigor.com/gdoc/server/ResStore/media";
+    DOMAIN_MAIN = "https://airt.havigor.com/gdoc/api/main";
     SOCKET_CONN = "ws://121.40.159.180:7893";
-    DOMAIN_FE = "http://airt.havigor.com/gdoc/Main";
-    DOMAIN_COMPONENT = "http://airt.havigor.com/gdoc/Component";
-    DOMAIN_DOWNLOAD = "http://airt.havigor.com/gdoc/Download";
+    DOMAIN_FE = "https://airt.havigor.com/gdoc/page/Main";
+    DOMAIN_COMPONENT = "https://airt.havigor.com/gdoc/page/Component";
+    DOMAIN_DOWNLOAD = "https://airt.havigor.com/gdoc/page/Download";
 }
 
 // DOMAIN RES

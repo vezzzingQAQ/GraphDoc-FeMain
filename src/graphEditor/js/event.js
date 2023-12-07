@@ -210,29 +210,21 @@ export async function saveToCloud(graph, norSave = true) {
     document.querySelector("#saveToCloud").innerHTML = "保存中...";
 
     // 多次保存
-    let repeatNum = 0;
     if (norSave) {
         let name = document.querySelector("#stc_path").value;
-        let saveInterval = window.setInterval(async () => {
-            if (repeatNum < 2) {
-                let svgData = await saveGraphSvgToCloud(svg);
-                if (name) {
-                    // 保存到云
-                    showSaveState("insaving");
-                    let data = graph.toJson();
-                    let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
-                    if (saveFileData.state == 11 || saveFileData.state == 10) {
-                        graph.currentGraphFileName = name;
-                        refreshGraphName(graph);
-                        hideCenterWindow(document.querySelector("#windowSaveToCloud"));
-                        showSaveState("saved");
-                    }
-                }
-            } else {
-                window.clearInterval(saveInterval);
+        let svgData = await saveGraphSvgToCloud(svg);
+        if (name) {
+            // 保存到云
+            showSaveState("insaving");
+            let data = graph.toJson();
+            let saveFileData = await saveGraphToCloud(data, name, svgData.msg.filename);
+            if (saveFileData.state == 11 || saveFileData.state == 10) {
+                graph.currentGraphFileName = name;
+                refreshGraphName(graph);
+                hideCenterWindow(document.querySelector("#windowSaveToCloud"));
+                showSaveState("saved");
             }
-            repeatNum++;
-        }, 300);
+        }
     } else {
         let name = graph.currentGraphFileName;
         let svgData = await saveGraphSvgToCloud(svg);
