@@ -67,8 +67,8 @@ if (process.env.PACK_MODE == "production") {
     DOMAIN_RES_DOWNLOAD = "http://127.0.0.1:4999/media";
     DOMAIN_MAIN = "http://127.0.0.1:4998";
     SOCKET_CONN = "ws://127.0.0.1:7893";
-    DOMAIN_FE = "http://127.0.0.1:5500";
-    DOMAIN_COMPONENT = "http://127.0.0.1:5501";
+    DOMAIN_FE = "http://127.0.0.1:5501";
+    DOMAIN_COMPONENT = "http://127.0.0.1:5502";
     DOMAIN_DOWNLOAD = "http://vezzzing.cn/GraphDoc/Download";
 }
 
@@ -81,7 +81,7 @@ if (process.env.DEP_ENV == "school") {
     DOMAIN_RES_UPLOAD = "https://airt.havigor.com/gdoc/api/resStore";
     DOMAIN_RES_DOWNLOAD = "https://airt.havigor.com/gdoc/server/ResStore/media";
     DOMAIN_MAIN = "https://airt.havigor.com/gdoc/api/main";
-    SOCKET_CONN = "ws://121.40.159.180:7893";
+    SOCKET_CONN = "wss://airt.havigor.com/gdoc/api/ws";
     DOMAIN_FE = "https://airt.havigor.com/gdoc/page/Main";
     DOMAIN_COMPONENT = "https://airt.havigor.com/gdoc/page/Component";
     DOMAIN_DOWNLOAD = "https://airt.havigor.com/gdoc/page/Download";
