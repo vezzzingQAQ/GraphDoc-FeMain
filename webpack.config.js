@@ -119,6 +119,10 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, "src/asset/js/templateDya"),
                     to: path.resolve(__dirname, "dist/graphTemplate")
+                },
+                {
+                    from: path.resolve(__dirname, "src/asset/fontawesome"),
+                    to: path.resolve(__dirname, "dist/fas")
                 }
             ]
         }),

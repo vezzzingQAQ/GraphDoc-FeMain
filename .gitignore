@@ -9,3 +9,5 @@ dist/
 copyFile.py
 
 temp/
+
+src/asset/fontawesome/
