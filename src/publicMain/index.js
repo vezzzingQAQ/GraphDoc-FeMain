@@ -119,18 +119,44 @@ window.addEventListener("load", async () => {
     });
 
     // 绑定搜索功能
-    document.querySelector("#btnSearchGraph").addEventListener("click", function () {
+    document.querySelector("#inputSearchString").addEventListener("input", function () {
         let searchString = document.querySelector("#inputSearchString").value;
         graphList = oGraphList.filter(graph => {
-            return graph.name.indexOf(searchString) !== -1;
+            return graph.name.toLowerCase().indexOf(searchString.toLowerCase()) !== -1;
         });
+        orderGraph();
         genGraphList(graphList);
     });
-    document.querySelector("#inputSearchString").addEventListener("input", function () {
-        if (document.querySelector("#inputSearchString").value == "") {
-            genGraphList(oGraphList);
+
+    // 绑定排序功能
+    function orderGraph() {
+        let selectValue = document.querySelector("#orderSelect").value;
+        switch (selectValue) {
+            case "modifyTime": {
+                graphList = graphList.sort((a, b) => {
+                    console.log(a.modifyTime - b.modifyTime)
+                    return (b.modifyTime - a.modifyTime);
+                });
+                break;
+            }
+            case "viewNumber": {
+                graphList = graphList.sort((a, b) => {
+                    return (b.view - a.view);
+                });
+                break;
+            }
+            case "createTime": {
+                graphList = graphList.sort((a, b) => {
+                    return (b.createTime - a.createTime);
+                });
+                break;
+            }
         }
-    });
+    }
+    document.querySelector("#orderSelect").addEventListener("click", function () {
+        orderGraph();
+        genGraphList(graphList);
+    })
 
     // 获取版本并显示
     document.querySelector("#gdVersion").innerHTML = `${GD_VERSION} `;
